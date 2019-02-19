@@ -1,0 +1,40 @@
+.project
+.classpath
+.lein-deps-sum
+.lein-repl-history
+.lein-failures
+.nrepl-port
+.pydevproject
+pom.xml
+bin
+classes
+checkouts
+test-output
+target
+lib
+tmp/*
+*.pyc
+.nrepl-history
+
+## editor files
+*~
+\#*
+.\#*
+*.swp
+*.swo
+
+## intellij files
+.idea
+sm.iml
+
+## for plugin settings like counter-clockwise
+.settings
+
+## ssh key files
+.ssh/*
+!.ssh/README
+
+## polarize generated files
+groups-to-methods.json
+polarizer-report.json
+logs/*
