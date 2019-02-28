@@ -1,0 +1,446 @@
+from virtwho import *
+
+class Base(unittest.TestCase):
+    def paramiko_run(self, cmd, host, username, password, timeout=1800, port=22):
+        try:
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(host, port, username, password, banner_timeout=300)
+            ssh._transport.window_size = 2147483647
+            chan = ssh.get_transport().open_session()
+            chan.settimeout(timeout)
+            try:
+                chan.exec_command(cmd)
+                contents = StringIO.StringIO()
+                error = StringIO.StringIO()
+                data = chan.recv(1024)
+                while data:
+                    contents.write(data)
+                    data = chan.recv(1024)
+                error_buff = chan.recv_stderr(1024)
+                while error_buff:
+                    error.write(error_buff)
+                    error_buff = chan.recv_stderr(1024)
+                exit_status = chan.recv_exit_status()
+                return exit_status, contents.getvalue()+error.getvalue()
+            except socket.timeout:
+                msg = "timeout exceeded ...({0})".format(host)
+                logger.info(msg)
+                return -1, msg
+        except Exception, e: 
+            return -1, str(e)
+
+    def paramiko_getfile(self, host, username, password, from_path, to_path, port=22):
+        scp = paramiko.Transport((host, port))
+        scp.connect(username=username, password=password)
+        sftp = paramiko.SFTPClient.from_transport(scp)
+        sftp.get(from_path, to_path)
+        scp.close()
+
+    def paramiko_putfile(self, ssh, from_path, to_path, port=22):
+        host = ssh['host']
+        username = ssh['username']
+        password = ssh['password']
+        scp = paramiko.Transport((host, port))
+        scp.connect(username=username, password=password)
+        sftp = paramiko.SFTPClient.from_transport(scp)
+        sftp.put(from_path, to_path)
+        scp.close()
+
+    def paramiko_putdir(self, ssh, local_dir, remote_dir, port=22):
+        host = ssh['host']
+        username = ssh['username']
+        password = ssh['password']
+        try:
+            t=paramiko.Transport((host, port))
+            t.connect(username=username, password=password)
+            sftp=paramiko.SFTPClient.from_transport(t)
+            for root,dirs,files in os.walk(local_dir):
+                for filespath in files:
+                    local_file = os.path.join(root,filespath)
+                    a = local_file.replace(local_dir,'')
+                    remote_file = os.path.join(remote_dir,a)
+                    try:
+                        sftp.put(local_file,remote_file)
+                    except Exception,e:
+                        sftp.mkdir(os.path.split(remote_file)[0])
+                        sftp.put(local_file,remote_file)
+                for name in dirs:
+                    local_path = os.path.join(root,name)
+                    a = local_path.replace(local_dir,'')
+                    remote_path = os.path.join(remote_dir,a)
+                    try:
+                        sftp.mkdir(remote_path)
+                    except Exception,e:
+                        logger.info(e)
+            t.close()
+        except Exception,e:
+            logger.info(e)
+
+    def get_exported_param(self, param_name):
+        param_value = os.getenv(param_name)
+        if param_value is None or param_value == "":
+            param_value = ""
+        return param_value
+
+    def set_exported_param(self, param_name, param_value):
+        os.putenv(param_name, param_value)
+        return os.getenv(param_name)
+
+    def shell_escape_char(self, char):
+        char = char.replace('[', '\[').replace(']', '\]').replace('/', '\/')
+        return char
+
+    def randomMAC(self):
+        mac = [ 0x06,
+                random.randint(0x00, 0x2f),
+                random.randint(0x00, 0x3f),
+                random.randint(0x00, 0x4f),
+                random.randint(0x00, 0x8f),
+                random.randint(0x00, 0xff) ]
+        return ':'.join(map(lambda x: "%02x" % x, mac))
+
+    def is_json(self, data):
+        try:
+            json_object = json.loads(data)
+        except ValueError, e:
+            logger.warning("No JSON object could be decoded")
+            return False
+        return json_object
+
+    def url_validation(self, url):
+        cmd = "if ( curl -o/dev/null -sfI '{0}' ); then echo 'true'; else echo 'false'; fi".format(url)
+        output = os.popen(cmd).read()
+        if output.strip() == "true":
+            return True
+        else:
+            return False
+
+    def runcmd(self, cmd, ssh, timeout=None, desc=None, debug=True, port=22):
+        host = ssh['host']
+        if ":" in host:
+            var = host.split(':')
+            host = var[0]
+            port = int(var[1])
+        username = ssh['username']
+        password = ssh['password']
+        retcode, stdout = self.paramiko_run(cmd, host, username, password, timeout, port)
+        if debug:
+            fd = open(DEBUG_FILE, 'a')
+            fd.write(">>> Running in: {0}:{1}, Desc: {2}\n".format(host, port, desc))
+            fd.write("Command: {0}\n".format(cmd))
+            fd.write("Retcode: {0}\n".format(retcode))
+            fd.write("Output:\n{0}\n".format(stdout))
+            fd.close()
+        return retcode, stdout.strip()
+
+    def run_loop(self, cmd, ssh, desc=None, loop_num=10, wait_time=30, wait_msg=None):
+        status = ""
+        for i in range(loop_num):
+            ret, output = self.runcmd(cmd, ssh, desc=desc)
+            if ret == 0:
+                status = "Yes"
+                break
+            if wait_msg is not None:
+                logger.info(wait_msg)
+            time.sleep(wait_time)
+        return status, output
+
+    def run_service(self, ssh, name, action):
+        cmd = "service {0} {1}".format(name, action)
+        ret, output = self.runcmd(cmd, ssh, desc="run service")
+        time.sleep(10)
+        return ret, output
+
+    def run_expect(self, ssh, cmd, attrs):
+        options = list()
+        filename = "/tmp/exp.sh"
+        for attr in attrs:
+            expect = r'expect "%s"' % attr.split('|')[0]
+            send = r'send "%s\r"' % attr.split('|')[1]
+            options.append(expect+'\n'+send)
+        cmd = ('cat <<EOF > %s\n'
+                '#!/usr/bin/expect\n'
+                'spawn %s\n'
+                '%s\n'
+                'expect eof\n'
+                'exit\n'
+                'EOF'
+              ) % (filename, cmd, '\n'.join(options))
+        ret, output = self.runcmd(cmd, ssh, desc="create expect script")
+        cmd = "chmod +x {0}; {1}".format(filename, filename)
+        ret, output = self.runcmd(cmd, ssh, desc="run expect script")
+        self.runcmd("rm -f {0}".format(filename), ssh, desc="rm expect script")
+        return ret, output
+
+    def fd_delete(self, ssh, file_path):
+        rex = ["", " ", "/", "/root", "/root/"]
+        if any(key == file_path for key in rex):
+            logger.warning("Unsupport to delete %s" % rex)
+        else:
+            cmd = "rm -rf %s" % file_path
+            ret, output = self.runcmd(cmd, ssh, desc="delete files/dir")
+            if ret == 0:
+                logger.info("Succeeded to delete {0}".format(file_path))
+            else:
+                logger.warning("Failed to delete {0}".format(file_path))
+
+    def ssh_no_passwd_access(self, ssh_local, ssh_remote=None):
+        if ssh_remote is None:
+            ssh_remote = {
+                    "host":deploy.libvirt.remote,
+                    "username":deploy.libvirt.remote_user,
+                    "password":deploy.libvirt.remote_passwd}
+        cmd = 'echo -e "\n" | ssh-keygen -N "" &> /dev/null'
+        ret, output = self.runcmd(cmd, ssh_local, desc="create ssh key")
+        cmd = "cat ~/.ssh/id_rsa.pub"
+        ret, output = self.runcmd(cmd, ssh_local, desc="check id_rsa.pub exist")
+        if ret != 0 or output is None:
+            raise FailException("Failed to create ssh key")
+        cmd = "mkdir ~/.ssh/; echo '{0}' >> ~/.ssh/authorized_keys".format(output)
+        ret, output = self.runcmd(cmd, ssh_remote, desc="copy id_rsa.pub to remote")
+        host = ssh_remote['host']
+        port = 22
+        if ":" in host:
+            var = host.split(':')
+            host = var[0]
+            port = int(var[1])
+        cmd = "ssh-keyscan -p {0} {1} >> ~/.ssh/known_hosts".format(port, host) 
+        ret, output = self.runcmd(cmd, ssh_local, desc="create ~/.ssh/known_hosts")
+        logger.info("Successed to copy sshkey from {0} to {1}".format(ssh_local['host'], ssh_remote['host']))
+
+    def kill_pid_by_name(self, ssh, process_name):
+        cmd = "ps -ef | grep %s -i | grep -v grep | awk '{print $2}' | xargs -I {} kill -9 {}" % process_name
+        ret, output = self.runcmd(cmd, ssh, desc="kill pid by pid_name")
+        cmd = "rm -f /var/run/%s.pid" % process_name
+        ret, output = self.runcmd(cmd, ssh, desc="remove pid file")
+        cmd = "ps -ef | grep %s -i | grep -v grep |sort" % process_name
+        ret, output = self.runcmd(cmd, ssh, desc="check pid exist")
+        if output.strip() == "" or output.strip() is None:
+            return True
+        else:
+            return False
+
+    def system_reboot(self, ssh):
+        host = ssh['host']
+        is_container = "no"
+        if ":" in host:
+            var = host.split(':')
+            host = var[0]
+            port = int(var[1])
+            if port != 22:
+                is_container = "yes"
+        if is_container == "no":
+            cmd = "sync;sync;sync;sync;reboot -f && exit"
+            ret, output = self.runcmd(cmd, ssh, desc="reboot os", timeout=3)
+            time.sleep(60)
+        else:
+            container_name = self.get_hostname(ssh)
+            ssh_docker ={
+                "host" : deploy.docker.server,
+                "username" : deploy.docker.server_user,
+                "password" : deploy.docker.server_passwd,
+            }
+            logger.info("system({0}) is a container, will restart it by docker".format(host))
+            cmd = "docker restart %s" % container_name
+            ret, output = self.runcmd(cmd, ssh_docker, desc="restart container")
+            cmd = "docker exec -i %s /usr/sbin/sshd" % container_name
+            ret, output = self.runcmd(cmd, ssh_docker, desc="start container ssh")
+            time.sleep(180)
+        if self.ssh_is_connected(ssh):
+            logger.info('Succeeded to reboot system({0})'.format(host))
+        else:
+            raise FailException('Failed to reboot system({0})'.format(host))
+
+    def ssh_is_connected(self, ssh):
+        host = ssh['host']
+        cmd ="rpm -qa filesystem"
+        for i in range(360):
+            ret, output = self.runcmd(cmd, ssh, desc="ssh connect check")
+            if ret == 0 and "filesystem" in output:
+                logger.info("Succeeded to ssh connect host %s" % host)
+                return True
+            logger.info("Trying to connect host %s after 60s..." % host)
+            time.sleep(60)
+        return False
+
+    def rhel_version(self, ssh):
+        cmd = "cat /etc/redhat-release"
+        ret, output = self.runcmd(cmd, ssh, desc="check rhel release")
+        if ret == 0 and output is not None:
+            m = re.search(r'(?<=release )\d', output)
+            rhel_ver = m.group(0)
+            logger.info("Succeeded to check rhel release: rhel-%s (%s) (%s)" % (rhel_ver, output, ssh['host']))
+            return str(rhel_ver)
+        else:
+            raise FailException("Unknown rhel release: %s (%s)" % (output.strip(), ssh['host']))
+
+    def stop_firewall(self, ssh):
+        rhel_ver = self.rhel_version(ssh)
+        if rhel_ver == "6":
+            cmd = "service iptables stop; chkconfig iptables off"
+            self.runcmd(cmd, ssh, desc="Stop and disable iptables service")
+        else:
+            cmd = "systemctl stop firewalld.service; systemctl disable firewalld.service"
+            self.runcmd(cmd, ssh, desc="Stop and disable firewalld service")
+        cmd = "setenforce 0; sed -i -e 's/SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config"
+        self.runcmd(cmd, ssh, desc="disable selinux")
+        logger.info("Succeeded to stop firewalld (%s)" % ssh['host'])
+
+    def bridge_setup(self, bridge_name, ssh):
+        host = ssh['host']
+        cmd = "ip route get 8.8.8.8 | awk 'NR==2 {print $1}' RS='dev'"
+        ret, output = self.runcmd(cmd, ssh, desc="get network device")
+        if ret == 0:
+            network_dev = output.strip()
+            if bridge_name not in output:
+                cmd_1 = "sed -i '/^BOOTPROTO/d' /etc/sysconfig/network-scripts/ifcfg-%s;" % network_dev
+                cmd_2 = "echo 'BRIDGE=%s' >> /etc/sysconfig/network-scripts/ifcfg-%s;" % (bridge_name, network_dev)
+                cmd_3 = "echo 'DEVICE=%s\nBOOTPROTO=dhcp\nONBOOT=yes\nTYPE=Bridge' > /etc/sysconfig/network-scripts/ifcfg-%s" % (bridge_name, bridge_name)
+                cmd = "%s %s %s" % (cmd_1, cmd_2, cmd_3)
+                ret, output = self.runcmd(cmd, ssh, desc="setup bridge")
+                if ret == 0:
+                    logger.info("Succeeded to create bridge:%s (%s)" % (bridge_name, host))
+                else:
+                    raise FailException("Failed to create bridge(%s)" % host)
+                cmd = "service NetworkManager stop; service network restart"
+                ret, output = self.runcmd(cmd, ssh, desc="restart network")
+            else:
+                logger.info("Bridge(%s) is ready(%s)" %(bridge_name, host))
+        else:
+            raise FailException("Failed to create bridge(%s)" % host)
+
+    def get_hostname(self, ssh):
+        ret, output = self.runcmd('hostname', ssh, desc="get host name")
+        if ret == 0 and output is not None and output != "":
+            hostname = output.strip()
+            logger.info("Succeeded to get hostname(%s): %s" %(ssh['host'], hostname))
+            return hostname
+        else:
+            raise FailException("Failed to get hostname(%s)" % ssh['host'])
+
+    def get_ipaddr(self, ssh):
+        #cmd = "ip route get 8.8.8.8 | awk 'NR==1 {print $NF}'"
+        cmd = "ip route get 8.8.8.8 | awk '/src/ { print $7 }'"
+        ret, output = self.runcmd(cmd, ssh, desc="get host ip address")
+        if ret == 0 and output is not None:
+                return output.strip()
+        else:
+            raise FailException("Failed to get ip address(%s)" % ssh['host'])
+
+    def get_gateway(self, ssh):
+        ipaddr = self.get_ipaddr(ssh)
+        cmd = "ip route | grep %s" % ipaddr
+        ret, output = self.runcmd(cmd, ssh, desc="get host ip gateway")
+        if ret == 0 and output is not None and output != "":
+            output = output.strip().split(" ")
+            if len(output) > 0:
+                gateway = output[0]
+                return gateway
+        raise FailException("Failed to get gateway(%s)" % ssh['host'])
+
+    def set_etc_hosts(self, etc_hosts_value, ssh):
+        cmd = "sed -i '/localhost/!d' /etc/hosts; echo '%s' >> /etc/hosts" % (etc_hosts_value)
+        ret, output = self.runcmd(cmd, ssh, desc="set /etc/hosts")
+        if ret == 0:
+            logger.info("Succeeded to set /etc/hosts (%s)" % ssh['host'])
+        else:
+            raise FailException("Failed to set /etc/hosts (%s)" % ssh['host'])
+
+    def set_hostname(self, hostname, ssh):
+        try:
+            cmd = "hostnamectl set-hostname {0}".format(hostname)
+            self.runcmd(cmd, ssh, desc="run hostname command")
+            rhel_ver = self.rhel_version(ssh)
+            if rhel_ver == "6":
+                cmd = "sed -i '/HOSTNAME=/d' /etc/sysconfig/network; echo 'HOSTNAME={0}' >> /etc/sysconfig/network".format(hostname)
+                self.runcmd(cmd, ssh, desc="set hostname in /etc/sysconfig/network")
+            else:
+                cmd = "if [ -f /etc/hostname ]; then sed -i -e '/localhost/d' -e '/{0}/d' /etc/hostname; echo {0} >> /etc/hostname; fi".format(hostname)
+                self.runcmd(cmd, ssh, desc="set hostname in /etc/hostname")
+            logger.info("Succeeded to set hostname ({0})".format(ssh['host']))
+        except:
+            raise FailException("Failed to set hostname ({0})".format(ssh['host']))
+
+    def system_init(self, key, ssh):
+        if self.ssh_is_connected(ssh):
+            host_ip = self.get_ipaddr(ssh)
+            host_name = self.get_hostname(ssh)
+            if "localhost" in host_name or "unused" in host_name or "openshift" in host_name or host_name is None:
+                random_str = ''.join(map(lambda xx:(hex(ord(xx))[2:]),os.urandom(8)))[0:8]
+                host_name = "%s-%s.redhat.com" % (key, random_str)
+            etc_hosts_value = "%s %s" % (host_ip, host_name)
+            self.set_hostname(host_name, ssh)
+            self.set_etc_hosts(etc_hosts_value, ssh)
+            self.stop_firewall(ssh)
+        else:
+            raise FailException("Failed to ssh login %s" % host_ip)
+
+    def brew_pkg_install(self, ssh):
+        brew_url = "http://download.eng.bos.redhat.com/brewroot/packages"
+        pkg_list = list()
+        if self.rhel_version(ssh) == "8":
+            pkg_list.append("%s/expect/5.45.4/3.el8/x86_64/expect-5.45.4-3.el8.x86_64.rpm" % brew_url)
+            pkg_list.append("%s/tcl/8.6.8/2.el8/x86_64/tcl-8.6.8-2.el8.x86_64.rpm" % brew_url)
+            pkg_list.append("%s/wget/1.19.5/2.el8/x86_64/wget-1.19.5-2.el8.x86_64.rpm" % brew_url)
+        if self.rhel_version(ssh) == "7":
+            pkg_list.append("%s/expect/5.45/14.el7_1/x86_64/expect-5.45-14.el7_1.x86_64.rpm" % brew_url)
+            pkg_list.append("%s/tcl/8.5.13/8.el7/x86_64/tcl-8.5.13-8.el7.x86_64.rpm" % brew_url)
+            pkg_list.append("%s/wget/1.14/18.el7/x86_64/wget-1.14-18.el7.x86_64.rpm" % brew_url)
+        for pkg in pkg_list:
+            if pkg is not None and pkg != "" and self.url_validation(pkg):
+                cmd = "cd /tmp/; curl -O -L %s" % pkg
+                ret, output = self.runcmd(cmd, ssh, desc="download pkg")
+        ret, output = self.runcmd("rpm -Uvh /tmp/*.rpm --force", ssh, desc="install packages")
+        ret, output = self.runcmd("rm -f /tmp/*.rpm", ssh, desc="clean package")
+        logger.info("Finished to install brew packages in (%s)" % ssh['host'])
+
+    def nmap_pkg_ready(self, ssh):
+        cmd =  "rpm -qa nmap"
+        ret, output = self.runcmd(cmd, ssh, desc="check nmap package")
+        if ret == 0 and output is not None and output != "":
+            logger.info("nmap is ready fro scan ip (%s)" % ssh['host'])
+        else:
+            self.nmap_pkg_install(ssh)
+
+    def nmap_pkg_install(self, ssh):
+        brew_url = "http://download.eng.bos.redhat.com/brewroot/packages"
+        if self.rhel_version(ssh) == "8":
+            nmap = "%s/nmap/7.70/3.el8/x86_64/nmap-7.70-3.el8.x86_64.rpm" % brew_url
+            nmap_ncat = "7.70/3.el8/x86_64/nmap-ncat-7.70-3.el8.x86_64.rpm" % brew_url
+        if self.rhel_version(ssh) == "7":
+            nmap = "%s/nmap/6.40/15.el7/x86_64/nmap-6.40-15.el7.x86_64.rpm" % brew_url
+            nmap_ncat = "%s/nmap/6.40/15.el7/x86_64/nmap-ncat-6.40-15.el7.x86_64.rpm" % brew_url
+        if self.rhel_version(ssh) == "6":
+            nmap = "%s/nmap/5.51/6.el6/x86_64/nmap-5.51-6.el6.x86_64.rpm" %brew_url
+            nmap_ncat = ""
+        if nmap != "" and self.url_validation(nmap):
+            cmd = "cd /tmp/; curl -O -L %s" % nmap
+            ret, output = self.runcmd(cmd, ssh, desc="download nmap")
+        if nmap_ncat != "" and self.url_validation(nmap_ncat):
+            cmd = "cd /tmp/; curl -O -L %s" % nmap_ncat
+            ret, output = self.runcmd(cmd, ssh, desc="download nmap-ncat")
+        ret, output = self.runcmd("rpm -Uvh /tmp/nmap* --force", ssh, desc="install nmap package")
+        ret, output = self.runcmd("rm -f /tmp/nmap*", ssh, desc="clean tmp package")
+        ret, output = self.runcmd("rpm -qa nmap", ssh, desc="check nmap package")
+        if "nmap" not in output:
+            raise FailException("Failed to install nmap package (%s)" % ssh['host'])
+        else:
+            logger.info("nmap package is installed (%s)" % ssh['host'])
+
+    def get_ipaddr_bymac(self, mac_addr, ssh):
+        self.nmap_pkg_ready(ssh)
+        gateway = self.get_gateway(ssh)
+        cmd = "nmap -sP -n %s | grep -i -B 2 %s |grep 'Nmap scan report for' | grep -Eo '([0-9]{1,3}[\.]){3}[0-9]{1,3}'| tail -1" % (gateway, mac_addr)
+        for i in range(40):
+            time.sleep(60)
+            ret, output = self.runcmd(cmd, ssh, desc="check ip addr by mac")
+            if ret == 0 and output is not None and output != "":
+                ipaddr = output.strip()
+                cmd = "ping -c 5 %s |grep -q 'ttl=' && echo 'ok' || echo 'failed'" % ipaddr
+                ret, output = self.runcmd(cmd, ssh, desc="ping ip")
+                if ret == 0 and output == "ok":
+                    return ipaddr
+            logger.info("Try to scan ip by nmap in %s after 30s ..." % ssh['host'])
+        logger.error("Failed to get ip addr by mac(%s)" % ssh['host'])
+        return False
