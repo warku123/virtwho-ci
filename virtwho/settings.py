@@ -10,12 +10,15 @@ def get_exported_param(name):
 class ReaderConf(object):
     def __init__(self, path):
         self.config_parser = ConfigParser()
-        with open(path) as handler:
-            self.config_parser.readfp(handler)
-            if sys.version_info[0] < 3:
+        try:
+            with open(path) as handler:
                 self.config_parser.readfp(handler)
-            else:
-                self.config_parser.read_file(handler)
+                if sys.version_info[0] < 3:
+                    self.config_parser.readfp(handler)
+                else:
+                    self.config_parser.read_file(handler)
+        except:
+            pass
 
     def get(self, section, option, default=None):
         try:
@@ -642,6 +645,16 @@ class ConfigureManifest(FeatureSettings):
         self.instance = reader.get('manifest', 'instance')
         self.limit = reader.get('manifest', 'limit')
         self.unlimit = reader.get('manifest', 'unlimit')
+        if not self.vdc:
+            self.vdc = "RH00002"
+        if not self.vdc_bonus:
+            self.vdc_bonus = "RH00050"
+        if not self.instance:
+            self.instance = "RH00003"
+        if not self.limit:
+            self.limit = "RH00204"
+        if not self.unlimit:
+            self.unlimit = "RH00060"
 
 class ConfigureVcenter(FeatureSettings):
     def __init__(self, *args, **kwargs):
