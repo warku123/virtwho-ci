@@ -1,0 +1,27 @@
+FROM registry.access.redhat.com/rhel7.4:latest
+MAINTAINER "hsun@redhat.com"
+
+# Register, subscribe and Install packages
+RUN subscription-manager register --username={USERNAME} --password={PASSWORD} --auto-attach
+RUN subscription-manager repos --enable=rhel-7-server-rpms --enable=rhel-7-server-optional-rpms
+RUN echo 'proxy=https://squid.corp.redhat.com:3128' >> /etc/yum.conf
+RUN yum install -y openssh-server net-tools wget hostname sudo java python-requests git
+RUN sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+RUN echo "root:redhat" | chpasswd
+RUN ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key
+RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
+
+# Install unittest2, paramiko from epel
+RUN rpm -ivh http://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm
+RUN yum install -y python-pip python-unittest2
+RUN yum install -y python-paramiko python-nose
+RUN yum install -y python-configparser
+
+VOLUME ["/sys/fs"]
+VOLUME ["/run"]
+VOLUME ["/export"]
+
+RUN mkdir /var/run/sshd
+EXPOSE 22
+CMD ["/usr/sbin/sshd", "-D"]

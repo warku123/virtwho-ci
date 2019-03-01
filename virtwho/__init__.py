@@ -1,0 +1,88 @@
+import re
+import os
+import sys
+import json
+import time
+import shutil
+import random
+
+import logging
+import StringIO
+import socket
+import select
+import Queue
+import threading
+import paramiko
+
+if sys.version_info < (2, 7):
+    import unittest2 as unittest
+else:
+    import unittest
+
+from virtwho.settings import DeploySettings
+from virtwho.settings import ConfigSettings
+# configuration for provisioning environment
+deploy = DeploySettings()
+deploy.configure("provision.ini")
+# configuration for debugging testcases
+config = ConfigSettings()
+config.configure("config.ini")
+
+# result data for provision
+provision_info = os.path.join(os.path.realpath(os.path.join(
+    os.path.dirname(__file__),
+    os.pardir)),
+    "provision.info"
+    )
+
+# result data for polarion importer
+runtest_info = os.path.join(os.path.realpath(os.path.join(
+    os.path.dirname(__file__),
+    os.pardir)),
+    "runtest.info"
+    )
+
+# debug log file
+DEBUG_FILE = os.path.join(os.path.realpath(os.path.join(
+    os.path.dirname(__file__),
+    os.pardir)),
+    "debug.log"
+    )
+
+# console output
+LOGGER_FILE = os.path.join(os.path.realpath(os.path.join(
+    os.path.dirname(__file__),
+    os.pardir)),
+    "console.log"
+    )
+
+# create a logger
+logger = logging.getLogger("vw")
+logger.setLevel(logging.DEBUG)
+
+# create file handler
+fh = logging.FileHandler("%s" % LOGGER_FILE)
+fh.setLevel(logging.DEBUG)
+
+# create console handler
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+
+# logging format
+formatter = logging.Formatter(
+        fmt='%(asctime)s [%(levelname)s] %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+        )
+fh.setFormatter(formatter)
+ch.setFormatter(formatter)
+
+logger.addHandler(fh)
+logger.addHandler(ch)
+
+# turn off paramiko log off
+paramiko_logger = logging.getLogger("paramiko.transport")
+paramiko_logger.disabled = True
+
+class FailException(BaseException):
+    def __init__(self, error_message):
+        logger.error(error_message)
