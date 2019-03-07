@@ -38,8 +38,8 @@ class tc_ID0000_stop_guest(unittest.TestCase):
         logger.info(deploy.satellite.default_org)
 
         logger.info(deploy.vcenter.ip)
-        logger.info(deploy.vcenter.esx_master_user)
-        logger.info(deploy.vcenter.esx_master_passwd)
+        logger.info(deploy.vcenter.master_user)
+        logger.info(deploy.vcenter.master_passwd)
 
         logger.info(deploy.xen.master)
         logger.info(deploy.xen.master_user)

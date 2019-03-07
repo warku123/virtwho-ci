@@ -558,8 +558,10 @@ class ConfigureHypervisor(FeatureSettings):
         super(ConfigureHypervisor, self).__init__(*args, **kwargs)
         self.type = None
         self.server = None
-        self.server_user = None
-        self.server_passwd = None
+        self.server_username = None
+        self.server_password = None
+        self.server_ssh_user = None
+        self.server_ssh_passwd = None
         self.guest_ip = None
         self.guest_name = None
         self.guest_user = None
@@ -568,8 +570,10 @@ class ConfigureHypervisor(FeatureSettings):
     def read(self, reader):
         self.type = get_exported_param("HYPERVISOR_TYPE")
         self.server = get_exported_param("HYPERVISOR_SERVER")
-        self.server_user = get_exported_param("HYPERVISOR_USER")
-        self.server_passwd = get_exported_param("HYPERVISOR_PASSWD")
+        self.server_username = get_exported_param("HYPERVISOR_USERNAME")
+        self.server_password = get_exported_param("HYPERVISOR_PASSWORD")
+        self.server_ssh_user = get_exported_param("HYPERVISOR_SSH_USER")
+        self.server_ssh_passwd = get_exported_param("HYPERVISOR_SSH_PASSWD")
         self.guest_ip = get_exported_param("GUESR_IP")
         self.guest_name = get_exported_param("GUEST_NAME")
         self.guest_user = get_exported_param("GUEST_USER")
@@ -578,10 +582,14 @@ class ConfigureHypervisor(FeatureSettings):
             self.type = reader.get('hypervisor', 'type')
         if not self.server:
             self.server = reader.get('hypervisor', 'server')
-        if not self.server_user:
-            self.server_user = reader.get('hypervisor', 'server_user')
-        if not self.server_passwd:
-            self.server_passwd = reader.get('hypervisor', 'server_passwd')
+        if not self.server_username:
+            self.server_username = reader.get('hypervisor', 'server_username')
+        if not self.server_password:
+            self.server_password = reader.get('hypervisor', 'server_password')
+        if not self.server_ssh_user:
+            self.server_ssh_user = reader.get('hypervisor', 'server_ssh_user')
+        if not self.server_ssh_passwd:
+            self.server_ssh_passwd = reader.get('hypervisor', 'server_ssh_passwd')
         if not self.guest_ip:
             self.guest_ip = reader.get('hypervisor', 'guest_ip')
         if not self.guest_name:
@@ -629,7 +637,6 @@ class ConfigureRegister(FeatureSettings):
         if not self.ssh_passwd:
             self.ssh_passwd = reader.get('register', 'ssh_passwd')
 
-
 class ConfigureManifest(FeatureSettings):
     def __init__(self, *args, **kwargs):
         super(ConfigureManifest, self).__init__(*args, **kwargs)
@@ -655,54 +662,6 @@ class ConfigureManifest(FeatureSettings):
             self.limit = "RH00204"
         if not self.unlimit:
             self.unlimit = "RH00060"
-
-class ConfigureVcenter(FeatureSettings):
-    def __init__(self, *args, **kwargs):
-        super(ConfigureVcenter, self).__init__(*args, **kwargs)
-        self.vcenter_ip = None
-        self.vcenter_ssh_user = None
-        self.vcenter_ssh_passwd = None
-        self.esxi_master = None
-        self.esxi_master_ssh_user = None
-        self.esxi_master_ssh_passwd = None
-
-    def read(self, reader):
-        self.vcenter_ip = reader.get('vcenter', 'vcenter_ip')
-        self.vcenter_ssh_user = reader.get('vcenter', 'vcenter_ssh_user')
-        self.vcenter_ssh_passwd = reader.get('vcenter', 'vcenter_ssh_passwd')
-        self.esxi_master = reader.get('vcenter', 'esxi_master')
-        self.esxi_master_ssh_user = reader.get('vcenter', 'esxi_master_ssh_user')
-        self.esxi_master_ssh_passwd = reader.get('vcenter', 'esxi_master_ssh_passwd')
-
-class ConfigureRHEVM(FeatureSettings):
-    def __init__(self, *args, **kwargs):
-        super(ConfigureRHEVM, self).__init__(*args, **kwargs)
-        self.rhevm_ip = None
-        self.rhevm_ssh_user = None
-        self.rhevm_ssh_passwd = None
-        self.vdsm_master = None
-        self.vdsm_master_ssh_user = None
-        self.vdsm_master_ssh_passwd = None
-
-    def read(self, reader):
-        self.rhevm_ip = reader.get('rhevm', 'rhevm_ip')
-        self.rhevm_ssh_user = reader.get('rhevm', 'rhevm_ssh_user')
-        self.rhevm_ssh_passwd = reader.get('rhevm', 'rhevm_ssh_passwd')
-        self.vdsm_master = reader.get('rhevm', 'vdsm_master')
-        self.vdsm_master_ssh_user = reader.get('rhevm', 'vdsm_master_ssh_user')
-        self.vdsm_master_ssh_passwd = reader.get('rhevm', 'vdsm_master_ssh_passwd')
-
-class ConfigureVDSM(FeatureSettings):
-    def __init__(self, *args, **kwargs):
-        super(ConfigureVDSM, self).__init__(*args, **kwargs)
-        self.rhevm_ip = None
-        self.rhevm_ssh_user = None
-        self.rhevm_ssh_passwd = None
-
-    def read(self, reader):
-        self.rhevm_ip = reader.get('vdsm', 'rhevm_ip')
-        self.rhevm_ssh_user = reader.get('vdsm', 'rhevm_ssh_user')
-        self.rhevm_ssh_passwd = reader.get('vdsm', 'rhevm_ssh_passwd')
 
 class ConfigurePerformance(FeatureSettings):
     def __init__(self, *args, **kwargs):
@@ -732,7 +691,4 @@ class ConfigSettings(Settings):
         self.manifest = ConfigureManifest()
         self.hypervisor = ConfigureHypervisor()
         self.register = ConfigureRegister()
-        self.vcenter = ConfigureVcenter()
-        self.rhevm = ConfigureRHEVM()
-        self.vdsm = ConfigureVDSM()
         self.performance = ConfigurePerformance()

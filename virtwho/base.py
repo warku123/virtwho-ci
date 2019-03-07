@@ -77,45 +77,6 @@ class Base(unittest.TestCase):
         except Exception,e:
             logger.info(e)
 
-    def get_exported_param(self, param_name):
-        param_value = os.getenv(param_name)
-        if param_value is None or param_value == "":
-            param_value = ""
-        return param_value
-
-    def set_exported_param(self, param_name, param_value):
-        os.putenv(param_name, param_value)
-        return os.getenv(param_name)
-
-    def shell_escape_char(self, char):
-        char = char.replace('[', '\[').replace(']', '\]').replace('/', '\/')
-        return char
-
-    def randomMAC(self):
-        mac = [ 0x06,
-                random.randint(0x00, 0x2f),
-                random.randint(0x00, 0x3f),
-                random.randint(0x00, 0x4f),
-                random.randint(0x00, 0x8f),
-                random.randint(0x00, 0xff) ]
-        return ':'.join(map(lambda x: "%02x" % x, mac))
-
-    def is_json(self, data):
-        try:
-            json_object = json.loads(data)
-        except ValueError, e:
-            logger.warning("No JSON object could be decoded")
-            return False
-        return json_object
-
-    def url_validation(self, url):
-        cmd = "if ( curl -o/dev/null -sfI '{0}' ); then echo 'true'; else echo 'false'; fi".format(url)
-        output = os.popen(cmd).read()
-        if output.strip() == "true":
-            return True
-        else:
-            return False
-
     def runcmd(self, cmd, ssh, timeout=None, desc=None, debug=True, port=22):
         host = ssh['host']
         if ":" in host:
@@ -172,6 +133,56 @@ class Base(unittest.TestCase):
         ret, output = self.runcmd(cmd, ssh, desc="run expect script")
         self.runcmd("rm -f {0}".format(filename), ssh, desc="rm expect script")
         return ret, output
+
+    def get_exported_param(self, param_name):
+        param_value = os.getenv(param_name)
+        if param_value is None or param_value == "":
+            param_value = ""
+        return param_value
+
+    def set_exported_param(self, param_name, param_value):
+        os.putenv(param_name, param_value)
+        return os.getenv(param_name)
+
+    def shell_escape_char(self, char):
+        char = char.replace('[', '\[').replace(']', '\]').replace('/', '\/')
+        return char
+
+    def randomMAC(self):
+        mac = [ 0x06,
+                random.randint(0x00, 0x2f),
+                random.randint(0x00, 0x3f),
+                random.randint(0x00, 0x4f),
+                random.randint(0x00, 0x8f),
+                random.randint(0x00, 0xff) ]
+        return ':'.join(map(lambda x: "%02x" % x, mac))
+
+    def get_url_domain(self, url):
+        reobj = re.compile(r"""(?xi)\A
+        [a-z][a-z0-9+\-.]*://               # Scheme
+        ([a-z0-9\-._~%!$&'()*+,;=]+@)?      # User
+        ([a-z0-9\-._~%]+                    # Named or IPv4 host
+        |\[[a-z0-9\-._~%!$&'()*+,;=:]+\])   # IPv6+ host
+        """)
+        match = reobj.search(url)
+        if match:
+            return match.group(2)
+
+    def is_json(self, data):
+        try:
+            json_object = json.loads(data)
+        except ValueError, e:
+            logger.warning("No JSON object could be decoded")
+            return False
+        return json_object
+
+    def url_validation(self, url):
+        cmd = "if ( curl -o/dev/null -sfI '{0}' ); then echo 'true'; else echo 'false'; fi".format(url)
+        output = os.popen(cmd).read()
+        if output.strip() == "true":
+            return True
+        else:
+            return False
 
     def fd_delete(self, ssh, file_path):
         rex = ["", " ", "/", "/root", "/root/"]
@@ -314,7 +325,6 @@ class Base(unittest.TestCase):
         ret, output = self.runcmd('hostname', ssh, desc="get host name")
         if ret == 0 and output is not None and output != "":
             hostname = output.strip()
-            logger.info("Succeeded to get hostname(%s): %s" %(ssh['host'], hostname))
             return hostname
         else:
             raise FailException("Failed to get hostname(%s)" % ssh['host'])
@@ -376,57 +386,83 @@ class Base(unittest.TestCase):
         else:
             raise FailException("Failed to ssh login %s" % host_ip)
 
-    def brew_pkg_install(self, ssh):
-        brew_url = "http://download.eng.bos.redhat.com/brewroot/packages"
-        pkg_list = list()
-        if self.rhel_version(ssh) == "8":
-            pkg_list.append("%s/expect/5.45.4/3.el8/x86_64/expect-5.45.4-3.el8.x86_64.rpm" % brew_url)
-            pkg_list.append("%s/tcl/8.6.8/2.el8/x86_64/tcl-8.6.8-2.el8.x86_64.rpm" % brew_url)
-            pkg_list.append("%s/wget/1.19.5/2.el8/x86_64/wget-1.19.5-2.el8.x86_64.rpm" % brew_url)
-        if self.rhel_version(ssh) == "7":
-            pkg_list.append("%s/expect/5.45/14.el7_1/x86_64/expect-5.45-14.el7_1.x86_64.rpm" % brew_url)
-            pkg_list.append("%s/tcl/8.5.13/8.el7/x86_64/tcl-8.5.13-8.el7.x86_64.rpm" % brew_url)
-            pkg_list.append("%s/wget/1.14/18.el7/x86_64/wget-1.14-18.el7.x86_64.rpm" % brew_url)
-        for pkg in pkg_list:
-            if pkg is not None and pkg != "" and self.url_validation(pkg):
-                cmd = "cd /tmp/; curl -O -L %s" % pkg
-                ret, output = self.runcmd(cmd, ssh, desc="download pkg")
-        ret, output = self.runcmd("rpm -Uvh /tmp/*.rpm --force", ssh, desc="install packages")
-        ret, output = self.runcmd("rm -f /tmp/*.rpm", ssh, desc="clean package")
-        logger.info("Finished to install brew packages in (%s)" % ssh['host'])
+    def pkg_check(self, ssh, package):
+        cmd = "rpm -qa {0}".format(package)
+        ret, output = self.runcmd(cmd, ssh)
+        if ret == 0 and output is not None and output != "":
+            pkg = output.strip()+".rpm"
+            logger.info("{0} is installed".format(pkg))
+            return pkg
+        else:
+            logger.info("{0} is not installed".format(package))
+            return False
+
+    def pkg_install(self, ssh, package):
+        cmd = "yum install -y {0}".format(package)
+        ret, output = self.runcmd(cmd, ssh)
+        if self.pkg_check(ssh, package) is False:
+            logger.warning("Failed to install {0}".format(package))
+            return False
+        else:
+            logger.info("Succeeded to install {0}".format(package))
+            return True
+
+    def pkg_uninstall(self, ssh, package):
+        cmd = "rpm -e {0} --nodeps".format(package)
+        ret, output = self.runcmd(cmd, ssh)
+        if self.pkg_check(ssh, package) is False:
+            logger.info("Succeeded to uninstall {0}".format(package))
+            return True
+        else:
+            logger.warning("Failed to uninstall {0}".format(package))
+            return False
+
+    def pkg_info(self, ssh, package):
+        cmd = "rpm -qi {0}".format(package)
+        ret,output = self.runcmd(cmd, ssh)
+        dic = output.split("\n")
+        info = {}
+        for d in dic:
+            try:
+                kv_entry = d.split(': ')
+                k = kv_entry[0].strip()
+                v = kv_entry[1].strip()
+                info.update({k: v})
+            except:
+                pass
+        return info
 
     def nmap_pkg_ready(self, ssh):
-        cmd =  "rpm -qa nmap"
-        ret, output = self.runcmd(cmd, ssh, desc="check nmap package")
-        if ret == 0 and output is not None and output != "":
-            logger.info("nmap is ready fro scan ip (%s)" % ssh['host'])
-        else:
+        if self.pkg_check(ssh, "nmap") is False:
             self.nmap_pkg_install(ssh)
+        else:
+            logger.info("nmap is ready to scan ip")
 
     def nmap_pkg_install(self, ssh):
-        brew_url = "http://download.eng.bos.redhat.com/brewroot/packages"
-        if self.rhel_version(ssh) == "8":
-            nmap = "%s/nmap/7.70/3.el8/x86_64/nmap-7.70-3.el8.x86_64.rpm" % brew_url
-            nmap_ncat = "7.70/3.el8/x86_64/nmap-ncat-7.70-3.el8.x86_64.rpm" % brew_url
-        if self.rhel_version(ssh) == "7":
-            nmap = "%s/nmap/6.40/15.el7/x86_64/nmap-6.40-15.el7.x86_64.rpm" % brew_url
-            nmap_ncat = "%s/nmap/6.40/15.el7/x86_64/nmap-ncat-6.40-15.el7.x86_64.rpm" % brew_url
-        if self.rhel_version(ssh) == "6":
-            nmap = "%s/nmap/5.51/6.el6/x86_64/nmap-5.51-6.el6.x86_64.rpm" %brew_url
-            nmap_ncat = ""
-        if nmap != "" and self.url_validation(nmap):
-            cmd = "cd /tmp/; curl -O -L %s" % nmap
-            ret, output = self.runcmd(cmd, ssh, desc="download nmap")
-        if nmap_ncat != "" and self.url_validation(nmap_ncat):
-            cmd = "cd /tmp/; curl -O -L %s" % nmap_ncat
-            ret, output = self.runcmd(cmd, ssh, desc="download nmap-ncat")
-        ret, output = self.runcmd("rpm -Uvh /tmp/nmap* --force", ssh, desc="install nmap package")
-        ret, output = self.runcmd("rm -f /tmp/nmap*", ssh, desc="clean tmp package")
-        ret, output = self.runcmd("rpm -qa nmap", ssh, desc="check nmap package")
-        if "nmap" not in output:
-            raise FailException("Failed to install nmap package (%s)" % ssh['host'])
+        rhel_ver = self.rhel_version(ssh)
+        mirror = "http://mirror.centos.org/centos/{0}/os/x86_64/Packages".format(rhel_ver)
+        ftp = "http://ftp.redhat.com/pub/redhat/rhel/rhel-8-beta/appstream/x86_64/Packages"
+        ret, output = self.runcmd("yum install nmap nmap-ncat", ssh)
+        if self.pkg_check(ssh, "nmap") is False:
+            if rhel_ver == "8":
+                nmap = "{0}/nmap-7.70-4.el8.x86_64.rpm".format(ftp)
+                ncat = "{0}/nmap-ncat-7.70-4.el8.x86_64.rpm".format(ftp)
+            if rhel_ver == "7":
+                nmap = "{0}/nmap-6.40-16.el7.x86_64.rpm".format(mirror)
+                ncat = "{0}/nmap-ncat-6.40-16.el7.x86_64.rpm".format(mirror)
+            if rhel_ver == "6":
+                nmap = "{0}/nmap-5.51-6.el6.x86_64.rpm".format(mirror)
+                ncat = ""
+            if nmap != "" and self.url_validation(nmap):
+                ret, output = self.runcmd("cd /tmp/; curl -O -L {0}".format(nmap), ssh)
+            if nmap_ncat != "" and self.url_validation(nmap_ncat):
+                ret, output = self.runcmd("cd /tmp/; curl -O -L {0}".format(ncat), ssh)
+            ret, output = self.runcmd("rpm -Uvh /tmp/nmap* --force", ssh)
+            ret, output = self.runcmd("rm -f /tmp/nmap*", ssh)
+        if self.pkg_check(ssh, "nmap") is False:
+            raise FailException("Failed to install nmap package")
         else:
-            logger.info("nmap package is installed (%s)" % ssh['host'])
+            logger.info("nmap package is installed")
 
     def get_ipaddr_bymac(self, mac_addr, ssh):
         self.nmap_pkg_ready(ssh)

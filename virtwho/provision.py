@@ -312,38 +312,38 @@ class Provision(Register):
             if "esx" in job_name:
                 username = deploy.stage.esx_user
                 password = deploy.stage.esx_passwd
-                owner = deploy.stage.esx_owner
-                env = deploy.stage.esx_env
+                owner = deploy.stage.esx_org
+                env = deploy.stage.esx_org
             if "xen" in job_name:
                 username = deploy.stage.xen_user
                 password = deploy.stage.xen_passwd
-                owner = deploy.stage.xen_owner
-                env = deploy.stage.xen_env
+                owner = deploy.stage.xen_org
+                env = deploy.stage.xen_org
             if "hyperv" in job_name:
                 username = deploy.stage.hyperv_user
                 password = deploy.stage.hyperv_passwd
-                owner = deploy.stage.hyperv_owner
-                env = deploy.stage.hyperv_env
+                owner = deploy.stage.hyperv_org
+                env = deploy.stage.hyperv_org
             if "rhevm" in job_name:
                 username = deploy.stage.rhevm_user
                 password = deploy.stage.rhevm_passwd
-                owner = deploy.stage.rhevm_owner
-                env = deploy.stage.rhevm_env
+                owner = deploy.stage.rhevm_org
+                env = deploy.stage.rhevm_org
             if "vdsm" in job_name:
                 username = deploy.stage.vdsm_user
                 password = deploy.stage.vdsm_passwd
-                owner = deploy.stage.vdsm_owner
-                env = deploy.stage.vdsm_env
+                owner = deploy.stage.vdsm_org
+                env = deploy.stage.vdsm_org
             if "libvirt-remote" in job_name:
                 username = deploy.stage.libvirt_remote_user
                 password = deploy.stage.libvirt_remote_passwd
-                owner = deploy.stage.libvirt_remote_owner
-                env = deploy.stage.libvirt_remote_env
+                owner = deploy.stage.libvirt_remote_org
+                env = deploy.stage.libvirt_remote_org
             if "libvirt-local" in job_name:
                 username = deploy.stage.libvirt_local_user
                 password = deploy.stage.libvirt_local_passwd
-                owner = deploy.stage.libvirt_local_owner
-                env = deploy.stage.libvirt_local_env
+                owner = deploy.stage.libvirt_local_org
+                env = deploy.stage.libvirt_local_org
             register_config={
                     'type':register_type,
                     'server':server,
@@ -390,11 +390,15 @@ class Provision(Register):
         else:
             host_user = deploy.docker.container_user
             host_passwd = deploy.docker.container_passwd
+        hypervisor_ssh_user = ""
+        hypervisor_ssh_passwd = ""
         if "esx" in job_name:
             hypervisor_type = "esx"
             hypervisor_server = deploy.vcenter.ip
             hypervisor_user = deploy.vcenter.admin_user
             hypervisor_passwd = deploy.vcenter.admin_passwd
+            hypervisor_ssh_user = deploy.vcenter.ssh_user
+            hypervisor_ssh_passwd = deploy.vcenter.ssh_passwd
             guest_name = deploy.vcenter.guest_name
             guest_user = deploy.vcenter.guest_user
             guest_passwd = deploy.vcenter.guest_passwd
@@ -417,9 +421,9 @@ class Provision(Register):
         if "rhevm" in job_name:
             hypervisor_type = "rhevm"
             rhevm_ip =  deploy.rhevm.rhevm_ip
-            ssh_user =  deploy.rhevm.rhevm_ssh_user
-            ssh_passwd =  deploy.rhevm.rhevm_ssh_passwd
-            ssh_rhevm = {'host':rhevm_ip,'username':ssh_user,'password':ssh_passwd}
+            hypervisor_ssh_user = deploy.rhevm.rhevm_ssh_user
+            hypervisor_ssh_passwd = deploy.rhevm.rhevm_ssh_passwd
+            ssh_rhevm = {'host':rhevm_ip,'username':hypervisor_ssh_user,'password':hypervisor_ssh_passwd}
             hypervisor_server = self.rhevm_admin_get(ssh_rhevm)
             hypervisor_user = deploy.rhevm.rhevm_admin_user
             hypervisor_passwd = deploy.rhevm.rhevm_admin_user
@@ -428,9 +432,13 @@ class Provision(Register):
             guest_passwd = deploy.rhevm.guest_passwd
         if "vdsm" in job_name:
             hypervisor_type = "vdsm"
-            hypervisor_server = ""
-            hypervisor_user = ""
-            hypervisor_passwd = ""
+            rhevm_ip =  deploy.vdsm.rhevm_ip
+            hypervisor_ssh_user = deploy.vdsm.rhevm_ssh_user
+            hypervisor_ssh_passwd = deploy.vdsm.rhevm_ssh_passwd
+            ssh_rhevm = {'host':rhevm_ip,'username':hypervisor_ssh_user,'password':hypervisor_ssh_passwd}
+            hypervisor_server = self.rhevm_admin_get(ssh_rhevm)
+            hypervisor_user = deploy.vdsm.rhevm_admin_user
+            hypervisor_passwd = deploy.vdsm.rhevm_admin_user
             host_user = deploy.vdsm.master_user
             host_passwd = deploy.vdsm.master_passwd
             guest_name = deploy.vdsm.guest_name
@@ -461,6 +469,8 @@ class Provision(Register):
                 'hypervisor_server':hypervisor_server,
                 'hypervisor_user':hypervisor_user,
                 'hypervisor_passwd':hypervisor_passwd,
+                'hypervisor_ssh_user':hypervisor_ssh_user,
+                'hypervisor_ssh_passwd':hypervisor_ssh_passwd,
                 'host_ip':host_ip,
                 'host_user':host_user,
                 'host_passwd':host_passwd,
@@ -522,8 +532,10 @@ class Provision(Register):
         parameter.append('-d VIRTWHO_HOST_PASSWD={0}'.format(hypervisor_config['host_passwd']))
         parameter.append('-d HYPERVISOR_TYPE={0}'.format(hypervisor_config['hypervisor_type']))
         parameter.append('-d HYPERVISOR_SERVER={0}'.format(hypervisor_config['hypervisor_server']))
-        parameter.append('-d HYPERVISOR_USER={0}'.format(hypervisor_config['hypervisor_user']))
-        parameter.append('-d HYPERVISOR_PASSWD={0}'.format(hypervisor_config['hypervisor_passwd']))
+        parameter.append('-d HYPERVISOR_USERNAME={0}'.format(hypervisor_config['hypervisor_user']))
+        parameter.append('-d HYPERVISOR_PASSWORD={0}'.format(hypervisor_config['hypervisor_passwd']))
+        parameter.append('-d HYPERVISOR_SSH_USER={0}'.format(hypervisor_config['hypervisor_ssh_user']))
+        parameter.append('-d HYPERVISOR_SSH_PASSWD={0}'.format(hypervisor_config['hypervisor_ssh_passwd']))
         parameter.append('-d GUEST_IP={0}'.format(hypervisor_config['guest_ip']))
         parameter.append('-d GUEST_NAME={0}'.format(hypervisor_config['guest_name']))
         parameter.append('-d GUEST_USER={0}'.format(hypervisor_config['guest_user']))
@@ -1494,6 +1506,34 @@ class Provision(Register):
                 % (admin_server, admin_user, admin_passwd)
         return cert 
 
+    def vcenter_host_get(self, cert, ssh_vcenter, guest_name):
+        cmd = "%s Get-VM %s | select *" % (cert, guest_name)
+        ret, output = self.runcmd(cmd, ssh_vcenter)
+        if ret == 0:
+            for line in output.splitlines():
+                if re.match(r"^VMHost .*:", line):
+                    host = line.split(':')[1].strip()
+                    logger.info("Successed to get vcenter host:{0}".format(host))
+                    return host
+        else:
+            raise FailException("Failed to get vcenter host")
+
+    def vcenter_hostname_get(self, cert, ssh_vcenter, esx_host):
+        cmd = "%s Get-VMHost -Name %s | Get-VMHostNetwork |select HostName, DomainName" % (cert, esx_host)
+        ret, output = self.runcmd(cmd, ssh_vcenter)
+        if ret == 0:
+            for line in output.splitlines():
+                if re.match(r"^HostName .*:", line):
+                    host = line.split(':')[1].strip()
+                if re.match(r"^DomainName .*:", line):
+                    domain = line.split(':')[1].strip()
+            if host and domain:
+                hostname = host+'.'+domain
+                logger.info("Successed to get vcenter host:{0}".format(hostname))
+                return hostname
+        else:
+            raise FailException("Failed to get vcenter host")
+
     def vcenter_host_exist(self, cert, ssh_vcenter, esx_host):
         cmd = "%s Get-VMHost -Name %s" % (cert, esx_host)
         ret, output = self.runcmd(cmd, ssh_vcenter)
@@ -2204,7 +2244,7 @@ class Provision(Register):
             time.sleep(15)
         raise FailException("Failed to shutdown libvirt({0}) guest".format(host))
 
-    def libvirt_guest_suspend(self, guest_name, ssh_libvirt, args_libvirt):
+    def libvirt_guest_suspend(self, guest_name, ssh_libvirt):
         host = ssh_libvirt['host']
         cmd = "virsh suspend {0}".format(guest_name)
         ret, output = self.runcmd(cmd, ssh_libvirt, desc="virsh suspend")
@@ -2216,7 +2256,7 @@ class Provision(Register):
             time.sleep(15)
         raise FailException("Failed to pause libvirt({0}) guest".format(host))
 
-    def libvirt_guest_resume(self, guest_name,  ssh_libvirt, args_libvirt):
+    def libvirt_guest_resume(self, guest_name, ssh_libvirt):
         host = ssh_libvirt['host']
         cmd = "virsh resume {0}".format(guest_name)
         ret, output = self.runcmd(cmd, ssh_libvirt, desc="virsh resume")
@@ -2368,6 +2408,36 @@ class Provision(Register):
                 for host_name in hosts:
                     self.rhevm_host_delete(ssh_rhevm, rhevm_shell, host_name.strip())
         logger.info("Finished to clean all the rhevm({0}) hosts".format(ssh_rhevm['host']))
+
+    def rhevm_host_uuid_by_guestname(self, ssh_rhevm, rhevm_shell, guest_name):
+        cmd = "{0} -c -E 'show vm {1}' |grep '^host-id'".format(rhevm_shell, guest_name)
+        ret, output = self.runcmd(cmd, ssh_rhevm)
+        if ret == 0 and "host-id" in output:
+            uuid = output.strip().split(':')[1].strip()
+            logger.info("Succeeded to get rhevm({0}) host: uuid {1}".format(ssh_rhevm['host'],uuid))
+            return uuid
+        else:
+            raise FailException("Failed to check rhevm({0}) host ".format(ssh_rhevm['host']))
+
+    def rhevm_host_name_by_guestname(self, ssh_rhevm, rhevm_shell, guest_name):
+        cmd = "{0} -c -E 'show vm {1}' |grep '^display-address'".format(rhevm_shell, guest_name)
+        ret, output = self.runcmd(cmd, ssh_rhevm)
+        if ret == 0 and "display-address" in output:
+            name = output.strip().split(':')[1].strip()
+            logger.info("Succeeded to get rhevm({0}) host name {1}".format(ssh_rhevm['host'],name))
+            return name
+        else:
+            raise FailException("Failed to check rhevm({0}) host ".format(ssh_rhevm['host']))
+
+    def rhevm_host_hwuuid_by_uuid(self, ssh_rhevm, rhevm_shell, host_uuid):
+        cmd = "{0} -c -E 'show host {1}' |grep '^hardware_information-uuid'".format(rhevm_shell, host_uuid)
+        ret, output = self.runcmd(cmd, ssh_rhevm)
+        if ret == 0 and "hardware_information-uuid" in output:
+            hwuuid = output.strip().split(':')[1].strip()
+            logger.info("Succeeded to get rhevm({0}) host: hwuuid {1}".format(ssh_rhevm['host'],hwuuid))
+            return hwuuid 
+        else:
+            raise FailException("Failed to check rhevm({0}) host ".format(ssh_rhevm['host']))
 
     def rhevm_host_exist(self, ssh_rhevm, rhevm_shell, hostname):
         cmd = "{0} -c -E 'show host {1}' |grep '^name'".format(rhevm_shell, hostname)
