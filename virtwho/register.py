@@ -85,7 +85,7 @@ class Register(Base):
 
     def system_isregister(self, ssh, register_type, register_config):
         host = ssh['host']
-        owner = register_type['owner']
+        owner = register_config['owner']
         ret, output = self.runcmd("subscription-manager identity", ssh)
         if ret == 0:
             if "stage" in register_type:
@@ -561,16 +561,15 @@ class Register(Base):
         logger.error("Failed to set satellite host for unregister_delete_host")
         return False
 
-    def satellite_host_id(self, register_config, host_name, host_uuid):
+    def satellite_host_id(self, ssh, register_config, host_name, host_uuid):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
-        ssh_sat = register_config['ssh_sat']
         cmd = "curl -X GET -s -k -u {0}:{1} {2}/api/v2/hosts/?per_page=1000".format(
                 username, password, api)
         for i in range(3):
             rex = [host_name, host_name.lower(), host_uuid, host_uuid.lower()]
-            ret, output = self.runcmd(cmd, ssh_sat, desc="satellite hosts list")
+            ret, output = self.runcmd(cmd, ssh, desc="satellite hosts list")
             output = self.is_json(output.strip())
             if output is not False and output is not None and output != "" and output.has_key('results'):
                 results = dict()
@@ -589,15 +588,14 @@ class Register(Base):
         logger.error("Failed to get satellite host_id for host({0}), maybe mapping is not sent".format(host_name))
         return None
 
-    def satellite_katello_id(self, register_config, pool_id):
+    def satellite_katello_id(self, ssh, register_config, pool_id):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
-        ssh_sat = register_config['ssh_sat']
         cmd = "curl -X GET -s -k -u {0}:{1} {2}/katello/api/organizations/1/subscriptions/?per_page=1000".format(
                 username, password, api)
         for i in range(3):
-            ret, output = self.runcmd(cmd, ssh_sat, desc="satellite pools list")
+            ret, output = self.runcmd(cmd, ssh, desc="satellite pools list")
             output = self.is_json(output.strip())
             if output is not False and output is not None and output != "" and output.has_key('results'):
                 for item in output['results']:
@@ -610,39 +608,37 @@ class Register(Base):
         logger.error("Failed to get satellite katello_id for pool({0})".format(pool_id))
         return None
 
-    def satellite_host_delete(self, register_config, host_name, host_uuid):
+    def satellite_host_delete(self, ssh, register_config, host_name, host_uuid):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
-        ssh_sat = register_config['ssh_sat']
         host_id = self.satellite_host_id(register_config, host_name, host_uuid)
         if host_id is not None and host_id != "":
             cmd = "curl -X DELETE -s -k -u {0}:{1} {2}/api/v2/hosts/{3}".format(
                     username, password, api, host_id)
-            ret, output = self.runcmd(cmd, ssh_sat, desc="satellite host delete")
+            ret, output = self.runcmd(cmd, ssh, desc="satellite host delete")
             cmd = "curl -X GET -s -k -u {0}:{1} {2}/api/v2/hosts/{3}".format(
                     username, password, api, host_id)
-            ret, output = self.runcmd(cmd, ssh_sat, desc="satellite host get")
+            ret, output = self.runcmd(cmd, ssh, desc="satellite host get")
             if host_name not in output:
                 logger.info("Succeeded to delete host: {0}".format(host_name))
         else:
             logger.info("Host({0}) is not found".format(host_name))
         return True
 
-    def satellite_host_attach(self, register_config, host_name, host_uuid, pool_id, quantity=1):
+    def satellite_host_attach(self, ssh, register_config, host_name, host_uuid, pool_id, quantity=1):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
-        ssh_sat = register_config['ssh_sat']
-        host_id = self.satellite_host_id(register_config, host_name, host_uuid)
-        katello_id = self.satellite_katello_id(register_config, pool_id)
+        host_id = self.satellite_host_id(ssh, register_config, host_name, host_uuid)
+        katello_id = self.satellite_katello_id(ssh, register_config, pool_id)
         if host_id is not None and host_id != "" and katello_id is not None and katello_id != "":
             curl_header = '-H "accept:application/json,version=2" -H "content-type:application/json"'
             json_data = json.dumps('{"subscriptions":[{"id":%s, "quantity":%s}]}' % (katello_id, quantity))
             cmd = 'curl -X PUT -s -k {0} -u {1}:{2} -d {3} {4}/api/v2/hosts/{5}/subscriptions/add_subscriptions'.format(
                     curl_header, username, password, json_data, api, host_id)
             for i in range(3):
-                ret, output = self.runcmd(cmd, ssh_sat, desc="satellite attach pool")
+                ret, output = self.runcmd(cmd, ssh, desc="satellite attach pool")
                 if pool_id in output and "subscription_id" in output and "product_id" in output:
                     logger.info("Succeeded to attach pool({0}) for host_id({0})".format(pool_id, host_id))
                     return True
@@ -650,19 +646,18 @@ class Register(Base):
                 time.sleep(15)
         raise FailException("Failed to attach pool({0}) for host_id({1})".format(pool_id, host_id))
 
-    def satellite_host_unattach(self, register_config, host_name, host_uuid):
+    def satellite_host_unattach(self, ssh, register_config, host_name, host_uuid):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
-        ssh_sat = register_config['ssh_sat']
-        host_id = self.satellite_host_id(register_config, host_name, host_uuid)
+        host_id = self.satellite_host_id(ssh, register_config, host_name, host_uuid)
         if host_id is not None and host_id != "":
             '''get all the attached subscriptions(katello_ids) for the host'''
             katello_ids = dict()
             cmd = "curl -X GET -s -k -u {0}:{1} {2}/api/v2/hosts/{3}/subscriptions/?per_page=1000".format(
                     username, password, api, host_id)
             for i in range(3):
-                ret, output = self.runcmd(cmd, ssh_sat, desc="satellite host consumed list")
+                ret, output = self.runcmd(cmd, ssh, desc="satellite host consumed list")
                 output = self.is_json(output.strip())
                 if output is not False and output is not None and output != "" and output.has_key('results'):
                     for item in output['results']:
@@ -679,7 +674,7 @@ class Register(Base):
                     json_data = json.dumps('{"subscriptions":[{"id":%s}]}' % katello_id)
                     cmd = 'curl -X PUT -s -k {0} -u {1}:{2} -d {3} {4}/api/v2/hosts/{5}/subscriptions/remove_subscriptions' \
                             %(curl_header, username, password, json_data, api, host_id)
-                    ret, output = self.runcmd(cmd, ssh_sat, desc="satellite remove pool")
+                    ret, output = self.runcmd(cmd, ssh, desc="satellite remove pool")
                     if ret == 0:
                         logger.info("Succeeded to remove pool({0}) for host_id({1})".format(cp_id, host_id))
                     else:
@@ -687,20 +682,19 @@ class Register(Base):
             else:
                 logger.info("no consumed pools for host_id({0})".format(host_id))
 
-    def satellite_host_associate(self, register_config, hypervisor_hostname, hypervisor_uuid, guest_hostname, guest_uuid):
+    def satellite_host_associate(self, ssh, register_config, hypervisor_hostname, hypervisor_uuid, guest_hostname, guest_uuid):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
-        ssh_sat = register_config['ssh_sat']
-        hypervisor_hostid = self.satellite_host_id(register_config, hypervisor_hostname, hypervisor_uuid)
-        guest_hostid = self.satellite_host_id(register_config, guest_hostname, guest_uuid)
+        hypervisor_hostid = self.satellite_host_id(ssh, register_config, hypervisor_hostname, hypervisor_uuid)
+        guest_hostid = self.satellite_host_id(ssh, register_config, guest_hostname, guest_uuid)
         for i in range(3):
             time.sleep(60)
             results = list()
             if hypervisor_hostid is not None and hypervisor_hostid != "" \
                     and guest_hostid is not None and guest_hostid != "":
                 cmd = "curl -X GET -s -k -u {0}:{1} {2}/api/v2/hosts/{3}".format(username, password, api, hypervisor_hostid)
-                ret, output = self.runcmd(cmd, ssh_sat, desc="satellite host show")
+                ret, output = self.runcmd(cmd, ssh, desc="satellite host show")
                 rex = [guest_hostname, guest_hostname.lower(), guest_uuid, guest_uuid.lower()]
                 if ret == 0 and any(key in output for key in rex):
                     results.append("Yes")
@@ -709,7 +703,7 @@ class Register(Base):
                     results.append("No")
                     logger.error("Failed to find guest associated info in hypervisor page")
                 cmd = "curl -X GET -s -k -u {0}:{1} {2}/api/v2/hosts/{3}".format(username,password, api, guest_hostid)
-                ret, output = self.runcmd(cmd, ssh_sat, desc="satellite host show")
+                ret, output = self.runcmd(cmd, ssh, desc="satellite host show")
                 rex = [hypervisor_hostname, hypervisor_hostname.lower(), hypervisor_uuid, hypervisor_uuid.lower()]
                 if ret == 0 and any(key in output for key in rex):
                     results.append("Yes")

@@ -1,10 +1,18 @@
 [trigger]
+;type should be one of them(trigger-rhel,trigger-satellite,trigger-rhev,trigger-multiarch,trigger-zstream,trigger-upstream)
+;level should be one of them(tier1,tier2,full)
+;rhel_compose should be like RHEL-8.0.0-20190213.0
+;hypervisor_list should be one or more of them (esx,xen,hyperv,rhevm,vdsm,libvirt-remote,libvirt-local)
+;register_list should be one or more of them("stage,satellite64-cdn-rhel7,satellite65-repo-rhel7")
+;rhev_iso only for trigger-rhev
+;errata_package only for trigger-zstream
+;virtwho_upstream only for trigger-upstream
+;arch_type only for trigger-multiarch
 type=trigger-satellite
 level=full
-;rhel_compose=RHEL-7.6-20181010.0
 rhel_compose=RHEL-8.0.0-20190213.0
 hypervisor_list=esx,xen,hyperv,rhevm,libvirt-remote,libvirt-local
-register_list=satellite63-cdn-rhel7 
+register_list=stage,satellite63-cdn-rhel7 
 rhev_iso=
 errata_package= 
 virtwho_upstream=
@@ -13,184 +21,197 @@ arch_type=
 [repo]
 rhel=http://download.eng.pek2.redhat.com/pub/rhel/rel-eng
 rhel_update=http://download.eng.pek2.redhat.com/rel-eng/updates
-rhel_brew=http://download.eng.bos.redhat.com/brewroot/packages
 rhel_sat=http://dogfood.sat.engineering.redhat.com/pub/katello-ca-consumer-latest.noarch.rpm
 epel=https://dl.fedoraproject.org/pub/epel
 
 [jenkins]
-url=https://virtwho-qe-jenkins.rhev-ci-vms.eng.rdu2.redhat.com
-username=hsun
-password=1638cb39d73ec1d61c700ff9b8f74887
+url=[JENKINS_URL]
+username=[JENKINS_USER]
+password=[JENKINS_TOKEN]
 
 [docker]
-server=10.73.131.237
-server_user=root
-server_passwd=redhat
-slave=10.73.131.228
-slave_user=root
-slave_passwd=redhat
-container_user=root
-container_passwd=redhat
+;docker server is used to create virt-who host images and containers for testing
+;docker slave is used to create jenkins slave
+server=[DOCKER_SERVER]
+server_user=[DOCKER_SERVER_USER]
+server_passwd=[DOCKER_SERVER_PASSWD]
+slave=[DOCKER_SLAVE]
+slave_user=[DOCKER_SLAVE_USER]
+slave_passwd=[DOCKER_SLAVE_PASSWD]
+container_user=[DEFAULT_CONTAINER_USER]
+container_passwd=[DEFAULT_CONTAINER_USER]
 
 [beaker]
-client=10.73.131.228
-client_user=root
-client_passwd=redhat
-default_user=root
-default_passwd=red2015
-keytab=/etc/jenkins.keytab-virtwho-qe-jenkins.rhev-ci-vms.eng.rdu2.redhat.com
-principal=jenkins/virtwho-qe-jenkins.rhev-ci-vms.eng.rdu2.redhat.com@REDHAT.COM
+;use bkr command to provision some machines in beaker system
+client=[BKR_CLIENT_IP]
+client_user=[BKR_CLIENT_USER]
+client_passwd=[BKR_CLIENT_PASSWD]
+default_user=[BKR_DEFAULT_USER]
+default_passwd=[BKR_DEFAULT_PASSWD]
+keytab=[BKR_KEYTAB]
+principal=[BKR_PRINCIPAL]
 
 [polarion]
-url=https://polarion.engineering.redhat.com/polarion/import/xunit
-username=platformqe_machine
-password=polarion
+;used to import xml test result to polarion
+url=[POLARION_XUNIT_URL]
+username=[POLARION_XUNIT_USER]
+password=[POLARION_XUNIT_PASSWD]
 
 [nfs]
-server=10.73.131.85
-server_user=root
-server_passwd=red2015
-rhel_mount=/home/data/nfs/ci/auto/rhel
-rhev_mount=/home/data/nfs/ci/auto/rhev
-rhel_url=http://10.73.131.85/ci/auto/rhel
-rhev_url=http://10.73.131.85/ci/auto/rhev
+;use nfs to save the guest images for vcente/rhevm/xen/hyperv/libvirt
+server=[NFS_SERVER]
+server_user=[NFS_SERVER_SSH_USER]
+server_passwd=[NFS_SERVER_SSH_PASSWD]
+rhel_mount=[RHEL_MOUNT_DIR]
+rhev_mount=[RHEV_MOUNT_DIR]
+rhel_url=[RHEL_KS_HTTP]
+rhev_url=[RHEV_KS_HTTP]
 
 [register]
+;used to install the required packages 
 serverurl=subscription.rhsm.redhat.com
 baseurl=https://cdn.redhat.com
-username=QualityAssurance
-password=VHVFhPS5TEG8dud9
-employee_sku=8a85f98960dbf6510160df23e3367451
+username=[USERNAME]
+password=[PASSWORD]
+employee_sku=[EMPLOYEER_POOL_ID]
 
 [stage]
+;different hypervisor type has different stage account
+;because we need to run all the hypervisor types at the same time
 server=subscription.rhsm.stage.redhat.com
-esx_user=vw_vcenter
-esx_passwd=redhat
-esx_org=11527238
-xen_user=vw_xen
-xen_passwd=redhat
-xen_org=11510080
-hyperv_user=vw_hyperv
-hyperv_passwd=redhat
-hyperv_org=11510081
-rhevm_user=vw_rhevm
-rhevm_passwd=redhat
-rhevm_org=11510082
-vdsm_user=vw_vdsm
-vdsm_passwd=redhat
-vdsm_org=11510083
-libvirt_remote_user=vw_libvirt_remote
-libvirt_remote_passwd=redhat
-libvirt_remote_org=11510084
-libvirt_local_user=vw_libvirt_local
-libvirt_local_passwd=redhat
-libvirt_local_org=11510085
+esx_user=
+esx_passwd=
+esx_org=
+xen_user=
+xen_passwd=
+xen_org=
+hyperv_user=
+hyperv_passwd=
+hyperv_org=
+rhevm_user=
+rhevm_passwd=
+rhevm_org=
+vdsm_user=
+vdsm_passwd=
+vdsm_org=
+libvirt_remote_user=
+libvirt_remote_passwd=
+libvirt_remote_org=
+libvirt_local_user=
+libvirt_local_passwd=
+libvirt_local_org=
 
 [satellite]
-admin_user=admin
-admin_passwd=admin
+;used to deploy satellite
+admin_user=
+admin_passwd=
 default_org=Default_Organization
 default_env=Library
 extra_org=Virtwho_Org
 rhel6_compose=RHEL-6.10-20180615.0
 rhel7_compose=RHEL-7.6-20181010.0
 rhel8_compose=RHEL-8.0-20181005.1
-manifest=http://10.73.131.85/ci/manifest/satellite_manifest_20190131.zip
+manifest=[MANIFEST_URL]
 activation_key=Virtwho_AK
 
 [vcenter]
-ip=10.73.130.254
-admin_user=administrator@vsphere.local
-admin_passwd=Welcome1!
-ssh_user=Administrator
-ssh_passwd=Welcome1
-master=10.73.131.226
-master_user=root
-master_passwd=Welcome1!
-slave=10.73.131.155
-slave_user=root
-slave_passwd=Welcome1!
-guest_name=7.4_Server_x86_64
-guest_user=root
-guest_passwd=redhat
-image_path=http://10.73.131.85/ci/esx/7.4_Server_x86_64.tar.gz
+;used to provision vcenter and guest
+ip=[VCENTER_IP]
+admin_user=
+admin_passwd=
+ssh_user=
+ssh_passwd=
+master=
+master_user=
+master_passwd=
+slave=
+slave_user=
+slave_passwd=
+guest_name=
+guest_user=
+guest_passwd=
+image_path=[GUEST_IMAGE_URL]
 
 [xen]
-master=10.73.131.247
-master_user=root
-master_passwd=Welcome1!
-guest_name=7.4_Server_x86_64
-guest_user=root
-guest_passwd=redhat
-sr_name=nfs_storage
-sr_server=10.73.131.85
-sr_path=/home/data/nfs/ci/xen/storage
-image_path=http://10.73.131.85/ci/xen/7.4_Server_x86_64.xva
+;used to provision vcenter and guest
+master=
+master_user=
+master_passwd=
+guest_name=
+guest_user=
+guest_passwd=
+sr_name=
+sr_server=
+sr_path=
+image_path=[GUEST_IMAGE_URL]
 
 [hyperv]
-master=10.73.131.160
-master_user=administrator
-master_passwd=Welcome1
-guest_name=7.4_Server_x86_64
-guest_user=root
-guest_passwd=redhat
-image_path=http://10.73.131.85/ci/hyperv/7.4_Server_x86_64.vhdx
+;used to provision hyperv and guest
+master=
+master_user=
+master_passwd=
+guest_name=
+guest_user=
+guest_passwd=
+image_path=[GUEST_IMAGE_URL]
 
 [rhevm]
-rhevm_ip=10.73.130.245
-rhevm_ssh_user=root
-rhevm_ssh_passwd=redhat
-rhevm_admin_user=admin@internal
-rhevm_admin_passwd=admin
-master=10.66.144.13
-master_user=root
-master_passwd=red2015
-slave=10.66.144.14
-slave_user=root
-slave_passwd=red2015
-datacenter=Default
+;used to provision rhevm and guest
+rhevm_ip=
+rhevm_ssh_user=
+rhevm_ssh_passwd=
+rhevm_admin_user=
+rhevm_admin_passwd=
+master=
+master_user=
+master_passwd=
+slave=
+slave_user=
+slave_passwd=
+datacenter=
 cluster=Default
 cputype=Intel Conroe Family
-storage=data_storage
-guest_name=7.4_Server_x86_64
-guest_user=root
-guest_passwd=redhat
-template=7.4_Server_x86_64_template
-disk=7.4_Server_x86_64_Disk1
-nfs_path=10.73.131.85:/home/data/nfs/ci/rhevm
+storage=
+guest_name=
+guest_user=
+guest_passwd=
+template=
+disk=
+nfs_path=[RHEVM_NFS_PATH]
 
 [vdsm]
-rhevm_ip=10.73.130.251
-rhevm_ssh_user=root
-rhevm_ssh_passwd=redhat
-rhevm_admin_user=admin@internal
-rhevm_admin_passwd=admin
-master=10.66.144.5
-master_user=root
-master_passwd=redhat
+;used to provision rhevm and guest for vdsm mode testin
+rhevm_ip=
+rhevm_ssh_user=
+rhevm_ssh_passwd=
+rhevm_admin_user=
+rhevm_admin_passwd=
+master=
+master_user=
+master_passwd=
 datacenter=Default
 cluster=Default
 cputype=Intel Conroe Family
-storage=data_storage
-guest_name=7.4_Server_x86_64
-guest_user=root
-guest_passwd=redhat
-template=7.4_Server_x86_64_template
-disk=7.4_Server_x86_64_Disk1
-nfs_path=10.73.131.85:/home/data/nfs/ci/vdsm4
+storage=
+guest_name=
+guest_user=
+guest_passwd=
+template=
+disk=
+nfs_path=[RHEVM_NFS_PATH]
 
 [libvirt]
-remote=10.66.144.12
-remote_user=root
-remote_passwd=redhat
-local=10.66.144.3
-local_user=root
-local_passwd=redhat
-guest_name=7.4_Server_x86_64
-guest_user=root
-guest_passwd=redhat
-image_path=/data_storage
+;used to provision libvirt remote and local env
+remote=
+remote_user=
+remote_passwd=
+local=
+local_user=
+local_passwd=
+guest_name=
+guest_user=
+guest_passwd=
+image_path=
 xml_path=/etc/libvirt/qemu
-image_url=http://10.73.131.85/ci/libvirt/7.4_Server_x86_64.qcow2
-xml_url=http://10.73.131.85/ci/libvirt/7.4_Server_x86_64.xml
-
+image_url=[GUEST_IMAGE_URL]
+xml_url=[GUEST_XML_URL]

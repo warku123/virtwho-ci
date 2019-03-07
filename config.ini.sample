@@ -1,67 +1,52 @@
 [virtwho]
-trigger_type=trigger-rhel
-rhel_compose=RHEL-8.0-20181220.1
-host_ip=10.73.131.237:53223
-host_user=root
-host_passwd=redhat
+;;trigger_type should be one of them(trigger-rhel,trigger-satellite,trigger-rhev,trigger-multiarch)
+;;rhel_compose should be such as RHEL-8.0.0-20190228.1
+trigger_type=[TRIGGER_TYPE]
+rhel_compose=[RHEL_COMPOSE_ID]
+host_ip=[VIRTWHO_HOST_IP]
+host_user=[VIRTWHO_HOST_SSH_USER]
+host_passwd=[VIRTWHO_HOST_SSH_PASSWD]
 
 [hypervisor]
-type=esx
-server=10.73.131.247
-server_user=root
-server_passwd=Welcome1!
-guest_ip=10.73.131.237:53223
-guest_name=7.4_Server_x86_64
-guest_user=root
-guest_passwd=redhat
+;;type should be one of them(esx,xen,hyperv,rhevm,vdsm,libvirt-remote,libvirt-local)
+;;server_ssh_user and server_ssh_passwd only for vcenter, rhevm, vdsm
+type=[HYPERVISOR_TYPE]
+server=[HYPERVISOR_SERVER]
+server_username=[HYPERVISOR_SERVER_USERNAME]
+server_password=[HYPERVISOR_SERVER_PASSWORD]
+server_ssh_user=[HYPERVISOR_SSH_USER]
+server_ssh_passwd=[HYPERVISOR_SSH_PASSWD]
+guest_ip=[GUEST_IP]
+guest_name=[GUEST_NAME]
+guest_user=[GUEST_SSH_USER]
+guest_passwd=[GUEST_SSH_PASSWD]
 
 [register]
-type=satellite-repo-rhel7
-server=ent-02-vm-04.lab.eng.nay.redhat.com
-org=Default_Organization
-env=Library
-admin_user=admin
-admin_passwd=admin
-ssh_user=root
-ssh_passwd=redhat
+;;type should be one of them(satellite, stage)
+;;ssh_user and ssh_passwd only for satellite type
+type=[REGISTER_TYPE]
+server=[REGISTER_SERVER]
+owner=[REGISTER_OWNER]
+env=[REGISTER_ENV]
+admin_user=[REGISTER_ADMIN_USER]
+admin_passwd=[REGISTER_ADMIN_PASSWD]
+ssh_user=[REGISTER_SSH_USER]
+ssh_passwd=[REGISTER_SSH_PASSWD]
 
 [manifest]
-vdc=RH00002
-vdc_bonus=RH00050
-instance =RH00003
-limit=RH00204
-unlimit=RH00060
+vdc=[SKU_ID]
+vdc_bonus=[SKU_ID]
+instance=[SKU_ID]
+limit=[SKU_ID]
+unlimit=[SKU_ID]
 
-;if esx, need to access vcenter and esxi host 
-[vcenter]
-vcenter_ip=10.73.130.254
-vcenter_ssh_user=Administrator
-vcenter_ssh_passwd=Welcome1
-esxi_master= 
-esxi_master_ssh_user= 
-esxi_master_ssh_passwd= 
-
-;if rhevm, need to access rhevm and vdsm host 
-[rhevm]
-rhevm_ip=10.73.131.219
-rhevm_ssh_user=root
-rhevm_ssh_passwd=redhat
-vdsm_master= 
-vdsm_master_ssh_user= 
-vdsm_master_ssh_passwd= 
-
-[vdsm]
-; if vdsm mode, the host should be added to rhevm
-rhevm_ip=10.73.130.251
-rhevm_ssh_user=root
-rhevm_ssh_passwd=redhat
-
-[performance]
-vcenter=10.73.131.242
-vcenter_admin_user=administrator@vsphere.local
-vcenter_admin_passwd=Welcome1!
-vcenter_ssh_user=Administrator
-vcenter_ssh_passwd=Welcome1
-esxi_hosts=10.73.131.163, 10.73.131.187, 10.73.131.201, 10.73.131.251, 10.73.131.252
-esxi_hosts_user=root
-esxi_hosts_passwd=Welcome1!
+;only used for performance testing
+;[performance]
+;vcenter=[VCENTER_IP]
+;vcenter_admin_user=[VCENTER_ADMIN_USER]
+;vcenter_admin_passwd=[VCENTER_ADMIN_PASSWD]
+;vcenter_ssh_user=[VCENTER_SSH_USER]
+;vcenter_ssh_passwd=[VCENTER_SSH_PASSWD]
+;esxi_hosts=[ESXi_HOST1, ESXi_HOST2, ...]
+;esxi_hosts_user=[ESXi_SSH_USER]
+;esxi_hosts_passwd=[ESXi_SSH_PASSWD]
