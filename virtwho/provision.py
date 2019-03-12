@@ -1322,20 +1322,15 @@ class Provision(Register):
         master = deploy.vcenter.master
         master_user = deploy.vcenter.master_user
         master_passwd = deploy.vcenter.master_passwd
-        slave = deploy.vcenter.slave
-        slave_user = deploy.vcenter.slave_user
-        slave_passwd = deploy.vcenter.slave_passwd
         guest_name = deploy.vcenter.guest_name
         guest_user = deploy.vcenter.guest_user
         guest_passwd = deploy.vcenter.guest_passwd
         image_path = deploy.vcenter.image_path
-        # set ssh env for vcenter, master slave
+        # set ssh env for vcenter, master
         ssh_vcenter = {"host":vcenter_ip,"username":vcenter_ssh_user,"password":vcenter_ssh_passwd}
         ssh_master = {"host":master,"username":master_user,"password":master_passwd}
-        ssh_slave = {"host":slave,"username":slave_user,"password":slave_passwd} 
         cert = self.vcenter_cert(vcenter_ip, vcenter_admin_user, vcenter_admin_passwd)
         self.vcenter_host_ready(cert, ssh_vcenter, ssh_master)
-        self.vcenter_host_ready(cert, ssh_vcenter, ssh_slave)
         guest_ip = self.vcenter_guest_add(cert, ssh_vcenter, ssh_master, guest_name, image_path)
         logger.info("Successed to get vcenter guest ip: {0}".format(guest_ip))
         ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
@@ -1391,9 +1386,6 @@ class Provision(Register):
         master = deploy.rhevm.master
         master_user = deploy.rhevm.master_user
         master_passwd = deploy.rhevm.master_passwd
-        slave = deploy.rhevm.slave
-        slave_user = deploy.rhevm.slave_user
-        slave_passwd = deploy.rhevm.slave_passwd
         guest_name = deploy.rhevm.guest_name
         guest_user = deploy.rhevm.guest_user
         guest_passwd = deploy.rhevm.guest_passwd
@@ -1403,21 +1395,16 @@ class Provision(Register):
         disk = deploy.rhevm.disk
         datacenter = deploy.rhevm.datacenter
         storage = deploy.rhevm.storage
-        # set ssh env for rhevm, master, slave
+        # set ssh env for rhevm, master
         ssh_rhevm = {"host":rhevm_ip,"username":rhevm_ssh_user,"password":rhevm_ssh_passwd}
         ssh_master = {"host":master,"username":master_user,"password":master_passwd}
-        ssh_slave = {"host":slave,"username":slave_user,"password":slave_passwd}
         rhevm_version = self.rhevm_version_get(ssh_rhevm)
         rhevm_admin_server = self.rhevm_admin_get(ssh_rhevm)
         rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_rhevm)
-        # vdsm master and slave are stable hosts, don't need to init again 
-        # self.vdsm_host_init(vdsm_master, rhevm_version)
-        # self.vdsm_host_init(vdsm_slave, rhevm_version)
         self.rhevm_shell_config(ssh_rhevm, rhevm_admin_server, rhevm_admin_user, rhevm_admin_passwd)
         self.rhevm_cpu_set(ssh_rhevm, rhevm_shell, cluster, cputype)
         self.rhevm_template_ready(ssh_rhevm, rhevm_shell, template, disk)
         self.rhevm_host_ready(ssh_rhevm, rhevm_shell, ssh_master, datacenter, storage)
-        self.rhevm_host_ready(ssh_rhevm, rhevm_shell, ssh_slave, datacenter, storage)
         guest_ip = self.rhevm_guest_add(ssh_rhevm, rhevm_shell, ssh_master, guest_name, template, cluster, disk)
         logger.info("Succeeded to get rhevm({0}) guest ip: {1}".format(rhevm_ip, guest_ip))
         ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
