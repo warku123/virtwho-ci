@@ -19,21 +19,14 @@ if sys.version_info < (2, 7):
 else:
     import unittest
 
-from virtwho.settings import DeploySettings
-from virtwho.settings import ConfigSettings
+from virt_who.settings import DeploySettings
+from virt_who.settings import ConfigSettings
 # configuration for provisioning environment
 deploy = DeploySettings()
 deploy.configure("provision.ini")
 # configuration for debugging testcases
 config = ConfigSettings()
 config.configure("config.ini")
-
-# result data for provision
-provision_info = os.path.join(os.path.realpath(os.path.join(
-    os.path.dirname(__file__),
-    os.pardir)),
-    "provision.info"
-    )
 
 # result data for polarion importer
 runtest_info = os.path.join(os.path.realpath(os.path.join(

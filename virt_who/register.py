@@ -1,5 +1,5 @@
-from virtwho import *
-from virtwho.base import Base
+from virt_who import *
+from virt_who.base import Base
 
 class Register(Base):
     #**************************************

@@ -1,4 +1,4 @@
-from virtwho import *
+from virt_who import *
 
 class Base(unittest.TestCase):
     def paramiko_run(self, cmd, host, username, password, timeout=1800, port=22):
