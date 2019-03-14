@@ -455,7 +455,7 @@ class Base(unittest.TestCase):
                 ncat = ""
             if nmap != "" and self.url_validation(nmap):
                 ret, output = self.runcmd("cd /tmp/; curl -O -L {0}".format(nmap), ssh)
-            if nmap_ncat != "" and self.url_validation(nmap_ncat):
+            if ncat != "" and self.url_validation(ncat):
                 ret, output = self.runcmd("cd /tmp/; curl -O -L {0}".format(ncat), ssh)
             ret, output = self.runcmd("rpm -Uvh /tmp/nmap* --force", ssh)
             ret, output = self.runcmd("rm -f /tmp/nmap*", ssh)

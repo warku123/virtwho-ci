@@ -80,7 +80,6 @@ class Provision(Register):
             logger.info(item)
         register_servers, virtwho_hosts, guests = self.provision_report(results)
         self.jenkins_job_scheduler(register_servers, virtwho_hosts, guests)
-        self.jenkins_mailinfo_provision(register_servers, virtwho_hosts, guests)
 
     def provision_report(self, data):
         register_servers = dict()
@@ -571,7 +570,11 @@ class Provision(Register):
             )
             job_tips = "{0}+{1}".format(job_name, register_type)
             output = os.popen(cmd).readlines()
-            job_url = self.jenkins_job_url(output)
+            if 'Location:' in output:
+                job_url = self.jenkins_job_url(output)
+            else:
+                logger.error(cmd)
+                raise FailException("Failed to get jenkins job url")
             logger.info("JJB({0})-Job URL: {1}".format(job_tips, job_url)) 
             while self.jenkins_job_is_finished(job_url, job_tips) is False:
                 time.sleep(60)
@@ -581,18 +584,15 @@ class Provision(Register):
             if "Location" in line:
                 url = line.split('Location:')[1].strip()
                 break
-        if url != "":
-            cmd = "curl -s -u {0}:{1} {2}/api/json".format(
-                    deploy.jenkins.username, deploy.jenkins.password, url)
+        cmd = "curl -s -u {0}:{1} {2}/api/json".format(
+                deploy.jenkins.username, deploy.jenkins.password, url)
+        output = os.popen(cmd).read()
+        while "executable" not in output:
+            time.sleep(10)
             output = os.popen(cmd).read()
-            while "executable" not in output:
-                time.sleep(10)
-                output = os.popen(cmd).read()
-            data = json.loads(output)
-            job_url = data['executable']['url']
-            return job_url
-        else:
-            raise FailException("Failed to get jenkins job url")
+        data = json.loads(output)
+        job_url = data['executable']['url']
+        return job_url
 
     def jenkins_job_is_finished(self, job_url, job_tips):
         cmd = "curl -s -u {0}:{1} {2}/api/json".format(
@@ -611,16 +611,6 @@ class Provision(Register):
             logger.warning(str(e))
             return False
 
-    def jenkins_mailinfo_provision(self, register_servers, hosts, guests):
-        fd = open(provision_info, 'a')
-        fd.write("trigger_type={0}\n".format(deploy.trigger.type))
-        fd.write("trigger_level={0}\n".format(deploy.trigger.level))
-        fd.write("rhel_compose={0}\n".format(deploy.trigger.rhel_compose))
-        fd.write("register_servers={0}\n".format(register_servers))
-        fd.write("hosts={0}\n".format(hosts))
-        fd.write("guests={0}\n".format(guests))
-        fd.close()
-
     #*************************************************
     # Re-install host by update grub for rhel and rhev
     #*************************************************
@@ -628,10 +618,10 @@ class Provision(Register):
         pkg_url = self.get_exported_param("VIRTWHO_ERRATA_PACKAGE")
         if self.url_validation(pkg_url) is False:
             raise FailException("VIRTWHO_ERRATA_PACKAGE is not available")
-        cmd = "wget -P /tmp/ %s" % pkg_url
-        ret, output = self.runcmd(cmd, ssh_host, desc="download virt-who package for errata")
+        cmd = "wget -P /tmp/ {0}".format(pkg_url)
+        ret, output = self.runcmd(cmd, ssh_host)
         cmd = "rm -rf /var/cache/yum/; yum clean all; yum remove -y virt-who; yum localinstall -y /tmp/virt-who*.rpm"
-        ret, output = self.runcmd(cmd, ssh_host, desc="install virt-who package for errata")
+        ret, output = self.runcmd(cmd, ssh_host)
 
     def install_virtwho_upstream(self, ssh_host):
         self.rhel_epel_repo(ssh_host)
@@ -639,14 +629,14 @@ class Provision(Register):
         if self.url_validation(git_url) is False:
             raise FailException("VIRTWHO_UPSTREAM is not available")
         git_path = "/tmp/virt-who.git"
-        cmd = "rm -rf /tmp/virt-who*; git clone %s %s" % (git_url, git_path)
-        ret, output = self.runcmd(cmd, ssh_host, desc="git clone virt-who")
+        cmd = "rm -rf /tmp/virt-who*; git clone {0} {1}".format(git_url, git_path)
+        ret, output = self.runcmd(cmd, ssh_host)
         cmd = "yum clean all; yum install -y tito"
-        ret, output = self.runcmd(cmd, ssh_host, desc="instal tito package")
+        ret, output = self.runcmd(cmd, ssh_host)
         if ret != 0:
             raise FailException("Failed to install tito")
-        cmd = "cd %s; tito build --rpm --test -i" % git_path
-        ret, output = self.runcmd(cmd, ssh_host, desc="tito to build and install virt-who")
+        cmd = "cd {0}; tito build --rpm --test -i".format(git_path)
+        ret, output = self.runcmd(cmd, ssh_host)
         if ret != 0:
             raise FailException("Failed to create virt-who package")
 
@@ -654,12 +644,12 @@ class Provision(Register):
         sat_ver, rhel_ver = self.satellite_version(sat_type)
         self.satellite_qa_repo_enable(ssh_host, sat_ver, rhel_ver, repo_type="satellite-tools")
         cmd = "rm -rf /var/cache/yum/; yum clean all; yum remove -y virt-who; yum install -y virt-who"
-        ret, output = self.runcmd(cmd, ssh_host, desc="install virt-who package from yum repo")
+        ret, output = self.runcmd(cmd, ssh_host)
 
     def install_base_packages(self, ssh_host):
         compose_id = deploy.trigger.rhel_compose
         cmd = "rm -f /var/lib/rpm/__db*; rm -rf /var/lib/yum/history/*.sqlite; rm -rf /var/cache/yum/; rpm --rebuilddb"
-        ret, output = self.runcmd(cmd, ssh_host, desc="update rpm rebuilddb")
+        ret, output = self.runcmd(cmd, ssh_host)
         if "RHEL-8" in compose_id:
             cmd = "yum clean all; yum install -y @core @base-x net-tools virt-who wget git nmap expect \
                     subscription-manager subscription-manager-cockpit python3-pexpect python3-libvirt network-scripts"
@@ -668,16 +658,16 @@ class Provision(Register):
                     subscription-manager-gui pexpect expect libvirt-python"
         status, output = self.run_loop(cmd, ssh_host, desc="install base required packages")
         if status != "Yes":
-            raise FailException("Failed to install base required packages in %s" % ssh_host['host'])
-        logger.info("Succeeded to install base required packages in %s" % ssh_host['host'])
+            raise FailException("Failed to install base required packages")
+        logger.info("Succeeded to install base required packages")
         if "RHEL-8" in compose_id:
             # uninstall cockpit due to bug https://bugzilla.redhat.com/show_bug.cgi?id=1663812
-            self.runcmd("rpm -e cockpit cockpit-ws", ssh_host, desc="uninstall cockpit")
+            self.runcmd("rpm -e cockpit cockpit-ws", ssh_host)
 
     def install_epel_packages(self, ssh_host):
         self.rhel_epel_repo(ssh_host)
         cmd = "yum clean all; yum install -y expect tcl wget nmap"
-        status, output = self.run_loop(cmd, ssh_host, desc="install package from epel")
+        status, output = self.run_loop(cmd, ssh_host)
 
     def rhel_epel_repo(self, ssh_host):
         rhel_ver = self.rhel_version(ssh_host)
@@ -2215,7 +2205,7 @@ class Provision(Register):
                 if guest_ip is not False and guest_ip is not None and guest_ip != "":
                     return guest_ip
             logger.warning("Failed to start libirt guest and try again after 15s...")
-            self.libvirt_guest_stop(guest_name, ssh_libvirt, args_libvirt)
+            self.libvirt_guest_stop(guest_name, ssh_libvirt)
             time.sleep(15)
         raise FailException("Failed to start libvirt({0}) guest".format(ssh_libvirt['host']))
 
