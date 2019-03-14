@@ -1,8 +1,8 @@
 # coding:utf-8
-import sys, getopt, fcntl
+import os, sys, getopt, fcntl
 from polarion_caseid_mapping import *
 sys.path.append('../')
-from virtwho import *
+from virt_who import *
 from datetime import datetime
 from xml.dom import minidom
 try:

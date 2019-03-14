@@ -1,6 +1,6 @@
-from virtwho import *
-from virtwho.base import Base
-from virtwho.register import Register
+from virt_who import *
+from virt_who.base import Base
+from virt_who.register import Register
 
 class Provision(Register):
     #****************************************
@@ -457,7 +457,7 @@ class Provision(Register):
             hypervisor_user = ""
             hypervisor_passwd = ""
             host_user = deploy.libvirt.local_user
-            host_passwd = deploy.libirt.local_passwd
+            host_passwd = deploy.libvirt.local_passwd
             guest_name = deploy.libvirt.guest_name
             guest_user = deploy.libvirt.guest_user
             guest_passwd = deploy.libvirt.guest_passwd
@@ -570,10 +570,11 @@ class Provision(Register):
             )
             job_tips = "{0}+{1}".format(job_name, register_type)
             output = os.popen(cmd).readlines()
-            if 'Location:' in output:
+            if 'Location:' in str(output):
                 job_url = self.jenkins_job_url(output)
             else:
                 logger.error(cmd)
+                logger.error(output)
                 raise FailException("Failed to get jenkins job url")
             logger.info("JJB({0})-Job URL: {1}".format(job_tips, job_url)) 
             while self.jenkins_job_is_finished(job_url, job_tips) is False:
