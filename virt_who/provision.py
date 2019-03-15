@@ -569,13 +569,19 @@ class Provision(Register):
                 data
             )
             job_tips = "{0}+{1}".format(job_name, register_type)
-            output = os.popen(cmd).readlines()
-            if 'Location:' in str(output):
-                job_url = self.jenkins_job_url(output)
-            else:
-                logger.error(cmd)
-                logger.error(output)
+            is_created = ""
+            for i in range(3):
+                output = os.popen(cmd).readlines()
+                if 'Location:' in str(output):
+                    is_created = 'yes'
+                    break
+                logger.info(cmd)
+                logger.warning(output)
+                logger.warning("Failed to post data to create jenkinks job, try again...")
+                time.sleep(30)
+            if is_created != 'yes':
                 raise FailException("Failed to get jenkins job url")
+            job_url = self.jenkins_job_url(output)
             logger.info("JJB({0})-Job URL: {1}".format(job_tips, job_url)) 
             while self.jenkins_job_is_finished(job_url, job_tips) is False:
                 time.sleep(60)
@@ -1319,10 +1325,12 @@ class Provision(Register):
         image_path = deploy.vcenter.image_path
         # set ssh env for vcenter, master
         ssh_vcenter = {"host":vcenter_ip,"username":vcenter_ssh_user,"password":vcenter_ssh_passwd}
-        ssh_master = {"host":master,"username":master_user,"password":master_passwd}
         cert = self.vcenter_cert(vcenter_ip, vcenter_admin_user, vcenter_admin_passwd)
-        self.vcenter_host_ready(cert, ssh_vcenter, ssh_master)
-        guest_ip = self.vcenter_guest_add(cert, ssh_vcenter, ssh_master, guest_name, image_path)
+        guest_ip = self.vcenter_guest_ip(cert, ssh_vcenter, guest_name)
+        if not guest_ip:
+            ssh_master = {"host":master,"username":master_user,"password":master_passwd}
+            self.vcenter_host_ready(cert, ssh_vcenter, ssh_master)
+            guest_ip = self.vcenter_guest_add(cert, ssh_vcenter, ssh_master, guest_name, image_path)
         logger.info("Successed to get vcenter guest ip: {0}".format(guest_ip))
         ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
         self.system_init("ci-guest-esx", ssh_guest)
@@ -1340,7 +1348,9 @@ class Provision(Register):
         image_path = deploy.hyperv.image_path
         # set ssh env for hyperv master
         ssh_hyperv ={"host":master,"username":master_user,"password":master_passwd}
-        guest_ip = self.hyperv_guest_add(ssh_hyperv, guest_name, image_path)
+        guest_ip = self.hyperv_guest_ip(ssh_hyperv, guest_name)
+        if not guest_ip:
+            guest_ip = self.hyperv_guest_add(ssh_hyperv, guest_name, image_path)
         logger.info("Succeeded to get hyperv guest ip: {0}".format(guest_ip))
         ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
         self.system_init("ci-guest-hyperv", ssh_guest)
@@ -1360,8 +1370,10 @@ class Provision(Register):
         image_path = deploy.xen.image_path
         # set ssh env for xen master
         ssh_master ={"host":master,"username":master_user,"password":master_passwd}
-        self.xen_host_ready(ssh_master, sr_name, sr_server, sr_path)
-        guest_ip = self.xen_guest_add(ssh_master, guest_name, sr_name, image_path)
+        guest_ip = self.xen_guest_ip(ssh_master, guest_name)
+        if not guest_ip:
+            self.xen_host_ready(ssh_master, sr_name, sr_server, sr_path)
+            guest_ip = self.xen_guest_add(ssh_master, guest_name, sr_name, image_path)
         logger.info("Successed to get xen guest ip: {0}".format(guest_ip))
         ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
         self.system_init("ci-guest-xen", ssh_guest)
@@ -1394,9 +1406,11 @@ class Provision(Register):
         rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_rhevm)
         self.rhevm_shell_config(ssh_rhevm, rhevm_admin_server, rhevm_admin_user, rhevm_admin_passwd)
         self.rhevm_cpu_set(ssh_rhevm, rhevm_shell, cluster, cputype)
-        self.rhevm_template_ready(ssh_rhevm, rhevm_shell, template, disk)
-        self.rhevm_host_ready(ssh_rhevm, rhevm_shell, ssh_master, datacenter, storage)
-        guest_ip = self.rhevm_guest_add(ssh_rhevm, rhevm_shell, ssh_master, guest_name, template, cluster, disk)
+        guest_ip = self.rhevm_guest_ip(ssh_rhevm, rhevm_shell, ssh_master, guest_name)
+        if not guest_ip:
+            self.rhevm_template_ready(ssh_rhevm, rhevm_shell, template, disk)
+            self.rhevm_host_ready(ssh_rhevm, rhevm_shell, ssh_master, datacenter, storage)
+            guest_ip = self.rhevm_guest_add(ssh_rhevm, rhevm_shell, ssh_master, guest_name, template, cluster, disk)
         logger.info("Succeeded to get rhevm({0}) guest ip: {1}".format(rhevm_ip, guest_ip))
         ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
         self.system_init("ci-guest-rhevm", ssh_guest)
@@ -1416,15 +1430,9 @@ class Provision(Register):
         # self.qa_enable_rhel_repo(ssh_libvirt)
         # self.libvirt_pkg_install(ssh_libvirt)
         # self.bridge_setup("br0", ssh_libvirt)
-        self.libvirt_guests_all_clean(ssh_libvirt)
-        if self.libvirt_guest_exist(guest_name, ssh_libvirt) and \
-                self.libvirt_guest_status(guest_name, ssh_libvirt) == "running":
-            mac_addr = self.libvirt_guest_mac(guest_name, ssh_libvirt)
-            guest_ip = self.get_ipaddr_bymac(mac_addr, ssh_libvirt)
-            if guest_ip is False or guest_ip is None or guest_ip == "":
-                self.libvirt_guest_stop(guest_name, ssh_libvirt)
-                guest_ip = self.libvirt_guest_start(guest_name, ssh_libvirt)
-        else:
+        guest_ip = self.libvirt_guest_ip(guest_name, ssh_libvirt)
+        if not guest_ip:
+            self.libvirt_guests_all_clean(ssh_libvirt)
             guest_ip = self.libvirt_guest_add(guest_name, ssh_libvirt)
         logger.info("Succeeded to create guest({0}) in libvirt({1})".format(guest_ip, remote_host))
         ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
@@ -1946,6 +1954,17 @@ class Provision(Register):
         else:
             raise FailException("Failed to check xen guest mac addr")
 
+    def xen_guest_ip(self, ssh_xen, guest_name):
+        for i in range(3):
+            if self.xen_guest_exist(ssh_xen, guest_name) is False:
+                break
+            mac_addr = self.xen_guest_mac(ssh_xen, guest_name)
+            guest_ip = self.get_ipaddr_bymac(mac_addr, ssh_xen)
+            if guest_ip is not False and guest_ip is not None and guest_ip != "":
+                return guest_ip
+            logger.info("No guest ip found for xen, try again after 15s...")
+            time.sleep(15)
+
     def xen_guest_add(self, ssh_xen, guest_name, sr_name, image_path):
         if self.xen_guest_exist(ssh_xen, guest_name):
             self.xen_guest_delete(ssh_xen, guest_name)
@@ -1979,9 +1998,7 @@ class Provision(Register):
             cmd = "xe vm-start vm={0}".format(guest_name)
             ret, output = self.runcmd(cmd, ssh_xen, desc="xen guest start")
             if self.xen_guest_status(ssh_xen, guest_name) == "running":
-                logger.info("Successed to start xen guest")
-                mac_addr = self.xen_guest_mac(ssh_xen, guest_name)
-                guest_ip = self.get_ipaddr_bymac(mac_addr, ssh_xen)
+                guest_ip = self.xen_guest_ip(ssh_xen, guest_name)
                 if guest_ip is not False and guest_ip is not None and guest_ip != "":
                     return guest_ip
             logger.warning("Failed to start xen guest, try again after 15s...")
@@ -2161,6 +2178,17 @@ class Provision(Register):
                 return mac_addr
         raise FailException("Failed to get libvirt({0}) guest mac address".format(host))
 
+    def libvirt_guest_ip(self, guest_name, ssh_libvirt):
+        for i in range(3):
+            if self.libvirt_guest_exist(guest_name, ssh_libvirt) is False:
+                break
+            mac_addr = self.libvirt_guest_mac(guest_name, ssh_libvirt)
+            guest_ip = self.get_ipaddr_bymac(mac_addr, ssh_libvirt)
+            if guest_ip is not False and guest_ip is not None and guest_ip != "":
+                return guest_ip
+            logger.info("No guest ip found for libvirt, try again after 15s...")
+            time.sleep(15)
+
     def libvirt_guest_add(self, guest_name, ssh_libvirt):
         host = ssh_libvirt['host']
         if self.libvirt_guest_exist(guest_name, ssh_libvirt):
@@ -2200,11 +2228,9 @@ class Provision(Register):
                 time.sleep(30)
                 if self.libvirt_guest_status(guest_name, ssh_libvirt) == "running":
                     break
-            if self.libvirt_guest_status(guest_name, ssh_libvirt) == "running":
-                mac_addr = self.libvirt_guest_mac(guest_name, ssh_libvirt)
-                guest_ip = self.get_ipaddr_bymac(mac_addr, ssh_libvirt)
-                if guest_ip is not False and guest_ip is not None and guest_ip != "":
-                    return guest_ip
+            guest_ip = self.libvirt_guest_ip(guest_name, ssh_libvirt)
+            if guest_ip is not False and guest_ip is not None and guest_ip != "":
+                return guest_ip
             logger.warning("Failed to start libirt guest and try again after 15s...")
             self.libvirt_guest_stop(guest_name, ssh_libvirt)
             time.sleep(15)
@@ -2732,7 +2758,9 @@ class Provision(Register):
         else:
             raise FailException("Failed to check rhevm({0}) guest mac".format(ssh_rhevm['host']))
 
-    def rhevm_guest_ip(self, ssh_rhevm, rhevm_shell, ssh_vdsm, guest_name, mac_addr):
+    def rhevm_guest_ip(self, ssh_rhevm, rhevm_shell, ssh_vdsm, guest_name):
+        if self.rhevm_guest_exist(ssh_rhevm, rhevm_shell, guest_name) is False:
+            return False
         cmd = "%s -c -E 'show vm %s' |grep '^guest_info-ips-ip-address' | grep -Eo '([0-9]{1,3}[\.]){3}[0-9]{1,3}' |grep ^10 |tail -1" \
                 % (rhevm_shell, guest_name)
         for i in range(30):
@@ -2740,12 +2768,12 @@ class Provision(Register):
             if output is not None and output != "":
                 guest_ip = output.strip()
                 return guest_ip
-            logger.info("No guest ip found rhevm, try again after 30s...")
+            logger.info("No guest ip found for rhevm, try again after 30s...")
             time.sleep(30)
+        mac_addr = self.rhevm_guest_mac(ssh_rhevm, rhevm_shell, guest_name)
         guest_ip =  self.get_ipaddr_bymac(mac_addr, ssh_vdsm)
         if guest_ip is not False and guest_ip is not None and guest_ip != "":
             return guest_ip
-        raise FailException("Failed to find rhevm({0}) guest ip".format(ssh_rhevm['host']))
 
     def rhevm_guest_add(self, ssh_rhevm, rhevm_shell, ssh_vdsm, guest_name, template, cluster, disk):
         host_name = self.get_hostname(ssh_vdsm) 
@@ -2799,10 +2827,10 @@ class Provision(Register):
             time.sleep(30)
             if self.rhevm_guest_status(ssh_rhevm, rhevm_shell, guest_name) == "up":
                 logger.info("Succeeded to start rhevm({0}) guest".format(ssh_rhevm['host']))
-                mac_addr = self.rhevm_guest_mac(ssh_rhevm, rhevm_shell, guest_name)
-                guest_ip = self.rhevm_guest_ip(ssh_rhevm, rhevm_shell, ssh_vdsm, guest_name, mac_addr)
-                return guest_ip
-            logger.warning("rhevm guest is not up, check again after 30s...")
+                guest_ip = self.rhevm_guest_ip(ssh_rhevm, rhevm_shell, ssh_vdsm, guest_name)
+                if guest_ip is not False and guest_ip is not None and guest_ip != "":
+                    return guest_ip
+            logger.info("rhevm guest is not up, check again after 30s...")
         raise FailException("Failed to start rhevm({0}) guest".format(ssh_rhevm['host']))
 
     def rhevm_guest_stop(self, ssh_rhevm, rhevm_shell, guest_name):

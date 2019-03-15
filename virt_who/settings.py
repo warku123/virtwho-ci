@@ -574,7 +574,7 @@ class ConfigureHypervisor(FeatureSettings):
         self.server_password = get_exported_param("HYPERVISOR_PASSWORD")
         self.server_ssh_user = get_exported_param("HYPERVISOR_SSH_USER")
         self.server_ssh_passwd = get_exported_param("HYPERVISOR_SSH_PASSWD")
-        self.guest_ip = get_exported_param("GUESR_IP")
+        self.guest_ip = get_exported_param("GUEST_IP")
         self.guest_name = get_exported_param("GUEST_NAME")
         self.guest_user = get_exported_param("GUEST_USER")
         self.guest_passwd = get_exported_param("GUEST_PASSWD")
