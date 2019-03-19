@@ -296,10 +296,12 @@ class Testing(Provision):
     # virt-who config function
     #******************************************
     def vw_case_info(self, case_name, case_id=None):
+        logger.info("+"*30)
+        logger.info(case_name)
         if case_id:
-            logger.info("caseID:{0} {1}".format(case_id, case_name))
-        else:
-            logger.info(case_name)
+            polarion_baseurl = "https://polarion.engineering.redhat.com/polarion/redirect/project"
+            polarion_workitem = "%s/RedHatEnterpriseLinux7/workitem?id=%s" % (polarion_baseurl, case_id)
+            logger.info(polarion_workitem)
 
     def vw_case_skip(self, skip_reason=None):
         try:
@@ -320,10 +322,9 @@ class Testing(Provision):
                 logger.warning(msg)
                 print msg
         if any(False in res for res in results.values()):
-            raise FailException("Failed to run case, please check the failed steps")
+            raise FailException("Failed to run case, please check the failed steps\n")
         else:
-            logger.info("Successed to run case, all steps passed")
-            logger.info("+"*30)
+            logger.info("Successed to run case, all steps passed\n")
 
     def vw_case_init(self):
         hypervisor_config = self.get_hypervisor_config()

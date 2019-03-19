@@ -90,8 +90,8 @@ def xml_createNode(parent_node, child_node, attr, text):
 
 def polarion_testrun_id():
     job_name = get_exported_param("JOB_NAME")
-    trigger_name = get_exported_param("TRIGGER_NAME")
-    server_type = get_exported_param("SERVER_TYPE")
+    trigger_name = get_exported_param("TRIGGER_TYPE")
+    server_type = get_exported_param("HYPERVISOR_TYPE")
     create_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     if job_name != "" and trigger_name !="" and server_type !="":
         testrun_id = "virtwho_%s_%s_%s_%s" % (job_name, server_type, trigger_name, create_time)

@@ -561,7 +561,7 @@ class Provision(Register):
             ssh_guest = hypervisor_config['ssh_guest']
             self.jenkins_job_init(register_type, register_config, job_name, ssh_host, ssh_guest)
             data = self.jenkins_parameter(hypervisor_config, register_config)
-            cmd = "curl -s -i -X POST {0}/job/{1}/buildWithParameters --user {2}:{3} {4}".format(
+            cmd = "curl -k -s -i -X POST {0}/job/{1}/buildWithParameters --user {2}:{3} {4}".format(
                 deploy.jenkins.url,
                 job_name,
                 deploy.jenkins.username,
@@ -2901,7 +2901,7 @@ class Provision(Register):
         host_name = self.get_hostname(ssh_vdsm)
         rhel_ver = self.rhel_version(ssh_vdsm)
         self.system_init("ci-host-vdsm", ssh_vdsm)
-        if trigger_name == "trigger-rhev":
+        if trigger_type == "trigger-rhev":
             self.nmap_pkg_ready(ssh_vdsm)
         else:
             self.qa_register(ssh_vdsm)

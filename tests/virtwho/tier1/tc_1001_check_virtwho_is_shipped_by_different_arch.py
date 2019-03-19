@@ -6,12 +6,7 @@ from virt_who.testing import Testing
 
 class Testcase(Testing):
     def test_run(self):
-        """
-        :Verify: virt-who package is exist in different arch repo
-        :Polarion_Id: RHEL-133652
-        :Automated: Yes
-        """
-        logger.info(os.path.basename(__file__))
+        self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133652')
         trigger_type = config.virtwho.trigger_type
         compose_id = config.virtwho.rhel_compose
         if "trigger-rhel" not in trigger_type:
@@ -60,10 +55,10 @@ class Testcase(Testing):
                 pkg_url = "%s/%s/compose/%s/os/Packages/%s" %(baseurl, compose_id, arch, pkg)
             if self.url_validation(pkg_url):
                 results.setdefault('step1', []).append(True)
-                logger.info("virt-who pkg is exist in arch: %s" % arch)
+                logger.info("{0} is exist in arch: {1}".format(pkg, arch))
             else:
                 results.setdefault('step1', []).append(False)
-                logger.error("virt-who pkg is not exist in arch: %s" % arch)
+                logger.info("{0} is not exist in arch: {1}".format(pkg, arch))
 
         # Case Results
         self.vw_case_result(results)

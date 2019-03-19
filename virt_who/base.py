@@ -267,9 +267,9 @@ class Base(unittest.TestCase):
         host = ssh['host']
         cmd ="rpm -qa filesystem"
         for i in range(360):
-            ret, output = self.runcmd(cmd, ssh, desc="ssh connect check")
+            ret, output = self.runcmd(cmd, ssh)
             if ret == 0 and "filesystem" in output:
-                logger.info("Succeeded to ssh connect host %s" % host)
+                logger.info("Succeeded to connect host {0} by ssh".format(host))
                 return True
             logger.info("Trying to connect host %s after 60s..." % host)
             time.sleep(60)
@@ -277,11 +277,10 @@ class Base(unittest.TestCase):
 
     def rhel_version(self, ssh):
         cmd = "cat /etc/redhat-release"
-        ret, output = self.runcmd(cmd, ssh, desc="check rhel release")
+        ret, output = self.runcmd(cmd, ssh)
         if ret == 0 and output is not None:
             m = re.search(r'(?<=release )\d', output)
             rhel_ver = m.group(0)
-            logger.info("Succeeded to check rhel release: rhel-%s (%s) (%s)" % (rhel_ver, output, ssh['host']))
             return str(rhel_ver)
         else:
             raise FailException("Unknown rhel release: %s (%s)" % (output.strip(), ssh['host']))
@@ -290,13 +289,12 @@ class Base(unittest.TestCase):
         rhel_ver = self.rhel_version(ssh)
         if rhel_ver == "6":
             cmd = "service iptables stop; chkconfig iptables off"
-            self.runcmd(cmd, ssh, desc="Stop and disable iptables service")
+            self.runcmd(cmd, ssh)
         else:
             cmd = "systemctl stop firewalld.service; systemctl disable firewalld.service"
-            self.runcmd(cmd, ssh, desc="Stop and disable firewalld service")
+            self.runcmd(cmd, ssh)
         cmd = "setenforce 0; sed -i -e 's/SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config"
         self.runcmd(cmd, ssh, desc="disable selinux")
-        logger.info("Succeeded to stop firewalld (%s)" % ssh['host'])
 
     def bridge_setup(self, bridge_name, ssh):
         host = ssh['host']
@@ -322,7 +320,7 @@ class Base(unittest.TestCase):
             raise FailException("Failed to create bridge(%s)" % host)
 
     def get_hostname(self, ssh):
-        ret, output = self.runcmd('hostname', ssh, desc="get host name")
+        ret, output = self.runcmd('hostname', ssh)
         if ret == 0 and output is not None and output != "":
             hostname = output.strip()
             return hostname
@@ -332,7 +330,7 @@ class Base(unittest.TestCase):
     def get_ipaddr(self, ssh):
         #cmd = "ip route get 8.8.8.8 | awk 'NR==1 {print $NF}'"
         cmd = "ip route get 8.8.8.8 | awk '/src/ { print $7 }'"
-        ret, output = self.runcmd(cmd, ssh, desc="get host ip address")
+        ret, output = self.runcmd(cmd, ssh)
         if ret == 0 and output is not None:
                 return output.strip()
         else:
@@ -341,7 +339,7 @@ class Base(unittest.TestCase):
     def get_gateway(self, ssh):
         ipaddr = self.get_ipaddr(ssh)
         cmd = "ip route | grep %s" % ipaddr
-        ret, output = self.runcmd(cmd, ssh, desc="get host ip gateway")
+        ret, output = self.runcmd(cmd, ssh)
         if ret == 0 and output is not None and output != "":
             output = output.strip().split(" ")
             if len(output) > 0:
@@ -351,24 +349,21 @@ class Base(unittest.TestCase):
 
     def set_etc_hosts(self, etc_hosts_value, ssh):
         cmd = "sed -i '/localhost/!d' /etc/hosts; echo '%s' >> /etc/hosts" % (etc_hosts_value)
-        ret, output = self.runcmd(cmd, ssh, desc="set /etc/hosts")
-        if ret == 0:
-            logger.info("Succeeded to set /etc/hosts (%s)" % ssh['host'])
-        else:
+        ret, output = self.runcmd(cmd, ssh)
+        if ret != 0:
             raise FailException("Failed to set /etc/hosts (%s)" % ssh['host'])
 
     def set_hostname(self, hostname, ssh):
         try:
             cmd = "hostnamectl set-hostname {0}".format(hostname)
-            self.runcmd(cmd, ssh, desc="run hostname command")
+            self.runcmd(cmd, ssh)
             rhel_ver = self.rhel_version(ssh)
             if rhel_ver == "6":
                 cmd = "sed -i '/HOSTNAME=/d' /etc/sysconfig/network; echo 'HOSTNAME={0}' >> /etc/sysconfig/network".format(hostname)
-                self.runcmd(cmd, ssh, desc="set hostname in /etc/sysconfig/network")
+                self.runcmd(cmd, ssh)
             else:
                 cmd = "if [ -f /etc/hostname ]; then sed -i -e '/localhost/d' -e '/{0}/d' /etc/hostname; echo {0} >> /etc/hostname; fi".format(hostname)
-                self.runcmd(cmd, ssh, desc="set hostname in /etc/hostname")
-            logger.info("Succeeded to set hostname ({0})".format(ssh['host']))
+                self.runcmd(cmd, ssh)
         except:
             raise FailException("Failed to set hostname ({0})".format(ssh['host']))
 
@@ -383,6 +378,7 @@ class Base(unittest.TestCase):
             self.set_hostname(host_name, ssh)
             self.set_etc_hosts(etc_hosts_value, ssh)
             self.stop_firewall(ssh)
+            logger.info("Finished to init system {0}".format(host_name))
         else:
             raise FailException("Failed to ssh login %s" % host_ip)
 
@@ -391,10 +387,8 @@ class Base(unittest.TestCase):
         ret, output = self.runcmd(cmd, ssh)
         if ret == 0 and output is not None and output != "":
             pkg = output.strip()+".rpm"
-            logger.info("{0} is installed".format(pkg))
             return pkg
         else:
-            logger.info("{0} is not installed".format(package))
             return False
 
     def pkg_install(self, ssh, package):
@@ -436,7 +430,7 @@ class Base(unittest.TestCase):
         if self.pkg_check(ssh, "nmap") is False:
             self.nmap_pkg_install(ssh)
         else:
-            logger.info("nmap is ready to scan ip")
+            logger.info("nmap is ready on {0} to scan ip".format(ssh['host']))
 
     def nmap_pkg_install(self, ssh):
         rhel_ver = self.rhel_version(ssh)

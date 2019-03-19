@@ -6,12 +6,7 @@ from virt_who.testing import Testing
 
 class Testcase(Testing):
     def test_run(self):
-        """
-        :Verify: virt-who package man page and help command
-        :Polarion_Id: RHEL-133657
-        :Automated: Yes
-        """
-        logger.info(os.path.basename(__file__))
+        self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133657')
         trigger_type = config.virtwho.trigger_type
         if "trigger-rhev" in trigger_type:
             self.vw_case_skip("skipped - this case is not avaialbe for {0}".format(trigger_type))
