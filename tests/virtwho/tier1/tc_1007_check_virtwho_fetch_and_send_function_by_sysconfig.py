@@ -6,12 +6,7 @@ from virt_who.testing import Testing
 
 class Testcase(Testing):
     def test_run(self):
-        """
-        :Verify: fetch and sent report
-        :Polarion_Id: RHEL-133789
-        :Automated: Yes
-        """
-        logger.info(os.path.basename(__file__))
+        self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133789')
         if self.pkg_check(self.ssh_host(), 'virt-who')[9:15] >= '0.23.3':
             logger.warning("Don't support to configer hypervisor in /etc/sysconfig/virt-who")
             self.vw_case_skip("skipped - this case is not avaialbe for virt-who version")

@@ -6,12 +6,7 @@ from virt_who.testing import Testing
 
 class Testcase(Testing):
     def test_run(self):
-        """
-        :Verify: fetach and send report for /etc/virt-who.d/xxx.conf
-        :Polarion_Id: RHEL-134107 
-        :Automated: Yes
-        """
-        logger.info(os.path.basename(__file__))
+        self.vw_case_info(os.path.basename(__file__), case_id='RHEL-134107')
         self.vw_case_init()
 
         # Case Config

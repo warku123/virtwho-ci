@@ -6,12 +6,7 @@ from virt_who.testing import Testing
 
 class Testcase(Testing):
     def test_run(self):
-        """
-        :Verify: virt-who package info
-        :Polarion_Id: RHEL-133656
-        :Automated: Yes
-        """
-        logger.info(os.path.basename(__file__))
+        self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133656')
         pkg_info = self.pkg_info(self.ssh_host(), 'virt-who')
         results = dict()
 
