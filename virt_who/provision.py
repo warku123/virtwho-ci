@@ -1434,7 +1434,7 @@ class Provision(Register):
         if not guest_ip:
             self.libvirt_guests_all_clean(ssh_libvirt)
             guest_ip = self.libvirt_guest_add(guest_name, ssh_libvirt)
-        logger.info("Succeeded to create guest({0}) in libvirt({1})".format(guest_ip, remote_host))
+        logger.info("Succeeded to get remote libvirt({0})'s guest ip: ({1})".format(remote_host, guest_ip))
         ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
         self.system_init("ci-guest-libvirt-remote", ssh_guest)
         mode_queue.put((mode_type, guest_ip))
@@ -1448,7 +1448,7 @@ class Provision(Register):
         self.bridge_setup("br0", ssh_libvirt)
         self.libvirt_guests_all_clean(ssh_libvirt)
         guest_ip = self.libvirt_guest_add(guest_name, ssh_libvirt)
-        logger.info("Succeeded to create guest({0}) in libvirt({1})".format(guest_ip, ssh_libvirt['host']))
+        logger.info("Succeeded to get local libvirt({0})'s guest ip: ({1})".format(ssh_libvirt['host'], guest_ip))
         ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
         self.system_init("ci-guest-libvirt-local", ssh_guest)
         return guest_ip
@@ -2394,7 +2394,7 @@ class Provision(Register):
         return True
 
     def rhevm_guests_all_clean(self, ssh_rhevm, rhevm_shell):
-        cmd = "{0} -c -E 'list vms' | grep '^name' | awk -F ':' '{print $2}'".format(rhevm_shell)
+        cmd = "%s -c -E 'list vms' | grep '^name' | awk -F ':' '{print $2}'" % rhevm_shell
         ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm all guests list")
         if ret == 0 and output is not None and output != "":
             guests = output.strip().split('\n')
@@ -2404,7 +2404,7 @@ class Provision(Register):
         logger.info("Finished to clean all the rhevm({0}) guests".format(ssh_rhevm['host']))
 
     def rhevm_hosts_all_clean(self, ssh_rhevm, rhevm_shell):
-        cmd = "{0} -c -E 'list hosts' | grep '^name' | awk -F ':' '{print $2}'".format(rhevm_shell)
+        cmd = "%s -c -E 'list hosts' | grep '^name' | awk -F ':' '{print $2}'" % rhevm_shell
         ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm all hosts list")
         if ret == 0 and output is not None and output != "":
             hosts = output.strip().split('\n')
@@ -2533,7 +2533,7 @@ class Provision(Register):
         self.rhevm_datacenter_ready(ssh_rhevm, rhevm_shell, ssh_vdsm, datacenter, storage)
 
     def rhevm_hosts_fence(self, ssh_rhevm, rhevm_shell):
-        cmd = "{0} -c -E 'list hosts' | grep '^name' | awk -F ':' '{print $2}'".format(rhevm_shell)
+        cmd = "%s -c -E 'list hosts' | grep '^name' | awk -F ':' '{print $2}'" % rhevm_shell
         ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm all hosts list")
         if ret == 0 and output is not None and output != "":
             hosts = output.strip().split('\n')
@@ -2548,7 +2548,7 @@ class Provision(Register):
         ret, output = self.runcmd(cmd, ssh_rhevm, desc="restart rhevm service before maintenance")
         time.sleep(60)
         self.rhevm_hosts_fence(ssh_rhevm, rhevm_shell)
-        cmd = "{0} -c -E 'list vms --show-all' | grep '^name' | awk -F ':' '{print $2}'".format(rhevm_shell)
+        cmd = "%s -c -E 'list vms --show-all' | grep '^name' | awk -F ':' '{print $2}'" % rhevm_shell
         ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm list all guests")
         host_uuid = self.rhevm_host_uuid(ssh_rhevm, rhevm_shell, hostname)
         if ret == 0 and output is not None and output != "":
