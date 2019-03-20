@@ -1273,13 +1273,13 @@ class Provision(Register):
         self.paramiko_putdir(ssh_docker, local_dir, remote_dir)
         cmd = "sh /tmp/docker/mkcontainer.sh -i {0} -c {1} -o {2} -u {3} -p {4}"\
                 .format(image_name, cont_name, cont_port, cont_user, cont_passwd)
-        logger.info("Command to create docker container: {0}".format(cmd))
         self.runcmd(cmd, ssh_docker)
         is_created = ""
         if self.docker_container_exist(ssh_docker, cont_port) and self.docker_container_exist(ssh_docker, cont_name):
             is_created = "Yes"
             logger.info("Successed to create container: {0}:{1}".format(cont_name, cont_port))
         else:
+            logger.info("Command to create docker container: {0}".format(cmd))
             logger.error("Failed to create container: {0}".format(cont_name))
         self.runcmd("rm -rf /tmp/docker/", ssh_docker)
         if is_created == "Yes":
@@ -2360,7 +2360,8 @@ class Provision(Register):
         options = "insecure = False\nno_paging = False\nfilter = False\ntimeout = -1"
         cmd = "echo -e '[ovirt-shell]\nusername = {0}\npassword = {1}\nca_file = {2}\nurl = {3}\n{4}' > {5}"\
                 .format(admin_user, admin_passwd, ca_file, api_url, options, rhevm_shellrc)
-        self.runcmd(cmd, ssh_rhevm, desc="config rhevm shell")
+        self.runcmd(cmd, ssh_rhevm)
+        self.runcmd("ovirt-aaa-jdbc-tool user unlock admin", ssh_rhevm)
         cmd = "{0} -c -E  'ping'".format(rhevm_shell)
         ret, output = self.runcmd(cmd, ssh_rhevm, desc="ping rhevm shell")
         if ret == 0 and "success" in output:
