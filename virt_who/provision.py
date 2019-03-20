@@ -591,7 +591,7 @@ class Provision(Register):
             if "Location" in line:
                 url = line.split('Location:')[1].strip()
                 break
-        cmd = "curl -s -u {0}:{1} {2}/api/json".format(
+        cmd = "curl -k -i -s -u {0}:{1} {2}/api/json".format(
                 deploy.jenkins.username, deploy.jenkins.password, url)
         output = os.popen(cmd).read()
         while "executable" not in output:
@@ -602,7 +602,7 @@ class Provision(Register):
         return job_url
 
     def jenkins_job_is_finished(self, job_url, job_tips):
-        cmd = "curl -s -u {0}:{1} {2}/api/json".format(
+        cmd = "curl -k -i -s -u {0}:{1} {2}/api/json".format(
                 deploy.jenkins.username, deploy.jenkins.password, job_url)
         try:
             output = os.popen(cmd).read()
@@ -1252,10 +1252,18 @@ class Provision(Register):
             return False
 
     def docker_container_clean(self, ssh_docker):
-        cmd = "docker ps -a | awk '{print $1 }'|xargs -I {} docker stop {}"
-        self.runcmd(cmd, ssh_docker, desc="Stop all containers")
-        cmd = "docker ps -a | awk '{print $1 }'|xargs -I {} docker rm -f {}"
-        self.runcmd(cmd, ssh_docker, desc="Delete all containers")
+        ret, output = self.runcmd('docker ps -a |wc -l', ssh_docker)
+        if int(output) > 15:
+            cmd = "docker ps -a | awk '{print $1 }'|xargs -I {} docker stop {}"
+            self.runcmd(cmd, ssh_docker, desc="Stop all containers")
+            cmd = "docker ps -a | awk '{print $1 }'|xargs -I {} docker rm -f {}"
+            self.runcmd(cmd, ssh_docker, desc="Delete all containers")
+
+    def docker_container_port(self, ssh_docker):
+        port = random.randint(53220, 60000)
+        while self.docker_container_exist(ssh_docker, port):
+            port = random.randint(53220, 60000)
+        return port
 
     def docker_container_create(self, ssh_docker, image_name, cont_name, cont_user, cont_passwd, cont_port):
         host = ssh_docker['host']
@@ -1287,14 +1295,13 @@ class Provision(Register):
         ssh_docker ={"host":server,"username":server_user,"password":server_passwd}
         container_user = deploy.docker.container_user
         container_passwd = deploy.docker.container_passwd
-        container_port = 53220
         image_name = compose_id.lower()
         self.runcmd("docker system prune -f", ssh_docker, desc="clean docker cache")
         self.docker_image_create(ssh_docker, compose_id, image_name)
         self.docker_container_clean(ssh_docker)
         for mode in remote_modes:
-            container_port = container_port + 1
-            container_name = image_name + "-" + mode.strip() + ".redhat.com"
+            container_port = self.docker_container_port(ssh_docker)
+            container_name = image_name.replace('.', "-") + "-" + mode.strip() + "-" + container_port + ".redhat.com"
             if self.docker_container_create(
                     ssh_docker, image_name, container_name, container_user, container_passwd, container_port):
                 ip_value = "{0}:{1}".format(server, container_port)
@@ -2112,10 +2119,10 @@ class Provision(Register):
                 logger.warning("Failed to download libvirt xml file, try again...")
             cmd = "sed -i -e 's|<name>.*</name>|<name>{0}</name>|g' {1}".format(guest_name, guest_xml)
             self.runcmd(cmd, ssh_libvirt, desc="libvirt xml guest_name update")
-            cmd = "sed -i -e 's|<source file=\".*\"/>|<source file=\"{0}\"/>|g' {1}".format(guest_image, guest_xml)
+            cmd = "sed -i -e 's|<source file=.*/>|<source file=\"{0}\"/>|g' {1}".format(guest_image, guest_xml)
             self.runcmd(cmd, ssh_libvirt, desc="libvirt xml source file update")
             guest_mac = self.randomMAC()
-            cmd = "sed -i -e 's|<mac address=\".*\"/>|<mac address=\"{0}\"/>|g' {1}".format(guest_mac, guest_xml)
+            cmd = "sed -i -e 's|<mac address=.*/>|<mac address=\"{0}\"/>|g' {1}".format(guest_mac, guest_xml)
             self.runcmd(cmd, ssh_libvirt, desc="libvirt xml mac address update")
         cmd = "virsh define {0}".format(guest_xml)
         ret, output = self.runcmd(cmd, ssh_libvirt, desc="libvirt define guest")
@@ -2579,7 +2586,7 @@ class Provision(Register):
             is_deleted = ""
             for i in range(10):
                 time.sleep(30)
-                if self.rhevm_host_exist(ssh_rhevm, rhevm_shell, hostname):
+                if self.rhevm_host_exist(ssh_rhevm, rhevm_shell, hostname) is False:
                     is_deleted = "Yes"
                     break
             if is_deleted != "Yes":
