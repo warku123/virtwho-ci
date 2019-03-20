@@ -32,7 +32,7 @@ config.configure("config.ini")
 runtest_info = os.path.join(os.path.realpath(os.path.join(
     os.path.dirname(__file__),
     os.pardir)),
-    "runtest.info"
+    "runtest.txt"
     )
 
 # debug log file

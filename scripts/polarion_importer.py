@@ -94,7 +94,7 @@ def polarion_testrun_id():
     server_type = get_exported_param("HYPERVISOR_TYPE")
     create_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     if job_name != "" and trigger_name !="" and server_type !="":
-        testrun_id = "virtwho_%s_%s_%s_%s" % (job_name, server_type, trigger_name, create_time)
+        testrun_id = "virtwho_%s_%s_%s" % (job_name, trigger_name, create_time)
     else:
         testrun_id = "virtwho_testrun_by_ci_%s" % create_time
     return testrun_id
@@ -199,5 +199,5 @@ if __name__ == "__main__":
     xml_file, testrun_id = polarion_xml_init()
     polarion_xml_update(xml_file, files)
     polarion_caseid_mapping(xml_file)
-    # polarion_xml_import(xml_file, testrun_id)
+    polarion_xml_import(xml_file, testrun_id)
 

@@ -354,6 +354,7 @@ class Provision(Register):
                     'ssh_passwd':"",
                     'api':api
             }
+            return register_config
         if "satellite" in register_type:
             server = register_server
             api = "https://{0}".format(server)
@@ -425,7 +426,7 @@ class Provision(Register):
             ssh_rhevm = {'host':rhevm_ip,'username':hypervisor_ssh_user,'password':hypervisor_ssh_passwd}
             hypervisor_server = self.rhevm_admin_get(ssh_rhevm)
             hypervisor_user = deploy.rhevm.rhevm_admin_user
-            hypervisor_passwd = deploy.rhevm.rhevm_admin_user
+            hypervisor_passwd = deploy.rhevm.rhevm_admin_passwd
             guest_name = deploy.rhevm.guest_name
             guest_user = deploy.rhevm.guest_user
             guest_passwd = deploy.rhevm.guest_passwd
@@ -437,7 +438,7 @@ class Provision(Register):
             ssh_rhevm = {'host':rhevm_ip,'username':hypervisor_ssh_user,'password':hypervisor_ssh_passwd}
             hypervisor_server = self.rhevm_admin_get(ssh_rhevm)
             hypervisor_user = deploy.vdsm.rhevm_admin_user
-            hypervisor_passwd = deploy.vdsm.rhevm_admin_user
+            hypervisor_passwd = deploy.vdsm.rhevm_admin_passwd
             host_user = deploy.vdsm.master_user
             host_passwd = deploy.vdsm.master_passwd
             guest_name = deploy.vdsm.guest_name
@@ -517,7 +518,7 @@ class Provision(Register):
         self.system_register_config(ssh_host, register_type, register_config)
         self.system_register_config(ssh_guest, register_type, register_config)
         if "stage" in register_type:
-            stage_consumer_clean(ssh_host, register_config)
+            self.stage_consumer_clean(ssh_host, register_config)
         self.system_register(ssh_host, register_type, register_config)
         self.system_register(ssh_guest, register_type, register_config)
 
@@ -591,7 +592,7 @@ class Provision(Register):
             if "Location" in line:
                 url = line.split('Location:')[1].strip()
                 break
-        cmd = "curl -k -i -s -u {0}:{1} {2}/api/json".format(
+        cmd = "curl -k -s -u {0}:{1} {2}/api/json".format(
                 deploy.jenkins.username, deploy.jenkins.password, url)
         output = os.popen(cmd).read()
         while "executable" not in output:
@@ -602,7 +603,7 @@ class Provision(Register):
         return job_url
 
     def jenkins_job_is_finished(self, job_url, job_tips):
-        cmd = "curl -k -i -s -u {0}:{1} {2}/api/json".format(
+        cmd = "curl -k -s -u {0}:{1} {2}/api/json".format(
                 deploy.jenkins.username, deploy.jenkins.password, job_url)
         try:
             output = os.popen(cmd).read()
@@ -983,7 +984,7 @@ class Provision(Register):
                 job_status.append("Cancelled")
             else:
                 job_status.append("Pending")
-        logger.info("Jobs: {0}, Jobs status: {1}".format(jobs, job_status))
+        logger.info("Beaker Jobs: {0}, Jobs status: {1}".format(jobs, job_status))
         if "Pending" in job_status:
             return True
         else:
@@ -1042,7 +1043,6 @@ class Provision(Register):
             jobs[job_name] = job_id
         logger.info(jobs)
         while(self.beaker_Jstatus(jobs)):
-            logger.info("sleep 60s to check the beaker job status again")
             time.sleep(60)
         job_passed = self.beaker_Jresult(jobs)
         return job_passed
@@ -1418,7 +1418,7 @@ class Provision(Register):
             self.rhevm_template_ready(ssh_rhevm, rhevm_shell, template, disk)
             self.rhevm_host_ready(ssh_rhevm, rhevm_shell, ssh_master, datacenter, storage)
             guest_ip = self.rhevm_guest_add(ssh_rhevm, rhevm_shell, ssh_master, guest_name, template, cluster, disk)
-        logger.info("Succeeded to get rhevm({0}) guest ip: {1}".format(rhevm_ip, guest_ip))
+        logger.info("Succeeded to get rhevm({0}) guest ip: {1} for rhevm mode".format(rhevm_ip, guest_ip))
         ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
         self.system_init("ci-guest-rhevm", ssh_guest)
         mode_queue.put((mode_type, guest_ip))
@@ -1486,7 +1486,7 @@ class Provision(Register):
         self.rhevm_hosts_all_clean(ssh_rhevm, rhevm_shell)
         self.rhevm_host_ready(ssh_rhevm, rhevm_shell, ssh_vdsm, datacenter, storage)
         guest_ip = self.rhevm_guest_add(ssh_rhevm, rhevm_shell, ssh_vdsm, guest_name, template, cluster, disk)
-        logger.info("Succeeded to get rhevm({0}) guest ip: {1}".format(rhevm_ip, guest_ip))
+        logger.info("Succeeded to get rhevm({0}) guest ip: {1} for vdsm mode".format(rhevm_ip, guest_ip))
         ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
         self.system_init("ci-guest-vdsm", ssh_guest)
         return guest_ip
