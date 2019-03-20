@@ -1263,7 +1263,7 @@ class Provision(Register):
         port = random.randint(53220, 60000)
         while self.docker_container_exist(ssh_docker, port):
             port = random.randint(53220, 60000)
-        return port
+        return str(port)
 
     def docker_container_create(self, ssh_docker, image_name, cont_name, cont_user, cont_passwd, cont_port):
         host = ssh_docker['host']
@@ -1301,7 +1301,7 @@ class Provision(Register):
         self.docker_container_clean(ssh_docker)
         for mode in remote_modes:
             container_port = self.docker_container_port(ssh_docker)
-            container_name = image_name.replace('.', "-") + "-" + mode.strip() + "-" + container_port + ".redhat.com"
+            container_name = image_name.replace('.', '-') + "-" + mode.strip() + "-" + container_port + ".redhat.com"
             if self.docker_container_create(
                     ssh_docker, image_name, container_name, container_user, container_passwd, container_port):
                 ip_value = "{0}:{1}".format(server, container_port)
