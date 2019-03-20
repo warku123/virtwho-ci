@@ -49,7 +49,6 @@ class Register(Base):
         if ret != 0 or "No such file or directory" in output:
             cmd = "rm -rf /backup/; mkdir -p /backup/; cp /etc/rhsm/rhsm.conf /backup/"
             self.runcmd(cmd, ssh)
-            logger.info("Successed to backup rhsm.conf({0})".format(ssh['host']))
         else:
             logger.info("rhsm.conf is backup already({0})".format(ssh['host']))
 
@@ -59,8 +58,7 @@ class Register(Base):
         ret, output = self.runcmd("ls /backup/rhsm.conf", ssh)
         if ret == 0 and "No such file or directory" not in output:
             cmd = "rm -f /etc/rhsm/rhsm.conf; cp /backup/rhsm.conf /etc/rhsm/rhsm.conf"
-            self.runcmd(cmd, ssh, desc="recovery rhsm.conf from /backup")
-            logger.info("Successed to recovery rhsm.conf({0})".format(ssh['host']))
+            self.runcmd(cmd, ssh)
         else:
             logger.info("Failed to recovery rhsm.conf, backup file is not found({0})".format(ssh['host']))
 
@@ -114,16 +112,12 @@ class Register(Base):
             ret, output = self.runcmd(cmd, ssh)
             cmd = "sed -i -e 's|^baseurl.*|baseurl=https:\/\/stage.cdn.redhat.com|g' /etc/rhsm/rhsm.conf"
             ret, output = self.runcmd(cmd, ssh)
-            if ret == 0:
-                logger.info("Succeeded to config stage register for host{0}".format(host))
-            else:
+            if ret != 0:
                 raise FailException("Failed to config stage register for host({0})".format(host))
         if "satellite" in register_type:
             cmd = "rpm -ihv http://{0}/pub/katello-ca-consumer-latest.noarch.rpm".format(server)
             ret, output = self.runcmd(cmd, ssh)
-            if ret == 0:
-                logger.info("Succeeded to config satellite register for host({0})".format(host))
-            else:
+            if ret != 0:
                 raise FailException("Failed to config satellite register for host({0})".format(host))
 
     def system_register(self, ssh, register_type, register_config):
@@ -139,14 +133,14 @@ class Register(Base):
         for i in range(3):
             ret, output = self.runcmd(cmd, ssh)
             if ret == 0 or "system has been registered" in output or "system is already registered" in output:
-                logger.info("Succeeded to register system {0} to {1}".format(host, register_type))
+                logger.info("Succeeded to register system {0} to {1}({2})".format(host, server, register_type))
                 return True
             elif "certificate verify failed" in output:
                 cmd = "sed -i -e 's|^insecure.*|insecure = 1|g' /etc/rhsm/rhsm.conf"
                 ret, output = self.runcmd(cmd, ssh)
                 self.system_unregister(ssh)
             time.sleep(180)
-        raise FailException("Failed to register system {0} to {1}".format(host, register_type))
+        raise FailException("Failed to register system {0} to {1}({2})".format(host, server, register_type))
 
     def system_unregister(self, ssh):
         for i in range(3):
