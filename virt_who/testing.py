@@ -26,7 +26,7 @@ class Testing(Provision):
         ssh_user = config.hypervisor.server_ssh_user
         ssh_passwd = config.hypervisor.server_ssh_passwd
         guest_name = config.hypervisor.guest_name 
-        if "//" in server:
+        if server is not None and "//" in server:
             server_ip = self.get_url_domain(server)
         else:
             server_ip = server
