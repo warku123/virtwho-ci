@@ -134,15 +134,15 @@ class Base(unittest.TestCase):
         self.runcmd("rm -f {0}".format(filename), ssh, desc="rm expect script")
         return ret, output
 
-    def get_exported_param(self, param_name):
-        param_value = os.getenv(param_name)
-        if param_value is None or param_value == "":
-            param_value = ""
-        return param_value
+    def get_exported_param(self, name):
+        value = os.getenv(name)
+        if value is None or value == '':
+            value = None
+        return value
 
-    def set_exported_param(self, param_name, param_value):
-        os.putenv(param_name, param_value)
-        return os.getenv(param_name)
+    def set_exported_param(self, name, value):
+        os.putenv(name, value)
+        return os.getenv(name)
 
     def shell_escape_char(self, char):
         char = char.replace('[', '\[').replace(']', '\]').replace('/', '\/')
