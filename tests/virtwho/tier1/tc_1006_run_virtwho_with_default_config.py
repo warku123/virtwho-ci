@@ -10,7 +10,7 @@ class Testcase(Testing):
         trigger_type = self.get_config('trigger_type')
         hypervisor_type = self.get_config('hypervisor_type')
         if "trigger-rhev" in trigger_type:
-            self.vw_case_skip("skipped - this case is not avaialbe for {0}".format(trigger_type))
+            self.vw_case_skip(trigger_type)
         self.vw_case_init()
 
         # Case Config

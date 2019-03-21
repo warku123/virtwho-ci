@@ -10,19 +10,19 @@ class Testcase(Testing):
         trigger_type = self.get_config('trigger_type')
         compose_id = self.get_config('rhel_compose')
         if "trigger-rhel" not in trigger_type:
-            self.vw_case_skip("skipped - this case is not avaialbe for {0}".format(trigger_type))
+            self.vw_case_skip(trigger_type)
 
         # Case Config
         results = dict()
         arch_list = list()
         pkg = self.pkg_check(self.ssh_host(), 'virt-who')
         if pkg is False:
-            raise FailException("Failed to run this case, due to virt-who pkg is not found")
+            raise FailException("virt-who pkg is not found")
         if compose_id is None or compose_id == "":
-            raise FailException("Failed to run this case, due to compose_id is not defined")
+            raise FailException("compose_id is not defined")
         if "updates" in compose_id:
             rhel_release = compose_id.split('-')[0] + '-' + compose_id.split('-')[1]
-            baseurl = "http://download.eng.pek2.redhat.com/rel-eng/updates/%s" % rhel_release
+            baseurl = "http://download.eng.pek2.redhat.com/rel-eng/updates/{0}".format(rhel_release)
         else:
             baseurl = "http://download.eng.pek2.redhat.com/pub/rhel/rel-eng"
         if "RHEL-8" in compose_id:
@@ -50,9 +50,9 @@ class Testcase(Testing):
         for arch in arch_list:
             if "RHEL-8" in compose_id:
                 baseurl = "http://download.eng.pek2.redhat.com/rhel-8/rel-eng/RHEL-8"
-                pkg_url = "%s/%s/compose/AppStream/%s/os/Packages/%s" %(baseurl, compose_id, arch, pkg)
+                pkg_url = "{0}/{1}/compose/AppStream/{2}/os/Packages/{3}".format(baseurl, compose_id, arch, pkg)
             else:
-                pkg_url = "%s/%s/compose/%s/os/Packages/%s" %(baseurl, compose_id, arch, pkg)
+                pkg_url = "{0}/{1}/compose/{2}/os/Packages/{3}".format(baseurl, compose_id, arch, pkg)
             if self.url_validation(pkg_url):
                 results.setdefault('step1', []).append(True)
                 logger.info("{0} is exist in arch: {1}".format(pkg, arch))

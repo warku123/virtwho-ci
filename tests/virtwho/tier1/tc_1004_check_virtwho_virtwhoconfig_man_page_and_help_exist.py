@@ -9,7 +9,7 @@ class Testcase(Testing):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133657')
         trigger_type = self.get_config('trigger_type')
         if "trigger-rhev" in trigger_type:
-            self.vw_case_skip("skipped - this case is not avaialbe for {0}".format(trigger_type))
+            self.vw_case_skip(trigger_type)
 
         results = dict()
         logger.info(">>>step1: virt-who have correct man page")
@@ -17,11 +17,11 @@ class Testcase(Testing):
         results.setdefault('step1', []).append("Agent for reporting virtual guest IDs to Subscription" in output)
 
         logger.info(">>>step2: virt-who-config have correct man page")
-        ret, output = self.runcmd("man virt-who-config", self.ssh_host(), desc="run man virt-who-config")
+        ret, output = self.runcmd("man virt-who-config", self.ssh_host())
         results.setdefault('step2', []).append("configuration for virt-who" in output)
 
         logger.info(">>>step3: virt-who have correct help page")
-        ret, output = self.runcmd("virt-who --help", self.ssh_host(), desc="run virt-who --help")
+        ret, output = self.runcmd("virt-who --help", self.ssh_host())
         results.setdefault('step3', []).append("optional arguments:" in output)
 
         # Case Result

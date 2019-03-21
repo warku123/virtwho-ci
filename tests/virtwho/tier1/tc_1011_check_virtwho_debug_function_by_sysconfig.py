@@ -8,8 +8,7 @@ class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133662')
         if self.pkg_check(self.ssh_host(), 'virt-who')[9:15] >= '0.23.3':
-            logger.warning("Don't support to configer hypervisor in /etc/sysconfig/virt-who")
-            self.vw_case_skip("skipped - this case is not avaialbe for virt-who version")
+            self.vw_case_skip("virt-who version")
         self.vw_case_init()
 
         # Case Config
