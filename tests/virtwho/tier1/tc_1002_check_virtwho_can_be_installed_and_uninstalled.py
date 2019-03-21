@@ -9,7 +9,7 @@ class Testcase(Testing):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133654')
         trigger_type = self.get_config('trigger_type')
         if "trigger-rhev" in trigger_type:
-            self.vw_case_skip("skipped - this case is not avaialbe for {0}".format(trigger_type))
+            self.vw_case_skip(trigger_type)
 
         # Case Config
         results = dict()
