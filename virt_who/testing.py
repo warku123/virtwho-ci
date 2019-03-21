@@ -80,8 +80,6 @@ class Testing(Provision):
         else:
             server_ip = server
         ssh_hypervisor = {"host":server_ip,"username":username,"password":password}
-        if "libvirt-remote" in hypervisor_type:
-            self.ssh_no_passwd_access(self.ssh_host(), ssh_hypervisor)
         if "libvirt-local" in hypervisor_type:
             ssh_hypervisor = self.ssh_host()
         if "rhevm" in hypervisor_type or "vdsm" in hypervisor_type:
@@ -368,15 +366,14 @@ class Testing(Provision):
     #******************************************
     def vw_case_info(self, case_name, case_id=None):
         logger.info("+"*30)
-        logger.info(case_name)
         if case_id:
-            polarion_baseurl = "https://polarion.engineering.redhat.com/polarion/redirect/project"
-            polarion_workitem = "%s/RedHatEnterpriseLinux7/workitem?id=%s" % (polarion_baseurl, case_id)
-            logger.info(polarion_workitem)
+            logger.info("{0}:{1}".format(case_id, case_name))
+        else:
+            logger.info(case_name)
 
     def vw_case_skip(self, skip_reason=None):
         try:
-            self.skipTest(skip_reason)
+            self.skipTest("SkipTest, not avaialbe for {0}".format(skip_reason))
         except Exception, SkipTest:
             logger.info(str(SkipTest))
             raise SkipTest
@@ -403,6 +400,10 @@ class Testing(Provision):
         hypervisor_type = hypervisor_config['type']
         ssh_hypervisor = hypervisor_config['ssh_hypervisor']
         register_type = register_config['type']
+        if self.pkg_check(self.ssh_host(), 'virt-who') is False:
+            self.pkg_install(self.ssh_host(), 'virt-who')
+        if "libvirt-remote" in hypervisor_type:
+            self.ssh_no_passwd_access(self.ssh_host(), ssh_hypervisor)
         if "vdsm" in hypervisor_type or "rhevm" in hypervisor_type:
             cmd = "ovirt-aaa-jdbc-tool user unlock admin"
             self.runcmd(cmd, ssh_hypervisor)
@@ -471,7 +472,7 @@ class Testing(Provision):
         if mode == "LIBVIRT-REMOTE":
             mode = "LIBVIRT"
         if mode == "LIBVIRT-LOCAL":
-            logger.info("libvirt local mode is default")
+            logger.info("libvirt local mode is default, don't need to configure")
         elif mode == "VDSM":
             cmd = 'sed -i -e "s|.*VIRTWHO_VDSM=.*|VIRTWHO_VDSM=1|g" {0}'.format(filename)
             ret, output = self.runcmd(cmd, self.ssh_host())
@@ -502,7 +503,7 @@ class Testing(Provision):
         if mode == "libvirt-remote":
             mode = "libvirt"
         if mode == "libvirt-local":
-            logger.info("local libvirt mode is default")
+            logger.info("libvirt local mode is default, don't need to configure")
         elif mode == "vdsm":
             cmd = "echo -e '[{0}]\ntype={1}' > {2}".format(config_name, mode, config_file)
             ret, output = self.runcmd(cmd, self.ssh_host())
@@ -1020,7 +1021,6 @@ class Testing(Provision):
                 logger.warning("RemoteServerException return 500 code, restart virt-who again after 60s")
                 time.sleep(60)
             else:
-                logger.info("Finished to start virt-who and return log")
                 data = self.vw_log_analyzer(data, tty_output, rhsm_output)
                 if web_check and data['error_num'] == 0 and data['send_num'] > 0:
                     if self.vw_web_host_exist():
@@ -1040,9 +1040,7 @@ class Testing(Provision):
 
     def vw_stop(self):
         ret, output = self.run_service(self.ssh_host(), "virt-who", "stop")
-        if self.kill_pid_by_name(self.ssh_host(), "virt-who"):
-            logger.info("Succeeded to stop and clean virt-who process")
-        else:
+        if self.kill_pid_by_name(self.ssh_host(), "virt-who") is False:
             raise FailException("Failed to stop and clean virt-who process")
 
     def vw_rhsm_associate(self, data, host_uuid, guest_uuid):

@@ -8,7 +8,7 @@ class Provision(Register):
     #****************************************
     def provision_validation(self):
         if deploy.trigger.type == "trigger-rhev":
-            if not delpoy.trigger.rhev_iso:
+            if not deploy.trigger.rhev_iso:
                 raise FailException("no rhev iso link")
         else:
             if not deploy.trigger.rhel_compose:
