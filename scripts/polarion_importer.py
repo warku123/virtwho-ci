@@ -97,6 +97,11 @@ def polarion_testrun_id():
         testrun_id = "virtwho_%s_%s_%s" % (job_name, trigger_name, create_time)
     else:
         testrun_id = "virtwho_testrun_by_ci_%s" % create_time
+    testrun_url = 'https://polarion.engineering.redhat.com/polarion/#/project/RedHatEnterpriseLinux7/testrun?id=%s' % testrun_id
+    logger.info(testrun_url)
+    fd = open(runtest_info, 'a')
+    fd.write("TESTRUN_URL=%s\n" % testrun_url)
+    fd.close()
     return testrun_id
 
 def polarion_xml_init():
@@ -199,5 +204,5 @@ if __name__ == "__main__":
     xml_file, testrun_id = polarion_xml_init()
     polarion_xml_update(xml_file, files)
     polarion_caseid_mapping(xml_file)
-    polarion_xml_import(xml_file, testrun_id)
+    # polarion_xml_import(xml_file, testrun_id)
 

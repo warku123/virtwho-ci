@@ -4,28 +4,77 @@ from virt_who.register import Register
 from virt_who.provision import Provision
 
 class Testing(Provision):
+    def get_config(self, name, value=None):
+        if name == 'trigger_type':
+            value = self.get_exported_param("TRIGGER_TYPE")
+            if not value:
+                value = config.virtwho.trigger_type
+        if name == 'rhel_compose':
+            value = self.get_exported_param("RHEL_COMPOSE")
+            if not value:
+                value = config.virtwho.rhel_compose
+        if name == 'hypervisor_type':
+            value = self.get_exported_param("HYPERVISOR_TYPE")
+            if not value:
+                value = config.hypervisor.type
+        if name == "register_type":
+            value = self.get_exported_param("REGISTER_TYPE")
+            if not value:
+                value = config.register.type
+        if not value:
+            raise FailException("no {0} config found".format(name))
+        return value
+
     def ssh_host(self):
-        host_ip = config.virtwho.host_ip
-        host_user = config.virtwho.host_user
-        host_passwd = config.virtwho.host_passwd
+        host_ip = self.get_exported_param("VIRTWHO_HOST_IP")
+        host_user = self.get_exported_param("VIRTWHO_HOST_USER")
+        host_passwd = self.get_exported_param("VIRTWHO_HOST_PASSWD")
+        if not host_ip:
+            host_ip = config.virtwho.host_ip
+        if not host_user:
+            host_user = config.virtwho.host_user
+        if not host_passwd:
+            host_passwd = config.virtwho.host_passwd
+        if not host_ip:
+            raise FailException("no virtwho host ip defined")
         ssh_host = {"host":host_ip,"username":host_user,"password":host_passwd}
         return ssh_host
 
     def ssh_guest(self):
-        guest_ip = config.hypervisor.guest_ip 
-        guest_user = config.hypervisor.guest_user 
-        guest_passwd = config.hypervisor.guest_passwd 
+        guest_ip = self.get_exported_param("GUEST_IP")
+        guest_user = self.get_exported_param("GUEST_USER")
+        guest_passwd = self.get_exported_param("GUEST_PASSWD")
+        if not guest_ip:
+            guest_ip = config.hypervisor.guest_ip
+        if not guest_user:
+            guest_user = config.hypervisor.guest_user
+        if not guest_passwd:
+            guest_passwd = config.hypervisor.guest_passwd
+        if not guest_ip:
+            raise FailException("no guest ip defined")
         ssh_guest = {"host":guest_ip,"username":guest_user,"password":guest_passwd}
         return ssh_guest
 
     def get_hypervisor_config(self):
-        hypervisor_type = config.hypervisor.type
-        server = config.hypervisor.server
-        username = config.hypervisor.server_username
-        password = config.hypervisor.server_password
-        ssh_user = config.hypervisor.server_ssh_user
-        ssh_passwd = config.hypervisor.server_ssh_passwd
-        guest_name = config.hypervisor.guest_name 
+        hypervisor_type = self.get_config('hypervisor_type')
+        server = self.get_exported_param("HYPERVISOR_SERVER")
+        username = self.get_exported_param("HYPERVISOR_USERNAME")
+        password = self.get_exported_param("HYPERVISOR_PASSWORD")
+        ssh_user = self.get_exported_param("HYPERVISOR_SSH_USER")
+        ssh_passwd = self.get_exported_param("HYPERVISOR_SSH_PASSWD")
+        guest_name = self.get_exported_param("GUEST_NAME")
+        if not server:
+            server = config.hypervisor.server
+        if not username:
+            username = config.hypervisor.server_username
+        if not password:
+            password = config.hypervisor.server_password
+        if not ssh_user:
+            ssh_user = config.hypervisor.server_ssh_user
+        if not ssh_passwd:
+            ssh_passwd = config.hypervisor.server_ssh_passwd
+        if not guest_name:
+            guest_name = config.hypervisor.guest_name
         if server is not None and "//" in server:
             server_ip = self.get_url_domain(server)
         else:
@@ -47,14 +96,35 @@ class Testing(Provision):
                 'username':username,
                 'password':password,
                 'guest_name':guest_name,
-                'ssh_hypervisor':ssh_hypervisor,}
+                'ssh_hypervisor':ssh_hypervisor
+                }
         return configs
 
     def get_register_config(self):
-        register_type = config.register.type
-        server = config.register.server
-        ssh_user = config.register.ssh_user
-        ssh_passwd = config.register.ssh_passwd
+        register_type = self.get_config('register_type')
+        server = self.get_exported_param("REGISTER_SERVER")
+        owner = self.get_exported_param("REGISTER_OWNER")
+        env = self.get_exported_param("REGISTER_ENV")
+        admin_user = self.get_exported_param("REGISTER_ADMIN_USER")
+        admin_passwd = self.get_exported_param("REGISTER_ADMIN_PASSWD")
+        ssh_user = self.get_exported_param("REGISTER_SSH_USER")
+        ssh_passwd = self.get_exported_param("REGISTER_SSH_PASSWD")
+        if not register_type:
+            register_type = config.register.type
+        if not server:
+            server = config.register.server
+        if not owner:
+            owner = config.register.owner
+        if not env:
+            env = config.register.env
+        if not admin_user:
+            admin_user = config.register.admin_user
+        if not admin_passwd:
+            admin_passwd = config.register.admin_passwd
+        if not ssh_user:
+            ssh_user = config.register.ssh_user
+        if not ssh_passwd:
+            ssh_passwd = config.register.ssh_passwd
         vdc = config.manifest.vdc
         vdc_bonus = config.manifest.vdc_bonus
         instance = config.manifest.instance
@@ -79,10 +149,10 @@ class Testing(Provision):
         configs = {
                 'type':register_type,
                 'server':server,
-                'username':config.register.admin_user,
-                'password':config.register.admin_passwd,
-                'owner':config.register.owner,
-                'env':config.register.env,
+                'username':admin_user,
+                'password':admin_passwd,
+                'owner':owner,
+                'env':env,
                 'ssh_user': ssh_user,
                 'ssh_passwd':ssh_passwd,
                 'api':api,
@@ -91,7 +161,8 @@ class Testing(Provision):
                 'vdc_bonus':vdc_bonus,
                 'instance':instance,
                 'limit':limit,
-                'unlimit':unlimit}
+                'unlimit':unlimit
+                }
         return configs
 
     def get_hypervisor_hostname(self):

@@ -537,21 +537,11 @@ class ConfigureVirtwho(FeatureSettings):
         self.host_passwd = None
 
     def read(self, reader):
-        self.trigger_type = get_exported_param("TRIGGER_TYPE")
-        self.rhel_compose = get_exported_param("RHEL_COMPOSE")
-        self.host_ip = get_exported_param("VIRTWHO_HOST_IP")
-        self.host_user = get_exported_param("VIRTWHO_HOST_USER")
-        self.host_passwd = get_exported_param("VIRTWHO_HOST_PASSWD")
-        if not self.trigger_type:
-            self.trigger_type = reader.get('virtwho', 'trigger_type')
-        if not self.rhel_compose:
-            self.rhel_compose = reader.get('virtwho', 'rhel_compose')
-        if not self.host_ip:
-            self.host_ip = reader.get('virtwho', 'host_ip')
-        if not self.host_user:
-            self.host_user = reader.get('virtwho', 'host_user')
-        if not self.host_passwd:
-            self.host_passwd = reader.get('virtwho', 'host_passwd')
+        self.trigger_type = reader.get('virtwho', 'trigger_type')
+        self.rhel_compose = reader.get('virtwho', 'rhel_compose')
+        self.host_ip = reader.get('virtwho', 'host_ip')
+        self.host_user = reader.get('virtwho', 'host_user')
+        self.host_passwd = reader.get('virtwho', 'host_passwd')
 
 class ConfigureHypervisor(FeatureSettings):
     def __init__(self, *args, **kwargs):
@@ -568,36 +558,16 @@ class ConfigureHypervisor(FeatureSettings):
         self.guest_passwd = None
 
     def read(self, reader):
-        self.type = get_exported_param("HYPERVISOR_TYPE")
-        self.server = get_exported_param("HYPERVISOR_SERVER")
-        self.server_username = get_exported_param("HYPERVISOR_USERNAME")
-        self.server_password = get_exported_param("HYPERVISOR_PASSWORD")
-        self.server_ssh_user = get_exported_param("HYPERVISOR_SSH_USER")
-        self.server_ssh_passwd = get_exported_param("HYPERVISOR_SSH_PASSWD")
-        self.guest_ip = get_exported_param("GUEST_IP")
-        self.guest_name = get_exported_param("GUEST_NAME")
-        self.guest_user = get_exported_param("GUEST_USER")
-        self.guest_passwd = get_exported_param("GUEST_PASSWD")
-        if not self.type:
-            self.type = reader.get('hypervisor', 'type')
-        if not self.server:
-            self.server = reader.get('hypervisor', 'server')
-        if not self.server_username:
-            self.server_username = reader.get('hypervisor', 'server_username')
-        if not self.server_password:
-            self.server_password = reader.get('hypervisor', 'server_password')
-        if not self.server_ssh_user:
-            self.server_ssh_user = reader.get('hypervisor', 'server_ssh_user')
-        if not self.server_ssh_passwd:
-            self.server_ssh_passwd = reader.get('hypervisor', 'server_ssh_passwd')
-        if not self.guest_ip:
-            self.guest_ip = reader.get('hypervisor', 'guest_ip')
-        if not self.guest_name:
-            self.guest_name = reader.get('hypervisor', 'guest_name')
-        if not self.guest_user:
-            self.guest_user = reader.get('hypervisor', 'guest_user')
-        if not self.guest_passwd:
-            self.guest_passwd = reader.get('hypervisor', 'guest_passwd')
+        self.type = reader.get('hypervisor', 'type')
+        self.server = reader.get('hypervisor', 'server')
+        self.server_username = reader.get('hypervisor', 'server_username')
+        self.server_password = reader.get('hypervisor', 'server_password')
+        self.server_ssh_user = reader.get('hypervisor', 'server_ssh_user')
+        self.server_ssh_passwd = reader.get('hypervisor', 'server_ssh_passwd')
+        self.guest_ip = reader.get('hypervisor', 'guest_ip')
+        self.guest_name = reader.get('hypervisor', 'guest_name')
+        self.guest_user = reader.get('hypervisor', 'guest_user')
+        self.guest_passwd = reader.get('hypervisor', 'guest_passwd')
 
 class ConfigureRegister(FeatureSettings):
     def __init__(self, *args, **kwargs):
@@ -612,30 +582,14 @@ class ConfigureRegister(FeatureSettings):
         self.ssh_passwd = None
 
     def read(self, reader):
-        self.type = get_exported_param("REGISTER_TYPE")
-        self.server = get_exported_param("REGISTER_SERVER")
-        self.owner = get_exported_param("REGISTER_OWNER")
-        self.env = get_exported_param("REGISTER_ENV")
-        self.admin_user = get_exported_param("REGISTER_ADMIN_USER")
-        self.admin_passwd = get_exported_param("REGISTER_ADMIN_PASSWD")
-        self.ssh_user = get_exported_param("REGISTER_SSH_USER")
-        self.ssh_passwd = get_exported_param("REGISTER_SSH_PASSWD")
-        if not self.type:
-            self.type = reader.get('register', 'type')
-        if not self.server:
-            self.server = reader.get('register', 'server')
-        if not self.owner:
-            self.owner = reader.get('register', 'owner')
-        if not self.env:
-            self.env = reader.get('register', 'env')
-        if not self.admin_user:
-            self.admin_user = reader.get('register', 'admin_user')
-        if not self.admin_passwd:
-            self.admin_passwd = reader.get('register', 'admin_passwd')
-        if not self.ssh_user:
-            self.ssh_user = reader.get('register', 'ssh_user')
-        if not self.ssh_passwd:
-            self.ssh_passwd = reader.get('register', 'ssh_passwd')
+        self.type = reader.get('register', 'type')
+        self.server = reader.get('register', 'server')
+        self.owner = reader.get('register', 'owner')
+        self.env = reader.get('register', 'env')
+        self.admin_user = reader.get('register', 'admin_user')
+        self.admin_passwd = reader.get('register', 'admin_passwd')
+        self.ssh_user = reader.get('register', 'ssh_user')
+        self.ssh_passwd = reader.get('register', 'ssh_passwd')
 
 class ConfigureManifest(FeatureSettings):
     def __init__(self, *args, **kwargs):
@@ -652,16 +606,6 @@ class ConfigureManifest(FeatureSettings):
         self.instance = reader.get('manifest', 'instance')
         self.limit = reader.get('manifest', 'limit')
         self.unlimit = reader.get('manifest', 'unlimit')
-        if not self.vdc:
-            self.vdc = "RH00002"
-        if not self.vdc_bonus:
-            self.vdc_bonus = "RH00050"
-        if not self.instance:
-            self.instance = "RH00003"
-        if not self.limit:
-            self.limit = "RH00204"
-        if not self.unlimit:
-            self.unlimit = "RH00060"
 
 class ConfigurePerformance(FeatureSettings):
     def __init__(self, *args, **kwargs):
