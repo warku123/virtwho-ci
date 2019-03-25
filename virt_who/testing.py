@@ -370,6 +370,8 @@ class Testing(Provision):
             logger.info("{0}:{1}".format(case_id, case_name))
         else:
             logger.info(case_name)
+        if self.pkg_check(self.ssh_host(), 'virt-who') is False:
+            self.pkg_install(self.ssh_host(), 'virt-who')
 
     def vw_case_skip(self, skip_reason=None):
         try:
@@ -400,8 +402,6 @@ class Testing(Provision):
         hypervisor_type = hypervisor_config['type']
         ssh_hypervisor = hypervisor_config['ssh_hypervisor']
         register_type = register_config['type']
-        if self.pkg_check(self.ssh_host(), 'virt-who') is False:
-            self.pkg_install(self.ssh_host(), 'virt-who')
         if "libvirt-remote" in hypervisor_type:
             self.ssh_no_passwd_access(self.ssh_host(), ssh_hypervisor)
         if "vdsm" in hypervisor_type or "rhevm" in hypervisor_type:
@@ -644,7 +644,7 @@ class Testing(Provision):
             op_4 = "--{0}-server={1}".format(mode, server)
             op_5 = "--{0}-username={1}".format(mode, username)
             op_6 = "--{0}-password={1}".format(mode, password)
-            cmd = "virt-who {0} {1} {2} {3} {4} {5}".format(op_1, op_2, op_3, op_4, op_5, op_6)
+            cmd = "virt-who {0} {1} {2} {3} {4} {5} ".format(op_1, op_2, op_3, op_4, op_5, op_6)
         return cmd
 
     def vw_cli_base_update(self, cmd, pattern, new_str):

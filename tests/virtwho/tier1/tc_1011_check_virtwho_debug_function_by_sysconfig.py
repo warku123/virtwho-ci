@@ -11,12 +11,12 @@ class Testcase(Testing):
             self.vw_case_skip("virt-who version")
         self.vw_case_init()
 
-        # Case Config
+        # case config
         results = dict()
         config_file = "/etc/sysconfig/virt-who"
         self.vw_etc_sys_mode_enable()
 
-        # Case Steps
+        # case steps
         logger.info('>>>step1: Run virt-who with "VIRTWHO_DEBUG=1"')
         self.vw_option_enable("VIRTWHO_DEBUG", filename=config_file)
         self.vw_option_update_value("VIRTWHO_DEBUG", "1", filename=config_file)
@@ -42,5 +42,5 @@ class Testcase(Testing):
         results.setdefault('step3', []).append(res1)
         results.setdefault('step3', []).append(res2)
 
-        # Case Result
+        # case result
         self.vw_case_result(results)

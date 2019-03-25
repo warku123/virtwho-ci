@@ -32,5 +32,5 @@ class Testcase(Testing):
         logger.info(">>>step7: 'rpm -qi virt-who' contains valid 'Key ID' info")
         results.setdefault('step7', []).append("Key ID" in pkg_info.get("Signature"))
 
-        # Case Result
+        # case result
         self.vw_case_result(results)

@@ -11,7 +11,7 @@ class Testcase(Testing):
             self.vw_case_skip("virt-who version")
         self.vw_case_init()
 
-        # Case Config
+        # case config
         results = dict()
         host_uuid = self.get_hypervisor_hostuuid()
         guest_uuid = self.get_hypervisor_guestuuid()
@@ -20,7 +20,7 @@ class Testcase(Testing):
         self.vw_option_enable("VIRTWHO_DEBUG", filename=config_file)
         self.vw_option_update_value("VIRTWHO_DEBUG", '1', filename=config_file)
 
-        # Case Steps
+        # case steps
         logger.info(">>>step1: run virt-who by /etc/sysconfig/virt-who")
         data, tty_output, rhsm_output = self.vw_start(exp_send=1)
         res = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
@@ -30,5 +30,5 @@ class Testcase(Testing):
         res = self.vw_rhsm_associate(data, host_uuid, guest_uuid)
         results.setdefault('step2', []).append(res)
 
-        # Case Result
+        # case result
         self.vw_case_result(results)
