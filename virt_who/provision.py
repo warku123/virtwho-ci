@@ -79,6 +79,11 @@ class Provision(Register):
         for item in results:
             logger.info(item)
         register_servers, virtwho_hosts, guests = self.provision_report(results)
+        try:
+            if len(remote_modes) > 1:
+                self.jenkins_oneshot_job(register_servers, virtwho_hosts, guests, remote_modes)
+        except:
+            pass
         self.jenkins_job_scheduler(register_servers, virtwho_hosts, guests)
 
     def provision_report(self, data):
@@ -242,6 +247,91 @@ class Provision(Register):
     #*************************************************
     # Jenkins Job Scheduler 
     #*************************************************
+    def jenkins_oneshot_parameters(self, register_config, hypervisor1_config, hypervisor2_config):
+        parameter = list()
+        parameter.append('-d RHEL_COMPOSE={0}'.format(deploy.trigger.rhel_compose))
+        parameter.append('-d TRIGGER_TYPE={0}'.format(deploy.trigger.type))
+        parameter.append('-d VIRTWHO_HOST_IP={0}'.format(hypervisor1_config['host_ip']))
+        parameter.append('-d VIRTWHO_HOST_USER={0}'.format(hypervisor1_config['host_user']))
+        parameter.append('-d VIRTWHO_HOST_PASSWD={0}'.format(hypervisor1_config['host_passwd']))
+        parameter.append('-d HYPERVISOR_01_TYPE={0}'.format(hypervisor1_config['hypervisor_type']))
+        parameter.append('-d HYPERVISOR_01_SERVER={0}'.format(hypervisor1_config['hypervisor_server']))
+        parameter.append('-d HYPERVISOR_01_USERNAME={0}'.format(hypervisor1_config['hypervisor_user']))
+        parameter.append('-d HYPERVISOR_01_PASSWORD={0}'.format(hypervisor1_config['hypervisor_passwd']))
+        parameter.append('-d HYPERVISOR_01_SSH_USER={0}'.format(hypervisor1_config['hypervisor_ssh_user']))
+        parameter.append('-d HYPERVISOR_01_SSH_PASSWD={0}'.format(hypervisor1_config['hypervisor_ssh_passwd']))
+        parameter.append('-d HYPERVISOR_01_GUEST_IP={0}'.format(hypervisor1_config['guest_ip']))
+        parameter.append('-d HYPERVISOR_01_GUEST_NAME={0}'.format(hypervisor1_config['guest_name']))
+        parameter.append('-d HYPERVISOR_01_GUEST_USER={0}'.format(hypervisor1_config['guest_user']))
+        parameter.append('-d HYPERVISOR_01_GUEST_PASSWD={0}'.format(hypervisor1_config['guest_passwd']))
+        parameter.append('-d HYPERVISOR_02_TYPE={0}'.format(hypervisor2_config['hypervisor_type']))
+        parameter.append('-d HYPERVISOR_02_SERVER={0}'.format(hypervisor2_config['hypervisor_server']))
+        parameter.append('-d HYPERVISOR_02_USERNAME={0}'.format(hypervisor2_config['hypervisor_user']))
+        parameter.append('-d HYPERVISOR_02_PASSWORD={0}'.format(hypervisor2_config['hypervisor_passwd']))
+        parameter.append('-d HYPERVISOR_02_SSH_USER={0}'.format(hypervisor2_config['hypervisor_ssh_user']))
+        parameter.append('-d HYPERVISOR_02_SSH_PASSWD={0}'.format(hypervisor2_config['hypervisor_ssh_passwd']))
+        parameter.append('-d HYPERVISOR_02_GUEST_IP={0}'.format(hypervisor2_config['guest_ip']))
+        parameter.append('-d HYPERVISOR_02_GUEST_NAME={0}'.format(hypervisor2_config['guest_name']))
+        parameter.append('-d HYPERVISOR_02_GUEST_USER={0}'.format(hypervisor2_config['guest_user']))
+        parameter.append('-d HYPERVISOR_02_GUEST_PASSWD={0}'.format(hypervisor2_config['guest_passwd']))
+        parameter.append('-d REGISTER_TYPE={0}'.format(register_config['type']))
+        parameter.append('-d REGISTER_SERVER={0}'.format(register_config['server']))
+        parameter.append('-d REGISTER_OWNER={0}'.format(register_config['owner']))
+        parameter.append('-d REGISTER_ENV={0}'.format(register_config['env']))
+        parameter.append('-d REGISTER_ADMIN_USER={0}'.format(register_config['username']))
+        parameter.append('-d REGISTER_ADMIN_PASSWD={0}'.format(register_config['password']))
+        parameter.append('-d REGISTER_SSH_USER={0}'.format(register_config['ssh_user']))
+        parameter.append('-d REGISTER_SSH_PASSWD={0}'.format(register_config['ssh_passwd']))
+        data = ' '.join(parameter)
+        return data
+
+    def jenkins_oneshot_job(self, register_servers, virtwho_hosts, guests, remote_modes):
+        trigger_type = deploy.trigger.type
+        hypervisor1_type = remote_modes[0]
+        hypervisor2_type = remote_modes[1]
+        if (trigger_type == "trigger-rhev" or trigger_type == "trigger-multiarch") \
+                and virtwho_hosts.has_key('virtwho-host-ip'):
+            virthwo_host_ip = virtwho_hosts['virtwho-host-ip']
+        else:
+            for key, value in virtwho_hosts.items():
+                virthwo_host_ip = value
+        for key, value in guests.items():
+            if hypervisor1_type in key:
+                hypervisor1_guest_ip = value
+            if hypervisor2_type in key:
+                hypervisor2_guest_ip = value
+        hypervisor1_config = self.jenkins_hypervisor_config(virthwo_host_ip, hypervisor1_guest_ip, hypervisor1_type)
+        hypervisor2_config = self.jenkins_hypervisor_config(virthwo_host_ip, hypervisor2_guest_ip, hypervisor2_type)
+        job_name = 'runtest-multi-hypervisors'
+        for register_type, register_server in register_servers.items():
+            register_config = self.jenkins_register_config(register_type, register_server, hypervisor1_type)
+            data = self.jenkins_oneshot_parameters(register_config, hypervisor1_config, hypervisor2_config)
+            logger.info(data)
+            cmd = "curl -k -s -i -X POST {0}/job/{1}/buildWithParameters --user {2}:{3} {4}".format(
+                deploy.jenkins.url,
+                job_name,
+                deploy.jenkins.username,
+                deploy.jenkins.password,
+                data
+            )
+            job_tips = "{0}+{1}".format(job_name, register_type)
+            is_created = ""
+            for i in range(3):
+                output = os.popen(cmd).readlines()
+                if 'Location:' in str(output):
+                    is_created = 'yes'
+                    break
+                logger.info(cmd)
+                logger.warning(output)
+                logger.warning("Failed to post data to create jenkinks job, try again...")
+                time.sleep(30)
+            if is_created != 'yes':
+                raise FailException("Failed to get jenkins job url")
+            job_url = self.jenkins_job_url(output)
+            logger.info("JJB({0})-Job URL: {1}".format(job_tips, job_url)) 
+            while self.jenkins_job_is_finished(job_url, job_tips) is False:
+                time.sleep(60)
+
     def jenkins_job_scheduler(self, register_servers, virtwho_hosts, guests):
         trigger_type = deploy.trigger.type
         if trigger_type == "trigger-rhev" or trigger_type == "trigger-multiarch":
