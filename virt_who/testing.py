@@ -40,46 +40,57 @@ class Testing(Provision):
         ssh_host = {"host":host_ip,"username":host_user,"password":host_passwd}
         return ssh_host
 
-    def ssh_guest(self):
-        guest_ip = self.get_exported_param("GUEST_IP")
-        guest_user = self.get_exported_param("GUEST_USER")
-        guest_passwd = self.get_exported_param("GUEST_PASSWD")
-        if not guest_ip:
-            guest_ip = config.hypervisor.guest_ip
-        if not guest_user:
-            guest_user = config.hypervisor.guest_user
-        if not guest_passwd:
-            guest_passwd = config.hypervisor.guest_passwd
-        if not guest_ip:
-            raise FailException("no guest ip defined")
-        ssh_guest = {"host":guest_ip,"username":guest_user,"password":guest_passwd}
-        return ssh_guest
+    def ssh_guest(self, uid=None):
+        config = self.get_hypervisor_config(uid)
+        return config['ssh_guest']
 
-    def get_hypervisor_config(self):
-        hypervisor_type = self.get_config('hypervisor_type')
-        server = self.get_exported_param("HYPERVISOR_SERVER")
-        username = self.get_exported_param("HYPERVISOR_USERNAME")
-        password = self.get_exported_param("HYPERVISOR_PASSWORD")
-        ssh_user = self.get_exported_param("HYPERVISOR_SSH_USER")
-        ssh_passwd = self.get_exported_param("HYPERVISOR_SSH_PASSWD")
-        guest_name = self.get_exported_param("GUEST_NAME")
-        if not server:
-            server = config.hypervisor.server
-        if not username:
-            username = config.hypervisor.server_username
-        if not password:
-            password = config.hypervisor.server_password
-        if not ssh_user:
-            ssh_user = config.hypervisor.server_ssh_user
-        if not ssh_passwd:
-            ssh_passwd = config.hypervisor.server_ssh_passwd
-        if not guest_name:
-            guest_name = config.hypervisor.guest_name
+    def get_hypervisor_config(self, uid=None):
+        if uid:
+            hypervisor_type = self.get_exported_param("HYPERVISOR_{0}_TYPE".format(uid))
+            server = self.get_exported_param("HYPERVISOR_{0}_SERVER".format(uid))
+            username = self.get_exported_param("HYPERVISOR_{0}_USERNAME".format(uid))
+            password = self.get_exported_param("HYPERVISOR_{0}_PASSWORD".format(uid))
+            ssh_user = self.get_exported_param("HYPERVISOR_{0}_SSH_USER".format(uid))
+            ssh_passwd = self.get_exported_param("HYPERVISOR_{0}_SSH_PASSWD".format(uid))
+            guest_ip = self.get_exported_param("HYPERVISOR_{0}_GUEST_IP".format(uid))
+            guest_name = self.get_exported_param("HYPERVISOR_{0}_GUEST_NAME".format(uid))
+            guest_user = self.get_exported_param("HYPERVISOR_{0}_GUEST_USER".format(uid))
+            guest_passwd = self.get_exported_param("HYPERVISOR_{0}_GUEST_PASSWD".format(uid))
+        else:
+            hypervisor_type = self.get_config('hypervisor_type')
+            server = self.get_exported_param("HYPERVISOR_SERVER")
+            username = self.get_exported_param("HYPERVISOR_USERNAME")
+            password = self.get_exported_param("HYPERVISOR_PASSWORD")
+            ssh_user = self.get_exported_param("HYPERVISOR_SSH_USER")
+            ssh_passwd = self.get_exported_param("HYPERVISOR_SSH_PASSWD")
+            guest_ip = self.get_exported_param("GUEST_IP")
+            guest_name = self.get_exported_param("GUEST_NAME")
+            guest_user = self.get_exported_param("GUEST_USER")
+            guest_passwd = self.get_exported_param("GUEST_PASSWD")
+            if not server:
+                server = config.hypervisor.server
+            if not username:
+                username = config.hypervisor.server_username
+            if not password:
+                password = config.hypervisor.server_password
+            if not ssh_user:
+                ssh_user = config.hypervisor.server_ssh_user
+            if not ssh_passwd:
+                ssh_passwd = config.hypervisor.server_ssh_passwd
+            if not guest_name:
+                guest_name = config.hypervisor.guest_name
+            if not guest_ip:
+                guest_ip = config.hypervisor.guest_ip
+            if not guest_user:
+                guest_user = config.hypervisor.guest_user
+            if not guest_passwd:
+                guest_passwd = config.hypervisor.guest_passwd
         if server is not None and "//" in server:
             server_ip = self.get_url_domain(server)
         else:
             server_ip = server
         ssh_hypervisor = {"host":server_ip,"username":username,"password":password}
+        ssh_guest = {"host":guest_ip,"username":guest_user,"password":guest_passwd}
         if "libvirt-local" in hypervisor_type:
             ssh_hypervisor = self.ssh_host()
         if "rhevm" in hypervisor_type or "vdsm" in hypervisor_type:
@@ -94,7 +105,8 @@ class Testing(Provision):
                 'username':username,
                 'password':password,
                 'guest_name':guest_name,
-                'ssh_hypervisor':ssh_hypervisor
+                'ssh_hypervisor':ssh_hypervisor,
+                'ssh_guest':ssh_guest
                 }
         return configs
 
@@ -163,8 +175,8 @@ class Testing(Provision):
                 }
         return configs
 
-    def get_hypervisor_hostname(self):
-        config = self.get_hypervisor_config()
+    def get_hypervisor_hostname(self, uid=None):
+        config = self.get_hypervisor_config(uid)
         hypervisor_type = config['type']
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
@@ -189,8 +201,8 @@ class Testing(Provision):
             hostname = "unsupport hypervisor type"
         return hostname
 
-    def get_hypervisor_hostuuid(self):
-        config = self.get_hypervisor_config()
+    def get_hypervisor_hostuuid(self, uid=None):
+        config = self.get_hypervisor_config(uid)
         hypervisor_type = config['type']
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
@@ -213,8 +225,8 @@ class Testing(Provision):
             uuid = "unsupport hypervisor type"
         return uuid
 
-    def get_hypervisor_hwuuid(self):
-        config = self.get_hypervisor_config()
+    def get_hypervisor_hwuuid(self, uid=None):
+        config = self.get_hypervisor_config(uid)
         hypervisor_type = config['type']
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
@@ -230,8 +242,8 @@ class Testing(Provision):
             hwuuid = "unsupported hypervisor type"
         return hwuuid
         
-    def get_hypervisor_guestuuid(self):
-        config = self.get_hypervisor_config()
+    def get_hypervisor_guestuuid(self, uid=None):
+        config = self.get_hypervisor_config(uid)
         hypervisor_type = config['type']
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
@@ -253,8 +265,8 @@ class Testing(Provision):
             uuid = "unsupport hypervisor type"
         return uuid
 
-    def hypervisor_guest_start(self):
-        config = self.get_hypervisor_config()
+    def hypervisor_guest_start(self, uid=None):
+        config = self.get_hypervisor_config(uid)
         hypervisor_type = config['type']
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
@@ -274,8 +286,8 @@ class Testing(Provision):
         self.set_exported_param("GUEST_IP", guest_ip)
         logger.info("Successed to start guest for mode %s, guest ip: %s" % (hypervisor_type, guest_ip))
 
-    def hypervisor_guest_stop(self):
-        config = self.get_hypervisor_config()
+    def hypervisor_guest_stop(self, uid=None):
+        config = self.get_hypervisor_config(uid)
         hypervisor_type = config['type']
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
@@ -294,8 +306,8 @@ class Testing(Provision):
             raise FailException("Unsupported to stop guest for mode: {0}".format(hypervisor_type))
         logger.info("Successed to stop guest for mode {0}".format(hypervisor_type))
 
-    def hypervisor_guest_suspend(self):
-        config = self.get_hypervisor_config()
+    def hypervisor_guest_suspend(self, uid=None):
+        config = self.get_hypervisor_config(uid)
         hypervisor_type = config['type']
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
@@ -314,8 +326,8 @@ class Testing(Provision):
             raise FailException("Unsupported to suspend guest for mode: {0}".format(hypervisor_type))
         logger.info("Successed to suspend guest for mode {0}".format(hypervisor_type))
 
-    def hypervisor_guest_resume(self):
-        config = self.get_hypervisor_config()
+    def hypervisor_guest_resume(self, uid=None):
+        config = self.get_hypervisor_config(uid)
         hypervisor_type = config['type']
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
@@ -334,8 +346,8 @@ class Testing(Provision):
             raise FailException("Unsupported to resume guest for mode: {0}".format(hypervisor_type))
         logger.info("Successed to resume guest for mode {0}".format(hypervisor_type))
 
-    def hypervisor_firewall_setup(self, action="on"):
-        config = self.get_hypervisor_config()
+    def hypervisor_firewall_setup(self, action="on", uid=None):
+        config = self.get_hypervisor_config(uid)
         hypervisor_type = config['type']
         ssh_hypervisor = config['ssh_hypervisor']
         ssh_host = self.ssh_host()
@@ -396,8 +408,8 @@ class Testing(Provision):
         else:
             logger.info("Successed to run case, all steps passed\n")
 
-    def vw_case_init(self):
-        hypervisor_config = self.get_hypervisor_config()
+    def vw_case_init(self, uid=None):
+        hypervisor_config = self.get_hypervisor_config(uid)
         register_config = self.get_register_config()
         hypervisor_type = hypervisor_config['type']
         ssh_hypervisor = hypervisor_config['ssh_hypervisor']
@@ -458,9 +470,9 @@ class Testing(Provision):
         else:
             logger.info("Successed to delete all files in /etc/virt-who.d/")
 
-    def vw_etc_sys_mode_enable(self):
+    def vw_etc_sys_mode_enable(self, uid=None):
         filename = "/etc/sysconfig/virt-who"
-        hypervisor_config = self.get_hypervisor_config()
+        hypervisor_config = self.get_hypervisor_config(uid)
         register_config = self.get_register_config()
         mode = hypervisor_config['type']
         server = hypervisor_config['server']
@@ -490,8 +502,8 @@ class Testing(Provision):
             else:
                 logger.info("Successed to enable mode {0} in /etc/sysconfig/virt-who".format(mode))
 
-    def vw_etc_d_mode_create(self, config_name, config_file):
-        hypervisor_config = self.get_hypervisor_config()
+    def vw_etc_d_mode_create(self, config_name, config_file, uid=None):
+        hypervisor_config = self.get_hypervisor_config(uid)
         register_config = self.get_register_config()
         mode = hypervisor_config['type']
         server = hypervisor_config['server']
@@ -621,8 +633,8 @@ class Testing(Provision):
         else:
             raise FailException("No this option or option is not enabled")
 
-    def vw_cli_base(self):
-        hypervisor_config = self.get_hypervisor_config()
+    def vw_cli_base(self, uid=None):
+        hypervisor_config = self.get_hypervisor_config(uid)
         register_config = self.get_register_config()
         mode = hypervisor_config['type']
         server = hypervisor_config['server']
@@ -1043,8 +1055,8 @@ class Testing(Provision):
         if self.kill_pid_by_name(self.ssh_host(), "virt-who") is False:
             raise FailException("Failed to stop and clean virt-who process")
 
-    def vw_rhsm_associate(self, data, host_uuid, guest_uuid):
-        hypervisor_config = self.get_hypervisor_config()
+    def vw_rhsm_associate(self, data, host_uuid, guest_uuid, uid=None):
+        hypervisor_config = self.get_hypervisor_config(uid)
         register_config = self.get_register_config()
         mode = hypervisor_config['type']
         owner = register_config['owner']

@@ -289,24 +289,25 @@ class Provision(Register):
         trigger_type = deploy.trigger.type
         hypervisor1_type = remote_modes[0]
         hypervisor2_type = remote_modes[1]
-        if (trigger_type == "trigger-rhev" or trigger_type == "trigger-multiarch") \
-                and virtwho_hosts.has_key('virtwho-host-ip'):
-            virthwo_host_ip = virtwho_hosts['virtwho-host-ip']
-        else:
-            for key, value in virtwho_hosts.items():
+        for key, value in virtwho_hosts.items():
+            if hypervisor1_type in key:
                 virthwo_host_ip = value
         for key, value in guests.items():
             if hypervisor1_type in key:
                 hypervisor1_guest_ip = value
             if hypervisor2_type in key:
                 hypervisor2_guest_ip = value
+        if (trigger_type == "trigger-rhev" or trigger_type == "trigger-multiarch"):
+            virthwo_host_ip = virtwho_hosts['virtwho-host-ip']
         hypervisor1_config = self.jenkins_hypervisor_config(virthwo_host_ip, hypervisor1_guest_ip, hypervisor1_type)
         hypervisor2_config = self.jenkins_hypervisor_config(virthwo_host_ip, hypervisor2_guest_ip, hypervisor2_type)
+        ssh_host = hypervisor1_config['ssh_host']
+        ssh_guest = hypervisor1_config['ssh_guest']
         job_name = 'runtest-multi-hypervisors'
         for register_type, register_server in register_servers.items():
             register_config = self.jenkins_register_config(register_type, register_server, hypervisor1_type)
+            self.jenkins_job_init(register_type, register_config, ssh_host, ssh_guest)
             data = self.jenkins_oneshot_parameters(register_config, hypervisor1_config, hypervisor2_config)
-            logger.info(data)
             cmd = "curl -k -s -i -X POST {0}/job/{1}/buildWithParameters --user {2}:{3} {4}".format(
                 deploy.jenkins.url,
                 job_name,
@@ -601,7 +602,7 @@ class Provision(Register):
         logger.info("virt-who package is installed: {0}".format(output.strip()))
         self.runcmd("sed -i '/^#.*;/d' /etc/virt-who.conf", ssh_host)
 
-    def jenkins_job_init(self, register_type, register_config, job_name, ssh_host, ssh_guest):
+    def jenkins_job_init(self, register_type, register_config, ssh_host, ssh_guest):
         self.rhsm_backup(ssh_host)
         self.rhsm_backup(ssh_guest)
         self.jenkins_virtwho_install(register_type, ssh_host)
@@ -650,7 +651,7 @@ class Provision(Register):
             register_config = self.jenkins_register_config(register_type, register_server, job_name)
             ssh_host = hypervisor_config['ssh_host']
             ssh_guest = hypervisor_config['ssh_guest']
-            self.jenkins_job_init(register_type, register_config, job_name, ssh_host, ssh_guest)
+            self.jenkins_job_init(register_type, register_config, ssh_host, ssh_guest)
             data = self.jenkins_parameter(hypervisor_config, register_config)
             cmd = "curl -k -s -i -X POST {0}/job/{1}/buildWithParameters --user {2}:{3} {4}".format(
                 deploy.jenkins.url,
