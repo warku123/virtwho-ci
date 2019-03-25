@@ -24,5 +24,5 @@ class Testcase(Testing):
         ret, output = self.runcmd("virt-who --help", self.ssh_host())
         results.setdefault('step3', []).append("optional arguments:" in output)
 
-        # Case Result
+        # case result
         self.vw_case_result(results)

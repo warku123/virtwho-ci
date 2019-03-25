@@ -9,13 +9,13 @@ class Testcase(Testing):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133661')
         self.vw_case_init()
 
-        # Case Config
+        # case config
         results = dict()
         config_name = "virtwho-config"
         config_file = "/etc/virt-who.d/{0}.conf".format(config_name)
         self.vw_etc_d_mode_create(config_name, config_file)
 
-        # Case Steps
+        # case steps
         logger.info(">>>step1: Run virt-who by cli with -d option")
         cmd = "virt-who -d"
         data, tty_output, rhsm_output = self.vw_start(cmd, exp_send=1)
@@ -32,7 +32,7 @@ class Testcase(Testing):
         results.setdefault('step2', []).append(res1)
         results.setdefault('step2', []).append(res2)
 
-        # Case Result
+        # case result
         notes = list()
         notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1510712")
         self.vw_case_result(results, notes)

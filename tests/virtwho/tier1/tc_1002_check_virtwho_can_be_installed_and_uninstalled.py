@@ -11,11 +11,11 @@ class Testcase(Testing):
         if "trigger-rhev" in trigger_type:
             self.vw_case_skip(trigger_type)
 
-        # Case Config
+        # case config
         results = dict()
         pkg = self.pkg_check(self.ssh_host(), 'virt-who')
 
-        # Case Steps
+        # case steps
         # If the virt-who package is installed
         if pkg:
             logger.info(">>>step1: uninstall virt-who package and verify it was removed")
@@ -39,5 +39,5 @@ class Testcase(Testing):
             res = self.pkg_install(self.ssh_host(), 'virt-who')
             results.setdefault('step3', []).append(res)
 
-        # Case Result
+        # case result
         self.vw_case_result(results)

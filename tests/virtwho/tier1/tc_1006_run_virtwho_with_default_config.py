@@ -13,13 +13,13 @@ class Testcase(Testing):
             self.vw_case_skip(trigger_type)
         self.vw_case_init()
 
-        # Case Config
+        # case config
         results = dict()
         self.pkg_uninstall(self.ssh_host(), 'virt-who')
         self.pkg_install(self.ssh_host(), 'virt-who')
         steps = {'step1':'service', 'step2':'cli'}
 
-        # Case Steps
+        # case steps
         for step, option in sorted(steps.items(),key=lambda item:item[0]):
             logger.info(">>>{0}: run virt-who {1} by default".format(step, option))
             if option == "service":
@@ -35,5 +35,5 @@ class Testcase(Testing):
             results.setdefault(step, []).append(res1)
             results.setdefault(step, []).append(res2)
 
-        # Case Result
+        # case result
         self.vw_case_result(results)

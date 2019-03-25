@@ -12,7 +12,7 @@ class Testcase(Testing):
         if "trigger-rhel" not in trigger_type:
             self.vw_case_skip(trigger_type)
 
-        # Case Config
+        # case config
         results = dict()
         arch_list = list()
         pkg = self.pkg_check(self.ssh_host(), 'virt-who')
@@ -46,7 +46,7 @@ class Testcase(Testing):
                     'Server/s390x', 
                     'Workstation/i386', 
                     'Workstation/x86_64',]
-        # Case Steps
+        # case steps
         for arch in arch_list:
             if "RHEL-8" in compose_id:
                 baseurl = "http://download.eng.pek2.redhat.com/rhel-8/rel-eng/RHEL-8"
@@ -60,5 +60,5 @@ class Testcase(Testing):
                 results.setdefault('step1', []).append(False)
                 logger.info("{0} is not exist in arch: {1}".format(pkg, arch))
 
-        # Case Results
+        # case results
         self.vw_case_result(results)

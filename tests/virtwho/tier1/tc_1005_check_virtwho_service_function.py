@@ -9,7 +9,7 @@ class Testcase(Testing):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133659')
         self.vw_case_init()
 
-        # Case Config
+        # case config
         results = dict()
         config_name = "virtwho-config"
         config_file = "/etc/virt-who.d/{0}.conf".format(config_name)
@@ -25,7 +25,7 @@ class Testcase(Testing):
         if self.rhel_version(self.ssh_host()) == 6:
             steps['step7'] = "condrestart"
 
-        # Case Steps
+        # case steps
         for step, option in sorted(steps.items(),key=lambda item:item[0]):
             logger.info(">>>{0}: {1} virt-who service".format(step, option))
             ret, output = self.run_service(self.ssh_host(), "virt-who", option)
@@ -38,7 +38,7 @@ class Testcase(Testing):
                 logger.error("failed to run '{0}' option".format(option))
                 results.setdefault(step, []).append(False)
 
-        # Case Result
+        # case result
         notes = list()
         notes.append("Bug(Step5): Failed to reload virt-who.service")
         notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1638182")
