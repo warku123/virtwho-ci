@@ -16,7 +16,7 @@ class Testcase(Testing):
             self.vw_case_skip("libvirt-local or vdsm")
         if self.pkg_check(self.ssh_host(), 'virt-who')[9:15] >= '0.23.3':
             self.vw_case_skip("virt-who version")
-        self.vw_case_init()
+        self.vw_case_init(uid='01')
 
         # case config
         results = dict()
@@ -35,7 +35,7 @@ class Testcase(Testing):
         logger.info(">>>step2: check how many modes in rhsm.log")
         modes = re.findall(r'Using configuration.*\("(.*?)" mode\)', rhsm_output)
         if len(modes) == 1:
-            logger.info("Succeeded to check, only one mode in rhsm.log: {0}".format(modes)
+            logger.info("Succeeded to check, only one mode in rhsm.log: {0}".format(modes))
             results.setdefault('step2', []).append(True)
         else:
             logger.error("Failed to check, the modes number is not matched: {0}".format(modes))

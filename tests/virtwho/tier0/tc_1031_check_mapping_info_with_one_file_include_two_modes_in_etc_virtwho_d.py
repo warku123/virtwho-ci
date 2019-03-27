@@ -16,7 +16,7 @@ class Testcase(Testing):
             self.vw_case_skip("libvirt-local or vdsm")
         if self.pkg_check(self.ssh_host(), 'virt-who')[9:15] >= '0.23.3':
             self.vw_case_skip("virt-who version")
-        self.vw_case_init()
+        self.vw_case_init(uid='01')
 
         # case config
         results = dict()
