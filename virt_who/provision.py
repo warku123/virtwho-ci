@@ -1296,7 +1296,7 @@ class Provision(Register):
             logger.info("docker image %s is not exist(%s)" % (image_name,host))
             return False
         else:
-            logger.info("docker image %s is ready!(%s)" % (image_name,host))
+            logger.info("docker image %s is ready on %s" % (image_name,host))
             return True
 
     def docker_image_delete(self, image_name, ssh_docker):
@@ -1398,9 +1398,10 @@ class Provision(Register):
                 ip_value = "{0}:{1}".format(server, container_port)
                 ip_name = "virtwho-host-{0}-ip".format(mode)
                 conf_hosts[ip_name] = ip_value
+                ssh_container = {"host":ip_value,"username":container_user,"password":container_passwd}
+                self.rhsm_override_uuid(ssh_container)
                 if mode == "libvirt-remote":
-                    ssh_local = {"host":ip_value,"username":container_user,"password":container_passwd}
-                    self.ssh_no_passwd_access(ssh_local)
+                    self.ssh_no_passwd_access(ssh_container)
             time.sleep(60)
         return conf_hosts
 

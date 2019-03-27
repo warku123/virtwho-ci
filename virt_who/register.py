@@ -44,6 +44,14 @@ class Register(Base):
     #**************************************
     # subscription-manager function 
     #**************************************
+    def rhsm_override_uuid(self, ssh):
+        ret, output = self.runcmd('uuidgen | tr a-z A-Z', ssh)
+        option = r'{"dmi.system.uuid":"%s"}' % output.strip()
+        cmd = "echo '{0}' > /etc/rhsm/facts/override_uuid.facts".format(option)
+        ret, output = self.runcmd(cmd, ssh)
+        ret, output = self.runcmd('cat /etc/rhsm/facts/override_uuid.facts', ssh)
+        logger.info('Finished to set dmi.system.uuid({0}) for host {1}'.format(output, ssh['host']))
+
     def rhsm_backup(self, ssh):
         ret, output = self.runcmd("ls /backup/rhsm.conf", ssh)
         if ret != 0 or "No such file or directory" in output:

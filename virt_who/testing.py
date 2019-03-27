@@ -419,14 +419,10 @@ class Testing(Provision):
         if "vdsm" in hypervisor_type or "rhevm" in hypervisor_type:
             cmd = "ovirt-aaa-jdbc-tool user unlock admin"
             self.runcmd(cmd, ssh_hypervisor)
-        if self.system_isregister(self.ssh_host(), register_type, register_config) is False:
-            self.system_register(self.ssh_host(), register_type, register_config)
-        if self.system_isregister(self.ssh_guest(), register_type, register_config) is False:
-            self.system_register(self.ssh_guest(), register_type, register_config)
-        if self.system_sku_unattach(self.ssh_host()) is False:
-            self.system_register(self.ssh_host(), register_type, register_config)
-        if self.system_sku_unattach(self.ssh_guest()) is False:
-            self.system_register(self.ssh_guest(), register_type, register_config)
+        self.system_register_config(self.ssh_host(), register_type, register_config)
+        self.system_register(self.ssh_host(), register_type, register_config)
+        self.system_register_config(self.ssh_guest(uid), register_type, register_config)
+        self.system_register(self.ssh_guest(uid), register_type, register_config)
         self.vw_etc_conf_disable_all()
         self.vw_etc_sys_disable_all()
         self.vw_etc_d_delete_all()
