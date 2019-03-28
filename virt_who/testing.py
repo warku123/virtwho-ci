@@ -143,9 +143,11 @@ class Testing(Provision):
         if "stage" in register_type:
             api = "https://{0}/subscription".format(server)
             ssh_sat = ""
+            prefix = "/subscription"
         if "satellite" in register_type:
             api = "https://{0}".format(server)
             ssh_sat = {"host": server,"username":ssh_user,"password":ssh_passwd}
+            prefix = "/rhsm"
         if not vdc:
             vdc = "RH00002"
         if not vdc_bonus:
@@ -163,6 +165,7 @@ class Testing(Provision):
                 'password':admin_passwd,
                 'owner':owner,
                 'env':env,
+                'prefix':prefix,
                 'ssh_user': ssh_user,
                 'ssh_passwd':ssh_passwd,
                 'api':api,
@@ -853,7 +856,7 @@ class Testing(Provision):
             ret, rhsm_output = self.runcmd(cmd, self.ssh_host(), debug=False)
         mode_type = self.vw_rhsm_modes_check(rhsm_output)
         if "0 hypervisors and 0 guests found" in rhsm_output:
-            logger.warning("virt-who send terminated because '0 hypervisors and 0 guests found'")
+            logger.info("virt-who send terminated because '0 hypervisors and 0 guests found'")
             msg = "0 hypervisors and 0 guests found"
         elif "virtwho.main DEBUG" in rhsm_output or "rhsm.connection DEBUG" in rhsm_output:
             if "satellite" in register_type:
