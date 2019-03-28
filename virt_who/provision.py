@@ -1598,7 +1598,6 @@ class Provision(Register):
             for line in output.splitlines():
                 if re.match(r"^VMHost .*:", line):
                     host = line.split(':')[1].strip()
-                    logger.info("Successed to get vcenter host:{0}".format(host))
                     return host
         else:
             raise FailException("Failed to get vcenter host")
@@ -1614,7 +1613,7 @@ class Provision(Register):
                     domain = line.split(':')[1].strip()
             if host and domain:
                 hostname = host+'.'+domain
-                logger.info("Successed to get vcenter host:{0}".format(hostname))
+                logger.info("Successed to get esxi hostname: {0}".format(hostname))
                 return hostname
         else:
             raise FailException("Failed to get vcenter host")
@@ -1640,7 +1639,7 @@ class Provision(Register):
             for line in output.splitlines():
                 if re.match(r"^Uuid.*:", line):
                     uuid = line.split(':')[1].strip()
-                    logger.info("Successed to get esxi host uuid is: {0}".format(uuid))
+                    logger.info("Successed to get esxi host uuid: {0}".format(uuid))
                     return uuid
         else:
             raise FailException("Failed to get esx host uuid")
@@ -1652,7 +1651,7 @@ class Provision(Register):
             for line in output.splitlines():
                 if re.match(r"^Value.*:", line):
                     hwuuid = line.split(':')[1].strip()
-                    logger.info("vcenter esxi host hwuuid is: {0}".format(hwuuid))
+                    logger.info("Succeeded to get esxi host hwuuid: {0}".format(hwuuid))
                     return hwuuid
         else:
             raise FailException("Failed to get esx host hwuuid")

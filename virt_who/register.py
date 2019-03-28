@@ -614,7 +614,7 @@ class Register(Base):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
-        host_id = self.satellite_host_id(register_config, host_name, host_uuid)
+        host_id = self.satellite_host_id(ssh, register_config, host_name, host_uuid)
         if host_id is not None and host_id != "":
             cmd = "curl -X DELETE -s -k -u {0}:{1} {2}/api/v2/hosts/{3}".format(
                     username, password, api, host_id)
