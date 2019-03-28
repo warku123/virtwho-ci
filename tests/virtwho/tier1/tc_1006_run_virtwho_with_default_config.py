@@ -26,7 +26,7 @@ class Testcase(Testing):
                 data, tty_output, rhsm_output = self.vw_start()
             else:
                 data, tty_output, rhsm_output = self.vw_start(cli="virt-who")
-            if "libvirt-local" in hypervisor_type or "vdsm" in hypervisor_type:
+            if hypervisor_type in ('libvirt-local', 'vdsm'):
                 res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
                 res2 = self.vw_msg_search(rhsm_output, 'Error in libvirt backend', exp_exist=False)
             else:

@@ -6,7 +6,7 @@ from virt_who.testing import Testing
 
 class Testcase(Testing):
     def test_run(self):
-        self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133743')
+        self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133740')
         hypervisor1_type = self.get_exported_param("HYPERVISOR_01_TYPE")
         hypervisor2_type = self.get_exported_param("HYPERVISOR_02_TYPE")
         if not hypervisor1_type or not hypervisor2_type:
@@ -19,26 +19,24 @@ class Testcase(Testing):
 
         # case config
         results = dict()
-        config_file = "/etc/sysconfig/virt-who"
-        self.vw_option_enable("VIRTWHO_DEBUG", filename=config_file)
-        self.vw_option_update_value("VIRTWHO_DEBUG", '1', filename=config_file)
-        self.vw_etc_sys_mode_enable(uid='01')
-        self.vw_etc_sys_mode_enable(uid='02')
+        config_01_name = "virtwho-config-{0}".format(hypervisor1_type)
+        config_01_file = "/etc/virt-who.d/{0}.conf".format(config_01_name)
+        guest_01_uuid = self.get_hypervisor_guestuuid(uid='01')
+        guest_02_uuid = self.get_hypervisor_guestuuid(uid='02')
 
-        # case steps
-        logger.info(">>>step1: check reporter sent and no error msg")
-        data, tty_output, rhsm_output = self.vw_start(exp_send=1)
+        # case Steps
+        logger.info(">>>step1: create a extra hypervisors in virt-who.d and run cli -d")
+        self.vw_etc_d_mode_create(config_01_name, config_01_file, uid='01')
+        cmd = self.vw_cli_base(uid='02') + "-d"
+        data, tty_output, rhsm_output = self.vw_start(cmd, exp_send=1)
         res = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
         results.setdefault('step1', []).append(res)
 
-        logger.info(">>>step2: check how many modes in rhsm.log")
-        modes = re.findall(r'Using configuration.*\("(.*?)" mode\)', rhsm_output)
-        if len(modes) == 1:
-            logger.info("Succeeded to check, only one mode in rhsm.log: {0}".format(modes))
-            results.setdefault('step2', []).append(True)
-        else:
-            logger.error("Failed to check, the modes number is not matched: {0}".format(modes))
-            results.setdefault('step2', []).append(False)
+        logger.info(">>>step2: check mapping info included two hypervisors")
+        res1 = self.vw_msg_search(str(data), guest_01_uuid, exp_exist=True)
+        res2 = self.vw_msg_search(str(data), guest_02_uuid, exp_exist=True)
+        results.setdefault('step2', []).append(res1)
+        results.setdefault('step2', []).append(res2)
 
         # case result
         self.vw_case_result(results)

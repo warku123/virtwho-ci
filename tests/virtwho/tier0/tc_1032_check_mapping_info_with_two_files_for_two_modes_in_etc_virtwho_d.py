@@ -6,7 +6,7 @@ from virt_who.testing import Testing
 
 class Testcase(Testing):
     def test_run(self):
-        self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133733')
+        self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133731')
         hypervisor1_type = self.get_exported_param("HYPERVISOR_01_TYPE")
         hypervisor2_type = self.get_exported_param("HYPERVISOR_02_TYPE")
         if not hypervisor1_type or not hypervisor2_type:
@@ -26,13 +26,11 @@ class Testcase(Testing):
         config_02_file = "/etc/virt-who.d/{0}.conf".format(config_02_name)
         guest_01_uuid = self.get_hypervisor_guestuuid(uid='01')
         guest_02_uuid = self.get_hypervisor_guestuuid(uid='02')
-        
+
         # case steps
-        logger.info(">>>step1: create config file include two different hypervisors")
+        logger.info(">>>step1: create two config files for two different hypervisors")
         self.vw_etc_d_mode_create(config_01_name, config_01_file, uid='01')
         self.vw_etc_d_mode_create(config_02_name, config_02_file, uid='02')
-        cmd = 'cat {0} >> {1} && rm -rf {0}'.format(config_02_file, config_01_file)
-        ret, output = self.runcmd(cmd, self.ssh_host())
         data, tty_output, rhsm_output = self.vw_start(exp_send=1)
         res = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
         results.setdefault('step1', []).append(res)
