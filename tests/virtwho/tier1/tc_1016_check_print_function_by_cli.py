@@ -31,7 +31,7 @@ class Testcase(Testing):
             ret, output = self.runcmd("cat {0}".format(json_file), self.ssh_host())
             res = self.vw_msg_search(output, guest_uuid, exp_exist=True)
             results.setdefault(step, []).append(res)
-            if "libvirt-local" not in hypervisor_type and "vdsm" not in hypervisor_type:
+            if hypervisor_type in ('libvirt-local', 'vdsm'):
                 res = self.vw_msg_search(output, host_uuid, exp_exist=True)
                 results.setdefault(step, []).append(res)
 
