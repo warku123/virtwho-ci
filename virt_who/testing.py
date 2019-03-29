@@ -381,10 +381,13 @@ class Testing(Provision):
     #******************************************
     def vw_case_info(self, case_name, case_id=None):
         logger.info("+"*30)
+        msg = case_name
         if case_id:
-            logger.info("{0}:{1}".format(case_id, case_name))
-        else:
-            logger.info(case_name)
+            msg = "{0}:{1}".format(case_id, case_name)
+        logger.info(msg)
+        fd = open(DEBUG_FILE, 'a')
+        fd.write("{0}\n".format(msg))
+        fd.close()
         if self.pkg_check(self.ssh_host(), 'virt-who') is False:
             self.pkg_install(self.ssh_host(), 'virt-who')
 
@@ -823,7 +826,7 @@ class Testing(Provision):
         return loop_time
 
     def vw_rhsm_modes_check(self, rhsm_output):
-        env_mode = config.hypervisor.type
+        env_mode = self.get_config('hypervisor_type')
         rhsm_modes = re.findall(r'Using configuration.*\("(.*?)" mode\)', rhsm_output)
         if len(rhsm_modes) == 0:
             return env_mode
