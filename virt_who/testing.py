@@ -826,7 +826,11 @@ class Testing(Provision):
         return loop_time
 
     def vw_rhsm_modes_check(self, rhsm_output):
-        env_mode = self.get_config('hypervisor_type')
+        env_mode = self.get_exported_param("HYPERVISOR_TYPE")
+        if not env_mode:
+            env_mode = self.get_exported_param("HYPERVISOR_01_TYPE")
+        if not env_mode:
+            env_mode = self.get_exported_param("HYPERVISOR_02_TYPE")
         rhsm_modes = re.findall(r'Using configuration.*\("(.*?)" mode\)', rhsm_output)
         if len(rhsm_modes) == 0:
             return env_mode

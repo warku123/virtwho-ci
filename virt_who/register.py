@@ -674,8 +674,8 @@ class Register(Base):
                 for cp_id, katello_id in katello_ids.items():
                     curl_header = '-H "accept:application/json,version=2" -H "content-type:application/json"'
                     json_data = json.dumps('{"subscriptions":[{"id":%s}]}' % katello_id)
-                    cmd = 'curl -X PUT -s -k {0} -u {1}:{2} -d {3} {4}/api/v2/hosts/{5}/subscriptions/remove_subscriptions' \
-                            %(curl_header, username, password, json_data, api, host_id)
+                    cmd = 'curl -X PUT -s -k {0} -u {1}:{2} -d {3} {4}/api/v2/hosts/{5}/subscriptions/remove_subscriptions'.format(
+                            curl_header, username, password, json_data, api, host_id)
                     ret, output = self.runcmd(cmd, ssh, desc="satellite remove pool")
                     if ret == 0:
                         logger.info("Succeeded to remove pool({0}) for host_id({1})".format(cp_id, host_id))
