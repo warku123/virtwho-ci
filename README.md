@@ -1,6 +1,6 @@
 VIRTWHO-QE - Testing virt-who package for differernt hypervisors and register servers.  
 
-Before running our test cases, you have to config the envionment variables for hypervisors and register server.   
+Before running our test cases, you have to config the environment variables for hypervisors and register server.   
 There are two ways to configure the env, take esx environment as an example:  
 1. Export Environment  
 ```
