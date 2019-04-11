@@ -50,7 +50,6 @@ class Register(Base):
         cmd = "echo '{0}' > /etc/rhsm/facts/override_uuid.facts".format(option)
         ret, output = self.runcmd(cmd, ssh)
         ret, output = self.runcmd('cat /etc/rhsm/facts/override_uuid.facts', ssh)
-        logger.info('Finished to set dmi.system.uuid({0}) for host {1}'.format(output, ssh['host']))
 
     def rhsm_backup(self, ssh):
         ret, output = self.runcmd("ls /backup/rhsm.conf", ssh)
@@ -587,7 +586,7 @@ class Register(Base):
                     return host_id
             logger.warning("no results found for host_id, try again after 15s...")
             time.sleep(15)
-        logger.error("Failed to get satellite host_id for host({0}), maybe mapping is not sent".format(host_name))
+        logger.warning("Failed to get satellite host_id for host({0}), maybe mapping is not sent".format(host_name))
         return None
 
     def satellite_katello_id(self, ssh, register_config, pool_id):

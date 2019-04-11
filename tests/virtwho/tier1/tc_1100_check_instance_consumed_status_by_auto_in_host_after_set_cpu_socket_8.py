@@ -9,7 +9,7 @@ class Testcase(Testing):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-134078')
         hypervisor_type = self.get_config('hypervisor_type')
         trigger_type = self.get_config('trigger_type')
-        if hypervisor_type in ('libvirt-local', 'vdsm'):
+        if hypervisor_type not in ('libvirt-local', 'vdsm'):
             self.vw_case_skip(hypervisor_type)
         if "trigger-rhev" in trigger_type:
             self.vw_case_skip(trigger_type)

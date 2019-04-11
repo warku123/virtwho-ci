@@ -398,7 +398,7 @@ class Testing(Provision):
             logger.info(str(SkipTest))
             raise SkipTest
         finally:
-            logger.info("Successed to skip case")
+            logger.info("Successed to skip case\n")
 
     def vw_case_result(self, results, notes=None):
         for key, value in results.items():
@@ -610,7 +610,7 @@ class Testing(Provision):
             raise FailException("Failed to disable option %s" % option)
 
     def vw_option_add(self, option, value, filename):
-        cmd = 'echo "%s=%s" >> %s' % (option, value, filename)
+        cmd = 'echo -e "\n%s=%s" >> %s' % (option, value, filename)
         ret, output = self.runcmd(cmd, self.ssh_host())
         if ret == 0:
             logger.info("Successed to add option %s=%s" % (option, value))

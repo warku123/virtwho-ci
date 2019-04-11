@@ -21,6 +21,7 @@ class Testcase(Testing):
         host_name = self.get_hypervisor_hostname()
         host_uuid = self.get_hypervisor_hostuuid()
         register_config = self.get_register_config()
+        register_type = register_config['type']
         vdc_physical_sku = register_config['vdc']
         vdc_virtual_sku = register_config['vdc_bonus']
 
@@ -56,7 +57,7 @@ class Testcase(Testing):
         logger.info(">>>step5: check repo status in guest")
         cmd = "subscription-manager repos --list"
         ret, output = self.runcmd(cmd, self.ssh_guest(), desc="check repo list")
-        if "stage" in server_type:
+        if "stage" in register_type:
             res = self.vw_msg_search(output, "Available Repositories" , exp_exist=True)
         else:
             res = self.vw_msg_search(output, "no repositories available" , exp_exist=True)
