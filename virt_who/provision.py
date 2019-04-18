@@ -10,6 +10,8 @@ class Provision(Register):
         if deploy.trigger.type == "trigger-rhev":
             if not deploy.trigger.rhev_iso:
                 raise FailException("no rhev iso link")
+        elif deploy.trigger.type == "trigger-gating":
+            logger.info("gating tests should be trigger by umb")
         else:
             if not deploy.trigger.rhel_compose:
                 raise FailException("no rhel compose_id")
@@ -49,9 +51,53 @@ class Provision(Register):
             local_modes.append("vdsm")
         return remote_modes, local_modes
 
+    def ci_msg_parser(self):
+        env = dict()
+        ci_msg_content = self.get_exported_param("CI_MESSAGE")
+        if ci_msg_content:
+            msg = json.loads(ci_msg_content)
+            build_id = msg['build']['build_id']
+            brew_build_url = "https://brewweb.engineering.redhat.com/brew/buildinfo?buildID={0}".format(build_id)
+        else:
+            brew_build_url = self.get_exported_param("BREW_BUILD_URL")
+            build_id = re.findall(r'buildID=(.*?)$', brew_build_url)[-1]
+        cmd = 'curl -k -s -i {0}'.format(brew_build_url)
+        output = os.popen(cmd).read()
+        pkg_url = 'http://'+re.findall(r'<a href="http://(.*?).noarch.rpm">download</a>', output)[-1]+'.noarch.rpm'
+        items = pkg_url.split('/')
+        rhel_release = items[5]
+        rhel_compose = self.get_exported_param("RHEL_COMPOSE")
+        if not rhel_compose:
+            if 'rhel-8' in rhel_release:
+                url = 'http://download.eng.bos.redhat.com/rel-eng/latest-RHEL-8/COMPOSE_ID'
+            if 'rhel-7' in rhel_release:
+                url = 'http://download.eng.bos.redhat.com/rel-eng/latest-RHEL-7/COMPOSE_ID'
+            if 'rhel-6' in rhel_release:
+                url = 'http://download.eng.bos.redhat.com/rel-eng/latest-RHEL-6/COMPOSE_ID'
+            cmd = 'curl -s -k -L {0}'.format(url)
+            rhel_compose = os.popen(cmd).read().strip()
+        if not pkg_url:
+            raise FailException("no package url found")
+        if not rhel_compose:
+            raise FailException("no rhel compose found")
+        env['build_id'] = build_id
+        env['pkg_url'] = pkg_url
+        env['pkg_name'] = items[7]
+        env['pkg_version'] = items[8]
+        env['pkg_release'] = items[9]
+        env['pkg_arch'] = items[10]
+        env['pkg_nvr'] = items[11]
+        env['rhel_release'] = rhel_release
+        env['rhel_compose'] = rhel_compose
+        return env
+
     def provision_start(self):
         self.provision_validation()
-        rhel_compose = deploy.trigger.rhel_compose
+        if deploy.trigger.type == "trigger-gating":
+            env = self.ci_msg_parser()
+            rhel_compose = env['rhel_compose']
+        else:
+            rhel_compose = deploy.trigger.rhel_compose
         remote_modes, local_modes = self.hypervisors_validation()
         queue = Queue.Queue()
         results = list()
@@ -80,7 +126,7 @@ class Provision(Register):
             logger.info(item)
         register_servers, virtwho_hosts, guests = self.provision_report(results)
         try:
-            if len(remote_modes) > 1:
+            if len(remote_modes) > 1 and deploy.trigger.type != "trigger-gating":
                 self.jenkins_oneshot_job(register_servers, virtwho_hosts, guests, remote_modes)
         except:
             pass
@@ -387,6 +433,8 @@ class Provision(Register):
                 if "vdsm" in key and guests.has_key('vdsm-guest-ip'):
                     job_name = "runtest-vdsm"
                     guest_ip = guests['vdsm-guest-ip']
+                if deploy.trigger.type == "trigger-gating":
+                    job_name = "runtest-gating"
                 if len(register_servers) > 0 and host_ip != "" and guest_ip != "" and job_name != "":
                     threads.append(threading.Thread(
                         target=self.jenkins_job_start, args=(register_servers, host_ip, guest_ip, job_name)))
@@ -586,7 +634,12 @@ class Provision(Register):
         cmd = "rm -f /var/lib/rpm/__db*; rm -rf /var/lib/yum/history/*.sqlite; rpm --rebuilddb"
         ret, output = self.runcmd(cmd, ssh_host)
         if trigger_type == "trigger-zstream":
-            self.install_virtwho_zstream(ssh_host)
+            pkg_url = self.get_exported_param("VIRTWHO_ERRATA_PACKAGE")
+            self.install_virtwho_by_url(ssh_host, pkg_url)
+        elif trigger_type == "trigger-gating":
+            env = self.ci_msg_parser()
+            pkg_url = env['pkg_url']
+            self.install_virtwho_by_url(ssh_host, pkg_url)
         elif trigger_type == "trigger-upstream":
             self.install_virtwho_upstream(ssh_host)
         elif trigger_type == "trigger-satellite":
@@ -615,9 +668,6 @@ class Provision(Register):
 
     def jenkins_parameter(self, hypervisor_config, register_config):
         parameter = list()
-        parameter.append('-d RHEL_COMPOSE={0}'.format(deploy.trigger.rhel_compose))
-        parameter.append('-d TRIGGER_TYPE={0}'.format(deploy.trigger.type))
-        parameter.append('-d TRIGGER_LEVEL={0}'.format(deploy.trigger.level))
         parameter.append('-d VIRTWHO_HOST_IP={0}'.format(hypervisor_config['host_ip']))
         parameter.append('-d VIRTWHO_HOST_USER={0}'.format(hypervisor_config['host_user']))
         parameter.append('-d VIRTWHO_HOST_PASSWD={0}'.format(hypervisor_config['host_passwd']))
@@ -639,6 +689,18 @@ class Provision(Register):
         parameter.append('-d REGISTER_ADMIN_PASSWD={0}'.format(register_config['password']))
         parameter.append('-d REGISTER_SSH_USER={0}'.format(register_config['ssh_user']))
         parameter.append('-d REGISTER_SSH_PASSWD={0}'.format(register_config['ssh_passwd']))
+        if deploy.trigger.type == "trigger-gating":
+            env = self.ci_msg_parser()
+            rhel_compose = env['rhel_compose']
+            build_id = env['build_id']
+            pkg_nvr = env['pkg_nvr']
+            parameter.append('-d RHEL_COMPOSE={0}'.format(rhel_compose))
+            parameter.append('-d BREW_BUILD_ID={0}'.format(build_id))
+            parameter.append('-d PACKAGE_NVR={0}'.format(pkg_nvr))
+        else:
+            parameter.append('-d RHEL_COMPOSE={0}'.format(deploy.trigger.rhel_compose))
+            parameter.append('-d TRIGGER_TYPE={0}'.format(deploy.trigger.type))
+            parameter.append('-d TRIGGER_LEVEL={0}'.format(deploy.trigger.level))
         data = ' '.join(parameter)
         return data 
 
@@ -713,13 +775,12 @@ class Provision(Register):
     #*************************************************
     # Re-install host by update grub for rhel and rhev
     #*************************************************
-    def install_virtwho_zstream(self, ssh_host):
-        pkg_url = self.get_exported_param("VIRTWHO_ERRATA_PACKAGE")
+    def install_virtwho_by_url(self, ssh_host, pkg_url):
         if self.url_validation(pkg_url) is False:
-            raise FailException("VIRTWHO_ERRATA_PACKAGE is not available")
-        cmd = "wget -P /tmp/ {0}".format(pkg_url)
+            raise FailException("package url is not available")
+        cmd = "rm -rf /var/cache/yum/; yum clean all; yum remove -y virt-who"
         ret, output = self.runcmd(cmd, ssh_host)
-        cmd = "rm -rf /var/cache/yum/; yum clean all; yum remove -y virt-who; yum localinstall -y /tmp/virt-who*.rpm"
+        cmd = "yum localinstall -y {0}".format(pkg_url)
         ret, output = self.runcmd(cmd, ssh_host)
 
     def install_virtwho_upstream(self, ssh_host):

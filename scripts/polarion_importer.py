@@ -151,8 +151,12 @@ def polarion_xml_update(xml_file, files):
     fd.write("TOTAL_PASS=%s\n" % total_passed)
     fd.write("TOTAL_FAIL=%s\n" % total_fail)
     fd.write("TOTAL_SKIP=%s\n" % ts_skip)
-    fd.close()
-    if total_fail > 30:
+    if total_fail < 30:
+        fd.write("TEST_STATUS=PASS\n")
+        fd.close()
+    else:
+        fd.write("TEST_STATUS=FAIL\n")
+        fd.close()
         logger.warning("failed cases is > 30, cancel to polarion import!")
         sys.exit()
     data = '<testsuite name="nosetests" tests="%s" errors="%s" failures="%s" skip="%s">\n</testsuite>' \
