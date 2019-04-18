@@ -96,6 +96,8 @@ class Provision(Register):
         if deploy.trigger.type == "trigger-gating":
             env = self.ci_msg_parser()
             rhel_compose = env['rhel_compose']
+            for key, value in env.items():
+                logger.info("{0}: {1}".format(key, value))
         else:
             rhel_compose = deploy.trigger.rhel_compose
         remote_modes, local_modes = self.hypervisors_validation()
@@ -433,8 +435,6 @@ class Provision(Register):
                 if "vdsm" in key and guests.has_key('vdsm-guest-ip'):
                     job_name = "runtest-vdsm"
                     guest_ip = guests['vdsm-guest-ip']
-                if deploy.trigger.type == "trigger-gating":
-                    job_name = "runtest-gating"
                 if len(register_servers) > 0 and host_ip != "" and guest_ip != "" and job_name != "":
                     threads.append(threading.Thread(
                         target=self.jenkins_job_start, args=(register_servers, host_ip, guest_ip, job_name)))
@@ -715,6 +715,8 @@ class Provision(Register):
             ssh_guest = hypervisor_config['ssh_guest']
             self.jenkins_job_init(register_type, register_config, ssh_host, ssh_guest)
             data = self.jenkins_parameter(hypervisor_config, register_config)
+            if deploy.trigger.type == "trigger-gating":
+                job_name = "runtest-gating"
             cmd = "curl -k -s -i -X POST {0}/job/{1}/buildWithParameters --user {2}:{3} {4}".format(
                 deploy.jenkins.url,
                 job_name,
