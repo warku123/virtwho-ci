@@ -63,9 +63,9 @@ class Provision(Register):
             build_id = re.findall(r'buildID=(.*?)$', brew_build_url)[-1]
         cmd = 'curl -k -s -i {0}'.format(brew_build_url)
         output = os.popen(cmd).read()
-        pkg_url = 'http://'+re.findall(r'<a href="http://(.*?).noarch.rpm">download</a>', output)[-1]+'.noarch.rpm'
+        pkg_url = re.findall(r'<a href="http://(.*?).noarch.rpm">download</a>', output)[-1]
         items = pkg_url.split('/')
-        rhel_release = items[5]
+        rhel_release = items[3]
         rhel_compose = self.get_exported_param("RHEL_COMPOSE")
         if not rhel_compose:
             if 'rhel-8' in rhel_release:
@@ -81,12 +81,12 @@ class Provision(Register):
         if not rhel_compose:
             raise FailException("no rhel compose found")
         env['build_id'] = build_id
-        env['pkg_url'] = pkg_url
-        env['pkg_name'] = items[7]
-        env['pkg_version'] = items[8]
-        env['pkg_release'] = items[9]
-        env['pkg_arch'] = items[10]
-        env['pkg_nvr'] = items[11]
+        env['pkg_url'] = 'http://'+pkg_url+'.noarch.rpm'
+        env['pkg_name'] = items[5]
+        env['pkg_version'] = items[6]
+        env['pkg_release'] = items[7]
+        env['pkg_arch'] = items[8]
+        env['pkg_nvr'] = items[9]
         env['rhel_release'] = rhel_release
         env['rhel_compose'] = rhel_compose
         return env
