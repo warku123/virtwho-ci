@@ -2119,6 +2119,8 @@ class Provision(Register):
         for i in range(3):
             if self.xen_guest_exist(ssh_xen, guest_name) is False:
                 break
+            if self.xen_guest_status(ssh_xen, guest_name) != "running":
+                break
             mac_addr = self.xen_guest_mac(ssh_xen, guest_name)
             guest_ip = self.get_ipaddr_bymac(mac_addr, ssh_xen)
             if guest_ip is not False and guest_ip is not None and guest_ip != "":
@@ -2342,6 +2344,8 @@ class Provision(Register):
     def libvirt_guest_ip(self, guest_name, ssh_libvirt):
         for i in range(3):
             if self.libvirt_guest_exist(guest_name, ssh_libvirt) is False:
+                break
+            if self.libvirt_guest_status(guest_name, ssh_libvirt) != "running":
                 break
             mac_addr = self.libvirt_guest_mac(guest_name, ssh_libvirt)
             guest_ip = self.get_ipaddr_bymac(mac_addr, ssh_libvirt)
@@ -2984,7 +2988,11 @@ class Provision(Register):
     def rhevm_guest_start(self, ssh_rhevm, rhevm_shell, ssh_vdsm, guest_name):
         host_name = self.get_hostname(ssh_vdsm)
         cmd = "{0} -c -E 'action vm {1} start --vm-placement_policy-host-name {2}'".format(rhevm_shell, guest_name, host_name)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest start")
+        for i in range(5):
+            ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest start")
+            if ret ==0 and "ERROR" not in output:
+                break
+            time.sleep(15)
         for i in range(10):
             time.sleep(30)
             if self.rhevm_guest_status(ssh_rhevm, rhevm_shell, guest_name) == "up":
