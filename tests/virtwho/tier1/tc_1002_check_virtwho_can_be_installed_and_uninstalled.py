@@ -8,7 +8,7 @@ class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133654')
         trigger_type = self.get_config('trigger_type')
-        if "trigger-rhev" in trigger_type:
+        if trigger_type in ('trigger-rhev', 'trigger-brew', 'trigger-multiarch'):
             self.vw_case_skip(trigger_type)
 
         # case config
