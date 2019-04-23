@@ -9,18 +9,18 @@ class Provision(Register):
     def provision_validation(self):
         if deploy.trigger.type == "trigger-rhev":
             if not deploy.trigger.rhev_iso:
-                raise FailException("no rhev iso link")
+                raise FailException("no rhev iso url")
         elif deploy.trigger.type == "trigger-gating":
             logger.info("gating tests should be trigger by umb")
         else:
             if not deploy.trigger.rhel_compose:
                 raise FailException("no rhel compose_id")
-        if deploy.trigger.type == "trigger-zstream":
-            if not deploy.trigger.errata_pkg:
-                raise FailException("no errata package link")
+        if deploy.trigger.type == "trigger-brew":
+            if not deploy.trigger.brew_package:
+                raise FailException("no brew package url")
         if deploy.trigger.type == "trigger-upstream":
             if not deploy.trigger.virtwho_upstream:
-                raise FailException("no upstream git link")
+                raise FailException("no upstream git url")
         if deploy.trigger.type == "trigger-multiarch":
             if not deploy.trigger.arch_type:
                 raise FailException("no arch defined")
@@ -633,8 +633,8 @@ class Provision(Register):
             ret, output = self.runcmd(cmd, ssh_host)
         cmd = "rm -f /var/lib/rpm/__db*; rm -rf /var/lib/yum/history/*.sqlite; rpm --rebuilddb"
         ret, output = self.runcmd(cmd, ssh_host)
-        if trigger_type == "trigger-zstream":
-            pkg_url = self.get_exported_param("VIRTWHO_ERRATA_PACKAGE")
+        if trigger_type == "trigger-brew":
+            pkg_url = deploy.trigger.brew_package
             self.install_virtwho_by_url(ssh_host, pkg_url)
         elif trigger_type == "trigger-gating":
             env = self.ci_msg_parser()
@@ -668,6 +668,7 @@ class Provision(Register):
 
     def jenkins_parameter(self, hypervisor_config, register_config):
         parameter = list()
+        parameter.append('-d TRIGGER_TYPE={0}'.format(deploy.trigger.type))
         parameter.append('-d VIRTWHO_HOST_IP={0}'.format(hypervisor_config['host_ip']))
         parameter.append('-d VIRTWHO_HOST_USER={0}'.format(hypervisor_config['host_user']))
         parameter.append('-d VIRTWHO_HOST_PASSWD={0}'.format(hypervisor_config['host_passwd']))
@@ -699,7 +700,6 @@ class Provision(Register):
             parameter.append('-d PACKAGE_NVR={0}'.format(pkg_nvr))
         else:
             parameter.append('-d RHEL_COMPOSE={0}'.format(deploy.trigger.rhel_compose))
-            parameter.append('-d TRIGGER_TYPE={0}'.format(deploy.trigger.type))
             parameter.append('-d TRIGGER_LEVEL={0}'.format(deploy.trigger.level))
         data = ' '.join(parameter)
         return data 

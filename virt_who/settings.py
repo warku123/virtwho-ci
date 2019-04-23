@@ -71,7 +71,7 @@ class SetTrigger(FeatureSettings):
         self.hypervisor_list = None
         self.register_list = None
         self.rhev_iso = None
-        self.errata_package = None
+        self.brew_package = None
         self.virtwho_upstream = None
         self.arch_type = None
 
@@ -82,7 +82,7 @@ class SetTrigger(FeatureSettings):
         self.hypervisor_list = get_exported_param("HYPERVISOR_LIST")
         self.register_list = get_exported_param("REGISTER_LIST")
         self.rhev_iso = get_exported_param("RHEV_ISO")
-        self.errata_package = get_exported_param("VIRTWHO_ERRATA_PACKAGE")
+        self.brew_package = get_exported_param("VIRTWHO_BREW_PACKAGE")
         self.virtwho_upstream = get_exported_param("VIRTWHO_UPSTREAM")
         self.arch_type = get_exported_param("ARCH_TYPE")
         if not self.type:
@@ -97,8 +97,8 @@ class SetTrigger(FeatureSettings):
             self.register_list = reader.get('trigger', 'register_list')
         if not self.rhev_iso:
             self.rhev_iso = reader.get('trigger', 'rhev_iso')
-        if not self.errata_package:
-            self.errata_package = reader.get('trigger', 'errata_package')
+        if not self.brew_package:
+            self.brew_package = reader.get('trigger', 'brew_package')
         if not self.virtwho_upstream:
             self.virtwho_upstream = reader.get('trigger', 'virtwho_upstream')
         if not self.arch_type:

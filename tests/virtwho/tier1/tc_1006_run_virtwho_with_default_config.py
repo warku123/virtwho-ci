@@ -9,7 +9,7 @@ class Testcase(Testing):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133660')
         trigger_type = self.get_config('trigger_type')
         hypervisor_type = self.get_config('hypervisor_type')
-        if "trigger-rhev" in trigger_type:
+        if trigger_type in ('trigger-rhev', 'trigger-brew', 'trigger-multiarch'):
             self.vw_case_skip(trigger_type)
         self.vw_case_init()
 
