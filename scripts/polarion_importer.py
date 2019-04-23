@@ -152,10 +152,10 @@ def polarion_xml_update(xml_file, files):
     fd.write("TOTAL_FAIL=%s\n" % total_fail)
     fd.write("TOTAL_SKIP=%s\n" % ts_skip)
     if total_fail < 30:
-        fd.write("TEST_STATUS=PASS\n")
+        fd.write("TEST_STATUS=passed\n")
         fd.close()
     else:
-        fd.write("TEST_STATUS=FAIL\n")
+        fd.write("TEST_STATUS=failed\n")
         fd.close()
         logger.warning("failed cases is > 30, cancel to polarion import!")
         sys.exit()
