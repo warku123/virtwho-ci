@@ -9,6 +9,8 @@ class Testcase(Testing):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-137111')
         hypervisor_type = self.get_config('hypervisor_type')
         register_type = self.get_config('register_type')
+        if hypervisor_type in ('libvirt-local', 'vdsm'):
+            self.vw_case_skip(hypervisor_type)
         if 'stage' in register_type:
             self.vw_case_skip(register_type)
         self.vw_case_init()

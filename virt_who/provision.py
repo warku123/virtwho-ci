@@ -2569,14 +2569,20 @@ class Provision(Register):
                     self.rhevm_guest_delete(ssh_rhevm, rhevm_shell, guest_name.strip())
         logger.info("Finished to clean all the rhevm({0}) guests".format(ssh_rhevm['host']))
 
-    def rhevm_hosts_all_clean(self, ssh_rhevm, rhevm_shell):
+    def rhevm_hosts_list(self, ssh_rhevm, rhevm_shell):
         cmd = "%s -c -E 'list hosts' | grep '^name' | awk -F ':' '{print $2}'" % rhevm_shell
         ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm all hosts list")
         if ret == 0 and output is not None and output != "":
             hosts = output.strip().split('\n')
-            if len(hosts) > 0:
-                for host_name in hosts:
-                    self.rhevm_host_delete(ssh_rhevm, rhevm_shell, host_name.strip())
+        else:
+            hosts = list()
+        return hosts
+
+    def rhevm_hosts_all_clean(self, ssh_rhevm, rhevm_shell):
+        hosts = self.rhevm_hosts_list(ssh_rhevm, rhevm_shell)
+        if len(hosts) > 0:
+            for host_name in hosts:
+                self.rhevm_host_delete(ssh_rhevm, rhevm_shell, host_name.strip())
         logger.info("Finished to clean all the rhevm({0}) hosts".format(ssh_rhevm['host']))
 
     def rhevm_host_uuid_by_guestname(self, ssh_rhevm, rhevm_shell, guest_name):
@@ -2699,14 +2705,11 @@ class Provision(Register):
         self.rhevm_datacenter_ready(ssh_rhevm, rhevm_shell, ssh_vdsm, datacenter, storage)
 
     def rhevm_hosts_fence(self, ssh_rhevm, rhevm_shell):
-        cmd = "%s -c -E 'list hosts' | grep '^name' | awk -F ':' '{print $2}'" % rhevm_shell
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm all hosts list")
-        if ret == 0 and output is not None and output != "":
-            hosts = output.strip().split('\n')
-            if len(hosts) > 0:
-                for host_name in hosts:
-                    cmd = "{0} -c -E 'action host {1} fence --fence_type manual'".format(rhevm_shell, host_name.strip())
-                    ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm confirm host was rebooted")
+        hosts = self.rhevm_hosts_list(ssh_rhevm, rhevm_shell)
+        if len(hosts) > 0:
+            for host_name in hosts:
+                cmd = "{0} -c -E 'action host {1} fence --fence_type manual'".format(rhevm_shell, host_name.strip())
+                ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm confirm host was rebooted")
         logger.info("Finished to fence all the rhevm({0}) hosts".format(ssh_rhevm['host']))
 
     def rhevm_host_maintenance(self, ssh_rhevm, rhevm_shell, hostname):
@@ -2959,7 +2962,11 @@ class Provision(Register):
         ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest mac update")
         logger.info("rhevm({0}) guest new mac is: {1}".format(ssh_rhevm['host'], guest_mac))
         self.rhevm_guest_disk_ready(ssh_rhevm, rhevm_shell, guest_name, disk)
-        return self.rhevm_guest_start(ssh_rhevm, rhevm_shell, ssh_vdsm, guest_name)
+        self.rhevm_guest_start(ssh_rhevm, rhevm_shell, guest_name, ssh_vdsm)
+        guest_ip = self.rhevm_guest_ip(ssh_rhevm, rhevm_shell, ssh_vdsm, guest_name)
+        if guest_ip is not False and guest_ip is not None and guest_ip != "":
+            return guest_ip
+        raise FailException("Failed to add rhevm({0}) guest".format(ssh_rhevm['host']))
 
     def rhevm_guest_delete(self, ssh_rhevm, rhevm_shell, guest_name):
         if self.rhevm_guest_exist(ssh_rhevm, rhevm_shell, guest_name):
@@ -2985,8 +2992,13 @@ class Provision(Register):
             else:
                 raise FailException("Failed to delete rhevm({0}) guest".format(ssh_rhevm['host']))
 
-    def rhevm_guest_start(self, ssh_rhevm, rhevm_shell, ssh_vdsm, guest_name):
-        host_name = self.get_hostname(ssh_vdsm)
+    def rhevm_guest_start(self, ssh_rhevm, rhevm_shell, guest_name, ssh_vdsm=None):
+        if ssh_vdsm:
+            host_name = self.get_hostname(ssh_vdsm)
+        else:
+            host_name = self.rhevm_hosts_list(ssh_rhevm, rhevm_shell)[-1]
+        if not host_name:
+            raise FailException("no vdsm host found in rhevm")
         cmd = "{0} -c -E 'action vm {1} start --vm-placement_policy-host-name {2}'".format(rhevm_shell, guest_name, host_name)
         for i in range(5):
             ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest start")
@@ -2997,9 +3009,7 @@ class Provision(Register):
             time.sleep(30)
             if self.rhevm_guest_status(ssh_rhevm, rhevm_shell, guest_name) == "up":
                 logger.info("Succeeded to start rhevm({0}) guest".format(ssh_rhevm['host']))
-                guest_ip = self.rhevm_guest_ip(ssh_rhevm, rhevm_shell, ssh_vdsm, guest_name)
-                if guest_ip is not False and guest_ip is not None and guest_ip != "":
-                    return guest_ip
+                return True
             logger.info("rhevm guest is not up, check again after 30s...")
         raise FailException("Failed to start rhevm({0}) guest".format(ssh_rhevm['host']))
 
@@ -3028,8 +3038,13 @@ class Provision(Register):
             logger.warning("rhevm guest status is not suspended, check again after 30s...")
         raise FailException("Failed to suspend rhevm({0}) guest".format(ssh_rhevm['host']))
 
-    def rhevm_guest_resume(self, ssh_rhevm,  rhevm_shell, ssh_vdsm, guest_name):
-        host_name = self.get_hostname(ssh_vdsm)
+    def rhevm_guest_resume(self, ssh_rhevm,  rhevm_shell, guest_name, ssh_vdsm=None):
+        if ssh_vdsm:
+            host_name = self.get_hostname(ssh_vdsm)
+        else:
+            host_name = self.rhevm_hosts_list(ssh_rhevm, rhevm_shell)[-1]
+        if not host_name:
+            raise FailException("no vdsm host found in rhevm")
         cmd = "{0} -c -E 'action vm {1} start --vm-placement_policy-host-name {2}'".format(rhevm_shell, guest_name, host_name)
         ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest resume")
         for i in range(10):
