@@ -117,4 +117,7 @@ class Testcase(Testing):
             results.setdefault('step7', []).append(res2)
 
         # Case Result
-        self.vw_case_result(results)
+        notes = list()
+        notes.append("Bug(Step3): 'ascii' codec can't decode")
+        notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1703317")
+        self.vw_case_result(results, notes)

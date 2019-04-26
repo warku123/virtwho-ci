@@ -178,30 +178,42 @@ class Testing(Provision):
                 }
         return configs
 
+    def hypervisor_supported(sefl, hypervisor_type):
+        if hypervisor_type in (
+                'esx',
+                'hyperv',
+                'rhevm',
+                'vdsm',
+                'xen',
+                'libvirt-remote',
+                'libvirt-local'
+                ):
+            return True
+        raise FailException("Unsupported hypervisor_type: {0}".format(hypervisor_type))
+
     def get_hypervisor_hostname(self, uid=None):
         config = self.get_hypervisor_config(uid)
         hypervisor_type = config['type']
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
+        self.hypervisor_supported(hypervisor_type)
         if hypervisor_type == "esx":
             cert = self.vcenter_cert(config['server'], config['username'], config['password'])
             esx_host = self.vcenter_host_get(cert, ssh_hypervisor, guest_name)
             hostname = self.vcenter_hostname_get(cert, ssh_hypervisor, esx_host)
-        elif hypervisor_type == "hyperv":
+        if hypervisor_type == "hyperv":
             hostname = self.hyperv_host_name(ssh_hypervisor)
-        elif hypervisor_type == "xen":
+        if hypervisor_type == "xen":
             hostname = self.get_hostname(ssh_hypervisor)
-        elif hypervisor_type == "rhevm":
+        if hypervisor_type == "rhevm":
             rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_hypervisor)
             hostname = self.rhevm_host_name_by_guestname(ssh_hypervisor, rhevm_shell, guest_name)
-        elif hypervisor_type == "vdsm":
+        if hypervisor_type == "vdsm":
             hostname = self.get_hostname(self.ssh_host())
-        elif hypervisor_type == "libvirt-local":
+        if hypervisor_type == "libvirt-local":
             hostname = self.get_hostname(self.ssh_host())
-        elif hypervisor_type == "libvirt-remote":
+        if hypervisor_type == "libvirt-remote":
             hostname = self.get_hostname(ssh_hypervisor)
-        else:
-            hostname = "unsupport hypervisor type"
         return hostname
 
     def get_hypervisor_hostuuid(self, uid=None):
@@ -209,23 +221,22 @@ class Testing(Provision):
         hypervisor_type = config['type']
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
+        self.hypervisor_supported(hypervisor_type)
         if hypervisor_type == "esx":
             cert = self.vcenter_cert(config['server'], config['username'], config['password'])
             esx_host = self.vcenter_host_get(cert, ssh_hypervisor, guest_name)
             uuid = self.vcenter_host_uuid(cert, ssh_hypervisor, esx_host)
-        elif hypervisor_type == "hyperv":
+        if hypervisor_type == "hyperv":
             uuid = self.hyperv_host_uuid(ssh_hypervisor)
-        elif hypervisor_type == "xen":
+        if hypervisor_type == "xen":
             uuid = self.xen_host_uuid(ssh_hypervisor)
-        elif hypervisor_type == "rhevm" or hypervisor_type == "vdsm":
+        if hypervisor_type == "libvirt-local":
+            uuid = self.libvirt_host_uuid(self.ssh_host())
+        if hypervisor_type == "libvirt-remote":
+            uuid = self.libvirt_host_uuid(ssh_hypervisor)
+        if hypervisor_type in ("rhevm", "vdsm"):
             rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_hypervisor)
             uuid = self.rhevm_host_uuid_by_guestname(ssh_hypervisor, rhevm_shell, guest_name)
-        elif hypervisor_type == "libvirt-local":
-            uuid = self.libvirt_host_uuid(self.ssh_host())
-        elif hypervisor_type == "libvirt-remote":
-            uuid = self.libvirt_host_uuid(ssh_hypervisor)
-        else:
-            uuid = "unsupport hypervisor type"
         return uuid
 
     def get_hypervisor_hwuuid(self, uid=None):
@@ -250,22 +261,21 @@ class Testing(Provision):
         hypervisor_type = config['type']
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
+        self.hypervisor_supported(hypervisor_type)
         if hypervisor_type == "esx":
             cert = self.vcenter_cert(config['server'], config['username'], config['password'])
             uuid = self.vcenter_guest_uuid(cert, ssh_hypervisor, guest_name)
-        elif hypervisor_type == "hyperv":
+        if hypervisor_type == "hyperv":
             uuid = self.hyperv_guest_uuid(ssh_hypervisor, guest_name)
-        elif hypervisor_type == "xen":
+        if hypervisor_type == "xen":
             uuid = self.xen_guest_uuid(ssh_hypervisor, guest_name)
-        elif hypervisor_type == "rhevm" or hypervisor_type == "vdsm":
+        if hypervisor_type == "libvirt-local":
+            uuid = self.libvirt_guest_uuid(guest_name, self.ssh_host())
+        if hypervisor_type == "libvirt-remote":
+            uuid = self.libvirt_guest_uuid(guest_name, ssh_hypervisor)
+        if hypervisor_type in ("rhevm", "vdsm"):
             rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_hypervisor)
             uuid = self.rhevm_guest_uuid(ssh_hypervisor, rhevm_shell, guest_name)
-        elif hypervisor_type == "libvirt-local":
-            uuid = self.libvirt_guest_uuid(guest_name, self.ssh_host())
-        elif hypervisor_type == "libvirt-remote":
-            uuid = self.libvirt_guest_uuid(guest_name, ssh_hypervisor)
-        else:
-            uuid = "unsupport hypervisor type"
         return uuid
 
     def hypervisor_guest_start(self, uid=None):
@@ -273,20 +283,22 @@ class Testing(Provision):
         hypervisor_type = config['type']
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
+        self.hypervisor_supported(hypervisor_type)
         if hypervisor_type == "esx":
             cert = self.vcenter_cert(config['server'], config['username'], config['password'])
             guest_ip = self.vcenter_guest_start(cert, ssh_hypervisor, guest_name)
-        elif hypervisor_type == "hyperv":
+        if hypervisor_type == "hyperv":
             guest_ip = self.hyperv_guest_start(ssh_hypervisor, guest_name)
-        elif hypervisor_type == "xen":
+        if hypervisor_type == "xen":
             guest_ip =  self.xen_guest_start(ssh_hypervisor, guest_name)
-        elif hypervisor_type == "libvirt-local":
+        if hypervisor_type == "libvirt-local":
             guest_ip = self.libvirt_guest_start(guest_name, self.ssh_host())
-        elif hypervisor_type == "libvirt-remote":
+        if hypervisor_type == "libvirt-remote":
             guest_ip = self.libvirt_guest_start(guest_name, ssh_hypervisor)
-        else:
-            raise FailException("Unsupported to start guest for hypervisor_type:{0}".format(hypervisor_type))
         self.set_exported_param("GUEST_IP", guest_ip)
+        if hypervisor_type in ('rhevm', 'vdsm'):
+            rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_hypervisor)
+            self.rhevm_guest_start(ssh_hypervisor, rhevm_shell, guest_name)
         logger.info("Successed to start guest for mode %s, guest ip: %s" % (hypervisor_type, guest_ip))
 
     def hypervisor_guest_stop(self, uid=None):
@@ -294,19 +306,21 @@ class Testing(Provision):
         hypervisor_type = config['type']
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
+        self.hypervisor_supported(hypervisor_type)
         if hypervisor_type == "esx":
             cert = self.vcenter_cert(config['server'], config['username'], config['password'])
             self.vcenter_guest_stop(cert, ssh_hypervisor, guest_name)
-        elif hypervisor_type == "hyperv":
+        if hypervisor_type == "hyperv":
             self.hyperv_guest_stop(ssh_hypervisor, guest_name)
-        elif hypervisor_type == "xen":
+        if hypervisor_type == "xen":
             self.xen_guest_stop(ssh_hypervisor, guest_name)
-        elif hypervisor_type == "libvirt-local":
+        if hypervisor_type == "libvirt-local":
             self.libvirt_guest_stop(guest_name, self.ssh_host())
-        elif hypervisor_type == "libvirt-remote":
+        if hypervisor_type == "libvirt-remote":
             self.libvirt_guest_stop(guest_name, ssh_hypervisor)
-        else:
-            raise FailException("Unsupported to stop guest for mode: {0}".format(hypervisor_type))
+        if hypervisor_type in ('rhevm', 'vdsm'):
+            rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_hypervisor)
+            self.rhevm_guest_stop(ssh_hypervisor, rhevm_shell, guest_name)
         logger.info("Successed to stop guest for mode {0}".format(hypervisor_type))
 
     def hypervisor_guest_suspend(self, uid=None):
@@ -314,19 +328,21 @@ class Testing(Provision):
         hypervisor_type = config['type']
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
+        self.hypervisor_supported(hypervisor_type)
         if hypervisor_type == "esx":
             cert = self.vcenter_cert(config['server'], config['username'], config['password'])
             self.vcenter_guest_suspend(cert, ssh_hypervisor, guest_name)
-        elif hypervisor_type == "hyperv":
+        if hypervisor_type == "hyperv":
             self.hyperv_guest_suspend(ssh_hypervisor, guest_name)
-        elif hypervisor_type == "xen":
+        if hypervisor_type == "xen":
             self.xen_guest_suspend(ssh_hypervisor, guest_name)
-        elif hypervisor_type == "libvirt-local":
+        if hypervisor_type == "libvirt-local":
             self.libvirt_guest_suspend(guest_name, self.ssh_host())
-        elif hypervisor_type == "libvirt-remote":
+        if hypervisor_type == "libvirt-remote":
             self.libvirt_guest_suspend(guest_name, ssh_hypervisor)
-        else:
-            raise FailException("Unsupported to suspend guest for mode: {0}".format(hypervisor_type))
+        if hypervisor_type in ('rhevm', 'vdsm'):
+            rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_hypervisor)
+            self.rhevm_guest_suspend(ssh_hypervisor, rhevm_shell, guest_name)
         logger.info("Successed to suspend guest for mode {0}".format(hypervisor_type))
 
     def hypervisor_guest_resume(self, uid=None):
@@ -334,19 +350,21 @@ class Testing(Provision):
         hypervisor_type = config['type']
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
+        self.hypervisor_supported(hypervisor_type)
         if hypervisor_type == "esx":
             cert = self.vcenter_cert(config['server'], config['username'], config['password'])
             self.vcenter_guest_resume(cert, ssh_hypervisor, guest_name)
-        elif hypervisor_type == "hyperv":
+        if hypervisor_type == "hyperv":
             self.hyperv_guest_resume(ssh_hypervisor, guest_name)
-        elif hypervisor_type == "xen":
+        if hypervisor_type == "xen":
             self.xen_guest_resume(ssh_hypervisor, guest_name)
-        elif hypervisor_type == "libvirt-local":
+        if hypervisor_type == "libvirt-local":
             self.libvirt_guest_resume(guest_name, self.ssh_host())
-        elif hypervisor_type == "libvirt-remote":
+        if hypervisor_type == "libvirt-remote":
             self.libvirt_guest_resume(guest_name, ssh_hypervisor)
-        else:
-            raise FailException("Unsupported to resume guest for mode: {0}".format(hypervisor_type))
+        if hypervisor_type in ('rhevm', 'vdsm'):
+            rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_hypervisor)
+            self.rhevm_guest_resume(ssh_hypervisor, rhevm_shell, guest_name)
         logger.info("Successed to resume guest for mode {0}".format(hypervisor_type))
 
     def hypervisor_firewall_setup(self, action="on", uid=None):

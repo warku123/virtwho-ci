@@ -8,7 +8,7 @@ class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-136585')
         hypervisor_type = self.get_config('hypervisor_type')
-        if hypervisor_type == 'libvirt-local':
+        if hypervisor_type in ('libvirt-local', 'vdsm'):
             self.vw_case_skip(hypervisor_type)
         self.vw_case_init()
 
@@ -52,7 +52,7 @@ class Testcase(Testing):
         results.setdefault('step4', []).append(res1)
         results.setdefault('step4', []).append(res2)
 
-        logger.info(">>>step5: owner option is disable")
+        logger.info(">>>step5: header option is disable")
         logger.warning("libvirt-local mode will be used to instead when header option is null")
         self.vw_option_disable(option_tested, config_file)
         data, tty_output, rhsm_output = self.vw_start()

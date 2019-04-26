@@ -31,7 +31,7 @@ class Testcase(Testing):
         try:
             vw_host_name = self.get_hostname(self.ssh_host())
             vw_host_uuid='xxx'
-            if "libvirt-local" in hypervisor_type or "vdsm" in hypervisor_type:
+            if hypervisor_type in ("libvirt-local", "vdsm"):
                 error_msg = "consumer no longer exists"
             else:
                 error_msg = ".*has been deleted"

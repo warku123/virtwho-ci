@@ -47,7 +47,9 @@ class Testcase(Testing):
         if 'libvirt-local' in hypervisor_type or 'vdsm' in hypervisor_type:
             name_list = ['{0}'.format(host_name)]
         else:
-            name_list = ['virt-who-{0}-1'.format(host_name), 'virt-who-{0}-1'.format(host_uuid)]
+            key1 = 'virt-who-{0}-1'.format(host_name)
+            key2 = 'virt-who-{0}-1'.format(host_uuid)
+            name_list = [key1, key2, key1.lower(), key2.lower()]
         baseurl = "https://{0}".format(server)
         cmd = "curl -X GET -s -k -u {0}:{1} {2}/katello/api/organizations/1/subscriptions/{3}" \
                 .format(admin_user, admin_passwd, baseurl, katello_id)

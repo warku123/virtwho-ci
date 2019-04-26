@@ -8,12 +8,11 @@ class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-136636')
         hypervisor_type = self.get_config('hypervisor_type')
-        if hypervisor_type in ('libvirt-local', 'vdsm'):
+        if hypervisor_type not in ('esx'):
             self.vw_case_skip(hypervisor_type)
         self.vw_case_init()
 
         # Case Config
-        results = dict()
         results = dict()
         self.vw_option_enable('[global]', '/etc/virt-who.conf')
         self.vw_option_enable('debug', '/etc/virt-who.conf')
