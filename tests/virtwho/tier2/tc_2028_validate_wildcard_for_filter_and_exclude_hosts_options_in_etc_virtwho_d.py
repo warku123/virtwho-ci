@@ -62,10 +62,7 @@ class Testcase(Testing):
                 self.vw_option_del("filter_hosts", config_file)
             self.vw_option_del("hypervisor_id", config_file)
             if "satellite" in register_type:
-                if "62" in register_type:
-                    self.vw_web_host_delete(hypervisorId, host_uuid)
-                else:
-                    self.vw_web_host_delete(host_name, host_uuid)
+                self.vw_web_host_delete(host_name, hypervisorId)
         if "stage" in register_type:
             self.stage_consumer_clean(self.ssh_host(), register_config)
 
