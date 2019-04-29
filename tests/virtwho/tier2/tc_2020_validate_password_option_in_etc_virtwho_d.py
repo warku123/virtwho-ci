@@ -8,7 +8,7 @@ class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-136591')
         hypervisor_type = self.get_config('hypervisor_type')
-        if hypervisor_type in ('libvirt-local', 'vdsm'):
+        if hypervisor_type in ('libvirt-local', 'vdsm', 'kubevirt'):
             self.vw_case_skip(hypervisor_type)
         self.vw_case_init()
 

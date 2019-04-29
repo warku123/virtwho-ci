@@ -43,6 +43,8 @@ class Provision(Register):
             remote_modes.append("hyperv")
         if "rhevm" in hypervisor_list:
             remote_modes.append("rhevm")
+        if "kubevirt" in hypervisor_list:
+            remote_modes.append("kubevirt")
         if "libvirt-remote" in hypervisor_list:
             remote_modes.append("libvirt-remote")
         if "libvirt-local" in hypervisor_list:
@@ -212,6 +214,8 @@ class Provision(Register):
                 mode_threads.append(threading.Thread(target=self.guest_hyperv_setup, args=(mode_queue, mode_type)))
             if "esx" in mode_type:
                 mode_threads.append(threading.Thread(target=self.guest_esx_setup, args=(mode_queue, mode_type)))
+            if "kubevirt" in mode_type:
+                mode_threads.append(threading.Thread(target=self.guest_kubevirt_setup, args=(mode_queue, mode_type)))
         for t in mode_threads:
             t.start()
         for t in mode_threads:
@@ -395,6 +399,8 @@ class Provision(Register):
                     job_name = "runtest-hyperv"
                 if "rhevm" in key:
                     job_name = "runtest-rhevm"
+                if "kubevirt" in key:
+                    job_name = "runtest-kubevirt"
                 if "libvirt-remote" in key:
                     job_name = "runtest-libvirt-remote"
                 if "libvirt-local" in key:
@@ -426,6 +432,9 @@ class Provision(Register):
                 if "rhevm" in key and guests.has_key('rhevm-guest-ip'):
                     job_name = "runtest-rhevm"
                     guest_ip = guests['rhevm-guest-ip']
+                if "kubevirt" in key and guests.has_key('kubevirt-guest-ip'):
+                    job_name = "runtest-kubevirt"
+                    guest_ip = guests['kubevirt-guest-ip']
                 if "libvirt-remote" in key and guests.has_key('libvirt-remote-guest-ip'):
                     job_name = "runtest-libvirt-remote"
                     guest_ip = guests['libvirt-remote-guest-ip']
@@ -467,6 +476,11 @@ class Provision(Register):
                 password = deploy.stage.rhevm_passwd
                 owner = deploy.stage.rhevm_org
                 env = deploy.stage.rhevm_org
+            if "kubevirt" in job_name:
+                username = deploy.stage.kubevirt_user
+                password = deploy.stage.kubevirt_passwd
+                owner = deploy.stage.kubevirt_org
+                env = deploy.stage.kubevirt_org
             if "vdsm" in job_name:
                 username = deploy.stage.vdsm_user
                 password = deploy.stage.vdsm_passwd
@@ -531,6 +545,7 @@ class Provision(Register):
             host_passwd = deploy.docker.container_passwd
         hypervisor_ssh_user = ""
         hypervisor_ssh_passwd = ""
+        hypervisor_config_file = ""
         if "esx" in job_name:
             hypervisor_type = "esx"
             hypervisor_server = deploy.vcenter.ip
@@ -557,6 +572,15 @@ class Provision(Register):
             guest_name = deploy.hyperv.guest_name
             guest_user = deploy.hyperv.guest_user
             guest_passwd = deploy.hyperv.guest_passwd
+        if "kubevirt" in job_name:
+            hypervisor_type = "kubevirt"
+            hypervisor_server = deploy.kubevirt.master
+            hypervisor_user = deploy.kubevirt.master_user
+            hypervisor_passwd = deploy.kubevirt.master_passwd
+            guest_name = deploy.kubevirt.guest_name
+            guest_user = deploy.kubevirt.guest_user
+            guest_passwd = deploy.kubevirt.guest_passwd
+            hypervisor_config_file = deploy.kubevirt.kube_config_file
         if "rhevm" in job_name:
             hypervisor_type = "rhevm"
             rhevm_ip =  deploy.rhevm.rhevm_ip
@@ -610,6 +634,7 @@ class Provision(Register):
                 'hypervisor_passwd':hypervisor_passwd,
                 'hypervisor_ssh_user':hypervisor_ssh_user,
                 'hypervisor_ssh_passwd':hypervisor_ssh_passwd,
+                'hypervisor_config_file':hypervisor_config_file,
                 'host_ip':host_ip,
                 'host_user':host_user,
                 'host_passwd':host_passwd,
@@ -678,6 +703,7 @@ class Provision(Register):
         parameter.append('-d HYPERVISOR_PASSWORD={0}'.format(hypervisor_config['hypervisor_passwd']))
         parameter.append('-d HYPERVISOR_SSH_USER={0}'.format(hypervisor_config['hypervisor_ssh_user']))
         parameter.append('-d HYPERVISOR_SSH_PASSWD={0}'.format(hypervisor_config['hypervisor_ssh_passwd']))
+        parameter.append('-d HYPERVISOR_CONFIG_FILE={0}'.format(hypervisor_config['hypervisor_config_file']))
         parameter.append('-d GUEST_IP={0}'.format(hypervisor_config['guest_ip']))
         parameter.append('-d GUEST_NAME={0}'.format(hypervisor_config['guest_name']))
         parameter.append('-d GUEST_USER={0}'.format(hypervisor_config['guest_user']))
@@ -714,6 +740,14 @@ class Provision(Register):
             ssh_host = hypervisor_config['ssh_host']
             ssh_guest = hypervisor_config['ssh_guest']
             self.jenkins_job_init(register_type, register_config, ssh_host, ssh_guest)
+            if 'kubevirt' in job_name and self.pkg_check(ssh_host(), 'virt-who')[9:15] < '0.24.4':
+                logger.warning("skip kubevirt testing, it's not available for this virt-who version")
+                return False
+            if 'kubevirt' in job_name and self.pkg_check(ssh_host(), 'virt-who')[9:15] >= '0.24.4':
+                kube_config_file = deploy.kubevirt.kube_config_file
+                kube_config_url = deploy.kubevirt.kube_config_url
+                cmd = "rm -f {1}; curl -L {0} -o {1}; sync".format(kube_config_url, kube_config_file)
+                ret, output = self.runcmd(cmd, ssh_host)
             data = self.jenkins_parameter(hypervisor_config, register_config)
             if deploy.trigger.type == "trigger-gating":
                 job_name = "runtest-gating"
@@ -1496,7 +1530,6 @@ class Provision(Register):
         logger.info("Successed to get vcenter guest ip: {0}".format(guest_ip))
         ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
         self.system_init("ci-guest-esx", ssh_guest)
-
         mode_queue.put((mode_type, guest_ip))
 
     def guest_hyperv_setup(self, mode_queue, mode_type):
@@ -1540,6 +1573,24 @@ class Provision(Register):
         ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
         self.system_init("ci-guest-xen", ssh_guest)
         mode_queue.put((mode_type, guest_ip))
+
+    def guest_kubevirt_setup(self, mode_queue, mode_type):
+        # get deploy settings for kubevirt mode
+        master = deploy.kubevirt.master
+        master_user = deploy.kubevirt.master_user
+        master_passwd = deploy.kubevirt.master_passwd
+        guest_name = deploy.kubevirt.guest_name
+        guest_user = deploy.kubevirt.guest_user
+        guest_passwd = deploy.kubevirt.guest_passwd
+
+        # set ssh env for kubevirt master
+        ssh_master ={"host":master,"username":master_user,"password":master_passwd}
+        guest_ip = self.kubevirt_guest_ip(ssh_master, guest_name)
+        if guest_ip:
+            logger.info("Successed to get kubevirt guest ip: {0}".format(guest_ip))
+            ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
+            self.system_init("ci-guest-kubvirt", ssh_guest)
+            mode_queue.put((mode_type, guest_ip))
 
     def guest_rhevm_setup(self, mode_queue, mode_type):
         # get deploy settings for rhevm mode
@@ -2201,6 +2252,70 @@ class Provision(Register):
             logger.warning("xen guest status is not running, check again after 15s... ")
             time.sleep(15)
         raise FailException("Failed to resume xen guest")
+
+    #*********************************************
+    # Hypervisor Kubvirt Function
+    #*********************************************
+    def kubevirt_host_uuid(self, ssh_kubvirt, node_name):
+        cmd = "oc describe node {0} |grep 'Machine ID:'".format(node_name)
+        ret, output = self.runcmd(cmd, ssh_kubvirt)
+        if ret == 0 and "Machine ID:" in output:
+            uuid = output.strip().split(':')[1].strip()
+            return uuid
+        else:
+            raise FailException("Failed to get kubvirt host uuid")
+
+    def kubevirt_guest_exist(self, ssh_kubvirt, guest_name):
+        cmd = "oc get vmis {0}".format(guest_name)
+        ret, output = self.runcmd(cmd, ssh_kubvirt)
+        if ret == 0 and guest_name in output:
+            return True
+        else:
+            return False
+
+    def kubevirt_guest_status(self, ssh_kubvirt, guest_name):
+        cmd = "oc describe vmis {0} |grep 'Phase:'".format(guest_name)
+        ret, output = self.runcmd(cmd, ssh_kubvirt)
+        if ret == 0 and 'Phase:' in output:
+            status = output.strip().split(':')[1].strip()
+            return status
+        else:
+            raise FailException("Failed to check kubevirt guest status")
+
+    def kubevirt_guest_node_name(self, ssh_kubvirt, guest_name):
+        cmd = "oc describe vmis {0} |grep 'Node Name:'".format(guest_name)
+        ret, output = self.runcmd(cmd, ssh_kubvirt)
+        if ret == 0 and 'Node Name:' in output:
+            node_name = output.strip().split(':')[1].strip()
+            return node_name
+        else:
+            raise FailException("Failed to check kubevirt guest's node name")
+
+    def kubevirt_guest_uuid(self, ssh_kubvirt, guest_name):
+        cmd = "oc describe vmis {0} |grep 'Uuid:'".format(guest_name)
+        ret, output = self.runcmd(cmd, ssh_kubvirt)
+        if ret == 0 and "Uuid:" in output:
+            uuid = output.strip().split(':')[1].strip()
+            return uuid
+        else:
+            raise FailException("Failed to check kubevirt guest uuid")
+
+    def kubevirt_guest_ip(self, ssh_kubvirt, guest_name):
+        for i in range(3):
+            if self.kubevirt_guest_exist(ssh_kubvirt, guest_name) is False:
+                break
+            if self.kubevirt_guest_status(ssh_kubvirt, guest_name) != "Running":
+                break
+            node_name = self.kubevirt_guest_node_name(ssh_kubvirt, guest_name)
+            guest_port = deploy.kubevirt.guest_port
+            guest_user = deploy.kubevirt.guest_user
+            guest_passwd = deploy.kubevirt.guest_passwd
+            guest_ip = "{0}:{1}".format(node_name, guest_port)
+            ssh_guest = {"host":guest_ip,"username":guest_user,"password":guest_passwd}
+            if self.ssh_is_connected(ssh_guest):
+                return guest_ip
+            logger.info("No guest ip found for kubevirt, try again after 15s...")
+            time.sleep(15)
 
     #*********************************************
     # Hypervisor Libvirt Function
