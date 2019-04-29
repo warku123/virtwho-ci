@@ -10,7 +10,7 @@ class Testcase(Testing):
         config = self.get_hypervisor_config()
         hypervisor_type = config['type']
         hypervisor_password = config['password']
-        if hypervisor_type in ('libvirt-local', 'vdsm'):
+        if hypervisor_type in ('libvirt-local', 'vdsm', 'kubevirt'):
             self.vw_case_skip(hypervisor_type)
         self.vw_case_init()
 

@@ -56,6 +56,7 @@ class Testing(Provision):
             guest_name = self.get_exported_param("HYPERVISOR_{0}_GUEST_NAME".format(uid))
             guest_user = self.get_exported_param("HYPERVISOR_{0}_GUEST_USER".format(uid))
             guest_passwd = self.get_exported_param("HYPERVISOR_{0}_GUEST_PASSWD".format(uid))
+            server_config = self.get_exported_param("HYPERVISOR_{0}_CONFIG_FILE")
         else:
             hypervisor_type = self.get_config('hypervisor_type')
             server = self.get_exported_param("HYPERVISOR_SERVER")
@@ -67,6 +68,7 @@ class Testing(Provision):
             guest_name = self.get_exported_param("GUEST_NAME")
             guest_user = self.get_exported_param("GUEST_USER")
             guest_passwd = self.get_exported_param("GUEST_PASSWD")
+            server_config = self.get_exported_param("HYPERVISOR_CONFIG_FILE")
             if not server:
                 server = config.hypervisor.server
             if not username:
@@ -85,6 +87,9 @@ class Testing(Provision):
                 guest_user = config.hypervisor.guest_user
             if not guest_passwd:
                 guest_passwd = config.hypervisor.guest_passwd
+            if not server_config:
+                server_config = config.hypervisor.server_config
+
         if server is not None and "//" in server:
             server_ip = self.get_url_domain(server)
         else:
@@ -106,7 +111,8 @@ class Testing(Provision):
                 'password':password,
                 'guest_name':guest_name,
                 'ssh_hypervisor':ssh_hypervisor,
-                'ssh_guest':ssh_guest
+                'ssh_guest':ssh_guest,
+                'server_config':server_config
                 }
         return configs
 
@@ -185,6 +191,7 @@ class Testing(Provision):
                 'rhevm',
                 'vdsm',
                 'xen',
+                'kubevirt',
                 'libvirt-remote',
                 'libvirt-local'
                 ):
@@ -204,6 +211,8 @@ class Testing(Provision):
         if hypervisor_type == "hyperv":
             hostname = self.hyperv_host_name(ssh_hypervisor)
         if hypervisor_type == "xen":
+            hostname = self.get_hostname(ssh_hypervisor)
+        if hypervisor_type == "kubevirt":
             hostname = self.get_hostname(ssh_hypervisor)
         if hypervisor_type == "rhevm":
             rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_hypervisor)
@@ -230,6 +239,9 @@ class Testing(Provision):
             uuid = self.hyperv_host_uuid(ssh_hypervisor)
         if hypervisor_type == "xen":
             uuid = self.xen_host_uuid(ssh_hypervisor)
+        if hypervisor_type == "kubevirt":
+            node_name = self.kubevirt_guest_node_name(ssh_hypervisor, guest_name)
+            uuid = self.kubevirt_host_uuid(ssh_hypervisor, node_name)
         if hypervisor_type == "libvirt-local":
             uuid = self.libvirt_host_uuid(self.ssh_host())
         if hypervisor_type == "libvirt-remote":
@@ -269,6 +281,8 @@ class Testing(Provision):
             uuid = self.hyperv_guest_uuid(ssh_hypervisor, guest_name)
         if hypervisor_type == "xen":
             uuid = self.xen_guest_uuid(ssh_hypervisor, guest_name)
+        if hypervisor_type == "kubevirt":
+            uuid = self.kubevirt_guest_uuid(ssh_hypervisor, guest_name)
         if hypervisor_type == "libvirt-local":
             uuid = self.libvirt_guest_uuid(guest_name, self.ssh_host())
         if hypervisor_type == "libvirt-remote":
@@ -284,6 +298,8 @@ class Testing(Provision):
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
         self.hypervisor_supported(hypervisor_type)
+        if hypervisor_type == "kubevirt":
+            return "unsupport guest start"
         if hypervisor_type == "esx":
             cert = self.vcenter_cert(config['server'], config['username'], config['password'])
             guest_ip = self.vcenter_guest_start(cert, ssh_hypervisor, guest_name)
@@ -307,6 +323,8 @@ class Testing(Provision):
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
         self.hypervisor_supported(hypervisor_type)
+        if hypervisor_type == "kubevirt":
+            return "unsupport guest stop"
         if hypervisor_type == "esx":
             cert = self.vcenter_cert(config['server'], config['username'], config['password'])
             self.vcenter_guest_stop(cert, ssh_hypervisor, guest_name)
@@ -329,6 +347,8 @@ class Testing(Provision):
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
         self.hypervisor_supported(hypervisor_type)
+        if hypervisor_type == "kubevirt":
+            return "unsupport guest suspend"
         if hypervisor_type == "esx":
             cert = self.vcenter_cert(config['server'], config['username'], config['password'])
             self.vcenter_guest_suspend(cert, ssh_hypervisor, guest_name)
@@ -351,6 +371,8 @@ class Testing(Provision):
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
         self.hypervisor_supported(hypervisor_type)
+        if hypervisor_type == "kubevirt":
+            return "unsupport guest resume"
         if hypervisor_type == "esx":
             cert = self.vcenter_cert(config['server'], config['username'], config['password'])
             self.vcenter_guest_resume(cert, ssh_hypervisor, guest_name)
@@ -505,9 +527,19 @@ class Testing(Provision):
             mode = "LIBVIRT"
         if mode == "LIBVIRT-LOCAL":
             logger.info("libvirt local mode is default, don't need to configure")
-        elif mode == "VDSM":
+            return True
+        if mode == "VDSM":
             cmd = 'sed -i -e "s|.*VIRTWHO_VDSM=.*|VIRTWHO_VDSM=1|g" {0}'.format(filename)
+        elif mode == "KUBEVIRT":
+            op_1 = '-e "s|.*{0}=.*|VIRTWHO_{0}=1|g"'.format(mode)
+            op_2 = '-e "s|.*{0}_OWNER=.*|VIRTWHO_{0}_OWNER={1}|g"'.format(mode, owner)
+            op_3 = '-e "s|.*{0}_ENV=.*|VIRTWHO_{0}_ENV={1}|g"'.format(mode, env)
+            cmd = 'sed -i {0} {1} {2} {3}'.format(op_1, op_2, op_3, filename)
             ret, output = self.runcmd(cmd, self.ssh_host())
+            server_config = hypervisor_config['server_config']
+            cmd = 'sed -i "/^KUBECONFIG/d" %s; sed -i "/^#KUBECONFIG/d" %s' % (filename, filename)
+            ret, output = self.runcmd(cmd, self.ssh_host())
+            cmd = 'echo -e "\nKUBECONFIG=%s" >> %s' % (server_config, filename)
         else:
             op_1 = '-e "s|.*{0}=.*|VIRTWHO_{0}=1|g"'.format(mode)
             op_2 = '-e "s|.*{0}_OWNER=.*|VIRTWHO_{0}_OWNER={1}|g"'.format(mode, owner)
@@ -516,11 +548,11 @@ class Testing(Provision):
             op_5 = '-e "s|.*{0}_USERNAME=.*|VIRTWHO_{0}_USERNAME={1}|g"'.format(mode, username) 
             op_6 = '-e "s|.*{0}_PASSWORD=.*|VIRTWHO_{0}_PASSWORD={1}|g"'.format(mode, password)
             cmd = 'sed -i {0} {1} {2} {3} {4} {5} {6}'.format(op_1, op_2, op_3, op_4, op_5, op_6, filename)
-            ret, output = self.runcmd(cmd, self.ssh_host())
-            if ret != 0:
-                raise FailException("Failed to enable mode {0} in /etc/sysconfig/virt-who".format(mode))
-            else:
-                logger.info("Successed to enable mode {0} in /etc/sysconfig/virt-who".format(mode))
+        ret, output = self.runcmd(cmd, self.ssh_host())
+        if ret != 0:
+            raise FailException("Failed to enable mode {0} in /etc/sysconfig/virt-who".format(mode))
+        else:
+            logger.info("Successed to enable mode {0} in /etc/sysconfig/virt-who".format(mode))
 
     def vw_etc_d_mode_create(self, config_name, config_file, uid=None):
         hypervisor_config = self.get_hypervisor_config(uid)
@@ -536,9 +568,19 @@ class Testing(Provision):
             mode = "libvirt"
         if mode == "libvirt-local":
             logger.info("libvirt local mode is default, don't need to configure")
-        elif mode == "vdsm":
+            return True
+        if mode == "vdsm":
             cmd = "echo -e '[{0}]\ntype={1}' > {2}".format(config_name, mode, config_file)
-            ret, output = self.runcmd(cmd, self.ssh_host())
+        elif mode == "kubevirt":
+            server_config = hypervisor_config['server_config']
+            cmd = ('cat <<EOF > {0}\n'
+                    '[{1}]\n'
+                    'type={2}\n'
+                    'kubeconfig={3}\n'
+                    'owner={4}\n'
+                    'env={5}\n'
+                    'EOF'
+                  ).format(config_file, config_name, mode, server_config, owner, env)
         else:
             cmd = ('cat <<EOF > {0}\n'
                     '[{1}]\n'
@@ -550,11 +592,11 @@ class Testing(Provision):
                     'env={7}\n'
                     'EOF'
                   ).format(config_file, config_name, mode, server, username, password, owner, env)
-            ret, output = self.runcmd(cmd, self.ssh_host())
-            if ret != 0:
-                raise FailException("Failed to create config file {0}".format(config_file))
-            else:
-                logger.info("Successed to create config file {0}".format(config_file))
+        ret, output = self.runcmd(cmd, self.ssh_host())
+        if ret != 0:
+            raise FailException("Failed to create config file {0}".format(config_file))
+        else:
+            logger.info("Successed to create config file {0}".format(config_file))
 
     def vw_fake_json_create(self, cli, json_file):
         self.vw_stop()
@@ -669,6 +711,13 @@ class Testing(Provision):
             cmd = "virt-who "
         elif mode == "vdsm":
             cmd = "virt-who --vdsm "
+        elif mode == "kubevirt":
+            server_config = hypervisor_config['server_config']
+            ret, output = self.runcmd("export KUBECONFIG={0}".format(server_config), self.ssh_host())
+            op_1 = "--{0}".format(mode)
+            op_2 = "--{0}-owner={1}".format(mode, owner)
+            op_3 = "--{0}-env={1}".format(mode, env)
+            cmd = "virt-who {0} {1} {2} ".format(op_1, op_2, op_3)
         else:
             op_1 = "--{0}".format(mode)
             op_2 = "--{0}-owner={1}".format(mode, owner)

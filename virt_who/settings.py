@@ -259,6 +259,9 @@ class SetStage(FeatureSettings):
         self.hyperv_user = reader.get('stage', 'hyperv_user')
         self.hyperv_passwd = reader.get('stage', 'hyperv_passwd')
         self.hyperv_org = reader.get('stage', 'hyperv_org')
+        self.kubevirt_user = reader.get('stage', 'kubevirt_user')
+        self.kubevirt_passwd = reader.get('stage', 'kubevirt_passwd')
+        self.kubevirt_org = reader.get('stage', 'kubevirt_org')
         self.rhevm_user = reader.get('stage', 'rhevm_user')
         self.rhevm_passwd = reader.get('stage', 'rhevm_passwd')
         self.rhevm_org = reader.get('stage', 'rhevm_org')
@@ -508,6 +511,30 @@ class SetLibvirt(FeatureSettings):
         self.xml_path = reader.get('libvirt', 'xml_path')
         self.xml_url = reader.get('libvirt', 'xml_url')
 
+class SetKubevirt(FeatureSettings):
+    def __init__(self, *args, **kwargs):
+        super(SetKubevirt, self).__init__(*args, **kwargs)
+        self.master = None
+        self.master_user = None
+        self.master_passwd = None
+        self.guest_name = None
+        self.guest_user = None
+        self.guest_passwd = None
+        self.guest_port = None
+        self.kube_config_file = None
+        self.kube_config_url = None
+
+    def read(self, reader):
+        self.master = reader.get('kubevirt', 'master')
+        self.master_user = reader.get('kubevirt', 'master_user')
+        self.master_passwd = reader.get('kubevirt', 'master_passwd')
+        self.guest_name = reader.get('kubevirt', 'guest_name')
+        self.guest_user = reader.get('kubevirt', 'guest_user')
+        self.guest_passwd = reader.get('kubevirt', 'guest_passwd')
+        self.guest_port = reader.get('kubevirt', 'guest_port')
+        self.kube_config_file = reader.get('kubevirt', 'kube_config_file')
+        self.kube_config_url = reader.get('kubevirt', 'kube_config_url')
+
 class DeploySettings(Settings):
     def __init__(self):
         self.trigger = SetTrigger()
@@ -526,6 +553,7 @@ class DeploySettings(Settings):
         self.rhevm = SetRHEVM()
         self.vdsm = SetVDSM()
         self.libvirt = SetLibvirt()
+        self.kubevirt = SetKubevirt()
 
 class ConfigureVirtwho(FeatureSettings):
     def __init__(self, *args, **kwargs):
@@ -552,6 +580,7 @@ class ConfigureHypervisor(FeatureSettings):
         self.server_password = None
         self.server_ssh_user = None
         self.server_ssh_passwd = None
+        self.server_config = None
         self.guest_ip = None
         self.guest_name = None
         self.guest_user = None
@@ -564,6 +593,7 @@ class ConfigureHypervisor(FeatureSettings):
         self.server_password = reader.get('hypervisor', 'server_password')
         self.server_ssh_user = reader.get('hypervisor', 'server_ssh_user')
         self.server_ssh_passwd = reader.get('hypervisor', 'server_ssh_passwd')
+        self.server_config = reader.get('hypervisor', 'server_config')
         self.guest_ip = reader.get('hypervisor', 'guest_ip')
         self.guest_name = reader.get('hypervisor', 'guest_name')
         self.guest_user = reader.get('hypervisor', 'guest_user')
