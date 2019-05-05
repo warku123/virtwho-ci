@@ -130,6 +130,8 @@ class Provision(Register):
             logger.info(item)
         register_servers, virtwho_hosts, guests = self.provision_report(results)
         try:
+            if "kubevirt" in remote_modes:
+                remote_modes.remove('kubevirt')
             if len(remote_modes) > 1 and deploy.trigger.type != "trigger-gating":
                 self.jenkins_oneshot_job(register_servers, virtwho_hosts, guests, remote_modes)
         except:
