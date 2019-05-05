@@ -742,10 +742,10 @@ class Provision(Register):
             ssh_host = hypervisor_config['ssh_host']
             ssh_guest = hypervisor_config['ssh_guest']
             self.jenkins_job_init(register_type, register_config, ssh_host, ssh_guest)
-            if 'kubevirt' in job_name and self.pkg_check(ssh_host(), 'virt-who')[9:15] < '0.24.4':
+            if 'kubevirt' in job_name and self.pkg_check(ssh_host, 'virt-who')[9:15] < '0.24.4':
                 logger.warning("skip kubevirt testing, it's not available for this virt-who version")
                 return False
-            if 'kubevirt' in job_name and self.pkg_check(ssh_host(), 'virt-who')[9:15] >= '0.24.4':
+            if 'kubevirt' in job_name and self.pkg_check(ssh_host, 'virt-who')[9:15] >= '0.24.4':
                 kube_config_file = deploy.kubevirt.kube_config_file
                 kube_config_url = deploy.kubevirt.kube_config_url
                 cmd = "rm -f {1}; curl -L {0} -o {1}; sync".format(kube_config_url, kube_config_file)
@@ -1238,7 +1238,9 @@ class Provision(Register):
         return job_passed
 
     def satellite_version(self, sat_type):
-        if "6.5" in sat_type or "65" in sat_type:
+        if "6.6" in sat_type or "66" in sat_type:
+            sat_ver = "6.6"
+        elif "6.5" in sat_type or "65" in sat_type:
             sat_ver = "6.5"
         elif "6.4" in sat_type or "64" in sat_type:
             sat_ver = "6.4"
@@ -1853,7 +1855,7 @@ class Provision(Register):
                 for line in datalines:
                     if re.match(r"^IpAddress.*:", line):
                         guest_ip = line.split(":")[1].strip()
-                        if guest_ip != "" and guest_ip is not None:
+                        if guest_ip != "" and guest_ip is not None and self.ping_is_connected(guest_ip):
                             return guest_ip
             logger.info("No guest ip found for vcenter, try again after 30s...")
             time.sleep(30)
@@ -2024,7 +2026,8 @@ class Provision(Register):
                 for line in datalines:
                     if ":" not in line and re.match(r"^10", line):
                         guest_ip = line.strip()
-                        return guest_ip
+                        if self.ping_is_connected(guest_ip):
+                            return guest_ip
             logger.info("No guest ip found for hyperv, try again after 30s...")
             
     def hyperv_guest_add(self, ssh_hyperv, guest_name, image_path):
@@ -2176,7 +2179,7 @@ class Provision(Register):
                 break
             mac_addr = self.xen_guest_mac(ssh_xen, guest_name)
             guest_ip = self.get_ipaddr_bymac(mac_addr, ssh_xen)
-            if guest_ip is not False and guest_ip is not None and guest_ip != "":
+            if guest_ip is not False and guest_ip is not None and guest_ip != "" and self.ping_is_connected(guest_ip):
                 return guest_ip
             logger.info("No guest ip found for xen, try again after 15s...")
             time.sleep(15)
@@ -3051,8 +3054,8 @@ class Provision(Register):
                 % (rhevm_shell, guest_name)
         for i in range(30):
             ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest ip check")
-            if output is not None and output != "":
-                guest_ip = output.strip()
+            guest_ip = output.strip()
+            if guest_ip is not None and guest_ip != "" and self.ping_is_connected(guest_ip):
                 return guest_ip
             logger.info("No guest ip found for rhevm, try again after 30s...")
             time.sleep(30)
