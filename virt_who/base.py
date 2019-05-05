@@ -275,6 +275,14 @@ class Base(unittest.TestCase):
             time.sleep(60)
         return False
 
+    def ping_is_connected(self, ipaddr):
+        cmd = "ping -c 5 %s |grep -q 'ttl=' && echo 'ok' || echo 'failed'" % ipaddr
+        output = os.popen(cmd).read().strip()
+        if output == "ok":
+            return True
+        else:
+            return False
+
     def rhel_version(self, ssh):
         cmd = "cat /etc/redhat-release"
         ret, output = self.runcmd(cmd, ssh)
@@ -467,9 +475,7 @@ class Base(unittest.TestCase):
             ret, output = self.runcmd(cmd, ssh, desc="check ip addr by mac")
             if ret == 0 and output is not None and output != "":
                 ipaddr = output.strip()
-                cmd = "ping -c 5 %s |grep -q 'ttl=' && echo 'ok' || echo 'failed'" % ipaddr
-                ret, output = self.runcmd(cmd, ssh, desc="ping ip")
-                if ret == 0 and output == "ok":
+                if self.ping_is_connected(ipaddr):
                     return ipaddr
             logger.info("Try to scan ip by nmap in %s after 30s ..." % ssh['host'])
         logger.error("Failed to get ip addr by mac(%s)" % ssh['host'])

@@ -1853,7 +1853,7 @@ class Provision(Register):
                 for line in datalines:
                     if re.match(r"^IpAddress.*:", line):
                         guest_ip = line.split(":")[1].strip()
-                        if guest_ip != "" and guest_ip is not None:
+                        if guest_ip != "" and guest_ip is not None and self.ping_is_connected(guest_ip):
                             return guest_ip
             logger.info("No guest ip found for vcenter, try again after 30s...")
             time.sleep(30)
@@ -2024,7 +2024,8 @@ class Provision(Register):
                 for line in datalines:
                     if ":" not in line and re.match(r"^10", line):
                         guest_ip = line.strip()
-                        return guest_ip
+                        if self.ping_is_connected(guest_ip):
+                            return guest_ip
             logger.info("No guest ip found for hyperv, try again after 30s...")
             
     def hyperv_guest_add(self, ssh_hyperv, guest_name, image_path):
@@ -2176,7 +2177,7 @@ class Provision(Register):
                 break
             mac_addr = self.xen_guest_mac(ssh_xen, guest_name)
             guest_ip = self.get_ipaddr_bymac(mac_addr, ssh_xen)
-            if guest_ip is not False and guest_ip is not None and guest_ip != "":
+            if guest_ip is not False and guest_ip is not None and guest_ip != "" and self.ping_is_connected(guest_ip):
                 return guest_ip
             logger.info("No guest ip found for xen, try again after 15s...")
             time.sleep(15)
@@ -3051,8 +3052,8 @@ class Provision(Register):
                 % (rhevm_shell, guest_name)
         for i in range(30):
             ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest ip check")
-            if output is not None and output != "":
-                guest_ip = output.strip()
+            guest_ip = output.strip()
+            if guest_ip is not None and guest_ip != "" and self.ping_is_connected(guest_ip):
                 return guest_ip
             logger.info("No guest ip found for rhevm, try again after 30s...")
             time.sleep(30)
