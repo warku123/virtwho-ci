@@ -742,10 +742,10 @@ class Provision(Register):
             ssh_host = hypervisor_config['ssh_host']
             ssh_guest = hypervisor_config['ssh_guest']
             self.jenkins_job_init(register_type, register_config, ssh_host, ssh_guest)
-            if 'kubevirt' in job_name and self.pkg_check(ssh_host(), 'virt-who')[9:15] < '0.24.4':
+            if 'kubevirt' in job_name and self.pkg_check(ssh_host, 'virt-who')[9:15] < '0.24.4':
                 logger.warning("skip kubevirt testing, it's not available for this virt-who version")
                 return False
-            if 'kubevirt' in job_name and self.pkg_check(ssh_host(), 'virt-who')[9:15] >= '0.24.4':
+            if 'kubevirt' in job_name and self.pkg_check(ssh_host, 'virt-who')[9:15] >= '0.24.4':
                 kube_config_file = deploy.kubevirt.kube_config_file
                 kube_config_url = deploy.kubevirt.kube_config_url
                 cmd = "rm -f {1}; curl -L {0} -o {1}; sync".format(kube_config_url, kube_config_file)
