@@ -1720,21 +1720,24 @@ class Provision(Register):
         else:
             raise FailException("Failed to get vcenter host")
 
-    def vcenter_hostname_get(self, cert, ssh_vcenter, esx_host):
-        cmd = "%s Get-VMHost -Name %s | Get-VMHostNetwork |select HostName, DomainName" % (cert, esx_host)
+    def vcenter_fqdn_set(self, cert, ssh_vcenter, esx_host, fqdn):
+        cmd = "%s (Get-EsxCli -VMhost %s).system.hostname.set($null, '%s', $null)" % (cert, esx_host, fqdn)
+        ret, output = self.runcmd(cmd, ssh_vcenter)
+        if ret == 0:
+            return self.vcenter_fqdn_get(cert, ssh_vcenter, esx_host)
+        else:
+            raise FailException("Failed to set vcenter host fqdn")
+
+    def vcenter_fqdn_get(self, cert, ssh_vcenter, esx_host):
+        cmd = "%s (Get-EsxCli -VMhost %s).system.hostname.get()|select FullyQualifiedDomainName" % (cert, esx_host)
         ret, output = self.runcmd(cmd, ssh_vcenter)
         if ret == 0:
             for line in output.splitlines():
-                if re.match(r"^HostName .*:", line):
-                    host = line.split(':')[1].strip()
-                if re.match(r"^DomainName .*:", line):
-                    domain = line.split(':')[1].strip()
-            if host and domain:
-                hostname = host+'.'+domain
-                logger.info("Successed to get esxi hostname: {0}".format(hostname))
-                return hostname
+                if re.match(r"^FullyQualifiedDomainName .*:", line):
+                    fqdn = line.split(':')[1].strip()
+                    return fqdn
         else:
-            raise FailException("Failed to get vcenter host")
+            raise FailException("Failed to get vcenter host fqdn")
 
     def vcenter_host_exist(self, cert, ssh_vcenter, esx_host):
         cmd = "%s Get-VMHost -Name %s" % (cert, esx_host)

@@ -207,7 +207,7 @@ class Testing(Provision):
         if hypervisor_type == "esx":
             cert = self.vcenter_cert(config['server'], config['username'], config['password'])
             esx_host = self.vcenter_host_get(cert, ssh_hypervisor, guest_name)
-            hostname = self.vcenter_hostname_get(cert, ssh_hypervisor, esx_host)
+            hostname = self.vcenter_fqdn_get(cert, ssh_hypervisor, esx_host)
         if hypervisor_type == "hyperv":
             hostname = self.hyperv_host_name(ssh_hypervisor)
         if hypervisor_type == "xen":
