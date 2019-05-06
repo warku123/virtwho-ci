@@ -41,6 +41,3 @@ class Testcase(Testing):
 
         # case result
         self.vw_case_result(results)
-
-
-

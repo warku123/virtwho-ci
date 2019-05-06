@@ -7,6 +7,9 @@ from virt_who.testing import Testing
 class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id="RHEL-136733")
+        hypervisor_type = self.get_config('hypervisor_type')
+        if hypervisor_type in ('kubevirt'):
+            self.vw_case_skip(hypervisor_type)
         self.vw_case_init()
 
         # case config
@@ -40,7 +43,6 @@ class Testcase(Testing):
         res2 = self.vw_msg_search(output, vdc_virtual_sku, exp_exist=True)
         results.setdefault('step1', []).append(res1)
         results.setdefault('step1', []).append(res2)
-        hypervisor_type = self.get_config('hypervisor_type')
 
         try:
             logger.info(">>>step2: suspend guest, and then restart virt-who")

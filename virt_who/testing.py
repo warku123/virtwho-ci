@@ -297,9 +297,13 @@ class Testing(Provision):
         hypervisor_type = config['type']
         ssh_hypervisor = config['ssh_hypervisor']
         guest_name = config['guest_name']
+        guest_ip = config['ssh_guest']['host']
         self.hypervisor_supported(hypervisor_type)
         if hypervisor_type == "kubevirt":
             return "unsupport guest start"
+        if hypervisor_type in ('rhevm', 'vdsm'):
+            rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_hypervisor)
+            self.rhevm_guest_start(ssh_hypervisor, rhevm_shell, guest_name)
         if hypervisor_type == "esx":
             cert = self.vcenter_cert(config['server'], config['username'], config['password'])
             guest_ip = self.vcenter_guest_start(cert, ssh_hypervisor, guest_name)
@@ -311,11 +315,9 @@ class Testing(Provision):
             guest_ip = self.libvirt_guest_start(guest_name, self.ssh_host())
         if hypervisor_type == "libvirt-remote":
             guest_ip = self.libvirt_guest_start(guest_name, ssh_hypervisor)
-        self.set_exported_param("GUEST_IP", guest_ip)
-        if hypervisor_type in ('rhevm', 'vdsm'):
-            rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_hypervisor)
-            self.rhevm_guest_start(ssh_hypervisor, rhevm_shell, guest_name)
-        logger.info("Successed to start guest for mode %s, guest ip: %s" % (hypervisor_type, guest_ip))
+        if guest_ip:
+            self.set_exported_param("GUEST_IP", guest_ip)
+            logger.info("Successed to start guest for mode {0}, guest ip: {1}".format(hypervisor_type, guest_ip))
 
     def hypervisor_guest_stop(self, uid=None):
         config = self.get_hypervisor_config(uid)
@@ -1001,12 +1003,12 @@ class Testing(Provision):
                 % (len(pending_job), is_429, loop_num, loop_time, send_num, error_num, thread_num))
         return pending_job, is_429, loop_num, loop_time, send_num, error_num, error_list, thread_num
 
-    def vw_thread_timeout(self, t1, queue, timeout, exp_send, exp_loopnum, oneshot, event, exp_error):
+    def vw_thread_timeout(self, t1, queue, timeout, exp_send, exp_loopnum, oneshot, exp_error, event):
+        while(t1.is_alive()):
+            time.sleep(3)
         if event is not None:
             time.sleep(60)
             self.vw_hypervisor_event(event)
-        while(t1.is_alive()):
-            time.sleep(3)
         while True:
             time.sleep(6)
             ret, output = self.runcmd("ls /var/log/rhsm/", self.ssh_host())
@@ -1074,7 +1076,7 @@ class Testing(Provision):
         threads.append(t1)
         t2 = threading.Thread(target=self.vw_thread_run, args=(t1, queue, cli))
         threads.append(t2)
-        t3 = threading.Thread(target=self.vw_thread_timeout, args=(t1, queue, timeout, exp_send, exp_loopnum, oneshot, event, exp_error))
+        t3 = threading.Thread(target=self.vw_thread_timeout, args=(t1, queue, timeout, exp_send, exp_loopnum, oneshot, exp_error, event))
         threads.append(t3)
         for t in threads:
             t.start()
