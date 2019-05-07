@@ -184,7 +184,7 @@ class Testing(Provision):
                 }
         return configs
 
-    def hypervisor_supported(sefl, hypervisor_type):
+    def hypervisor_supported(self, hypervisor_type):
         if hypervisor_type in (
                 'esx',
                 'hyperv',
@@ -213,7 +213,7 @@ class Testing(Provision):
         if hypervisor_type == "xen":
             hostname = self.get_hostname(ssh_hypervisor)
         if hypervisor_type == "kubevirt":
-            hostname = self.get_hostname(ssh_hypervisor)
+            hostname = self.kubevirt_guest_node_name(ssh_hypervisor, guest_name)
         if hypervisor_type == "rhevm":
             rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_hypervisor)
             hostname = self.rhevm_host_name_by_guestname(ssh_hypervisor, rhevm_shell, guest_name)

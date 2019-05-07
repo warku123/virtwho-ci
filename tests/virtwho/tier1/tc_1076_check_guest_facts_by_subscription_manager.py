@@ -19,6 +19,7 @@ class Testcase(Testing):
                 'esx'               :'vmware',
                 'hyperv'            :'hyperv',
                 'xen'               :'xen',
+                'kubevirt'          :'kvm',
                 }
 
         # case steps
