@@ -184,7 +184,7 @@ class Testing(Provision):
                 }
         return configs
 
-    def hypervisor_supported(sefl, hypervisor_type):
+    def hypervisor_supported(self, hypervisor_type):
         if hypervisor_type in (
                 'esx',
                 'hyperv',
