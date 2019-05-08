@@ -402,6 +402,7 @@ class Testing(Provision):
             host = var[0]
         if hypervisor_type == "rhevm" \
                 or hypervisor_type == "libvirt-remote" \
+                or hypervisor_type == "kubevirt" \
                 or hypervisor_type == "xen":
             if action == "off":
                 cmd = "iptables -I INPUT -s {0} -j DROP".format(host)
@@ -1016,11 +1017,11 @@ class Testing(Provision):
                     and "Unable to connect to" not in output \
                     and "No such file or directory" not in output:
                 break
-        start=time.clock()
+        start=time.time()
         while True:
             time.sleep(5)
-            end=time.clock()
-            spend_time = int((end-start)*10)
+            end=time.time()
+            spend_time = int(end-start)
             pending_job, is_429, loop_num, loop_time, send_num, error_num, error_list, thread_num = self.vw_thread_callback()
             if is_429 == "yes":
                 logger.info("virt-who is terminated by 429 status")
@@ -1032,7 +1033,7 @@ class Testing(Provision):
                 logger.info("virt-who is terminated by error msg")
                 break
             if spend_time >= timeout:
-                logger.info("virt-who is terminated by timeout(10m)")
+                logger.info("virt-who is terminated by timeout(360s)")
                 break
             if oneshot is False:
                 if send_num >= exp_send and loop_num >= exp_loopnum:
@@ -1092,7 +1093,7 @@ class Testing(Provision):
                 data = item[2]
         return data, tty_output, rhsm_output
 
-    def vw_start(self, cli=None, timeout=100, exp_send=1, exp_loopnum=0, oneshot=False, event=None, web_check=True, exp_error=False):
+    def vw_start(self, cli=None, timeout=360, exp_send=1, exp_loopnum=0, oneshot=False, event=None, web_check=True, exp_error=False):
         for i in range(3):
             data, tty_output, rhsm_output = self.vw_start_thread(cli, timeout, exp_send, exp_loopnum, oneshot, event, exp_error)
             if data['is_429'] == "yes":
