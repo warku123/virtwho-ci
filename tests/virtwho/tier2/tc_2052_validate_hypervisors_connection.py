@@ -39,11 +39,11 @@ class Testcase(Testing):
         try:
             logger.info(">>>step2: disconnect virt-who host from hyperivosr")
             self.hypervisor_firewall_setup("off")
-            start = time.clock()
+            start = time.time()
             while True:
                 time.sleep(30)
-                end = time.clock()
-                spend_time = int((end - start) * 10)
+                end = time.time()
+                spend_time = int(end - start)
                 error_num, error_list = self.vw_callback_error_num()
                 thread_num = self.vw_callback_thread_num()
                 logger.info("error_num: {0}, thread_num: {1}".format(error_num, thread_num))
@@ -56,8 +56,8 @@ class Testcase(Testing):
                     logger.info("virt-who is disconnected from hyperivosr by timeout")
                     results.setdefault('step2', []).append(True)
                     break
-                if spend_time >= 60:
-                    logger.info("virt-who is timeout(6m)")
+                if spend_time >= 360:
+                    logger.info("virt-who is timeout(360s)")
                     results.setdefault('step2', []).append(False)
                     break
         except:

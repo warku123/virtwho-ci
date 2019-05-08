@@ -44,13 +44,14 @@ class Testcase(Testing):
                 "password": register_config['ssh_passwd'],
                 }
         ak_list = {
-        'libvirt-local':  'libvirt-local_ak',
-        'libvirt-remote': 'libvirt-remote_ak',
-        'esx':            'esx_ak',
-        'hyperv':         'hyperv_ak',
-        'xen':            'xen_ak',
-        'vdsm':           'vdsm_ak',
-        'rhevm':          'rhevm_ak'
+        'libvirt-local':    'libvirt-local_ak',
+        'libvirt-remote':   'libvirt-remote_ak',
+        'esx':              'esx_ak',
+        'hyperv':           'hyperv_ak',
+        'xen':              'xen_ak',
+        'vdsm':             'vdsm_ak',
+        'rhevm':            'rhevm_ak',
+        'kubevirt':         'kubevirt_ak'
         }
         ak_name = ak_list[hypervisor_type]
 
