@@ -1322,7 +1322,7 @@ class Provision(Register):
                 return True
         raise FailException("Failed to install satellite package({0})".format(sat_host))
 
-    def satellite_deploy(self, ssh_sat, admin_user, admin_passwd, manifest_url):
+    def satellite_deploy(self, ssh_sat, admin_user, admin_passwd, manifest_url, sat_ver):
         sat_host = ssh_sat['host']
         manifest_path = "/tmp/manifest/"
         ret, output = self.runcmd("mkdir -p {0}".format(manifest_path), ssh_sat, desc="create manifest_path")
@@ -1333,6 +1333,8 @@ class Provision(Register):
         else:
             raise FailException("No manifest file found")
         cmd = "satellite-installer --scenario satellite --foreman-admin-password={0}".format(admin_passwd)
+        if sat_ver == "6.6":
+            cmd = "satellite-installer --scenario satellite --foreman-initial-admin-password={0}".format(admin_passwd)
         ret, output = self.runcmd(cmd, ssh_sat, desc="run satellite-installer --scenario satellite")
         if ret != 0:
             cmd = "for i in pulp_resource_manager pulp_workers pulp_celerybeat; do service $i stop; done"
@@ -1340,6 +1342,8 @@ class Provision(Register):
             cmd = "sudo -u apache pulp-manage-db"
             ret, output = self.runcmd(cmd, ssh_sat, desc="re-deploy satellite, pulp-manage-db")
             cmd = "echo y |satellite-installer --reset --scenario satellite  --foreman-admin-password=admin"
+            if sat_ver == "6.6":
+                cmd = "echo y |satellite-installer --reset --scenario satellite  --foreman-initial-admin-password=admin"
             ret, output = self.runcmd(cmd, ssh_sat, desc="re-deploy satellite start")
             if ret != 0:
                 raise FailException("Failed to satellite-installer --scenario satellite({0})".format(sat_host))
@@ -1380,7 +1384,7 @@ class Provision(Register):
             self.satellite_cdn_pool_attach(ssh_sat)
             self.satellite_cdn_repo_enable(ssh_sat, sat_ver, rhel_ver)
         self.satellite_pkg_install(ssh_sat)
-        self.satellite_deploy(ssh_sat, admin_user, admin_passwd, manifest_url)
+        self.satellite_deploy(ssh_sat, admin_user, admin_passwd, manifest_url, sat_ver)
         self.satellite_host_setting(ssh_sat, admin_user, admin_passwd)
         self.satellite_org_create(ssh_sat, admin_user, admin_passwd, extra_org)
         self.satellite_active_key_create(ssh_sat, admin_user, admin_passwd, activation_key)
