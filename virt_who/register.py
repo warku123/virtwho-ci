@@ -809,8 +809,10 @@ class Register(Base):
                 logger.info("Succeeded to search, unexpected host is not exist in org %s" % org_name)
                 return True
 
-    def satellite_active_key_create(self, ssh_sat, admin_user, admin_passwd, key_name, org_id=1, desc=""):
+    def satellite_active_key_create(self, ssh_sat, admin_user, admin_passwd, key_name, desc=""):
         baseurl = "https://{0}".format(ssh_sat['host'])
+        org_name = 'Default_Organization'
+        org_id = self.satellite_org_id_get(ssh_sat, admin_user, admin_passwd, org_name)
         curl_header = '-H "Accept:application/json,version=2" -H "Content-Type:application/json"'
         active_key_json = json.dumps('\
                 {"organization_id":"%s", \
@@ -825,7 +827,7 @@ class Register(Base):
         output = self.is_json(output.strip())
         if ret == 0 and output is not False and output is not None and output != "":
             for i in range(5):
-                output = self.satellite_active_key_list(ssh_sat, admin_user, admin_passwd, org_id)
+                output = self.satellite_active_key_list(ssh_sat, admin_user, admin_passwd)
                 if output.has_key('results'):
                     for item in output['results']:
                         if item['name'] == key_name:
@@ -835,8 +837,10 @@ class Register(Base):
                 time.sleep(30)
         raise FailException("Failed to create activation_key")
 
-    def satellite_active_key_list(self, ssh_sat, admin_user, admin_passwd, org_id=1):
+    def satellite_active_key_list(self, ssh_sat, admin_user, admin_passwd):
         baseurl = "https://{0}".format(ssh_sat['host'])
+        org_name = 'Default_Organization'
+        org_id = self.satellite_org_id_get(ssh_sat, admin_user, admin_passwd, org_name)
         cmd = "curl -X GET -s -k -u %s:%s '%s/katello/api/activation_keys?organization_id=%s'" \
                 % (admin_user, admin_passwd, baseurl, org_id)
         ret, output = self.runcmd(cmd, ssh_sat, desc="satellite list activation_keys info")
