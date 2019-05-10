@@ -55,10 +55,14 @@ class Testcase(Testing):
         }
         ak_name = ak_list[hypervisor_type]
 
+        default_org = deploy.satellite.default_org
+        default_org_id = self.satellite_org_id_get(self, ssh_sat, admin_user, admin_passwd, default_org)
+
         # Case Steps
         try:
             logger.info(">>>step1: Create activation key {0}".format(ak_name))
-            self.satellite_active_key_create(ssh_sat, admin_user, admin_passwd, ak_name)
+
+            self.satellite_active_key_create(ssh_sat, admin_user, admin_passwd, ak_name, default_org_id)
         except:
             results.setdefault('step1', []).append(False)
             pass
@@ -93,8 +97,8 @@ class Testcase(Testing):
         try:
             logger.info(">>>step3: enable auto-attach with subscription specified")
             # add vdc virtual sku to activation key, guest will auto-attach the best match pool from subscriptions in the key
-            vdc_katello_id = self.satellite_katello_id(ssh_sat, register_config, vdc_virtual_sku_pool_id)
-            self.satellite_ak_add_subscription(ssh_sat, admin_user, admin_passwd, ak_name, vdc_katello_id)
+            vdc_katello_id = self.satellite_katello_id(ssh_sat, register_config, vdc_virtual_sku_pool_id, default_org_id)
+            self.satellite_ak_add_subscription(ssh_sat, admin_user, admin_passwd, ak_name, vdc_katello_id, default_org_id)
             self.system_register_with_ak(self.ssh_guest(), ak_name)
             output = self.system_sku_consumed(self.ssh_guest())
             res1 = self.vw_msg_search(output, limit_virtual_sku_pool_id, exp_exist=False)
@@ -103,7 +107,7 @@ class Testcase(Testing):
             results.setdefault('step3', []).append(res2)
             # then add limit virtual sku to activation key, guest will auto-attach the best match pool from subscriptions in the key
             limit_katello_id = self.satellite_katello_id(self.ssh_host(), register_config, limit_virtual_sku_pool_id)
-            self.satellite_ak_add_subscription(ssh_sat, admin_user, admin_passwd, ak_name, limit_katello_id)
+            self.satellite_ak_add_subscription(ssh_sat, admin_user, admin_passwd, ak_name, limit_katello_id, default_org_id)
             self.system_register_with_ak(self.ssh_guest(), ak_name)
             output = self.system_sku_consumed(self.ssh_guest())
             res1 = self.vw_msg_search(output, limit_virtual_sku_pool_id, exp_exist=True)
@@ -117,7 +121,7 @@ class Testcase(Testing):
         try:
             logger.info(">>>step4: disable auto-attach with subscription specified")
             # guest will auto-attach all pools in the key
-            self.satellite_ak_edit_auto_attach(ssh_sat, admin_user, admin_passwd, ak_name, auto_attach='false')
+            self.satellite_ak_edit_auto_attach(ssh_sat, admin_user, admin_passwd, ak_name, default_org_id, auto_attach='false')
             self.system_register_with_ak(self.ssh_guest(), ak_name)
             output = self.system_sku_consumed(self.ssh_guest())
             res1 = self.vw_msg_search(output, limit_virtual_sku_pool_id, exp_exist=True)
@@ -131,8 +135,8 @@ class Testcase(Testing):
         try:
             logger.info(">>>step5: disable auto-attach with no subscription specified")
             # guest will not auto-attach any pool
-            self.satellite_ak_rm_subscription(ssh_sat, admin_user, admin_passwd, ak_name, limit_katello_id)
-            self.satellite_ak_rm_subscription(ssh_sat, admin_user, admin_passwd, ak_name, vdc_katello_id)
+            self.satellite_ak_rm_subscription(ssh_sat, admin_user, admin_passwd, ak_name, limit_katello_id, default_org_id)
+            self.satellite_ak_rm_subscription(ssh_sat, admin_user, admin_passwd, ak_name, vdc_katello_id, default_org_id)
             self.system_register_with_ak(self.ssh_guest(), ak_name)
             cmd = "subscription-manager list --co"
             ret, output = self.runcmd(cmd, self.ssh_guest(), desc="subscription list consumed for guest")
@@ -149,13 +153,13 @@ class Testcase(Testing):
             logger.info(">>>step finally: Clear environment")
             self.vw_web_host_delete(host_name, host_uuid)
             self.vw_web_host_delete(guest_name, guest_uuid)
-            self.satellite_ak_delete(ssh_sat, admin_user, admin_passwd, ak_name)
+            self.satellite_ak_delete(ssh_sat, admin_user, admin_passwd, ak_name, default_org_id)
 
         # Case Result
         self.vw_case_result(results)
 
     def satellite_ak_delete(self, ssh_sat, admin_user, admin_passwd, key_name, org_id=1):
-        output = self.satellite_active_key_list(ssh_sat, admin_user, admin_passwd)
+        output = self.satellite_active_key_list(ssh_sat, admin_user, admin_passwd, org_id)
         key_id = self.satellite_ak_id_get(output, key_name)
         baseurl = "https://%s" % self.get_hostname(ssh_sat)
         curl_header = '-H "Accept:application/json,version=2" -H "Content-Type:application/json"'
@@ -201,8 +205,8 @@ class Testcase(Testing):
         else:
             raise FailException('failed to register system using activation_key')
 
-    def satellite_ak_add_subscription(self, ssh_sat, admin_user, admin_passwd, key_name, katello_id, quantity=1):
-        output = self.satellite_active_key_list(ssh_sat, admin_user, admin_passwd)
+    def satellite_ak_add_subscription(self, ssh_sat, admin_user, admin_passwd, key_name, katello_id, org_id, quantity=1):
+        output = self.satellite_active_key_list(ssh_sat, admin_user, admin_passwd, org_id)
         key_id = self.satellite_ak_id_get(output, key_name)
         baseurl = "https://%s" % self.get_hostname(ssh_sat)
         curl_header = '-H "accept:application/json,version=2" -H "content-type:application/json"'
@@ -217,8 +221,8 @@ class Testcase(Testing):
         else:
             raise FailException("Failed to add subscription for activation key")
 
-    def satellite_ak_rm_subscription(self, ssh_sat, admin_user, admin_passwd, key_name, katello_id):
-        output = self.satellite_active_key_list(ssh_sat, admin_user, admin_passwd)
+    def satellite_ak_rm_subscription(self, ssh_sat, admin_user, admin_passwd, key_name, katello_id, org_id):
+        output = self.satellite_active_key_list(ssh_sat, admin_user, admin_passwd, org_id)
         key_id = self.satellite_ak_id_get(output, key_name)
         baseurl = "https://%s" % self.get_hostname(ssh_sat)
         curl_header = '-H "Accept:application/json,version=2" -H "Content-Type:application/json"'
@@ -234,7 +238,7 @@ class Testcase(Testing):
             raise FailException("Failed to remove subscription from activation key")
 
     def satellite_ak_edit_auto_attach(self, ssh_sat, admin_user, admin_passwd, key_name, org_id=1, auto_attach='true'):
-        output = self.satellite_active_key_list(ssh_sat, admin_user, admin_passwd)
+        output = self.satellite_active_key_list(ssh_sat, admin_user, admin_passwd, org_id)
         key_id = self.satellite_ak_id_get(output, key_name)
         baseurl = "https://%s" % self.get_hostname(ssh_sat)
         curl_header = '-H "Accept:application/json,version=2" -H "Content-Type:application/json"'
