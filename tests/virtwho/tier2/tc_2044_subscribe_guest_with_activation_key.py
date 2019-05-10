@@ -154,7 +154,7 @@ class Testcase(Testing):
         # Case Result
         self.vw_case_result(results)
 
-    def satellite_ak_delete(self, ssh_sat, admin_user, admin_passwd, key_name):
+    def satellite_ak_delete(self, ssh_sat, admin_user, admin_passwd, key_name, org_id=1):
         output = self.satellite_active_key_list(ssh_sat, admin_user, admin_passwd)
         key_id = self.satellite_ak_id_get(output, key_name)
         baseurl = "https://%s" % self.get_hostname(ssh_sat)
@@ -164,7 +164,7 @@ class Testcase(Testing):
         ret, output = self.runcmd(cmd, ssh_sat, desc="satellite delete activation key id:%s" % key_id)
         if ret == 0:
             for i in range(5):
-                output = self.satellite_active_key_list(ssh_sat, admin_user, admin_passwd)
+                output = self.satellite_active_key_list(ssh_sat, admin_user, admin_passwd, org_id)
                 if output['total'] != 0:
                     for item in output['results']:
                         id_list = []
@@ -233,12 +233,10 @@ class Testcase(Testing):
         else:
             raise FailException("Failed to remove subscription from activation key")
 
-    def satellite_ak_edit_auto_attach(self, ssh_sat, admin_user, admin_passwd, key_name, auto_attach='true'):
+    def satellite_ak_edit_auto_attach(self, ssh_sat, admin_user, admin_passwd, key_name, org_id=1, auto_attach='true'):
         output = self.satellite_active_key_list(ssh_sat, admin_user, admin_passwd)
         key_id = self.satellite_ak_id_get(output, key_name)
         baseurl = "https://%s" % self.get_hostname(ssh_sat)
-        org_name = 'Default_Organization'
-        org_id = self.satellite_org_id_get(ssh_sat, admin_user, admin_passwd, org_name)
         curl_header = '-H "Accept:application/json,version=2" -H "Content-Type:application/json"'
         data_json = json.dumps('{"organization_id":"%s", "auto_attach":"%s"}' % (org_id, auto_attach))
         cmd = "curl %s -X PUT -s -k -u %s:%s -d %s %s/katello/api/activation_keys/%s" \
