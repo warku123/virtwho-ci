@@ -149,6 +149,16 @@ class Register(Base):
             time.sleep(180)
         raise FailException("Failed to register system {0} to {1}({2})".format(host, server, register_type))
 
+    def system_register_with_ak(self, ssh, register_config, key_name):
+        owner = register_config['owner']
+        self.system_unregister(ssh)
+        cmd = 'subscription-manager register  --org="{0}" --activationkey="{1}"'.format(owner, key_name)
+        ret, output = self.runcmd(cmd, ssh)
+        if 'system has been registered with ID' in output:
+            logger.info('Succeded to register system using activation_key: {0}'.format(key_name))
+        else:
+            raise FailException('Failed to register system using activation_key')
+
     def system_unregister(self, ssh):
         for i in range(3):
             ret, output = self.runcmd("subscription-manager unregister", ssh)
@@ -539,20 +549,22 @@ class Register(Base):
     #**************************************
     # Satellite API Function
     #**************************************
-    def satellite_host_setting(self, ssh_sat, admin_user, admin_passwd):
-        baseurl = "https://{0}".format(ssh_sat['host'])
-        cmd = "curl -X GET -s -k -u {0}:{1} {2}/api/settings/?per_page=1000".format(admin_user, admin_passwd, baseurl)
+    def satellite_host_setting(self, ssh, register_config):
+        api = register_config['api']
+        username = register_config['username']
+        password = register_config['password']
+        cmd = "curl -X GET -s -k -u {0}:{1} {2}/api/settings/?per_page=1000".format(username, password, api)
         for i in range(3):
-            ret, output = self.runcmd(cmd, ssh_sat, desc="satellite setting list")
+            ret, output = self.runcmd(cmd, ssh)
             output = self.is_json(output.strip())
             if output is not False and output is not None and output != "":
                 for item in output["results"]:
                     if item['name'] == "unregister_delete_host":
                         curl_header = '-H "accept:application/json,version=2" -H "content-type:application/json"'
                         json_data = json.dumps('{"value":"true"}')
-                        cmd = 'curl -X PUT -s -k %s -u %s:%s -d %s %s/api/settings/%s' \
-                                %(curl_header, admin_user, admin_passwd, json_data, baseurl, item['id'])
-                        ret, output = self.runcmd(cmd, ssh_sat, desc="satellite update unregister_delete_host")
+                        cmd = 'curl -X PUT -s -k {0} -u {1}:{2} -d {3} {4}/api/settings/{5}'.format(
+                                curl_header, username, password, json_data, api, item['id'])
+                        ret, output = self.runcmd(cmd, ssh)
                         if ret == 0 and '"value":true' in output:
                             logger.info("Succeeded to update unregister_delete_host option to True")
                         else:
@@ -589,12 +601,13 @@ class Register(Base):
         logger.warning("Failed to get satellite host_id for host({0}), maybe mapping is not sent".format(host_name))
         return None
 
-    def satellite_katello_id(self, ssh, register_config, pool_id):
+    def satellite_katello_id(self, ssh, register_config, pool_id, org_name="Default_Organization"):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
-        cmd = "curl -X GET -s -k -u {0}:{1} {2}/katello/api/organizations/1/subscriptions/?per_page=1000".format(
-                username, password, api)
+        org_id = self.satellite_org_id_get(ssh, register_config, org_name)
+        cmd = "curl -X GET -s -k -u {0}:{1} {2}/katello/api/organizations/{3}/subscriptions/?per_page=1000".format(
+                username, password, api, org_id)
         for i in range(3):
             ret, output = self.runcmd(cmd, ssh, desc="satellite pools list")
             output = self.is_json(output.strip())
@@ -639,12 +652,12 @@ class Register(Base):
             cmd = 'curl -X PUT -s -k {0} -u {1}:{2} -d {3} {4}/api/v2/hosts/{5}/subscriptions/add_subscriptions'.format(
                     curl_header, username, password, json_data, api, host_id)
             for i in range(3):
+                time.sleep(30)
                 ret, output = self.runcmd(cmd, ssh, desc="satellite attach pool")
                 if pool_id in output and "subscription_id" in output and "product_id" in output:
                     logger.info("Succeeded to attach pool({0}) for host_id({0})".format(pool_id, host_id))
                     return True
-                logger.warning("can't attach pool({0}) for host_id({1}), try again after 15s".format(pool_id, host_id))
-                time.sleep(15)
+                logger.warning("can't attach pool({0}) for host_id({1}), try again after 30s".format(pool_id, host_id))
         raise FailException("Failed to attach pool({0}) for host_id({1})".format(pool_id, host_id))
 
     def satellite_host_unattach(self, ssh, register_config, host_name, host_uuid):
@@ -718,68 +731,73 @@ class Register(Base):
                 return True
         return False
 
-    def satellite_org_create(self, ssh_sat, admin_user, admin_passwd, org_name, org_label="", desc=""):
-        baseurl = "https://{0}".format(ssh_sat['host'])
+    def satellite_org_create(self, ssh, register_config, org_name, org_label="", desc=""):
+        api = register_config['api']
+        username = register_config['username']
+        password = register_config['password']
         if org_label == "":
             org_label = org_name
         curl_header = '-H "Accept:application/json,version=2" -H "Content-Type:application/json"'
         org_json = json.dumps('{"name":"%s", "label":"%s", "description":"%s"}' \
                             % (org_name, org_label, desc))
-        cmd = "curl %s -X POST -s -k -u %s:%s -d %s %s/katello/api/organizations" \
-                % (curl_header, admin_user, admin_passwd, org_json, baseurl)
-        ret, output = self.runcmd(cmd, ssh_sat, desc="satellite create new organization")
+        cmd = "curl {0} -X POST -s -k -u {1}:{2} -d {3} {4}/katello/api/organizations".format(
+                curl_header, username, password, org_json, api)
+        ret, output = self.runcmd(cmd, ssh)
         output = self.is_json(output.strip())
         if ret == 0 and output is not False and output is not None and output != "":
             for i in range(3):
-                output = self.satellite_org_list(ssh_sat, admin_user, admin_passwd)
+                output = self.satellite_org_list(ssh, register_config)
                 if output.has_key('results'):
                     for item in output['results']:
                         if item['name'] == org_name:
-                            logger.info("succeeded to create organization %s" % org_name)
+                            logger.info("succeeded to create organization {0}".format(org_name))
                             return
-                logger.warning("no results found for created organization, try again after 15s...")
+                logger.warning("no org found for creation, try again after 15s...")
                 time.sleep(15)
         raise FailException("Failed to create organization")
 
-    def satellite_org_list(self, ssh_sat, admin_user, admin_passwd):
-        baseurl = "https://{0}".format(ssh_sat['host'])
-        cmd = "curl -X GET -s -k -u %s:%s '%s/katello/api/organizations'" \
-                % (admin_user, admin_passwd, baseurl)
-        ret, output = self.runcmd(cmd, ssh_sat, desc="satellite list organization info")
-        output = self.is_json(output.strip())
-        if ret == 0 and output is not False and output is not None and output != "":
-            return output
+    def satellite_org_list(self, ssh, register_config):
+        api = register_config['api']
+        username = register_config['username']
+        password = register_config['password']
+        for i in range(3):
+            cmd = "curl -X GET -s -k -u {0}:{1} '{2}/katello/api/organizations'".format(
+                    username, password, api)
+            ret, output = self.runcmd(cmd, ssh)
+            output = self.is_json(output.strip())
+            if ret == 0 and output is not False and output is not None and output != "":
+                return output
         raise FailException("Failed to list organization info")
 
-    def satellite_org_id_get(self, ssh_sat, admin_user, admin_passwd, org_name):
+    def satellite_org_id_get(self, ssh, register_config, org_name):
         for i in range(3):
-            org_list = self.satellite_org_list(ssh_sat, admin_user, admin_passwd)
+            org_list = self.satellite_org_list(ssh, register_config)
             if org_list.has_key('results'):
                 for item in org_list['results']:
                     if item['label'] == org_name:
                         org_id = item['id']
-                        logger.info("succeeded to get org id:%s" % org_id)
                         return org_id
-            logger.warning("no %s organization find, try again after 15s..." % org_name)
+            logger.warning("no {0} organization find, try again after 15s...".format(org_name))
             time.sleep(15)
-        logger.warning("failed to find organization:%s" % org_name)
+        logger.warning("Failed to find organization: {0}".format(org_name))
         return False
 
-    def satellite_hosts_list(self, ssh_sat, admin_user, admin_passwd, org_name):
-        baseurl = "https://{0}".format(ssh_sat['host'])
-        org_id = self.satellite_org_id_get(ssh_sat, admin_user, admin_passwd, org_name)
-        cmd = "curl -X GET -s -k -u %s:%s '%s/api/organizations/%s/hosts'" \
-                % (admin_user, admin_passwd, baseurl, org_id)
-        ret, output = self.runcmd(cmd, ssh_sat, desc="satellite list all hosts in %s" % org_name)
+    def satellite_hosts_list(self, ssh, register_config, org_name):
+        api = register_config['api']
+        username = register_config['username']
+        password = register_config['password']
+        org_id = self.satellite_org_id_get(ssh, register_config, org_name)
+        cmd = "curl -X GET -s -k -u {0}:{1} '{2}/api/organizations/{3}/hosts'".format(username, password, api, org_id)
+        ret, output = self.runcmd(cmd, ssh)
         output = self.is_json(output.strip())
         if ret == 0 and output is not False and output is not None and output != "":
-            logger.info("succeeded to list all hosts in %s" % org_name)
+            logger.info("succeeded to list all hosts")
             return output
         else:
-            raise FailException("Failed to list all hosts in %s" % org_name)
+            raise FailException("Failed to list all hosts")
 
-    def satellite_hosts_search(self, ssh_sat, admin_user, admin_passwd, org_name, hostname, hostuuid, exp_exist=True):
-        hosts = self.satellite_hosts_list(ssh_sat, admin_user, admin_passwd, org_name)
+    def satellite_hosts_search(self, ssh, register_config, org_name, hostname, hostuuid, exp_exist=True):
+        hosts = self.satellite_hosts_list(ssh, register_config, org_name)
         if hosts.has_key('results'):
             name_list = []
             for item in hosts['results']:
@@ -790,27 +808,29 @@ class Register(Base):
             res2 = re.findall('.*%s.*' % hostuuid, name_list, re.I)
             num = len(res1) + len(res2)
             if num > 0 and exp_exist is True:
-                    logger.info("Succeeded to search, expected host is exist in org %s" % org_name)
+                    logger.info("Succeeded to search, expected host is exist in org {0}".format(org_name))
                     return True
             if num == 0 and exp_exist is True:
-                    logger.error("Failed to search, expected host is not exist in org %s" % org_name)
+                    logger.error("Failed to search, expected host is not exist in org {0}".format(org_name))
                     return False
             if num > 0 and exp_exist is False:
-                    logger.error("Failed to search, unexpected host is exist in org %s" % org_name)
+                    logger.error("Failed to search, unexpected host is exist in org {0}".format(org_name))
                     return False
             if num == 0 and exp_exist is False:
-                    logger.info("Succeeded to search, unexpected host is not exist in org %s" % org_name)
+                    logger.info("Succeeded to search, unexpected host is not exist in org {0}".format(org_name))
                     return True
         else:
             if exp_exist is True:
-                logger.error("Failed to search, expected host is not exist in org %s" % org_name)
+                logger.error("Failed to search, expected host is not exist in org {0}".format(org_name))
                 return False
             if exp_exist is False:
-                logger.info("Succeeded to search, unexpected host is not exist in org %s" % org_name)
+                logger.info("Succeeded to search, unexpected host is not exist in org {0}".format(org_name))
                 return True
 
-    def satellite_active_key_create(self, ssh_sat, admin_user, admin_passwd, key_name, org_id=1, desc=""):
-        baseurl = "https://{0}".format(ssh_sat['host'])
+    def satellite_active_key_create(self, ssh, register_config, key_name, org_id=1, desc=""):
+        api = register_config['api']
+        username = register_config['username']
+        password = register_config['password']
         curl_header = '-H "Accept:application/json,version=2" -H "Content-Type:application/json"'
         active_key_json = json.dumps('\
                 {"organization_id":"%s", \
@@ -819,13 +839,13 @@ class Register(Base):
                 "environment": {"id":1, "name":"Library"}, \
                 "content_view_id":"1", \
                 "content_view":{"id":1,"name":"Default Organization View"}}' % (org_id, key_name, desc))
-        cmd = "curl %s -X POST -s -k -u %s:%s -d %s %s/katello/api/activation_keys" \
-                % (curl_header, admin_user, admin_passwd, active_key_json, baseurl)
-        ret, output = self.runcmd(cmd, ssh_sat, desc="satellite create activation key")
+        cmd = "curl {0} -X POST -s -k -u {1}:{2} -d {3} {4}/katello/api/activation_keys".format(
+                curl_header, username, password, active_key_json, api)
+        ret, output = self.runcmd(cmd, ssh)
         output = self.is_json(output.strip())
         if ret == 0 and output is not False and output is not None and output != "":
             for i in range(5):
-                output = self.satellite_active_key_list(ssh_sat, admin_user, admin_passwd, org_id)
+                output = self.satellite_active_key_list(ssh, register_config, org_id)
                 if output.has_key('results'):
                     for item in output['results']:
                         if item['name'] == key_name:
@@ -835,12 +855,101 @@ class Register(Base):
                 time.sleep(30)
         raise FailException("Failed to create activation_key")
 
-    def satellite_active_key_list(self, ssh_sat, admin_user, admin_passwd, org_id=1):
-        baseurl = "https://{0}".format(ssh_sat['host'])
-        cmd = "curl -X GET -s -k -u %s:%s '%s/katello/api/activation_keys?organization_id=%s'" \
-                % (admin_user, admin_passwd, baseurl, org_id)
-        ret, output = self.runcmd(cmd, ssh_sat, desc="satellite list activation_keys info")
+    def satellite_active_key_delete(self, ssh, register_config, key_name, org_id=1):
+        key_id = self.satellite_active_key_id_get(ssh, register_config, key_name, org_id)
+        api = register_config['api']
+        username = register_config['username']
+        password = register_config['password']
+        curl_header = '-H "Accept:application/json,version=2" -H "Content-Type:application/json"'
+        cmd = "curl {0} -X DELETE -s -k -u {1}:{2} {3}/katello/api/activation_keys/{4}".format(
+                curl_header, username, password, api, key_id)
+        ret, output = self.runcmd(cmd, ssh)
+        if ret == 0:
+            for i in range(5):
+                output = self.satellite_active_key_list(ssh, register_config, org_id)
+                if output['total'] != 0:
+                    for item in output['results']:
+                        id_list = []
+                        id_list.append(item['id'])
+                        if key_id not in id_list:
+                            logger.info("Succeeded to delete activation_key id: {0}".format(key_id))
+                            return
+                        logger.warning("Activation key still exists, try again after 30s...")
+                        time.sleep(30)
+                else:
+                    logger.info("Succeeded to delete activation_key id: {0}".format(key_id))
+                    return
+        raise FailException("Failed to delete activation_key")
+
+    def satellite_active_key_list(self, ssh, register_config, org_id=1):
+        api = register_config['api']
+        username = register_config['username']
+        password = register_config['password']
+        cmd = "curl -X GET -s -k -u {0}:{1} '{2}/katello/api/activation_keys?organization_id={3}'".format(
+                username, password, api, org_id)
+        ret, output = self.runcmd(cmd, ssh)
         output = self.is_json(output.strip())
         if ret == 0 and output is not False and output is not None and output != "":
             return output
         raise FailException("Failed to list activation_keys info")
+
+    def satellite_active_key_id_get(self, ssh, register_config, key_name, org_id=1):
+        output = self.satellite_active_key_list(ssh, register_config, org_id)
+        if output is not False and output is not None and output != "":
+            for item in output['results']:
+                if item['name'] == key_name:
+                    key_id = item['id']
+                    logger.info("Succeded to get activation key id: %s" % key_id)
+                    return key_id
+        raise FailException("Failed to get activation key id of %s" % key_name)
+
+    def satellite_active_key_attach_sku(self, ssh, register_config, key_name, katello_id, org_id=1, quantity=1):
+        key_id = self.satellite_active_key_id_get(ssh, register_config, key_name, org_id)
+        api = register_config['api']
+        username = register_config['username']
+        password = register_config['password']
+        curl_header = '-H "accept:application/json,version=2" -H "content-type:application/json"'
+        data_json = json.dumps('{"id":"%s", "subscription_id":%s, "quantity":%s}' \
+                 % (key_id, katello_id, quantity))
+        cmd = "curl {0} -X PUT -s -k -u {1}:{2} -d {3} {4}/katello/api/v2/activation_keys/{5}/add_subscriptions".format(
+                curl_header, username, password, data_json, api, key_id)
+        ret, output = self.runcmd(cmd, ssh)
+        output = self.is_json(output.strip())
+        if ret == 0 and output is not False and output is not None and output != "":
+            logger.info("Succeeded to add subscription {0} for activation key".format(katello_id))
+        else:
+            raise FailException("Failed to add subscription for activation key")
+
+    def satellite_active_key_unattach_sku(self, ssh, register_config, key_name, katello_id, org_id=1):
+        key_id = self.satellite_active_key_id_get(ssh, register_config, key_name, org_id)
+        api = register_config['api']
+        username = register_config['username']
+        password = register_config['password']
+        curl_header = '-H "Accept:application/json,version=2" -H "Content-Type:application/json"'
+        data_json = json.dumps('{"id":"%s", "subscription_id":"%s"}' \
+                 % (key_id, katello_id))
+        cmd = "curl {0} -X PUT -s -k -u {1}:{2} -d {3} {4}/katello/api/v2/activation_keys/{5}/remove_subscriptions".format(
+                curl_header, username, password, data_json, api, key_id)
+        ret, output = self.runcmd(cmd, ssh)
+        output = self.is_json(output.strip())
+        if ret == 0 and output is not False and output is not None and output != "":
+            logger.info("Succeeded to remove subscription from activation key")
+        else:
+            raise FailException("Failed to remove subscription from activation key")
+
+    def satellite_active_key_auto_attach_enable(self, ssh, register_config, key_name, org_id=1, auto_attach='true'):
+        key_id = self.satellite_active_key_id_get(ssh, register_config, key_name, org_id)
+        api = register_config['api']
+        username = register_config['username']
+        password = register_config['password']
+        curl_header = '-H "Accept:application/json,version=2" -H "Content-Type:application/json"'
+        data_json = json.dumps('{"organization_id":"%s", "auto_attach":"%s"}' % (org_id, auto_attach))
+        cmd = "curl {0} -X PUT -s -k -u {1}:{2} -d {3} {4}/katello/api/activation_keys/{5}".format(
+                curl_header, username, password, data_json, api, key_id)
+        ret, output = self.runcmd(cmd, ssh)
+        output = self.is_json(output.strip())
+        if ret == 0 and output is not False and output is not None and output != "":
+            logger.info("Succeeded to set auto_attach to {}".format(auto_attach))
+        else:
+            raise FailException("Failed to set auto_attach")
+

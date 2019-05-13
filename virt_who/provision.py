@@ -1332,25 +1332,25 @@ class Provision(Register):
             manifest_filename = "{0}/{1}".format(manifest_path, output.strip())
         else:
             raise FailException("No manifest file found")
-        cmd = "satellite-installer --scenario satellite --foreman-admin-password={0}".format(admin_passwd)
         if sat_ver == "6.6":
-            cmd = "satellite-installer --scenario satellite --foreman-initial-admin-password={0}".format(admin_passwd)
-        ret, output = self.runcmd(cmd, ssh_sat, desc="run satellite-installer --scenario satellite")
+            options = "--disable-system-checks --foreman-admin-password={0}".format(admin_passwd)
+        else:
+            options = "--disable-system-checks --foreman-initial-admin-password={0}".format(admin_passwd)
+        cmd = "satellite-installer --scenario satellite {0}".format(options)
+        ret, output = self.runcmd(cmd, ssh_sat)
         if ret != 0:
             cmd = "for i in pulp_resource_manager pulp_workers pulp_celerybeat; do service $i stop; done"
-            ret, output = self.runcmd(cmd, ssh_sat, desc="re-deploy satellite, stop pulp service")
+            ret, output = self.runcmd(cmd, ssh_sat)
             cmd = "sudo -u apache pulp-manage-db"
-            ret, output = self.runcmd(cmd, ssh_sat, desc="re-deploy satellite, pulp-manage-db")
-            cmd = "echo y |satellite-installer --reset --scenario satellite  --foreman-admin-password=admin"
-            if sat_ver == "6.6":
-                cmd = "echo y |satellite-installer --reset --scenario satellite  --foreman-initial-admin-password=admin"
-            ret, output = self.runcmd(cmd, ssh_sat, desc="re-deploy satellite start")
+            ret, output = self.runcmd(cmd, ssh_sat)
+            cmd = "echo y |satellite-installer --reset --scenario satellite {0}".format(options)
+            ret, output = self.runcmd(cmd, ssh_sat)
             if ret != 0:
                 raise FailException("Failed to satellite-installer --scenario satellite({0})".format(sat_host))
         logger.info("Succeeded to run satellite-installer --scenario satellite({0})".format(sat_host))
-        cmd = "hammer -u {0} -p {1} subscription upload --organization-label Default_Organization --file {2}"\
-                .format(admin_user, admin_passwd, manifest_filename)
-        status, output = self.run_loop(cmd, ssh_sat, desc="manifest upload")
+        cmd = "hammer -u {0} -p {1} subscription upload --organization-label Default_Organization --file {2}".format(
+                admin_user, admin_passwd, manifest_filename)
+        status, output = self.run_loop(cmd, ssh_sat)
         if status != "Yes":
             raise FailException("Failed to upload manifest to satellite({0})".format(sat_host))
         logger.info("Succeeded to upload manifest to satellite({0})".format(sat_host))
@@ -1364,17 +1364,29 @@ class Provision(Register):
     def satellite_setup(self, sat_queue, sat_type, sat_host):
         logger.info("Start to deploy %s:%s" % (sat_type, sat_host))
         func_name = sys._getframe().f_code.co_name
+        api = "https://{0}".format(sat_host)
         admin_user = deploy.satellite.admin_user
         admin_passwd = deploy.satellite.admin_passwd
+        ssh_user = deploy.beaker.default_user
+        ssh_passwd = deploy.beaker.default_passwd
         default_org = deploy.satellite.default_org
         extra_org = deploy.satellite.extra_org
+        env = deploy.satellite.default_env
         activation_key = deploy.satellite.activation_key
         manifest_url = deploy.satellite.manifest
-        ssh_sat = {
-                "host": sat_host, 
-                "username":deploy.beaker.default_user,
-                "password":deploy.beaker.default_passwd,
-                }
+        ssh_sat = {"host": sat_host, "username":ssh_user,"password":ssh_passwd}
+        register_config={
+                'type':sat_type,
+                'server':sat_host,
+                'username':admin_user,
+                'password':admin_passwd,
+                'owner':default_org,
+                'env':env,
+                'ssh_user':ssh_user,
+                'ssh_passwd':ssh_passwd,
+                'api':api,
+                'ssh_sat':ssh_sat
+        }
         self.system_init("ci-host-satellite", ssh_sat)
         sat_ver, rhel_ver = self.satellite_version(sat_type)
         if "repo" in sat_type:
@@ -1386,10 +1398,10 @@ class Provision(Register):
             self.satellite_cdn_repo_enable(ssh_sat, sat_ver, rhel_ver)
         self.satellite_pkg_install(ssh_sat)
         self.satellite_deploy(ssh_sat, admin_user, admin_passwd, manifest_url, sat_ver)
-        self.satellite_host_setting(ssh_sat, admin_user, admin_passwd)
-        self.satellite_org_create(ssh_sat, admin_user, admin_passwd, extra_org)
-        default_org_id = self.satellite_org_id_get(self, ssh_sat, admin_user, admin_passwd, default_org)
-        self.satellite_active_key_create(ssh_sat, admin_user, admin_passwd, activation_key, default_org_id)
+        self.satellite_host_setting(ssh_sat, register_config)
+        self.satellite_org_create(ssh_sat, register_config, extra_org)
+        default_org_id = self.satellite_org_id_get(ssh_sat, register_config, default_org)
+        self.satellite_active_key_create(ssh_sat, register_config, activation_key, default_org_id)
         sat_queue.put((sat_type, sat_host))
 
     #*********************************************
@@ -1475,7 +1487,7 @@ class Provision(Register):
         is_created = ""
         if self.docker_container_exist(ssh_docker, cont_port) and self.docker_container_exist(ssh_docker, cont_name):
             is_created = "Yes"
-            logger.info("Successed to create container: {0}:{1}".format(cont_name, cont_port))
+            logger.info("Succeeded to create container: {0}:{1}".format(cont_name, cont_port))
         else:
             logger.info("Command to create docker container: {0}".format(cmd))
             logger.error("Failed to create container: {0}".format(cont_name))
@@ -1537,7 +1549,7 @@ class Provision(Register):
             ssh_master = {"host":master,"username":master_user,"password":master_passwd}
             self.vcenter_host_ready(cert, ssh_vcenter, ssh_master)
             guest_ip = self.vcenter_guest_add(cert, ssh_vcenter, ssh_master, guest_name, image_path)
-        logger.info("Successed to get vcenter guest ip: {0}".format(guest_ip))
+        logger.info("Succeeded to get vcenter guest ip: {0}".format(guest_ip))
         ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
         self.system_init("ci-guest-esx", ssh_guest)
         mode_queue.put((mode_type, guest_ip))
@@ -1579,7 +1591,7 @@ class Provision(Register):
         if not guest_ip:
             self.xen_host_ready(ssh_master, sr_name, sr_server, sr_path)
             guest_ip = self.xen_guest_add(ssh_master, guest_name, sr_name, image_path)
-        logger.info("Successed to get xen guest ip: {0}".format(guest_ip))
+        logger.info("Succeeded to get xen guest ip: {0}".format(guest_ip))
         ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
         self.system_init("ci-guest-xen", ssh_guest)
         mode_queue.put((mode_type, guest_ip))
@@ -1597,7 +1609,7 @@ class Provision(Register):
         ssh_master ={"host":master,"username":master_user,"password":master_passwd}
         guest_ip = self.kubevirt_guest_ip(ssh_master, guest_name)
         if guest_ip:
-            logger.info("Successed to get kubevirt guest ip: {0}".format(guest_ip))
+            logger.info("Succeeded to get kubevirt guest ip: {0}".format(guest_ip))
             ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
             self.system_init("ci-guest-kubvirt", ssh_guest)
             mode_queue.put((mode_type, guest_ip))
@@ -1766,7 +1778,7 @@ class Provision(Register):
             for line in output.splitlines():
                 if re.match(r"^Uuid.*:", line):
                     uuid = line.split(':')[1].strip()
-                    logger.info("Successed to get esxi host uuid: {0}".format(uuid))
+                    logger.info("Succeeded to get esxi host uuid: {0}".format(uuid))
                     return uuid
         else:
             raise FailException("Failed to get esx host uuid")
@@ -1839,7 +1851,7 @@ class Provision(Register):
             for line in output.splitlines():
                 if re.match(r"^Uuid.*:", line):
                     uuid = line.split(':')[1].strip()
-                    logger.info("Successed to get vcenter guest uuid: {0}".format(uuid))
+                    logger.info("Succeeded to get vcenter guest uuid: {0}".format(uuid))
                     return uuid
         else:
             raise FailException("Failed to get vcenter guest uuid")
@@ -1879,7 +1891,7 @@ class Provision(Register):
         cmd = "%s New-VM -VMFilePath %s -VMHost %s" % (cert, vmxFile, esx_host)
         ret, output = self.runcmd(cmd, ssh_vcenter)
         if self.vcenter_guest_exist(cert, ssh_vcenter, guest_name):
-            logger.info("Successed to add vcenter guest")
+            logger.info("Succeeded to add vcenter guest")
         else:
             raise FailException("Failed to add vcenter guest")
         return self.vcenter_guest_start(cert, ssh_vcenter, guest_name)
@@ -1896,7 +1908,7 @@ class Provision(Register):
             elif self.vcenter_guest_exist(cert, ssh_vcenter, guest_name):
                 logger.info("guest still exist, try again")
             else:
-                logger.info("Successed to delete vcenter guest")
+                logger.info("Succeeded to delete vcenter guest")
                 return True
             time(10)
         raise FailException("Failed to delete vcenter guest")
@@ -1910,7 +1922,7 @@ class Provision(Register):
             ret, output = self.runcmd(cmd, ssh_vcenter, desc="vcenter guest question check")
             time.sleep(30)
             if self.vcenter_guest_status(cert, ssh_vcenter, guest_name) == "PoweredOn":
-                logger.info("Successed to start vcenter guest")
+                logger.info("Succeeded to start vcenter guest")
                 guest_ip = self.vcenter_guest_ip(cert, ssh_vcenter, guest_name)
                 return guest_ip
             logger.warning("vcenter guest status is not PoweredOn, check again after 15s...")
@@ -1921,7 +1933,7 @@ class Provision(Register):
         ret, output = self.runcmd(cmd, ssh_vcenter)
         for i in range(10):
             if self.vcenter_guest_status(cert, ssh_vcenter, guest_name) == "PoweredOff":
-                logger.info("Successed to stop vcenter guest")
+                logger.info("Succeeded to stop vcenter guest")
                 return True
             logger.warning("vcenter guest status is not PoweredOff, check again after 15s...")
             time.sleep(15)
@@ -1932,7 +1944,7 @@ class Provision(Register):
         ret, output = self.runcmd(cmd, ssh_vcenter)
         for i in range(10):
             if self.vcenter_guest_status(cert, ssh_vcenter, guest_name) == "Suspended":
-                logger.info("Successed to suspend vcenter guest")
+                logger.info("Succeeded to suspend vcenter guest")
                 return True
             logger.warning("vcenter guest status is not Suspended, check again after 15s...")
             time.sleep(15)
@@ -1943,7 +1955,7 @@ class Provision(Register):
         ret, output = self.runcmd(cmd, ssh_vcenter)
         for i in range(10):
             if self.vcenter_guest_status(cert, ssh_vcenter, guest_name) == "PoweredOn":
-                logger.info("Successed to resume vcenter guest")
+                logger.info("Succeeded to resume vcenter guest")
                 return True
             logger.warning("vcenter guest status is not PoweredOn, check again after 15s...")
             time.sleep(15)
@@ -2068,7 +2080,7 @@ class Provision(Register):
         ret, output = self.runcmd(cmd, ssh_hyperv)
         for i in range(10):
             if self.hyperv_guest_status(ssh_hyperv, guest_name) == "Running":
-                logger.info("Successed to start hyperv guest")
+                logger.info("Succeeded to start hyperv guest")
                 guest_ip = self.hyperv_guest_ip(ssh_hyperv, guest_name)
                 return guest_ip
             logger.warning("hyperv guest status is not Running, check again after 15s...")
@@ -2080,7 +2092,7 @@ class Provision(Register):
         ret, output = self.runcmd(cmd, ssh_hyperv)
         for i in range(10):
             if self.hyperv_guest_status(ssh_hyperv, guest_name) == "Off":
-                logger.info("Successed to stop hyperv guest")
+                logger.info("Succeeded to stop hyperv guest")
                 return True
             logger.warning("hyperv guest status is not Off, check again after 15s...")
             time.sleep(15)
@@ -2091,7 +2103,7 @@ class Provision(Register):
         ret, output = self.runcmd(cmd, ssh_hyperv)
         for i in range(10):
             if self.hyperv_guest_status(ssh_hyperv, guest_name) == "Paused":
-                logger.info("Successed to suspend hyperv guest")
+                logger.info("Succeeded to suspend hyperv guest")
                 return True
             logger.warning("hyperv guest status is not Paused, check again after 15s...")
             time.sleep(15)
@@ -2102,7 +2114,7 @@ class Provision(Register):
         ret, output = self.runcmd(cmd, ssh_hyperv)
         for i in range(10):
             if self.hyperv_guest_status(ssh_hyperv, guest_name) == "Running":
-                logger.info("Successed to resume hyperv guest")
+                logger.info("Succeeded to resume hyperv guest")
                 return True
             logger.warning("hyperv guest status is not Running, check again after 15s...")
             time.sleep(15)
@@ -2219,7 +2231,7 @@ class Provision(Register):
         if self.xen_guest_exist(ssh_xen, guest_name):
             raise FailException("Failed to delete xen guest")
         else:
-            logger.info("Successed to delete xen guest")
+            logger.info("Succeeded to delete xen guest")
 
     def xen_guest_start(self, ssh_xen, guest_name):
         for i in range(3):
@@ -2239,7 +2251,7 @@ class Provision(Register):
         ret, output = self.runcmd(cmd, ssh_xen)
         for i in range(10):
             if self.xen_guest_status(ssh_xen, guest_name) == "halted":
-                logger.info("Successed to stop xen guest")
+                logger.info("Succeeded to stop xen guest")
                 return True
             logger.warning("xen guest status is not halted, check again after 15s... ")
             time.sleep(15)
@@ -2250,7 +2262,7 @@ class Provision(Register):
         ret, output = self.runcmd(cmd, ssh_xen)
         for i in range(10):
             if self.xen_guest_status(ssh_xen, guest_name) == "suspended":
-                logger.info("Successed to suspend xen guest")
+                logger.info("Succeeded to suspend xen guest")
                 return True
             logger.warning("xen guest status is not suspended, check again after 15s... ")
             time.sleep(15)
@@ -2261,7 +2273,7 @@ class Provision(Register):
         ret, output = self.runcmd(cmd, ssh_xen)
         for i in range(10):
             if self.xen_guest_status(ssh_xen, guest_name) == "running":
-                logger.info("Successed to resume xen guest")
+                logger.info("Succeeded to resume xen guest")
                 return True
             logger.warning("xen guest status is not running, check again after 15s... ")
             time.sleep(15)
@@ -2652,7 +2664,7 @@ class Provision(Register):
         cmd = "{0} -c -E  'ping'".format(rhevm_shell)
         ret, output = self.runcmd(cmd, ssh_rhevm, desc="ping rhevm shell")
         if ret == 0 and "success" in output:
-            logger.info("Successed to config rhevm({0}) shell".format(ssh_rhevm['host']))
+            logger.info("Succeeded to config rhevm({0}) shell".format(ssh_rhevm['host']))
         else:
             raise FailException("Failed to config rhevm({0}) shell".format(ssh_rhevm['host']))
 
@@ -3272,4 +3284,4 @@ class Provision(Register):
             ret, output = self.runcmd(cmd, ssh_vcenter, desc="vcenter guest delete")
             logger.info("delete guest: %s" % vm_name)
         total_vms = len(self.esx_vms_list())
-        logger.info("Successed to delete guests, %s guests reserved" % total_vms)
+        logger.info("Succeeded to delete guests, %s guests reserved" % total_vms)

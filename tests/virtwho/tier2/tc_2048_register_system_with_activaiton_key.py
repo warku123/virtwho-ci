@@ -40,10 +40,10 @@ class Testcase(Testing):
             self.system_unregister(args)
             ret, output = self.runcmd(cmd, args)
             if self.vw_msg_search(output, msg) is True:
-                logger.info('succeded registering {0} using activation_key'.format(system))
+                logger.info('Succeded registering {0} using activation_key'.format(system))
                 results.setdefault('step1', []).append(True)
             else:
-                logger.error('failed registering {0} using activation_key'.format(system))
+                logger.error('Failed registering {0} using activation_key'.format(system))
                 results.setdefault('step1', []).append(False)
 
         logger.info(">>>step2: run virt-who")

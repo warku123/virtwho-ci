@@ -29,6 +29,8 @@ class Testcase(Testing):
         server = register_config['server']
         vdc_physical_sku = register_config['vdc']
         vdc_virtual_sku = register_config['vdc_bonus']
+        default_org = register_config['owner']
+        api = register_config['api']
 
         # Case Steps
         logger.info(">>>step1: run virt-who to send mappings")
@@ -43,21 +45,22 @@ class Testcase(Testing):
         virtual_sku_attrs = self.system_sku_attr(self.ssh_guest(), vdc_virtual_sku, "virtual")
         virtual_pool_id = virtual_sku_attrs['pool_id']
         katello_id = self.satellite_katello_id(self.ssh_host(), register_config, virtual_pool_id)
+        default_org_id = self.satellite_org_id_get(self.ssh_host(), register_config, default_org)
+
         name_list = []
         if 'libvirt-local' in hypervisor_type or 'vdsm' in hypervisor_type:
             name_list = ['{0}'.format(host_name)]
         else:
-            key1 = 'virt-who-{0}-1'.format(host_name)
-            key2 = 'virt-who-{0}-1'.format(host_uuid)
+            key1 = 'virt-who-{0}'.format(host_name)
+            key2 = 'virt-who-{0}'.format(host_uuid)
             name_list = [key1, key2, key1.lower(), key2.lower()]
-        baseurl = "https://{0}".format(server)
-        cmd = "curl -X GET -s -k -u {0}:{1} {2}/katello/api/organizations/1/subscriptions/{3}" \
-                .format(admin_user, admin_passwd, baseurl, katello_id)
+        cmd = "curl -X GET -s -k -u {0}:{1} {2}/katello/api/organizations/{3}/subscriptions/{4}" \
+                .format(admin_user, admin_passwd, api ,default_org_id, katello_id)
         ret, output = self.runcmd(cmd, self.ssh_host())
         output = self.is_json(output.strip())
         if ret == 0 and output is not False and output is not None:
             if output["type"] == "STACK_DERIVED" and output["virt_only"] is True and \
-                output["hypervisor"]["name"] in name_list:
+                    any(key in output["hypervisor"]["name"] for key in name_list):
                 logger.info("succeeded to check bonus pool coming from %s" % name_list)
                 results.setdefault('step2', []).append(True)
             else:

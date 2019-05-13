@@ -317,7 +317,7 @@ class Testing(Provision):
             guest_ip = self.libvirt_guest_start(guest_name, ssh_hypervisor)
         if guest_ip:
             self.set_exported_param("GUEST_IP", guest_ip)
-            logger.info("Successed to start guest for mode {0}, guest ip: {1}".format(hypervisor_type, guest_ip))
+            logger.info("Succeeded to start guest for mode {0}, guest ip: {1}".format(hypervisor_type, guest_ip))
 
     def hypervisor_guest_stop(self, uid=None):
         config = self.get_hypervisor_config(uid)
@@ -341,7 +341,7 @@ class Testing(Provision):
         if hypervisor_type in ('rhevm', 'vdsm'):
             rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_hypervisor)
             self.rhevm_guest_stop(ssh_hypervisor, rhevm_shell, guest_name)
-        logger.info("Successed to stop guest for mode {0}".format(hypervisor_type))
+        logger.info("Succeeded to stop guest for mode {0}".format(hypervisor_type))
 
     def hypervisor_guest_suspend(self, uid=None):
         config = self.get_hypervisor_config(uid)
@@ -365,7 +365,7 @@ class Testing(Provision):
         if hypervisor_type in ('rhevm', 'vdsm'):
             rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_hypervisor)
             self.rhevm_guest_suspend(ssh_hypervisor, rhevm_shell, guest_name)
-        logger.info("Successed to suspend guest for mode {0}".format(hypervisor_type))
+        logger.info("Succeeded to suspend guest for mode {0}".format(hypervisor_type))
 
     def hypervisor_guest_resume(self, uid=None):
         config = self.get_hypervisor_config(uid)
@@ -389,7 +389,7 @@ class Testing(Provision):
         if hypervisor_type in ('rhevm', 'vdsm'):
             rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_hypervisor)
             self.rhevm_guest_resume(ssh_hypervisor, rhevm_shell, guest_name)
-        logger.info("Successed to resume guest for mode {0}".format(hypervisor_type))
+        logger.info("Succeeded to resume guest for mode {0}".format(hypervisor_type))
 
     def hypervisor_firewall_setup(self, action="on", uid=None):
         config = self.get_hypervisor_config(uid)
@@ -441,7 +441,7 @@ class Testing(Provision):
             logger.info(str(SkipTest))
             raise SkipTest
         finally:
-            logger.info("Successed to skip case\n")
+            logger.info("Succeeded to skip case\n")
 
     def vw_case_result(self, results, notes=None):
         for key, value in results.items():
@@ -455,7 +455,7 @@ class Testing(Provision):
         if any(False in res for res in results.values()):
             raise FailException("Failed to run case, please check the failed steps\n")
         else:
-            logger.info("Successed to run case, all steps passed\n")
+            logger.info("Succeeded to run case, all steps passed\n")
 
     def vw_case_init(self, uid=None):
         hypervisor_config = self.get_hypervisor_config(uid)
@@ -496,7 +496,7 @@ class Testing(Provision):
         if ret != 0:
             raise FailException("Failed to disable all options in /etc/virt-who.conf")
         else:
-            logger.info("Successed to disable all options in /etc/virt-who.conf")
+            logger.info("Succeeded to disable all options in /etc/virt-who.conf")
 
     def vw_etc_sys_disable_all(self):
         op_1 = '-e "s|^[^#]|#&|g"'
@@ -505,7 +505,7 @@ class Testing(Provision):
         if ret != 0:
             raise FailException("Failed to disable all modes in /etc/sysconfig/virt-who")
         else:
-            logger.info("Successed to disable all options in /etc/sysconfig/virt-who")
+            logger.info("Succeeded to disable all options in /etc/sysconfig/virt-who")
 
     def vw_etc_d_delete_all(self):
         cmd = "rm -rf /etc/virt-who.d/*; rm -f /etc/virt-who.d/.*swp"
@@ -513,7 +513,7 @@ class Testing(Provision):
         if ret != 0:
             raise FailException("Failed to delete all files in /etc/virt-who.d/")
         else:
-            logger.info("Successed to delete all files in /etc/virt-who.d/")
+            logger.info("Succeeded to delete all files in /etc/virt-who.d/")
 
     def vw_etc_sys_mode_enable(self, uid=None):
         filename = "/etc/sysconfig/virt-who"
@@ -555,7 +555,7 @@ class Testing(Provision):
         if ret != 0:
             raise FailException("Failed to enable mode {0} in /etc/sysconfig/virt-who".format(mode))
         else:
-            logger.info("Successed to enable mode {0} in /etc/sysconfig/virt-who".format(mode))
+            logger.info("Succeeded to enable mode {0} in /etc/sysconfig/virt-who".format(mode))
 
     def vw_etc_d_mode_create(self, config_name, config_file, uid=None):
         hypervisor_config = self.get_hypervisor_config(uid)
@@ -599,7 +599,7 @@ class Testing(Provision):
         if ret != 0:
             raise FailException("Failed to create config file {0}".format(config_file))
         else:
-            logger.info("Successed to create config file {0}".format(config_file))
+            logger.info("Succeeded to create config file {0}".format(config_file))
 
     def vw_fake_json_create(self, cli, json_file):
         self.vw_stop()
@@ -609,7 +609,7 @@ class Testing(Provision):
         logger.info(output)
         if "guestId" not in output:
             raise FailException("Failed to create json data: {0}".format(json_file))
-        logger.info("Successed to create json data: {0}".format(json_file))
+        logger.info("Succeeded to create json data: {0}".format(json_file))
 
     def vw_fake_conf_create(self, conf_file, json_file, is_hypervisor=True):
         register_config = self.get_register_config()
@@ -628,7 +628,7 @@ class Testing(Provision):
         ret, output = self.runcmd("ls {0}".format(conf_file), self.ssh_host())
         if ret != 0 :
             raise FailException("Failed to create fake config file: {0}".format(conf_file))
-        logger.info("Successed to create fake config file: {0}".format(conf_file))
+        logger.info("Succeeded to create fake config file: {0}".format(conf_file))
 
     def vw_option_update_name(self, option, rename, filename):
         option = self.shell_escape_char(option)
@@ -636,7 +636,7 @@ class Testing(Provision):
         cmd = 'sed -i "s|^%s|%s|g" %s' % (option, rename, filename)
         ret, output = self.runcmd(cmd, self.ssh_host())
         if ret == 0:
-            logger.info("Successed to update option name %s to %s" % (option, rename))
+            logger.info("Succeeded to update option name %s to %s" % (option, rename))
         else:
             raise FailException("Failed to update option name %s to %s" % (option, rename))
 
@@ -646,7 +646,7 @@ class Testing(Provision):
         cmd = 'sed -i "s|^%s.*|%s=%s|g" %s' % (option, option, value, filename)
         ret, output = self.runcmd(cmd, self.ssh_host())
         if ret == 0:
-            logger.info("Successed to set option %s value to %s" % (option, value))
+            logger.info("Succeeded to set option %s value to %s" % (option, value))
         else:
             raise FailException("Failed to set option %s value to %s" % (option, value))
 
@@ -659,7 +659,7 @@ class Testing(Provision):
         cmd = 'sed -i %s %s %s %s %s' % (op_1, op_2, op_3, op_4, filename)
         ret, output = self.runcmd(cmd, self.ssh_host())
         if ret == 0:
-            logger.info("Successed to enable option %s" % option)
+            logger.info("Succeeded to enable option %s" % option)
         else:
             raise FailException("Failed to enable option %s" % option)
 
@@ -668,7 +668,7 @@ class Testing(Provision):
         cmd = 'sed -i "s|^%s|#%s|g" %s' % (option, option, filename) 
         ret, output = self.runcmd(cmd, self.ssh_host())
         if ret == 0:
-            logger.info("Successed to disable option %s" % option)
+            logger.info("Succeeded to disable option %s" % option)
         else:
             raise FailException("Failed to disable option %s" % option)
 
@@ -676,7 +676,7 @@ class Testing(Provision):
         cmd = 'echo -e "\n%s=%s" >> %s' % (option, value, filename)
         ret, output = self.runcmd(cmd, self.ssh_host())
         if ret == 0:
-            logger.info("Successed to add option %s=%s" % (option, value))
+            logger.info("Succeeded to add option %s=%s" % (option, value))
         else:
             raise FailException("Failed to add option %s=%s" % (option, value))
 
@@ -685,7 +685,7 @@ class Testing(Provision):
         cmd = 'sed -i "/^%s/d" %s; sed -i "/^#%s/d" %s' % (option, filename, option, filename)
         ret, output = self.runcmd(cmd, self.ssh_host())
         if ret == 0:
-            logger.info("Successed to delete option %s" % option)
+            logger.info("Succeeded to delete option %s" % option)
         else:
             raise FailException("Failed to delete option %s" % option)
 
@@ -1033,7 +1033,7 @@ class Testing(Provision):
                 logger.info("virt-who is terminated by error msg")
                 break
             if spend_time >= timeout:
-                logger.info("virt-who is terminated by timeout(360s)")
+                logger.info("virt-who is terminated by timeout(900s)")
                 break
             if oneshot is False:
                 if send_num >= exp_send and loop_num >= exp_loopnum:
@@ -1093,7 +1093,7 @@ class Testing(Provision):
                 data = item[2]
         return data, tty_output, rhsm_output
 
-    def vw_start(self, cli=None, timeout=360, exp_send=1, exp_loopnum=0, oneshot=False, event=None, web_check=True, exp_error=False):
+    def vw_start(self, cli=None, timeout=900, exp_send=1, exp_loopnum=0, oneshot=False, event=None, web_check=True, exp_error=False):
         for i in range(3):
             data, tty_output, rhsm_output = self.vw_start_thread(cli, timeout, exp_send, exp_loopnum, oneshot, event, exp_error)
             if data['is_429'] == "yes":
