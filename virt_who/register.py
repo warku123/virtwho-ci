@@ -652,12 +652,12 @@ class Register(Base):
             cmd = 'curl -X PUT -s -k {0} -u {1}:{2} -d {3} {4}/api/v2/hosts/{5}/subscriptions/add_subscriptions'.format(
                     curl_header, username, password, json_data, api, host_id)
             for i in range(3):
-                time.sleep(30)
                 ret, output = self.runcmd(cmd, ssh, desc="satellite attach pool")
                 if pool_id in output and "subscription_id" in output and "product_id" in output:
                     logger.info("Succeeded to attach pool({0}) for host_id({0})".format(pool_id, host_id))
                     return True
-                logger.warning("can't attach pool({0}) for host_id({1}), try again after 30s".format(pool_id, host_id))
+                logger.warning("can't attach pool({0}) for host_id({1}), try again after 15s".format(pool_id, host_id))
+                time.sleep(15)
         raise FailException("Failed to attach pool({0}) for host_id({1})".format(pool_id, host_id))
 
     def satellite_host_unattach(self, ssh, register_config, host_name, host_uuid):
