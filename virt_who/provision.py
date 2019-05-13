@@ -1366,6 +1366,7 @@ class Provision(Register):
         func_name = sys._getframe().f_code.co_name
         admin_user = deploy.satellite.admin_user
         admin_passwd = deploy.satellite.admin_passwd
+        default_org = deploy.satellite.default_org
         extra_org = deploy.satellite.extra_org
         activation_key = deploy.satellite.activation_key
         manifest_url = deploy.satellite.manifest
@@ -1387,7 +1388,8 @@ class Provision(Register):
         self.satellite_deploy(ssh_sat, admin_user, admin_passwd, manifest_url, sat_ver)
         self.satellite_host_setting(ssh_sat, admin_user, admin_passwd)
         self.satellite_org_create(ssh_sat, admin_user, admin_passwd, extra_org)
-        self.satellite_active_key_create(ssh_sat, admin_user, admin_passwd, activation_key)
+        default_org_id = self.satellite_org_id_get(self, ssh_sat, admin_user, admin_passwd, default_org)
+        self.satellite_active_key_create(ssh_sat, admin_user, admin_passwd, activation_key, default_org_id)
         sat_queue.put((sat_type, sat_host))
 
     #*********************************************
