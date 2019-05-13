@@ -218,7 +218,7 @@ class Base(unittest.TestCase):
             port = int(var[1])
         cmd = "ssh-keyscan -p {0} {1} >> ~/.ssh/known_hosts".format(port, host) 
         ret, output = self.runcmd(cmd, ssh_local, desc="create ~/.ssh/known_hosts")
-        logger.info("Successed to copy sshkey from {0} to {1}".format(ssh_local['host'], ssh_remote['host']))
+        logger.info("Succeeded to copy sshkey from {0} to {1}".format(ssh_local['host'], ssh_remote['host']))
 
     def kill_pid_by_name(self, ssh, process_name):
         cmd = "ps -ef | grep %s -i | grep -v grep | awk '{print $2}' | xargs -I {} kill -9 {}" % process_name

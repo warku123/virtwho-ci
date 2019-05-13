@@ -56,8 +56,8 @@ class Testcase(Testing):
                     logger.info("virt-who is disconnected from hyperivosr by timeout")
                     results.setdefault('step2', []).append(True)
                     break
-                if spend_time >= 360:
-                    logger.info("virt-who is timeout(360s)")
+                if spend_time >= 900:
+                    logger.info("virt-who is timeout(900s)")
                     results.setdefault('step2', []).append(False)
                     break
         except:
