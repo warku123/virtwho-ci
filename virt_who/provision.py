@@ -1324,18 +1324,18 @@ class Provision(Register):
 
     def satellite_deploy(self, ssh_sat, admin_user, admin_passwd, manifest_url, sat_ver):
         sat_host = ssh_sat['host']
-        manifest_path = "/tmp/manifest/"
-        ret, output = self.runcmd("mkdir -p {0}".format(manifest_path), ssh_sat, desc="create manifest_path")
-        ret, output = self.runcmd("wget {0} -P {1}".format(manifest_url, manifest_path), ssh_sat, desc="download manifest")
-        ret, output = self.runcmd("ls {0}".format(manifest_path), ssh_sat, desc="list manifest_path")
+        manifest_path = "/tmp/manifest"
+        ret, output = self.runcmd("rm -rf {0}; mkdir -p {0}".format(manifest_path), ssh_sat)
+        ret, output = self.runcmd("wget {0} -P {1}".format(manifest_url, manifest_path), ssh_sat)
+        ret, output = self.runcmd("ls {0}".format(manifest_path), ssh_sat)
         if output is not None:
             manifest_filename = "{0}/{1}".format(manifest_path, output.strip())
         else:
             raise FailException("No manifest file found")
         if sat_ver == "6.6":
-            options = "--disable-system-checks --foreman-admin-password={0}".format(admin_passwd)
-        else:
             options = "--disable-system-checks --foreman-initial-admin-password={0}".format(admin_passwd)
+        else:
+            options = "--disable-system-checks --foreman-admin-password={0}".format(admin_passwd)
         cmd = "satellite-installer --scenario satellite {0}".format(options)
         ret, output = self.runcmd(cmd, ssh_sat)
         if ret != 0:
