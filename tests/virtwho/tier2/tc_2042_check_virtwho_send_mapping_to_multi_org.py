@@ -26,46 +26,38 @@ class Testcase(Testing):
         host_name = self.get_hypervisor_hostname()
         register_config = self.get_register_config()
         ssh_sat = register_config['ssh_sat']
-        admin_user = register_config['username']
-        admin_passwd = register_config['password']
         default_org = 'Default_Organization'
         extra_org = 'Virtwho_Org'
         org_list = {'step1':default_org, 'step2':extra_org}
 
-        try:
-            for step, org in sorted(org_list.items(), key=lambda item:item[0]):
-                logger.info(">>>{0}: run with owner={1}".format(step, org))
-                if 'libvirt-local' not in hypervisor_type and 'vdsm' not in hypervisor_type:
-                    self.vw_option_update_value('owner', '{0}'.format(org), config_file)
-                host_id = self.satellite_host_id(self.ssh_host(), register_config, host_name, host_uuid)
-                if host_id is not None and host_id != "":
-                    self.vw_web_host_delete(host_name, host_uuid)
-                self.system_unregister(self.ssh_host())
-                if org == extra_org:
-                    register_config['owner'] = extra_org
-                self.system_register(self.ssh_host(), register_type, register_config)
-                data, tty_output, rhsm_output = self.vw_start(exp_send=1)
-                res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
-                if org == default_org:
-                    res2 = self.satellite_hosts_search(ssh_sat, admin_user, admin_passwd, default_org, host_name, host_uuid, exp_exist=True)
-                    res3 = self.satellite_hosts_search(ssh_sat, admin_user, admin_passwd, extra_org, host_name, host_uuid, exp_exist=False)
-                else:
-                    res2 = self.satellite_hosts_search(ssh_sat, admin_user, admin_passwd, default_org, host_name, host_uuid, exp_exist=False)
-                    res3 = self.satellite_hosts_search(ssh_sat, admin_user, admin_passwd, extra_org, host_name, host_uuid, exp_exist=True)
-                results.setdefault(step, []).append(res1)
-                results.setdefault(step, []).append(res2)
-                results.setdefault(step, []).append(res3)
-
-        except:
-            results.setdefault('step', []).append(False)
-            pass
-
-        finally:
-            logger.info(">>>step finally: delete host and hypervisor from extra_org")
+        for step, org in sorted(org_list.items(), key=lambda item:item[0]):
+            logger.info(">>>{0}: run with owner={1}".format(step, org))
             host_id = self.satellite_host_id(self.ssh_host(), register_config, host_name, host_uuid)
+            if 'libvirt-local' not in hypervisor_type and 'vdsm' not in hypervisor_type:
+                self.vw_option_update_value('owner', org, config_file)
             if host_id is not None and host_id != "":
                 self.vw_web_host_delete(host_name, host_uuid)
+            if org == extra_org:
+                register_config['owner'] = extra_org
             self.system_unregister(self.ssh_host())
+            self.system_register(self.ssh_host(), register_type, register_config)
+            data, tty_output, rhsm_output = self.vw_start(exp_send=1)
+            res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+            if org == default_org:
+                res2 = self.satellite_hosts_search(ssh_sat, register_config, default_org, host_name, host_uuid, exp_exist=True)
+                res3 = self.satellite_hosts_search(ssh_sat, register_config, extra_org, host_name, host_uuid, exp_exist=False)
+            else:
+                res2 = self.satellite_hosts_search(ssh_sat, register_config, default_org, host_name, host_uuid, exp_exist=False)
+                res3 = self.satellite_hosts_search(ssh_sat, register_config, extra_org, host_name, host_uuid, exp_exist=True)
+            results.setdefault(step, []).append(res1)
+            results.setdefault(step, []).append(res2)
+            results.setdefault(step, []).append(res3)
+
+        logger.info(">>>step finally: delete host and hypervisor from extra_org")
+        host_id = self.satellite_host_id(self.ssh_host(), register_config, host_name, host_uuid)
+        if host_id is not None and host_id != "":
+            self.vw_web_host_delete(host_name, host_uuid)
+        self.system_unregister(self.ssh_host())
 
         # Case Result
         self.vw_case_result(results)

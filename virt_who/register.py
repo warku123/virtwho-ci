@@ -394,16 +394,15 @@ class Register(Base):
             return False
 
     def system_custom_facts_remove(self, ssh):
-        cmd = "rm -f /etc/rhsm/facts/custom.facts"
-        ret, output = self.runcmd(cmd, ssh, desc="remove custom.facts")
-        cmd = "subscription-manager facts --update"
-        ret, output = self.runcmd(cmd, ssh, desc="subscription facts update")
-        '''time sleep for satellite conflicts with tasks when run facts --update'''
-        time.sleep(60)
-        if ret == 0 and "Successfully updated" in output:
-            logger.info("Succeeded to remove custom.facts")
-        else:
-            raise FailException("Failed to remove custom.facts")
+        ret, output = self.runcmd('rm -f /etc/rhsm/facts/custom.facts', ssh)
+        for i in range(3):
+            ret, output = self.runcmd('subscription-manager facts --update', ssh)
+            time.sleep(60)
+            if ret == 0 and "Successfully updated" in output:
+                logger.info("Succeeded to remove custom.facts")
+                return True
+            time.sleep(60)
+        raise FailException("Failed to remove custom.facts")
 
     #**************************************
     # Stage API Function
