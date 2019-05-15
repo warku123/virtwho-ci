@@ -849,7 +849,7 @@ class Provision(Register):
 
     def install_virtwho_sattools(self, ssh_host, sat_type):
         sat_ver, rhel_ver = self.satellite_version(sat_type)
-        self.satellite_qa_repo_enable(ssh_host, sat_ver, rhel_ver, repo_type="satellite-tools")
+        self.satellite_qa_dogfood_enable(ssh_host, sat_ver, rhel_ver, repo_type="satellite-tools")
         cmd = "rm -rf /var/cache/yum/; yum clean all; yum remove -y virt-who; yum install -y virt-who"
         ret, output = self.runcmd(cmd, ssh_host)
 
@@ -1296,7 +1296,7 @@ class Provision(Register):
             raise FailException("Failed to enable satellite repos({0})".format(sat_host))
         logger.info("Succeeded to enable satellite repos({0})".format(sat_host))
 
-    def satellite_qa_repo_enable(self, ssh_sat, sat_ver, rhel_ver, repo_type="satellite"):
+    def satellite_qa_dogfood_enable(self, ssh_sat, sat_ver, rhel_ver, repo_type="satellite"):
         '''repo_type should be one of them: satellite, capsule, satellite-tools'''
         repo = deploy.repo.rhel_sat
         for i in range(3):
@@ -1398,8 +1398,8 @@ class Provision(Register):
         }
         self.system_init("ci-host-satellite", ssh_sat)
         sat_ver, rhel_ver = self.satellite_version(sat_type)
-        if "repo" in sat_type:
-            self.satellite_qa_repo_enable(ssh_sat, sat_ver, rhel_ver, repo_type="satellite")
+        if "dogfood" in sat_type:
+            self.satellite_qa_dogfood_enable(ssh_sat, sat_ver, rhel_ver, repo_type="satellite")
         if "cdn" in sat_type:
             self.qa_register(ssh_sat)
             self.qa_enable_rhel_repo(ssh_sat)
