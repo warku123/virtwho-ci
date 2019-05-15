@@ -58,11 +58,17 @@ class Provision(Register):
         ci_msg_content = self.get_exported_param("CI_MESSAGE")
         if ci_msg_content:
             msg = json.loads(ci_msg_content)
-            build_id = msg['build']['build_id']
+            if msg.has_key('info'):
+                build_id = msg['info']['build_id']
+                task_id = msg['info']['task_id']
+            else:
+                build_id = re.findall(r'"build_id":(.*?),', ci_msg_content)[-1].strip()
+                task_id = re.findall(r'"task_id":(.*?),', ci_msg_content)[-1].strip()
             brew_build_url = "https://brewweb.engineering.redhat.com/brew/buildinfo?buildID={0}".format(build_id)
         else:
             brew_build_url = self.get_exported_param("BREW_BUILD_URL")
             build_id = re.findall(r'buildID=(.*?)$', brew_build_url)[-1]
+            task_id = build_id
         cmd = 'curl -k -s -i {0}'.format(brew_build_url)
         output = os.popen(cmd).read()
         pkg_url = re.findall(r'<a href="http://(.*?).noarch.rpm">download</a>', output)[-1]
@@ -83,6 +89,7 @@ class Provision(Register):
         if not rhel_compose:
             raise FailException("no rhel compose found")
         env['build_id'] = build_id
+        env['task_id'] = task_id
         env['pkg_url'] = 'http://'+pkg_url+'.noarch.rpm'
         env['pkg_name'] = items[5]
         env['pkg_version'] = items[6]
@@ -722,9 +729,11 @@ class Provision(Register):
             env = self.ci_msg_parser()
             rhel_compose = env['rhel_compose']
             build_id = env['build_id']
+            task_id = env['task_id']
             pkg_nvr = env['pkg_nvr']
             parameter.append('-d RHEL_COMPOSE={0}'.format(rhel_compose))
             parameter.append('-d BREW_BUILD_ID={0}'.format(build_id))
+            parameter.append('-d BREW_TASK_ID={0}'.format(task_id))
             parameter.append('-d PACKAGE_NVR={0}'.format(pkg_nvr))
         else:
             parameter.append('-d RHEL_COMPOSE={0}'.format(deploy.trigger.rhel_compose))
