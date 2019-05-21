@@ -48,7 +48,7 @@ class Testcase(Testing):
         hypervisor_type = self.get_config('hypervisor_type')
         if "libvirt-local" in hypervisor_type or "vdsm" in hypervisor_type:
             cmd = "subscription-manager repos --list"
-            ret, output = self.runcmd(cmd, self.ssh_host(), desc="check repo list")
+            ret, output = self.runcmd(cmd, self.ssh_host())
             res = self.vw_msg_search(output, "no repositories available" , exp_exist=True)
             results.setdefault('step4', []).append(res)
         else:
@@ -56,12 +56,20 @@ class Testcase(Testing):
 
         logger.info(">>>step5: check repo status in guest")
         cmd = "subscription-manager repos --list"
-        ret, output = self.runcmd(cmd, self.ssh_guest(), desc="check repo list")
+        ret, output = self.runcmd(cmd, self.ssh_guest())
         if "stage" in register_type:
             res = self.vw_msg_search(output, "Available Repositories" , exp_exist=True)
         else:
             res = self.vw_msg_search(output, "no repositories available" , exp_exist=True)
-        results.setdefault('step4', []).append(res)
+        results.setdefault('step5', []).append(res)
+
+        logger.info(">>>step6: check subscription status in guest")
+        cmd = "subscription-manager status"
+        ret, output = self.runcmd(cmd, self.ssh_guest())
+        res1 = self.vw_msg_search(output, "Overall Status: Current" , exp_exist=True)
+        res2 = self.vw_msg_search(output, "Invalid" , exp_exist=False)
+        results.setdefault('step6', []).append(res1)
+        results.setdefault('step6', []).append(res2)
 
         # case result
         self.vw_case_result(results)

@@ -21,6 +21,7 @@ class Testcase(Testing):
         host_name = self.get_hypervisor_hostname()
         host_uuid = self.get_hypervisor_hostuuid()
         register_config = self.get_register_config()
+        register_type = register_config['type']
         limit_physical_sku = register_config['limit']
         limit_virtual_sku = register_config['limit']
 
@@ -54,6 +55,23 @@ class Testcase(Testing):
         res2 = self.vw_msg_search(output, 'Quantity Used:.*1', exp_exist=True)
         results.setdefault('step4', []).append(res1)
         results.setdefault('step4', []).append(res2)
+
+        logger.info(">>>step5: check repo status in guest")
+        cmd = "subscription-manager repos --list"
+        ret, output = self.runcmd(cmd, self.ssh_guest())
+        if "stage" in register_type:
+            res = self.vw_msg_search(output, "Available Repositories" , exp_exist=True)
+        else:
+            res = self.vw_msg_search(output, "no repositories available" , exp_exist=True)
+        results.setdefault('step5', []).append(res)
+
+        logger.info(">>>step6: check subscription status in guest")
+        cmd = "subscription-manager status"
+        ret, output = self.runcmd(cmd, self.ssh_guest())
+        res1 = self.vw_msg_search(output, "Overall Status: Current" , exp_exist=True)
+        res2 = self.vw_msg_search(output, "Invalid" , exp_exist=False)
+        results.setdefault('step6', []).append(res1)
+        results.setdefault('step6', []).append(res2)
 
         # case result
         self.vw_case_result(results)

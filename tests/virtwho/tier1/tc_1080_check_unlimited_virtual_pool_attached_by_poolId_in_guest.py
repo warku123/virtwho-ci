@@ -21,6 +21,7 @@ class Testcase(Testing):
         host_name = self.get_hypervisor_hostname()
         host_uuid = self.get_hypervisor_hostuuid()
         register_config = self.get_register_config()
+        register_type = register_config['type']
         unlimited_sku = register_config['unlimit']
 
         # case steps
@@ -41,6 +42,22 @@ class Testcase(Testing):
         output = self.system_sku_consumed(self.ssh_guest())
         res = self.vw_msg_search(output, unlimited_sku, exp_exist=True)
         results.setdefault('step3', []).append(res)
+
+        logger.info(">>>step4: check repo status in guest")
+        cmd = "subscription-manager repos --list"
+        ret, output = self.runcmd(cmd, self.ssh_guest())
+        if "stage" in register_type:
+            res = self.vw_msg_search(output, "Available Repositories" , exp_exist=True)
+        else:
+            res = self.vw_msg_search(output, "no repositories available" , exp_exist=True)
+        results.setdefault('step4', []).append(res)
+
+        logger.info(">>>step5: check subscription status in guest")
+        cmd = "subscription-manager status"
+        ret, output = self.runcmd(cmd, self.ssh_guest())
+        res1 = self.vw_msg_search(output, "Invalid" , exp_exist=True)
+        logger.warning("{0} is not available for: Red Hat Enterprise Linux Server".format(unlimited_sku))
+        results.setdefault('step5', []).append(res1)
 
         # case result
         self.vw_case_result(results)
