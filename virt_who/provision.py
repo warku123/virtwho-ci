@@ -2064,7 +2064,10 @@ class Provision(Register):
         if self.hyperv_guest_exist(ssh_hyperv, guest_name):
             self.hyperv_guest_delete(ssh_hyperv, guest_name)
         self.hyperv_image_ready(ssh_hyperv, guest_name, image_path)
-        options = "-MemoryStartupBytes 1GB -SwitchName virtual_switch -Generation 1"
+        if '8.' in guest_name:
+            options = "-MemoryStartupBytes 2GB -SwitchName virtual_switch -Generation 2"
+        else:
+            options = "-MemoryStartupBytes 1GB -SwitchName virtual_switch -Generation 1"
         cmd = "powershell New-VM -Name %s -VHDPath \"C:\hyperv_img\%s.vhdx\" %s" \
                 % (guest_name, guest_name, options)
         ret, output = self.runcmd(cmd, ssh_hyperv, desc="hyperv guest add")
@@ -2072,6 +2075,9 @@ class Provision(Register):
             logger.info("Succeeded to add hyperv guest")
         else:
             raise FailException("Failed to add hyperv guest")
+        if '8.' in guest_name:
+            cmd = "powershell Set-VMFirmware -VMName %s -EnableSecureBoot off" % guest_name
+            ret, output = self.runcmd(cmd, ssh_hyperv, desc="disable secure boot")
         return self.hyperv_guest_start(ssh_hyperv, guest_name)
 
     def hyperv_guest_delete(self, ssh_hyperv, guest_name):
@@ -3080,6 +3086,10 @@ class Provision(Register):
     def rhevm_guest_ip(self, ssh_rhevm, rhevm_shell, ssh_vdsm, guest_name):
         if self.rhevm_guest_exist(ssh_rhevm, rhevm_shell, guest_name) is False:
             return False
+        mac_addr = self.rhevm_guest_mac(ssh_rhevm, rhevm_shell, guest_name)
+        guest_ip =  self.get_ipaddr_bymac(mac_addr, ssh_vdsm)
+        if guest_ip is not False and guest_ip is not None and guest_ip != "":
+            return guest_ip
         cmd = "%s -c -E 'show vm %s' |grep '^guest_info-ips-ip-address' | grep -Eo '([0-9]{1,3}[\.]){3}[0-9]{1,3}' |grep ^10 |tail -1" \
                 % (rhevm_shell, guest_name)
         for i in range(30):
@@ -3089,10 +3099,6 @@ class Provision(Register):
                 return guest_ip
             logger.info("No guest ip found for rhevm, try again after 30s...")
             time.sleep(30)
-        mac_addr = self.rhevm_guest_mac(ssh_rhevm, rhevm_shell, guest_name)
-        guest_ip =  self.get_ipaddr_bymac(mac_addr, ssh_vdsm)
-        if guest_ip is not False and guest_ip is not None and guest_ip != "":
-            return guest_ip
 
     def rhevm_guest_add(self, ssh_rhevm, rhevm_shell, ssh_vdsm, guest_name, template, cluster, disk):
         host_name = self.get_hostname(ssh_vdsm) 
