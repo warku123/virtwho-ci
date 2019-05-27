@@ -155,9 +155,9 @@ class Testing(Provision):
             ssh_sat = {"host": server,"username":ssh_user,"password":ssh_passwd}
             prefix = "/rhsm"
         if not vdc:
-            vdc = "RH00002"
+            vdc = "RH00001"
         if not vdc_bonus:
-            vdc_bonus = "RH00050"
+            vdc_bonus = "RH00049"
         if not instance:
             instance = "RH00003"
         if not limit:
