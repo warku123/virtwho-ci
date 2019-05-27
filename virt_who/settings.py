@@ -250,6 +250,9 @@ class SetStage(FeatureSettings):
 
     def read(self, reader):
         self.server = reader.get('stage', 'server')
+        self.gate_user = reader.get('stage', 'gate_user')
+        self.gate_passwd = reader.get('stage', 'gate_passwd')
+        self.gate_org = reader.get('stage', 'gate_org')
         self.esx_user = reader.get('stage', 'esx_user')
         self.esx_passwd = reader.get('stage', 'esx_passwd')
         self.esx_org = reader.get('stage', 'esx_org')

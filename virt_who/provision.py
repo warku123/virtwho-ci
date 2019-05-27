@@ -505,6 +505,11 @@ class Provision(Register):
                 password = deploy.stage.libvirt_local_passwd
                 owner = deploy.stage.libvirt_local_org
                 env = deploy.stage.libvirt_local_org
+            if deploy.trigger.type == "trigger-gating":
+                username = deploy.stage.gate_user
+                password = deploy.stage.gate_passwd
+                owner = deploy.stage.gate_org
+                env = deploy.stage.gate_org
             register_config={
                     'type':register_type,
                     'server':server,
