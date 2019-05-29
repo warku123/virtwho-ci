@@ -531,26 +531,26 @@ class Testing(Provision):
         if mode == "LIBVIRT-LOCAL":
             logger.info("libvirt local mode is default, don't need to configure")
             return True
+        cf_type = '-e "s|.*{0}=.*|VIRTWHO_{0}=1|g"'.format(mode)
+        cf_owner = '-e "s|.*{0}_OWNER=.*|VIRTWHO_{0}_OWNER={1}|g"'.format(mode, owner)
+        cf_env = '-e "s|.*{0}_ENV=.*|VIRTWHO_{0}_ENV={1}|g"'.format(mode, env)
+        cf_server = '-e "s|.*{0}_SERVER=.*|VIRTWHO_{0}_SERVER={1}|g"'.format(mode, server)
+        cf_username = '-e "s|.*{0}_USERNAME=.*|VIRTWHO_{0}_USERNAME={1}|g"'.format(mode, username)
+        cf_password = '-e "s|.*{0}_PASSWORD=.*|VIRTWHO_{0}_PASSWORD={1}|g"'.format(mode, password)
+        if self.pkg_check(self.ssh_host(), 'virt-who')[9:15] >= '0.24.6':
+            cf_env = ''
         if mode == "VDSM":
             cmd = 'sed -i -e "s|.*VIRTWHO_VDSM=.*|VIRTWHO_VDSM=1|g" {0}'.format(filename)
         elif mode == "KUBEVIRT":
-            op_1 = '-e "s|.*{0}=.*|VIRTWHO_{0}=1|g"'.format(mode)
-            op_2 = '-e "s|.*{0}_OWNER=.*|VIRTWHO_{0}_OWNER={1}|g"'.format(mode, owner)
-            op_3 = '-e "s|.*{0}_ENV=.*|VIRTWHO_{0}_ENV={1}|g"'.format(mode, env)
-            cmd = 'sed -i {0} {1} {2} {3}'.format(op_1, op_2, op_3, filename)
-            ret, output = self.runcmd(cmd, self.ssh_host())
             server_config = hypervisor_config['server_config']
             cmd = 'sed -i "/^KUBECONFIG/d" %s; sed -i "/^#KUBECONFIG/d" %s' % (filename, filename)
             ret, output = self.runcmd(cmd, self.ssh_host())
             cmd = 'echo -e "\nKUBECONFIG=%s" >> %s' % (server_config, filename)
+            ret, output = self.runcmd(cmd, self.ssh_host())
+            cmd = 'sed -i {0} {1} {2} {3}'.format(cf_type, cf_owner, cf_env, filename)
         else:
-            op_1 = '-e "s|.*{0}=.*|VIRTWHO_{0}=1|g"'.format(mode)
-            op_2 = '-e "s|.*{0}_OWNER=.*|VIRTWHO_{0}_OWNER={1}|g"'.format(mode, owner)
-            op_3 = '-e "s|.*{0}_ENV=.*|VIRTWHO_{0}_ENV={1}|g"'.format(mode, env) 
-            op_4 = '-e "s|.*{0}_SERVER=.*|VIRTWHO_{0}_SERVER={1}|g"'.format(mode, server)
-            op_5 = '-e "s|.*{0}_USERNAME=.*|VIRTWHO_{0}_USERNAME={1}|g"'.format(mode, username) 
-            op_6 = '-e "s|.*{0}_PASSWORD=.*|VIRTWHO_{0}_PASSWORD={1}|g"'.format(mode, password)
-            cmd = 'sed -i {0} {1} {2} {3} {4} {5} {6}'.format(op_1, op_2, op_3, op_4, op_5, op_6, filename)
+            cmd = 'sed -i {0} {1} {2} {3} {4} {5} {6}'.format(
+                    cf_type, cf_owner, cf_env, cf_server, cf_username, cf_password, filename)
         ret, output = self.runcmd(cmd, self.ssh_host())
         if ret != 0:
             raise FailException("Failed to enable mode {0} in /etc/sysconfig/virt-who".format(mode))
@@ -572,29 +572,25 @@ class Testing(Provision):
         if mode == "libvirt-local":
             logger.info("libvirt local mode is default, don't need to configure")
             return True
+        cf_file = '{0}\n'.format(config_file)
+        cf_title = '[{0}]\n'.format(config_name)
+        cf_type = 'type={0}\n'.format(mode)
+        cf_server = 'server={0}\n'.format(server)
+        cf_username = 'username={0}\n'.format(username)
+        cf_password = 'password={0}\n'.format(password)
+        cf_owner = 'owner={0}\n'.format(owner)
+        cf_env = 'env={0}\n'.format(env)
+        if self.pkg_check(self.ssh_host(), 'virt-who')[9:15] >= '0.24.6':
+            cf_env = ''
         if mode == "vdsm":
             cmd = "echo -e '[{0}]\ntype={1}' > {2}".format(config_name, mode, config_file)
         elif mode == "kubevirt":
-            server_config = hypervisor_config['server_config']
-            cmd = ('cat <<EOF > {0}\n'
-                    '[{1}]\n'
-                    'type={2}\n'
-                    'kubeconfig={3}\n'
-                    'owner={4}\n'
-                    'env={5}\n'
-                    'EOF'
-                  ).format(config_file, config_name, mode, server_config, owner, env)
+            cf_kube = 'kubeconfig={0}\n'.format(hypervisor_config['server_config'])
+            cmd = ('cat <<EOF > {0}''{1}''{2}''{3}''{4}''{5}''EOF').format(
+                    cf_file, cf_title, cf_type, cf_kube, cf_owner, cf_env)
         else:
-            cmd = ('cat <<EOF > {0}\n'
-                    '[{1}]\n'
-                    'type={2}\n'
-                    'server={3}\n'
-                    'username={4}\n'
-                    'password={5}\n'
-                    'owner={6}\n'
-                    'env={7}\n'
-                    'EOF'
-                  ).format(config_file, config_name, mode, server, username, password, owner, env)
+            cmd = ('cat <<EOF > {0}''{1}''{2}''{3}''{4}''{5}''{6}''{7}''EOF').format(
+                    cf_file, cf_title, cf_type, cf_server, cf_username, cf_password, cf_owner, cf_env)
         ret, output = self.runcmd(cmd, self.ssh_host())
         if ret != 0:
             raise FailException("Failed to create config file {0}".format(config_file))
@@ -615,15 +611,17 @@ class Testing(Provision):
         register_config = self.get_register_config()
         owner = register_config['owner']
         env = register_config['env']
-        cmd = ('cat <<EOF > {0}\n'
-                '[fake]\n'
-                'type=fake\n'
-                'file={1}\n'
-                'is_hypervisor={2}\n'
-                'owner={3}\n'
-                'env={4}\n'
-                'EOF'
-              ).format(conf_file, json_file, is_hypervisor, owner, env)
+        cf_file = '{0}\n'.format(conf_file)
+        cf_title = '[fake]\n'
+        cf_type = 'type=fake\n'
+        cf_json = 'file={0}\n'.format(json_file)
+        cf_is_hypervisor = 'is_hypervisor={0}\n'.format(is_hypervisor)
+        cf_owner = 'owner={0}\n'.format(owner)
+        cf_env = 'env={0}\n'.format(env)
+        if self.pkg_check(self.ssh_host(), 'virt-who')[9:15] >= '0.24.6':
+            cf_env=''
+        cmd = ('cat <<EOF > {0}''{1}''{2}''{3}''{4}''{5}''{6}''EOF').format(
+                cf_file, cf_title, cf_type, cf_json, cf_is_hypervisor, cf_owner, cf_env)
         ret, output = self.runcmd(cmd, self.ssh_host())
         ret, output = self.runcmd("ls {0}".format(conf_file), self.ssh_host())
         if ret != 0 :
@@ -710,6 +708,14 @@ class Testing(Provision):
         mode = mode.lower()
         if mode == "libvirt-remote":
             mode = "libvirt"
+        cf_type = "--{0}".format(mode)
+        cf_owner = "--{0}-owner={1}".format(mode, owner)
+        cf_env = "--{0}-env={1}".format(mode, env)
+        cf_server = "--{0}-server={1}".format(mode, server)
+        cf_username = "--{0}-username={1}".format(mode, username)
+        cf_password = "--{0}-password={1}".format(mode, password)
+        if self.pkg_check(self.ssh_host(), 'virt-who')[9:15] >= '0.24.6':
+            cf_env=''
         if mode == "libvirt-local" or mode == "" or mode is None: 
             cmd = "virt-who "
         elif mode == "vdsm":
@@ -717,18 +723,10 @@ class Testing(Provision):
         elif mode == "kubevirt":
             server_config = hypervisor_config['server_config']
             ret, output = self.runcmd("export KUBECONFIG={0}".format(server_config), self.ssh_host())
-            op_1 = "--{0}".format(mode)
-            op_2 = "--{0}-owner={1}".format(mode, owner)
-            op_3 = "--{0}-env={1}".format(mode, env)
-            cmd = "virt-who {0} {1} {2} ".format(op_1, op_2, op_3)
+            cmd = "virt-who {0} {1} {2} ".format(cf_type, cf_owner, cf_env)
         else:
-            op_1 = "--{0}".format(mode)
-            op_2 = "--{0}-owner={1}".format(mode, owner)
-            op_3 = "--{0}-env={1}".format(mode, env)
-            op_4 = "--{0}-server={1}".format(mode, server)
-            op_5 = "--{0}-username={1}".format(mode, username)
-            op_6 = "--{0}-password={1}".format(mode, password)
-            cmd = "virt-who {0} {1} {2} {3} {4} {5} ".format(op_1, op_2, op_3, op_4, op_5, op_6)
+            cmd = "virt-who {0} {1} {2} {3} {4} {5} ".format(
+                    cf_type, cf_owner, cf_env, cf_server, cf_username, cf_password)
         return cmd
 
     def vw_cli_base_update(self, cmd, pattern, new_str):
