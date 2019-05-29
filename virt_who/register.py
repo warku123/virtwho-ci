@@ -269,10 +269,16 @@ class Register(Base):
         logger.info("attach command: %s" % cmd)
         for i in range(3):
             ret, output = self.runcmd(cmd, ssh, desc="subscription attach")
-            if ret == 0 or ("--auto" in cmd and "Unable to find available" in output):
+            if ret == 0:
                 logger.info("Succeeded to attach subscription")
                 return output.strip()
-            logger.warning("attach subscription return code %s, try again after 180s..." % ret)
+            if "--auto" in cmd and "Unable to find available" in output:
+                logger.warning("Failed to attach subscription by auto")
+                return output.strip()
+            if "Multi-entitlement not supported" in output:
+                logger.warning("It's a 'Standard' subscription type, quantity=2*N is only used for 'Stackable'")
+                return output.strip()
+            logger.warning("attach subscription return code {0}, try again after 180s...".format(ret))
             logger.warning(output)
             time.sleep(180)
         raise FailException("Failed to attach subscription after trying 3 loops")

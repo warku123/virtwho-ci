@@ -67,11 +67,11 @@ class Testcase(Testing):
                 results.setdefault('step2', []).append(False)
 
             logger.info(">>>step3: Register guest with auto-attach enabled by default, no sku in the key")
-            # guest will be auto-attached the best matched pool, virtual limit has the high priority
+            # guest will be auto-attached the best matched pool, vdc has the high priority
             self.system_register_with_ak(self.ssh_guest(), register_config, ak_name)
             output = self.system_sku_consumed(self.ssh_guest())
-            res1 = self.vw_msg_search(output, virtual_limit_pool_id, exp_exist=True)
-            res2 = self.vw_msg_search(output, virtual_vdc_pool_id, exp_exist=False)
+            res1 = self.vw_msg_search(output, virtual_limit_pool_id, exp_exist=False)
+            res2 = self.vw_msg_search(output, virtual_vdc_pool_id, exp_exist=True)
             results.setdefault('step3', []).append(res1)
             results.setdefault('step3', []).append(res2)
 
@@ -87,13 +87,13 @@ class Testcase(Testing):
             results.setdefault('step4', []).append(res2)
 
             logger.info(">>>step5: Re-register guest with auto-attach enabled by default, both virtual_vdc and virtual_limit are added to the key")
-            # guest will be auto-attached the best matched pool, virtual limit has the high priority
+            # guest will be auto-attached the best matched pool, vdc has the high priority
             limit_katello_id = self.satellite_katello_id(ssh_sat, register_config, virtual_limit_pool_id)
             self.satellite_active_key_attach_sku(ssh_sat, register_config, ak_name, limit_katello_id, default_org_id)
             self.system_register_with_ak(self.ssh_guest(), register_config, ak_name)
             output = self.system_sku_consumed(self.ssh_guest())
-            res1 = self.vw_msg_search(output, virtual_limit_pool_id, exp_exist=True)
-            res2 = self.vw_msg_search(output, virtual_vdc_pool_id, exp_exist=False)
+            res1 = self.vw_msg_search(output, virtual_limit_pool_id, exp_exist=False)
+            res2 = self.vw_msg_search(output, virtual_vdc_pool_id, exp_exist=True)
             results.setdefault('step5', []).append(res1)
             results.setdefault('step5', []).append(res2)
 

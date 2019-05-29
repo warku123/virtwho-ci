@@ -56,14 +56,9 @@ class Testcase(Testing):
         self.system_sku_unattach(self.ssh_guest())
         sku_attrs = self.system_sku_attr(self.ssh_guest(), vdc_virtual_sku, "virtual")
         virtual_pool_id = sku_attrs['pool_id']
-        self.system_sku_attach(self.ssh_guest(), pool_id=virtual_pool_id, quantity=2)
-        output = self.system_sku_consumed(self.ssh_guest())
-        res1 = self.vw_msg_search(output, vdc_virtual_sku, exp_exist=True)
-        res2 = self.vw_msg_search(output, 'Quantity Used:.*2', exp_exist=True)
-        res3 = self.vw_msg_search(output, 'Status Details:.*Subscription is current', exp_exist=True)
+        output = self.system_sku_attach(self.ssh_guest(), pool_id=virtual_pool_id, quantity=2)
+        res1 = self.vw_msg_search(output, 'Multi-entitlement not supported for pool', exp_exist=True)
         results.setdefault('step5', []).append(res1)
-        results.setdefault('step5', []).append(res2)
-        results.setdefault('step5', []).append(res3)
         self.system_custom_facts_remove(self.ssh_guest())
 
         # case result
