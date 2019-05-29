@@ -10,6 +10,8 @@ class Testcase(Testing):
         hypervisor_type = self.get_config('hypervisor_type')
         if hypervisor_type in ('libvirt-local', 'vdsm'):
             self.vw_case_skip(hypervisor_type)
+        if self.pkg_check(self.ssh_host(), 'virt-who')[9:15] >= '0.24.6':
+            self.vw_case_skip("virt-who version")
         self.vw_case_init()
 
         # case config
