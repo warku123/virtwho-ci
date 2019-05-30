@@ -221,6 +221,9 @@ class Register(Base):
             self.system_sku_refresh(ssh)
             cmd = "subscription-manager list --av --all --matches=%s | tail -n +4" % sku_id
             ret, output = self.runcmd(cmd, ssh, desc="subscription list matches")
+            if ret == 0 and not output and exp_exist is False:
+                logger.info("Succeeded to search, unexpected sku %s(%s) is not exist" % (sku_id, system_type))
+                return output
             if ret == 0 and "No available subscription pools" not in output \
                     and "Remote server error" not in output and "Pool ID:" in output:
                 sku_list = output.strip().split('\n\n')
@@ -438,7 +441,7 @@ class Register(Base):
         logger.error("Failed to clean consumers due to invalid json data")
         return False
 
-    def stage_consumer_uuid(self, ssh, register_config, host_name, host_uuid):
+    def stage_consumer_uuid(self, ssh, register_config, host_name, host_uuid, retry=True):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
@@ -463,17 +466,19 @@ class Register(Base):
                     logger.info("Succeeded to get stage consumer_uuid: {0}:{1}".format(
                         host_name, consumer_uuid))
                     return consumer_uuid
+            if retry is False:
+                return None
             logger.warning("no consumer_uuid found, try again after 180s...")
             logger.warning(output)
             time.sleep(180)
         logger.error("Failed to get stage consumer_uuid for host({0})".format(host_name))
         return None
 
-    def stage_consumer_delete(self, ssh, register_config, host_name, host_uuid):
+    def stage_consumer_delete(self, ssh, register_config, host_name, host_uuid, retry=True):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
-        consumer_uuid = self.stage_consumer_uuid(ssh, register_config, host_name, host_uuid)
+        consumer_uuid = self.stage_consumer_uuid(ssh, register_config, host_name, host_uuid, retry)
         if consumer_uuid is not None and consumer_uuid != "":
             cmd = "curl -s -k -u {0}:{1} -X DELETE {2}/consumers/{3}".format(
                     username, password, api, consumer_uuid)
@@ -484,7 +489,7 @@ class Register(Base):
             if host_name not in output:
                 logger.info("Succeeded to delete host {0}".format(host_name))
         else:
-            logger.info("Host({0}) is not found".format(host_name))
+            logger.info("Host({0}) is not found in stage server".format(host_name))
         return True
 
     def stage_consumer_attach(self, ssh, register_config, host_name, host_uuid, pool_id):
@@ -579,7 +584,7 @@ class Register(Base):
         logger.error("Failed to set satellite host for unregister_delete_host")
         return False
 
-    def satellite_host_id(self, ssh, register_config, host_name, host_uuid):
+    def satellite_host_id(self, ssh, register_config, host_name, host_uuid, retry=True):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
@@ -601,6 +606,8 @@ class Register(Base):
                     host_id = results[latest_time]
                     logger.info("Succeeded to get satellite host_id: {0}:{1}".format(host_name, host_id))
                     return host_id
+            if retry is False:
+                return None
             logger.warning("no results found for host_id, try again after 15s...")
             time.sleep(15)
         logger.warning("Failed to get satellite host_id for host({0}), maybe mapping is not sent".format(host_name))
@@ -627,11 +634,11 @@ class Register(Base):
         logger.error("Failed to get satellite katello_id for pool({0})".format(pool_id))
         return None
 
-    def satellite_host_delete(self, ssh, register_config, host_name, host_uuid):
+    def satellite_host_delete(self, ssh, register_config, host_name, host_uuid, retry=True):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
-        host_id = self.satellite_host_id(ssh, register_config, host_name, host_uuid)
+        host_id = self.satellite_host_id(ssh, register_config, host_name, host_uuid, retry)
         if host_id is not None and host_id != "":
             cmd = "curl -X DELETE -s -k -u {0}:{1} {2}/api/v2/hosts/{3}".format(
                     username, password, api, host_id)
@@ -642,7 +649,7 @@ class Register(Base):
             if host_name not in output:
                 logger.info("Succeeded to delete host: {0}".format(host_name))
         else:
-            logger.info("Host({0}) is not found".format(host_name))
+            logger.info("Host({0}) is not found in satellite server".format(host_name))
         return True
 
     def satellite_host_attach(self, ssh, register_config, host_name, host_uuid, pool_id, quantity=1):
@@ -661,8 +668,8 @@ class Register(Base):
                 if pool_id in output and "subscription_id" in output and "product_id" in output:
                     logger.info("Succeeded to attach pool({0}) for host_id({0})".format(pool_id, host_id))
                     return True
-                logger.warning("can't attach pool({0}) for host_id({1}), try again after 15s".format(pool_id, host_id))
                 time.sleep(15)
+                logger.warning("can't attach pool({0}) for host_id({1}), try again after 15s".format(pool_id, host_id))
         raise FailException("Failed to attach pool({0}) for host_id({1})".format(pool_id, host_id))
 
     def satellite_host_unattach(self, ssh, register_config, host_name, host_uuid):

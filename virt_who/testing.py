@@ -468,6 +468,9 @@ class Testing(Provision):
         if "vdsm" in hypervisor_type or "rhevm" in hypervisor_type:
             cmd = "ovirt-aaa-jdbc-tool user unlock admin"
             self.runcmd(cmd, ssh_hypervisor)
+        host_name = self.get_hypervisor_hostname()
+        host_uuid = self.get_hypervisor_hostuuid()
+        self.vw_web_host_delete(host_name, host_uuid, retry=False)
         self.system_register_config(self.ssh_host(), register_type, register_config)
         self.system_register(self.ssh_host(), register_type, register_config)
         self.system_register_config(self.ssh_guest(uid), register_type, register_config)
@@ -1178,13 +1181,13 @@ class Testing(Provision):
         if "satellite" in register_type:
             logger.warning("not support to delete job currently")
 
-    def vw_web_host_delete(self, host_name, host_uuid):
+    def vw_web_host_delete(self, host_name, host_uuid, retry=True):
         register_config = self.get_register_config()
         register_type = register_config['type']
         if "stage" in register_type:
-            self.stage_consumer_delete(self.ssh_host(), register_config, host_name, host_uuid)
+            self.stage_consumer_delete(self.ssh_host(), register_config, host_name, host_uuid, retry)
         elif "satellite" in register_type:
-            self.satellite_host_delete(self.ssh_host(), register_config, host_name, host_uuid)
+            self.satellite_host_delete(self.ssh_host(), register_config, host_name, host_uuid, retry)
         else:
             raise FailException("Unkonwn server type for web host delete")
 
