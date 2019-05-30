@@ -73,5 +73,10 @@ class Testcase(Testing):
         results.setdefault('step6', []).append(res1)
         results.setdefault('step6', []).append(res2)
 
+        logger.info(">>>step7: no available virtual limit sku listed in guest ")
+        output = self.system_sku_attr(self.ssh_guest(), limit_virtual_sku, "virtual", exp_exist=False)
+        res = self.vw_msg_search(str(output), limit_virtual_sku, exp_exist=False)
+        results.setdefault('step7', []).append(res)
+
         # case result
         self.vw_case_result(results)

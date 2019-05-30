@@ -59,5 +59,10 @@ class Testcase(Testing):
         logger.warning("{0} is not available for: Red Hat Enterprise Linux Server".format(unlimited_sku))
         results.setdefault('step5', []).append(res1)
 
+        logger.info(">>>step6: available virtual unlimit sku can be listed in guest ")
+        output = self.system_sku_attr(self.ssh_guest(), unlimited_sku, "virtual")
+        res = self.vw_msg_search(str(output), unlimited_sku, exp_exist=True)
+        results.setdefault('step6', []).append(res)
+
         # case result
         self.vw_case_result(results)
