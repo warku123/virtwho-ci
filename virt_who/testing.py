@@ -468,6 +468,7 @@ class Testing(Provision):
         if "vdsm" in hypervisor_type or "rhevm" in hypervisor_type:
             cmd = "ovirt-aaa-jdbc-tool user unlock admin"
             self.runcmd(cmd, ssh_hypervisor)
+        self.vw_thread_clean()
         host_name = self.get_hypervisor_hostname(uid)
         host_uuid = self.get_hypervisor_hostuuid(uid)
         self.vw_web_host_delete(host_name, host_uuid, retry=False)
