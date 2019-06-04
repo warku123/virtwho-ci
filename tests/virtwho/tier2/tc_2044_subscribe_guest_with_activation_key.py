@@ -126,4 +126,7 @@ class Testcase(Testing):
             self.satellite_active_key_delete(ssh_sat, register_config, ak_name, default_org_id)
 
         # Case Result
-        self.vw_case_result(results)
+        notes = list()
+        notes.append("Bug(Step3,Step5): Which SKU has the high priority to auto-attach?")
+        notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1712821")
+        self.vw_case_result(results, notes)

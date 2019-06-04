@@ -40,10 +40,8 @@ class Testcase(Testing):
 
         logger.info(">>>step2: check temporary sku is attached by auto in guest")
         output = self.system_sku_consumed(self.ssh_guest())
-        res1 = self.vw_msg_search(output, vdc_virtual_sku, exp_exist=True)
-        res2 = self.vw_msg_search(output, 'Subscription Type: .*Temporary', exp_exist=True)
+        res1 = self.vw_msg_search(output, 'Subscription Type: .*Temporary', exp_exist=True)
         results.setdefault('step2', []).append(res1)
-        results.setdefault('step2', []).append(res2)
 
         logger.info(">>>step3: start virt-who service")
         data, tty_output, rhsm_output = self.vw_start(exp_send=1)
