@@ -43,5 +43,10 @@ class Testcase(Testing):
         res = self.vw_msg_search(output, vdc_virtual_sku, exp_exist=True)
         results.setdefault('step3', []).append(res)
 
+        logger.info(">>>step4: no available virtual vdc sku listed in guest ")
+        output = self.system_sku_attr(self.ssh_guest(), vdc_virtual_sku, "virtual", exp_exist=False)
+        res = self.vw_msg_search(str(output), vdc_virtual_sku, exp_exist=False)
+        results.setdefault('step4', []).append(res)
+
         # case result
         self.vw_case_result(results)

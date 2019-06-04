@@ -146,6 +146,8 @@ class Register(Base):
                 cmd = "sed -i -e 's|^insecure.*|insecure = 1|g' /etc/rhsm/rhsm.conf"
                 ret, output = self.runcmd(cmd, ssh)
                 self.system_unregister(ssh)
+            elif "Please unregister or remove hosts" in output:
+                self.system_unregister(ssh)
             time.sleep(180)
         raise FailException("Failed to register system {0} to {1}({2})".format(host, server, register_type))
 

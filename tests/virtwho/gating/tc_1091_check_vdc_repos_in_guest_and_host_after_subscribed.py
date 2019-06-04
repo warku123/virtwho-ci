@@ -6,7 +6,7 @@ from virt_who.testing import Testing
 
 class Testcase(Testing):
     def test_run(self):
-        self.vw_case_info(os.path.basename(__file__), case_id='RHEL-134073')
+        self.vw_case_info(os.path.basename(__file__), case_id='RHEL-134055')
         self.vw_case_init()
 
         # case config
@@ -22,8 +22,8 @@ class Testcase(Testing):
         host_uuid = self.get_hypervisor_hostuuid()
         register_config = self.get_register_config()
         register_type = register_config['type']
-        limit_physical_sku = register_config['limit']
-        limit_virtual_sku = register_config['limit']
+        vdc_physical_sku = register_config['vdc']
+        vdc_virtual_sku = register_config['vdc_bonus']
 
         # case steps
         logger.info(">>>step1: run virt-who and check the mapping info is sent or not")
@@ -32,29 +32,27 @@ class Testcase(Testing):
         results.setdefault('step1', []).append(res)
 
         logger.info(">>>step2: attach physical sku for host/hypervisor")
-        self.vw_web_unattach(host_name, host_uuid)
-        sku_attrs = self.system_sku_attr(self.ssh_host(), limit_physical_sku, "physical")
-        pool_id = sku_attrs['pool_id']
-        self.vw_web_attach(host_name, host_uuid, pool_id)
+        sku_attrs = self.system_sku_attr(self.ssh_host(), vdc_physical_sku, "physical")
+        physical_pool_id = sku_attrs['pool_id']
+        self.vw_web_attach(host_name, host_uuid, physical_pool_id)
 
-        logger.info(">>>step3: check virtual sku attrs in guest")
-        sku_attrs = self.system_sku_attr(self.ssh_guest(), limit_virtual_sku, "virtual")
-        available = sku_attrs['available']
-        if available == "1":
-            logger.info("Succeeded to check, vitual sku({0}) Available({1})".format(limit_virtual_sku, available))
-            results.setdefault('step3', []).append(True)
-        else:
-            logger.error("Failed to check, vitual sku({0}) Available({1})".format(limit_virtual_sku, available))
-            results.setdefault('step3', []).append(False)
-
-        logger.info(">>>step4: attach virtual sku by pool_id in guest")
-        pool_id = sku_attrs['pool_id']
-        self.system_sku_attach(self.ssh_guest(), pool_id=pool_id)
+        logger.info(">>>step3: attach virtual sku by pool_id in guest")
+        sku_attrs = self.system_sku_attr(self.ssh_guest(), vdc_virtual_sku, "virtual")
+        virtual_pool_id = sku_attrs['pool_id']
+        self.system_sku_attach(self.ssh_guest(), pool_id=virtual_pool_id)
         output = self.system_sku_consumed(self.ssh_guest())
-        res1 = self.vw_msg_search(output, limit_virtual_sku, exp_exist=True)
-        res2 = self.vw_msg_search(output, 'Quantity Used:.*1', exp_exist=True)
-        results.setdefault('step4', []).append(res1)
-        results.setdefault('step4', []).append(res2)
+        res = self.vw_msg_search(output, vdc_virtual_sku, exp_exist=True)
+        results.setdefault('step3', []).append(res)
+
+        logger.info(">>>step4: check repo status in host")
+        hypervisor_type = self.get_config('hypervisor_type')
+        if "libvirt-local" in hypervisor_type or "vdsm" in hypervisor_type:
+            cmd = "subscription-manager repos --list"
+            ret, output = self.runcmd(cmd, self.ssh_host())
+            res = self.vw_msg_search(output, "no repositories available" , exp_exist=True)
+            results.setdefault('step4', []).append(res)
+        else:
+            logger.warning("skip this step, it's not available for mode {0}".format(hypervisor_type))
 
         logger.info(">>>step5: check repo status in guest")
         cmd = "subscription-manager repos --list"
@@ -72,11 +70,6 @@ class Testcase(Testing):
         res2 = self.vw_msg_search(output, "Invalid" , exp_exist=False)
         results.setdefault('step6', []).append(res1)
         results.setdefault('step6', []).append(res2)
-
-        logger.info(">>>step7: no available virtual limit sku listed in guest ")
-        output = self.system_sku_attr(self.ssh_guest(), limit_virtual_sku, "virtual", exp_exist=False)
-        res = self.vw_msg_search(str(output), limit_virtual_sku, exp_exist=False)
-        results.setdefault('step7', []).append(res)
 
         # case result
         self.vw_case_result(results)
