@@ -841,6 +841,23 @@ class Register(Base):
                 logger.info("Succeeded to search, unexpected host is not exist in org {0}".format(org_name))
                 return True
 
+    def satellite_hosts_get(self, ssh, register_config, host_name, host_uuid, desc=""):
+        admin_user = register_config['username']
+        admin_passwd = register_config['password']
+        server = register_config['server']
+        baseurl = "https://{0}".format(server)
+        host_id = self.satellite_host_id(ssh, register_config, host_name, host_uuid)
+        cmd = "curl -X GET -s -k -u {0}:{1} {2}/api/v2/hosts/{3}" \
+            .format(admin_user, admin_passwd, baseurl, host_id)
+        ret, output = self.runcmd(str(cmd), ssh, desc=desc)
+        if ret == 0 and output is not False and output is not None:
+            logger.info("Succeed to get expected host info")
+            output = self.is_json(output.strip())
+            return output
+        else:
+            logger.info("Failed to get host info")
+            return None
+
     def satellite_active_key_create(self, ssh, register_config, key_name, org_id=1, desc=""):
         api = register_config['api']
         username = register_config['username']
