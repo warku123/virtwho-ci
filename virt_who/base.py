@@ -39,6 +39,10 @@ class Base(unittest.TestCase):
 
     def paramiko_putfile(self, ssh, from_path, to_path, port=22):
         host = ssh['host']
+        if ":" in host:
+            var = host.split(':')
+            host = var[0]
+            port = int(var[1])
         username = ssh['username']
         password = ssh['password']
         scp = paramiko.Transport((host, port))
@@ -86,13 +90,13 @@ class Base(unittest.TestCase):
         username = ssh['username']
         password = ssh['password']
         retcode, stdout = self.paramiko_run(cmd, host, username, password, timeout, port)
-        if debug:
-            fd = open(DEBUG_FILE, 'a')
-            fd.write(">>> Running in: {0}:{1}, Desc: {2}\n".format(host, port, desc))
-            fd.write("Command: {0}\n".format(cmd))
-            fd.write("Retcode: {0}\n".format(retcode))
+        fd = open(DEBUG_FILE, 'a')
+        fd.write(">>> Running in: {0}:{1}, Desc: {2}\n".format(host, port, desc))
+        fd.write("Command: {0}\n".format(cmd))
+        fd.write("Retcode: {0}\n".format(retcode))
+        if debug or retcode != 0:
             fd.write("Output:\n{0}\n".format(stdout))
-            fd.close()
+        fd.close()
         return retcode, stdout.strip()
 
     def run_loop(self, cmd, ssh, desc=None, loop_num=10, wait_time=30, wait_msg=None):

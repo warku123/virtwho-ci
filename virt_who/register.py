@@ -567,7 +567,7 @@ class Register(Base):
         password = register_config['password']
         cmd = "curl -X GET -s -k -u {0}:{1} {2}/api/settings/?per_page=1000".format(username, password, api)
         for i in range(3):
-            ret, output = self.runcmd(cmd, ssh)
+            ret, output = self.runcmd(cmd, ssh, debug=False)
             output = self.is_json(output.strip())
             if output is not False and output is not None and output != "":
                 for item in output["results"]:
@@ -594,7 +594,7 @@ class Register(Base):
                 username, password, api)
         for i in range(3):
             rex = [host_name, host_name.lower(), host_uuid, host_uuid.lower()]
-            ret, output = self.runcmd(cmd, ssh, desc="satellite hosts list")
+            ret, output = self.runcmd(cmd, ssh, desc="satellite hosts list", debug=False)
             output = self.is_json(output.strip())
             if output is not False and output is not None and output != "" and output.has_key('results'):
                 results = dict()
@@ -623,7 +623,7 @@ class Register(Base):
         cmd = "curl -X GET -s -k -u {0}:{1} {2}/katello/api/organizations/{3}/subscriptions/?per_page=1000".format(
                 username, password, api, org_id)
         for i in range(3):
-            ret, output = self.runcmd(cmd, ssh, desc="satellite pools list")
+            ret, output = self.runcmd(cmd, ssh, desc="satellite pools list", debug=False)
             output = self.is_json(output.strip())
             if output is not False and output is not None and output != "" and output.has_key('results'):
                 for item in output['results']:
@@ -685,7 +685,7 @@ class Register(Base):
             cmd = "curl -X GET -s -k -u {0}:{1} {2}/api/v2/hosts/{3}/subscriptions/?per_page=1000".format(
                     username, password, api, host_id)
             for i in range(3):
-                ret, output = self.runcmd(cmd, ssh, desc="satellite host consumed list")
+                ret, output = self.runcmd(cmd, ssh, desc="satellite host consumed list", debug=False)
                 output = self.is_json(output.strip())
                 if output is not False and output is not None and output != "" and output.has_key('results'):
                     for item in output['results']:
@@ -802,7 +802,7 @@ class Register(Base):
         password = register_config['password']
         org_id = self.satellite_org_id_get(ssh, register_config, org_name)
         cmd = "curl -X GET -s -k -u {0}:{1} '{2}/api/organizations/{3}/hosts'".format(username, password, api, org_id)
-        ret, output = self.runcmd(cmd, ssh)
+        ret, output = self.runcmd(cmd, ssh, debug=False)
         output = self.is_json(output.strip())
         if ret == 0 and output is not False and output is not None and output != "":
             logger.info("succeeded to list all hosts")
