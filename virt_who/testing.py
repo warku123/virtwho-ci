@@ -1133,6 +1133,22 @@ class Testing(Provision):
         if self.kill_pid_by_name(self.ssh_host(), "virt-who") is False:
             raise FailException("Failed to stop and clean virt-who process")
 
+    def vw_gen_json(self, hypervisors, guests):
+        virtwho = {}
+        for i in range(hypervisors):
+            guest_list = []
+            for c in range(guests):
+                guest_list.append({
+                    "guestId": str(uuid.uuid4()),
+                    "state": 1,
+                    "attributes": {
+                        "active": 1,
+                        "virtWhoType": "esx"
+                    }
+                })
+            virtwho[str(uuid.uuid4()).replace("-", ".")] = guest_list
+        return virtwho
+
     def vw_rhsm_associate(self, data, host_uuid, guest_uuid, uid=None):
         hypervisor_config = self.get_hypervisor_config(uid)
         register_config = self.get_register_config()
