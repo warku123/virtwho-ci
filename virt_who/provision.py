@@ -1477,7 +1477,7 @@ class Provision(Register):
 
     def docker_container_clean(self, ssh_docker):
         ret, output = self.runcmd('docker ps -a |wc -l', ssh_docker)
-        if int(output) > 11:
+        if int(output) > 5:
             cmd = "docker ps -a | awk '{print $1 }'|xargs -I {} docker stop {}"
             self.runcmd(cmd, ssh_docker, desc="Stop all containers")
             cmd = "docker ps -a | awk '{print $1 }'|xargs -I {} docker rm -f {}"
