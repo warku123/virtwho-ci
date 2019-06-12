@@ -26,6 +26,7 @@ class Testcase(Testing):
         register_username = register_config['username']
         register_password = register_config['password']
         register_prefix = register_config['prefix']
+        self.system_unregister(self.ssh_host())
 
         # Case Steps
         logger.info(">>>step1: run virt-who with rhsm_hostname, rhsm_port, rhsm_prefix good value")
@@ -59,14 +60,18 @@ class Testcase(Testing):
         logger.info(">>>step4: run virt-who with rhsm_password null value")
         self.vw_option_update_value("rhsm_password", " ", config_file)
         data, tty_output, rhsm_output = self.vw_start()
-        res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+        res1 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
+        res2 = self.vw_msg_search(rhsm_output, "system is not registered or you are not root")
         results.setdefault('step4', []).append(res1)
+        results.setdefault('step4', []).append(res2)
 
         logger.info(">>>step5: run virt-who with rhsm_password disable")
         self.vw_option_disable("rhsm_password", config_file)
         data, tty_output, rhsm_output = self.vw_start()
-        res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+        res1 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
+        res2 = self.vw_msg_search(rhsm_output, "system is not registered or you are not root")
         results.setdefault('step5', []).append(res1)
+        results.setdefault('step5', []).append(res2)
 
         # Case Result
         self.vw_case_result(results)

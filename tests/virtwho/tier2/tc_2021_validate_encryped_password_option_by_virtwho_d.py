@@ -66,8 +66,4 @@ class Testcase(Testing):
             self.fd_delete(self.ssh_host(), config_file_ok)
 
         # Case Result
-        notes = list()
-        if "libvirt-remote" not in hypervisor_type:
-            notes.append("Bug(step3): Failed to run valid hypervisors if configure one hypervisor with wrong encrypted_password")
-            notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1641953")
-        self.vw_case_result(results, notes)
+        self.vw_case_result(results)
