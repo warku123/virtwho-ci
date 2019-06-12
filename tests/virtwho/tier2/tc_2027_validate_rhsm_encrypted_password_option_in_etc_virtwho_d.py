@@ -25,6 +25,7 @@ class Testcase(Testing):
         register_username = register_config['username']
         register_password = register_config['password']
         register_prefix = register_config['prefix']
+        self.system_unregister(self.ssh_host())
 
         # Case Steps
         logger.info(">>>step1: run virt-who with rhsm_encrypted_password good value")
@@ -46,28 +47,22 @@ class Testcase(Testing):
         results.setdefault('step2', []).append(res1)
         results.setdefault('step2', []).append(res2)
 
-        logger.info(">>>step3: run virt-who with rhsm_encrypted_password=红帽©¥®ðπ∉")
-        self.vw_option_update_value("rhsm_encrypted_password", "红帽©¥®ðπ∉", config_file)
-        data, tty_output, rhsm_output = self.vw_start()
-        res1 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
-        res2 = self.vw_msg_search(rhsm_output, "codec can't decode", exp_exist=True)
-        results.setdefault('step3', []).append(res1)
-        results.setdefault('step3', []).append(res2)
+        logger.info(">>>step3: skip this step")
+        # logger.info(">>>step3: run virt-who with rhsm_encrypted_password=红帽©¥®ðπ∉")
+        # self.vw_option_update_value("rhsm_encrypted_password", "红帽©¥®ðπ∉", config_file)
+        # data, tty_output, rhsm_output = self.vw_start()
+        # res1 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
+        # res2 = self.vw_msg_search(rhsm_output, "codec can't decode", exp_exist=True)
+        # results.setdefault('step3', []).append(res1)
+        # results.setdefault('step3', []).append(res2)
 
         logger.info(">>>step4: run virt-who with rhsm_encrypted_password null value")
         self.vw_option_update_value("rhsm_encrypted_password", " ", config_file)
         data, tty_output, rhsm_output = self.vw_start()
-        res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+        res1 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
+        res2 = self.vw_msg_search(rhsm_output, 'Option "rhsm_encrypted_password" cannot be decrypted', exp_exist=True)
         results.setdefault('step4', []).append(res1)
-
-        logger.info(">>>step5: run virt-who with rhsm_encrypted_password disable")
-        self.vw_option_disable("rhsm_encrypted_password", config_file)
-        data, tty_output, rhsm_output = self.vw_start()
-        res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
-        results.setdefault('step5', []).append(res1)
+        results.setdefault('step4', []).append(res2)
 
         # Case Result
-        notes = list()
-        notes.append("Bug(step2,3): Failed to run valid hypervisors if configure one hypervisor with wrong encrypted_password")
-        notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1641953")
-        self.vw_case_result(results, notes)
+        self.vw_case_result(results)
