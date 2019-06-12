@@ -64,7 +64,4 @@ class Testcase(Testing):
         results.setdefault('step4', []).append(thread_num == 1)
 
         # case result
-        notes = list()
-        notes.append("Bug(Step4): unregister and clean together, virt-who will be killed")
-        notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1506167")
-        self.vw_case_result(results, notes)
+        self.vw_case_result(results)
