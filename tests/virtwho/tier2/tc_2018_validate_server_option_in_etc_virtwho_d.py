@@ -92,7 +92,7 @@ class Testcase(Testing):
         self.vw_option_enable(option_tested, config_file)
         self.vw_option_update_value(option_tested, '', config_file)
         data, tty_output, rhsm_output = self.vw_start(exp_error=True)
-        msg_list = ["SERVER.* not set|Error in .* backend|No host supplied"]
+        msg_list = ["SERVER.* not set|Error in .* backend|No host supplied|server needs to be set"]
         res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=1, exp_send=1)
         res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
         results.setdefault('step7', []).append(res1)
