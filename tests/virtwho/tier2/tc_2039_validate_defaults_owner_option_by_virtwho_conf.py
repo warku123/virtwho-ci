@@ -49,11 +49,8 @@ class Testcase(Testing):
         logger.info(">>>step3: disable owner option in /etc/virt-who.d/, set owner=红帽©¥®ðπ∉ in /etc/virt-who.conf")
         self.vw_option_update_value("owner", "红帽©¥®ðπ∉", virtwho_conf)
         data, tty_output, rhsm_output = self.vw_start()
-        msg_list = ["codec can't decode|codec can't encode|Communication with subscription manager failed|owner.* is different"]
-        res1 = self.op_normal_value(data, exp_error="1|3", exp_thread=1, exp_send=0)
-        res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
+        res1 = self.op_normal_value(data, exp_error="nz", exp_thread=1, exp_send=0)
         results.setdefault('step3', []).append(res1)
-        results.setdefault('step3', []).append(res2)
 
         logger.info(">>>step4: disable owner option in /etc/virt-who.d/, set owner= in /etc/virt-who.conf")
         self.vw_option_update_value("owner", "", virtwho_conf)
@@ -76,12 +73,7 @@ class Testcase(Testing):
         results.setdefault('step5', []).append(res2)
 
         # Case Result
-        notes = list()
-        register_type = self.get_config('register_type')
-        if "satellite62" in register_type:
-            notes.append("Bug(Step4): set owner to null, still can sent report normally")
-            notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1516173")
-        self.vw_case_result(results, notes)
+        self.vw_case_result(results)
 
 if __name__ == "__main__":
     unittest.main()

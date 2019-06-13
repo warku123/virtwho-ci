@@ -31,14 +31,11 @@ class Testcase(Testing):
         try:
             vw_host_name = self.get_hostname(self.ssh_host())
             vw_host_uuid='xxx'
-            if hypervisor_type in ("libvirt-local", "vdsm"):
-                error_msg = "consumer no longer exists"
-            else:
-                error_msg = ".*has been deleted"
             res1 = self.vw_web_host_delete(vw_host_name, vw_host_uuid)
             data, tty_output, rhsm_output = self.vw_start(exp_send=0, exp_error=True)
             res2 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
-            res3 = self.vw_msg_search(rhsm_output, error_msg, exp_exist=True)
+            error_msg = ["consumer no longer exists|.*has been deleted"]
+            res3 = self.msg_validation(rhsm_output, error_msg, exp_exist=True)
             results.setdefault('step2', []).append(res1)
             results.setdefault('step2', []).append(res2)
             results.setdefault('step2', []).append(res3)
