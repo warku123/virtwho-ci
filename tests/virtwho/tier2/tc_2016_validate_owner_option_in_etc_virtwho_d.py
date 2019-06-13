@@ -40,11 +40,8 @@ class Testcase(Testing):
         logger.info(">>>step3: owner option is 红帽€467aa value")
         self.vw_option_update_value(option_tested, '红帽€467aa', config_file)
         data, tty_output, rhsm_output = self.vw_start()
-        msg_list = ["codec can't decode|codec can't encode|Communication with subscription manager failed|owner.* is different"]
-        res1 = self.op_normal_value(data, exp_error="1|3", exp_thread=1, exp_send=0)
-        res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
+        res1 = self.op_normal_value(data, exp_error="nz", exp_thread=1, exp_send=0)
         results.setdefault('step3', []).append(res1)
-        results.setdefault('step3', []).append(res2)
 
         logger.info(">>>step4: owner option is null value")
         self.vw_option_update_value(option_tested, '', config_file)
@@ -88,9 +85,4 @@ class Testcase(Testing):
         results.setdefault('step7', []).append(res2)
 
         # Case Result
-        notes = list()
-        register_type = self.get_config('register_type')
-        if "satellite62" in register_type:
-            notes.append("Bug(Step4,Step7): set owner to null, still can sent report normally")
-            notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1516173")
-        self.vw_case_result(results, notes)
+        self.vw_case_result(results)
