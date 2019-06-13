@@ -49,16 +49,13 @@ class Testcase(Testing):
             logger.info(">>>step3: run virt-who with rhsm_prefix null value")
             self.vw_option_update_value("rhsm_prefix", " ", config_file)
             data, tty_output, rhsm_output = self.vw_start()
-            res1 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
-            res2 = self.vw_msg_search(rhsm_output, 'HTTP error', exp_exist=True)
+            res1 = self.op_normal_value(data, exp_error="nz", exp_thread=1, exp_send=0)
             results.setdefault('step3', []).append(res1)
-            results.setdefault('step3', []).append(res2)
 
             logger.info(">>>step4: run virt-who with rhsm_prefix disable")
             self.vw_option_disable("rhsm_prefix", config_file)
             data, tty_output, rhsm_output = self.vw_start()
-            res1 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
-            res2 = self.vw_msg_search(rhsm_output, 'HTTP error', exp_exist=True)
+            res1 = self.op_normal_value(data, exp_error="nz", exp_thread=1, exp_send=0)
             results.setdefault('step4', []).append(res1)
             results.setdefault('step4', []).append(res2)
 
@@ -70,4 +67,9 @@ class Testcase(Testing):
             self.vw_option_enable("prefix", "/etc/rhsm/rhsm.conf")
 
         # Case Result
-        self.vw_case_result(results)
+        notes = list()
+        server_type = self.get_config('register_type')
+        if "stage" in server_type:
+            notes.append("Bug(Step3,4): virt-who send out mappings to Stage Candlepin without rhsm_prefix")
+            notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1720072")
+        self.vw_case_result(results, notes)
