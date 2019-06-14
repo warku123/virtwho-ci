@@ -46,11 +46,12 @@ class Testcase(Testing):
         results.setdefault('step2', []).append(res1)
         results.setdefault('step2', []).append(res2)
 
-        logger.info(">>>step3: disable owner option in /etc/virt-who.d/, set owner=红帽©¥®ðπ∉ in /etc/virt-who.conf")
-        self.vw_option_update_value("owner", "红帽©¥®ðπ∉", virtwho_conf)
-        data, tty_output, rhsm_output = self.vw_start()
-        res1 = self.op_normal_value(data, exp_error="nz", exp_thread=1, exp_send=0)
-        results.setdefault('step3', []).append(res1)
+        logger.info(">>>step3: skip this step because owner cannot be set to no-ascci")
+        # logger.info(">>>step3: disable owner option in /etc/virt-who.d/, set owner=红帽©¥®ðπ∉ in /etc/virt-who.conf")
+        # self.vw_option_update_value("owner", "红帽©¥®ðπ∉", virtwho_conf)
+        # data, tty_output, rhsm_output = self.vw_start()
+        # res1 = self.op_normal_value(data, exp_error="nz", exp_thread=1, exp_send=0)
+        # results.setdefault('step3', []).append(res1)
 
         logger.info(">>>step4: disable owner option in /etc/virt-who.d/, set owner= in /etc/virt-who.conf")
         self.vw_option_update_value("owner", "", virtwho_conf)
