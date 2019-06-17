@@ -698,12 +698,12 @@ class Provision(Register):
         self.rhsm_backup(ssh_host)
         self.rhsm_backup(ssh_guest)
         self.jenkins_virtwho_install(register_type, ssh_host)
-        self.system_register_config(ssh_host, register_type, register_config)
-        self.system_register_config(ssh_guest, register_type, register_config)
+        #self.system_register_config(ssh_host, register_type, register_config)
+        #self.system_register_config(ssh_guest, register_type, register_config)
         if "stage" in register_type:
             self.stage_consumer_clean(ssh_host, register_config)
-        self.system_register(ssh_host, register_type, register_config)
-        self.system_register(ssh_guest, register_type, register_config)
+        #self.system_register(ssh_host, register_type, register_config)
+        #self.system_register(ssh_guest, register_type, register_config)
 
     def jenkins_parameter(self, hypervisor_config, register_config):
         parameter = list()
