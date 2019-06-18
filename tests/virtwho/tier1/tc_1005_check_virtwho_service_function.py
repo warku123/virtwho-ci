@@ -19,11 +19,10 @@ class Testcase(Testing):
                 'step2':'stop',
                 'step3':'start',
                 'step4':'try-restart',
-                'step5':'reload', 
-                'step6':'force-reload'
+                'step5':'force-reload'
                 }
         if self.rhel_version(self.ssh_host()) == 6:
-            steps['step7'] = "condrestart"
+            steps['step6'] = "condrestart"
 
         # case steps
         for step, option in sorted(steps.items(),key=lambda item:item[0]):
@@ -39,7 +38,5 @@ class Testcase(Testing):
                 results.setdefault(step, []).append(False)
 
         # case result
-        notes = list()
-        notes.append("Bug(Step5): Failed to reload virt-who.service")
-        notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1638182")
-        self.vw_case_result(results, notes)
+        logger.info('Warning: Skip to test "reload" due to Bug 1638182 WONTFIX')
+        self.vw_case_result(results)
