@@ -693,17 +693,14 @@ class Provision(Register):
             raise FailException("virt-who package is not installed for testing")
         logger.info("virt-who package is installed: {0}".format(output.strip()))
         self.runcmd("sed -i '/^#.*;/d' /etc/virt-who.conf", ssh_host)
+        self.system_unregister(ssh_host)
 
     def jenkins_job_init(self, register_type, register_config, ssh_host, ssh_guest):
         self.rhsm_backup(ssh_host)
         self.rhsm_backup(ssh_guest)
         self.jenkins_virtwho_install(register_type, ssh_host)
-        #self.system_register_config(ssh_host, register_type, register_config)
-        #self.system_register_config(ssh_guest, register_type, register_config)
         if "stage" in register_type:
             self.stage_consumer_clean(ssh_host, register_config)
-        #self.system_register(ssh_host, register_type, register_config)
-        #self.system_register(ssh_guest, register_type, register_config)
 
     def jenkins_parameter(self, hypervisor_config, register_config):
         parameter = list()
@@ -1305,12 +1302,12 @@ class Provision(Register):
         '''repo_type should be one of them: satellite, capsule, satellite-tools'''
         repo = deploy.repo.rhel_sat
         for i in range(3):
-            cmd = "rpm -qa | grep katello-ca-consumer | xargs rpm -e |sort"
-            ret, output = self.runcmd(cmd, ssh_sat, desc="uninstall katello-ca-consumer")
             cmd = "subscription-manager unregister"
             ret, output = self.runcmd(cmd, ssh_sat, desc="sub-man unregister")
             cmd = "subscription-manager clean"
             ret, output = self.runcmd(cmd, ssh_sat, desc="sub-man clean")
+            cmd = "rpm -qa | grep katello-ca-consumer | xargs rpm -e |sort"
+            ret, output = self.runcmd(cmd, ssh_sat, desc="uninstall katello-ca-consumer")
             cmd = "yum -y localinstall {0}".format(repo)
             ret, output = self.runcmd(cmd, ssh_sat, desc="install katello-ca")
             cmd = "subscription-manager register --org Sat6-CI --activationkey '%s-%s.0-qa-rhel%s'" % (repo_type, sat_ver, rhel_ver)
