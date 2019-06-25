@@ -2031,9 +2031,9 @@ class Provision(Register):
             s = output.strip()
             if s.startswith('{') and s.endswith('}'):
                 s = s[1:-1]
-                uuid = s[6:8] + s[4:6] + s[2:4] + s[0:2] + "-" + s[11:13] + s[9:11] + "-" + s[16:18] + s[14:16] + s[18:]
-                logger.info("Succeeded to get hyperv guest uuid: {0}".format(uuid))
-                return uuid
+            uuid = s[6:8] + s[4:6] + s[2:4] + s[0:2] + "-" + s[11:13] + s[9:11] + "-" + s[16:18] + s[14:16] + s[18:]
+            logger.info("Succeeded to get hyperv guest uuid: {0}".format(uuid))
+            return uuid
         else:
             raise FailException("Failed to get hyperv guest uuid")
 
