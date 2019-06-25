@@ -119,4 +119,8 @@ class Testcase(Testing):
             self.vw_option_update_value('no_proxy', '', "/etc/rhsm/rhsm.conf")
 
         # case result
-        self.vw_case_result(results)
+        notes = list()
+        if hypervisor_type in ('libvirt-local', 'vdsm'):
+            notes.append("(step5,6) rhsm_no_proxy doesn't work for local libvirt and vdsm mode")
+            notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1720048")
+        self.vw_case_result(results, notes)
