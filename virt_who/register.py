@@ -207,24 +207,25 @@ class Register(Base):
             if re.match(r"^Ends:", line):
                 ends = line.split(':')[1].strip()
                 sku_attr['ends'] = ends
-            if re.match(r"^System Type:", line):
-                system_type = line.split(':')[1].strip()
-                sku_attr['system_type'] = system_type
+            if re.match(r"^System Type:", line) \
+                    or re.match(r"^Entitlement Type:", line):
+                sku_type = line.split(':')[1].strip()
+                sku_attr['sku_type'] = sku_type
         return sku_attr
 
-    def system_sku_attr(self, ssh, sku_id, system_type, exp_exist=True):
-        if "physical" in system_type.lower():
-            system_type= "Physical"
-        elif "virtual" in system_type.lower():
-            system_type= "Virtual"
+    def system_sku_attr(self, ssh, sku_id, sku_type, exp_exist=True):
+        if "physical" in sku_type.lower():
+            sku_type= "Physical"
+        elif "virtual" in sku_type.lower():
+            sku_type= "Virtual"
         else:
-            raise FailException("Unknown system type, please check")
+            raise FailException("Unknown sku type, please check")
         for i in range(3):
             self.system_sku_refresh(ssh)
             cmd = "subscription-manager list --av --all --matches=%s | tail -n +4" % sku_id
             ret, output = self.runcmd(cmd, ssh, desc="subscription list matches")
             if ret == 0 and not output and exp_exist is False:
-                logger.info("Succeeded to search, unexpected sku %s(%s) is not exist" % (sku_id, system_type))
+                logger.info("Succeeded to search, unexpected sku %s(%s) is not exist" % (sku_id, sku_type))
                 return output
             if ret == 0 and "No available subscription pools" not in output \
                     and "Remote server error" not in output and "Pool ID:" in output:
@@ -232,23 +233,25 @@ class Register(Base):
                 sku_attrs = dict()
                 if len(sku_list) > 0:
                     for attrs in sku_list:
-                        pattern = r"System Type:.*%s" % system_type
-                        if re.search(pattern, attrs):
+                        pattern_1 = r"System Type:.*%s" % sku_type
+                        pattern_2 = r"Entitlement Type:.*%s" % sku_type
+                        if re.search(pattern_1, attrs) \
+                                or re.search(pattern_2, attrs):
                             sku_attrs = self.sku_attr_callback(attrs)
                 if sku_attrs and exp_exist:
-                    logger.info("Succeeded to search, expected sku %s(%s) is exist" %(sku_id, system_type))
+                    logger.info("Succeeded to search, expected sku %s(%s) is exist" %(sku_id, sku_type))
                     return sku_attrs
                 if sku_attrs and exp_exist is False:
-                    logger.warning("Failed to search, unexpected sku %s(%s) is exist" %(sku_id, system_type))
+                    logger.warning("Failed to search, unexpected sku %s(%s) is exist" %(sku_id, sku_type))
                 if not sku_attrs and exp_exist:
-                    logger.warning("Failed to search, expected sku %s(%s) is not exist" %(sku_id, system_type))
+                    logger.warning("Failed to search, expected sku %s(%s) is not exist" %(sku_id, sku_type))
                 if not sku_attrs and exp_exist is False:
-                    logger.info("Succeeded to search, unexpected sku %s(%s) is not exist" % (sku_id, system_type))
+                    logger.info("Succeeded to search, unexpected sku %s(%s) is not exist" % (sku_id, sku_type))
                     return sku_attrs
             logger.warning("Failed to list expected subscription, try again after 180s...")
             logger.warning(output)
             time.sleep(180)
-        raise FailException("Failed to find %s(%s)" %(sku_id, system_type))
+        raise FailException("Failed to find %s(%s)" %(sku_id, sku_type))
 
     def system_sku_refresh(self, ssh):
         for i in range(3):
