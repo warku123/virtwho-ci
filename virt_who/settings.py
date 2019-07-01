@@ -112,6 +112,7 @@ class SetRepo(FeatureSettings):
         self.rhel_brew = None
         self.rhel_sat = None
         self.epel = None
+        self.rhel8_ftp = None
 
     def read(self, reader):
         self.rhel = reader.get('repo', 'rhel')
@@ -119,6 +120,7 @@ class SetRepo(FeatureSettings):
         self.rhel_brew = reader.get('repo', 'rhel_brew')
         self.rhel_sat = reader.get('repo', 'rhel_sat')
         self.epel = reader.get('repo', 'epel')
+        self.rhel8_ftp = reader.get('repo', 'rhel8_ftp')
 
 class SetJenkins(FeatureSettings):
     def __init__(self, *args, **kwargs):
@@ -177,12 +179,14 @@ class SetBeaker(FeatureSettings):
 class SetPolarion(FeatureSettings):
     def __init__(self, *args, **kwargs):
         super(SetPolarion, self).__init__(*args, **kwargs)
-        self.url = None
+        self.testrun_url = None
+        self.import_url = None
         self.username = None
         self.password = None
 
     def read(self, reader):
-        self.url = reader.get('polarion', 'url')
+        self.testrun_url = reader.get('polarion', 'testrun_url')
+        self.import_url = reader.get('polarion', 'import_url')
         self.username = reader.get('polarion', 'username')
         self.password = reader.get('polarion', 'password')
 

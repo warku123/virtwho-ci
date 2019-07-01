@@ -97,7 +97,7 @@ def polarion_testrun_id():
         testrun_id = "virtwho_%s_%s_%s" % (job_name, trigger_name, create_time)
     else:
         testrun_id = "virtwho_testrun_by_ci_%s" % create_time
-    testrun_url = 'https://polarion.engineering.redhat.com/polarion/#/project/RedHatEnterpriseLinux7/testrun?id=%s' % testrun_id
+    testrun_url = '{0}/testrun?id={1}'.format(deploy.polarion.testrun_url, testrun_id)
     logger.info(testrun_url)
     fd = open(runtest_info, 'a')
     fd.write("TESTRUN_URL=%s\n" % testrun_url)
@@ -188,18 +188,19 @@ def polarion_caseid_mapping(xml_file):
 def polarion_xml_import(xml_file, testrun_id):
     username =  deploy.polarion.username
     password =  deploy.polarion.password
-    url =  deploy.polarion.url
-    cmd = "curl -k -u %s:%s -X POST -F file=@%s %s" % (username, password, xml_file, url) 
+    import_url =  deploy.polarion.import_url
+    testrun_url = deploy.polarion.testrun_url
+    cmd = "curl -k -u %s:%s -X POST -F file=@%s %s" % (username, password, xml_file, import_url) 
     output = os.popen(cmd).read()
     logger.info(cmd)
     logger.info(output)
     if "error-message" not in output:
-        testrun_url = 'https://polarion.engineering.redhat.com/polarion/#/project/RedHatEnterpriseLinux7/testrun?id=%s' % testrun_id
+        testrun = '{0}/testrun?id={1}'.format(testrun_url, testrun_id)
         fd = open(runtest_info, 'a')
-        fd.write("TESTRUN_URL=%s\n" % testrun_url)
+        fd.write("TESTRUN_URL=%s\n" % testrun)
         fd.close()
         logger.info("Successed to import xml to polarion")
-        logger.info(testrun_url)
+        logger.info(testrun)
     else:
         logger.error("Failed to import xml to polarion")
 

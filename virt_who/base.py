@@ -447,7 +447,7 @@ class Base(unittest.TestCase):
     def nmap_pkg_install(self, ssh):
         rhel_ver = self.rhel_version(ssh)
         mirror = "http://mirror.centos.org/centos/{0}/os/x86_64/Packages".format(rhel_ver)
-        ftp = "http://ftp.redhat.com/pub/redhat/rhel/rhel-8-beta/appstream/x86_64/Packages"
+        ftp = deploy.repo.rhel8_ftp
         ret, output = self.runcmd("yum install nmap nmap-ncat", ssh)
         if self.pkg_check(ssh, "nmap") is False:
             if rhel_ver == "8":
