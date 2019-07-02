@@ -52,7 +52,7 @@ class Testcase(Testing):
         finally:
             logger.info(">>>step2: start to recovery hostname")
             if "satellite" in register_type:
-                self.vw_web_host_delete(host_name, host_uuid)
+                self.vw_web_host_delete(hostname_non_domain, host_uuid)
             if "stage" in register_type:
                 self.stage_consumer_clean(self.ssh_host(), register_config)
             if hypervisor_type == "esx":
