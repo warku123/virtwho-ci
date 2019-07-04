@@ -43,7 +43,7 @@ class Testcase(Testing):
             logger.info("> run virt-who with bad {0}".format(option))
             self.vw_option_update_value(option, bad_value, config_file)
             data, tty_output, rhsm_output = self.vw_start(exp_send=0)
-            s4 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
+            s4 = self.op_normal_value(data, exp_error="1|2", exp_thread=1, exp_send=0)
             s5 = self.msg_validation(rhsm_output, error_msg, exp_exist=True)
             results.setdefault(step, []).append(s4)
             results.setdefault(step, []).append(s5)
