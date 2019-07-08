@@ -644,27 +644,6 @@ class ConfigureManifest(FeatureSettings):
         self.limit = reader.get('manifest', 'limit')
         self.unlimit = reader.get('manifest', 'unlimit')
 
-class ConfigurePerformance(FeatureSettings):
-    def __init__(self, *args, **kwargs):
-        super(ConfigurePerformance, self).__init__(*args, **kwargs)
-        self.vcenter_ip = None
-        self.vcenter_admin_user = None
-        self.vcenter_admin_passwd = None
-        self.vcenter_ssh_user = None
-        self.vcenter_ssh_passwd = None
-        self.esxi_hosts = None
-        self.esxi_hosts_user = None
-        self.esxi_hosts_passwd = None
-
-    def read(self, reader):
-        self.vcenter_ip = reader.get('performance', 'vcenter_ip')
-        self.vcenter_admin_user = reader.get('performance', 'vcenter_admin_user')
-        self.vcenter_admin_passwd = reader.get('performance', 'vcenter_admin_passwd')
-        self.vcenter_ssh_user = reader.get('performance', 'vcenter_ssh_user')
-        self.vcenter_ssh_passwd = reader.get('performance', 'vcenter_ssh_passwd')
-        self.esxi_hosts = reader.get('performance', 'esxi_hosts')
-        self.esxi_hosts_user = reader.get('performance', 'esxi_hosts_user')
-        self.esxi_hosts_passwd = reader.get('performance', 'esxi_hosts_passwd')
 
 class ConfigSettings(Settings):
     def __init__(self):
@@ -672,4 +651,3 @@ class ConfigSettings(Settings):
         self.manifest = ConfigureManifest()
         self.hypervisor = ConfigureHypervisor()
         self.register = ConfigureRegister()
-        self.performance = ConfigurePerformance()
