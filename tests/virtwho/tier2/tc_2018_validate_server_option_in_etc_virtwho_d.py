@@ -99,8 +99,10 @@ class Testcase(Testing):
         results.setdefault('step7', []).append(res2)
 
         # Case Result
-        notes = list()
-        if "libvirt-remote" not in hypervisor_type:
+        if "esx" in hypervisor_type:
+            notes.append("Bug(Step3): server not support non-ascii character")
+            notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1727203")
+        if hypervisor_type in ("rhevm", "xen", "hyperv"):
             notes.append("Bug(Step4): Set server to null value, virt-who still can be started")
             notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1516209")
         self.vw_case_result(results, notes)
