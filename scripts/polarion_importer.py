@@ -61,7 +61,9 @@ def update_file(filename, location, data):
 def fomatTree(elem):
     root_str = ET.tostring(elem, 'UTF-8')
     reparse = minidom.parseString(root_str)
-    return reparse.toprettyxml(encoding = "utf-8").replace("\t\t\n", "").replace("\t\n", "").replace("\n\n", "\n")
+    return reparse.toprettyxml(
+            encoding = "utf-8"
+            ).replace("\t\t\n", "").replace("\t\n", "").replace("\n\n", "\n")
 
 def xml_init(xmlFile, root_node):
     if os.path.exists(xmlFile):
@@ -106,7 +108,10 @@ def polarion_testrun_id():
 
 def polarion_xml_init():
     testrun_id = polarion_testrun_id()
-    xml_file = os.path.join(os.path.realpath(os.path.join(os.path.dirname(__file__), os.pardir)), "polarion.xml")
+    xml_file = os.path.join(
+        os.path.realpath(os.path.join(os.path.dirname(__file__), os.pardir)),
+        "polarion.xml"
+    )
     xml_init(xml_file, "testsuites")
     tree = xml_read(xml_file)
     rootNode = tree.getroot()
