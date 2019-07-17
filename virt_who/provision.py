@@ -898,18 +898,20 @@ class Provision(Register):
     def rhel_compose_repo(self, ssh_host, compose_id, repo_file):
         base_url = deploy.repo.rhel
         if "updates" in compose_id:
-            rhel_release = compose_id.split('-')[0] + '-' + compose_id.split('-')[1]
-            repo_base = "{0}/updates/{1}/{2}/compose/Server/x86_64/os".format(
-                    base_url, rhel_release, compose_id)
             if "RHEL-8" in compose_id:
-                repo_base = "{0}/updates/{1}/{2}/compose/BaseOS/x86_64/os".format(
-                    base_url, rhel_release, compose_id)
-                repo_optional = "{0}/updates/{1}/{2}/compose/AppStream/x86_64/os".format(
-                        base_url, rhel_release, compose_id)
+                repo_base = "{0}/updates/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
+                    base_url, compose_id)
+                repo_optional = "{0}/updates/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
+                    base_url, compose_id)
             if "RHEL-7" in compose_id:
-                repo_optional = "{0}/updates/{1}/{2}/compose/Server-optional/x86_64/os".format(
-                        base_url, rhel_release, compose_id)
+                repo_base = "{0}/updates/RHEL-7/{1}/compose/Server/x86_64/os".format(
+                    base_url, compose_id)
+                repo_optional = "{0}/updates/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
+                    base_url, compose_id)
             if "RHEL-6" in compose_id:
+                rhel_release = compose_id.split('-')[0] + '-' + compose_id.split('-')[1]
+                repo_base = "{0}/updates/{1}/{2}/compose/Server/x86_64/os".format(
+                    base_url, rhel_release, compose_id)
                 repo_optional = "{0}/updates/{1}/{2}/compose/Server/optional/x86_64/os".format(
                         base_url, rhel_release, compose_id)
         else:
@@ -1007,12 +1009,22 @@ class Provision(Register):
         ks_url= "{0}/{1}".format(nfs_rhel_url, ks_name)
         ks_path = "{0}/{1}".format(nfs_rhel_mount, ks_name)
         if "updates" in compose_id:
-            rhel_release = compose_id.split('-')[0] + '-' + compose_id.split('-')[1]
-            base_repo = "{0}/updates/{1}/{2}/compose/Server/x86_64/os".format(base_url, rhel_release, compose_id)
             if "RHEL-6" in compose_id:
-                extra_repo = "{0}/updates/{1}/{2}/compose/Server/optional/x86_64/os".format(base_url, rhel_release, compose_id)
+                rhel_release = compose_id.split('-')[0] + '-' + compose_id.split('-')[1]
+                base_repo = "{0}/updates/{1}/{2}/compose/Server/x86_64/os".format(
+                    base_url, rhel_release, compose_id)
+                extra_repo = "{0}/updates/{1}/{2}/compose/Server/optional/x86_64/os".format(
+                        base_url, rhel_release, compose_id)
             if "RHEL-7" in compose_id:
-                extra_repo = "{0}/updates/{1}/{2}/compose/Server-optional/x86_64/os".format(base_url, rhel_release, compose_id)
+                base_repo = "{0}/updates/RHEL-7/{1}/compose/Server/x86_64/os".format(
+                    base_url, compose_id)
+                extra_repo = "{0}/updates/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
+                    base_url, compose_id)
+            if "RHEL-8" in compose_id:
+                base_repo = "{0}/updates/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
+                    base_url, compose_id)
+                extra_repo = "{0}/updates/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
+                    base_url, compose_id)
         else:
             base_repo = "{0}/{1}/compose/Server/x86_64/os".format(base_url, compose_id)
             if "RHEL-6" in compose_id:
