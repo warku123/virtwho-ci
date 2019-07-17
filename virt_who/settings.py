@@ -217,14 +217,16 @@ class SetRegister(FeatureSettings):
         self.baseurl = None
         self.username = None
         self.password = None
-        self.employee_sku = None
+        self.employee_sku_phys = None
+        self.employee_sku_virt = None
 
     def read(self, reader):
         self.serverurl = reader.get('register', 'serverurl')
         self.baseurl = reader.get('register', 'baseurl')
         self.username = reader.get('register', 'username')
         self.password = reader.get('register', 'password')
-        self.employee_sku = reader.get('register', 'employee_sku')
+        self.employee_sku_phys = reader.get('register', 'employee_sku_phys')
+        self.employee_sku_virt = reader.get('register', 'employee_sku_virt')
 
 class SetStage(FeatureSettings):
     def __init__(self, *args, **kwargs):

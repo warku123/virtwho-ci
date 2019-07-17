@@ -99,6 +99,7 @@ class Testcase(Testing):
         results.setdefault('step7', []).append(res2)
 
         # Case Result
+        notes = list()
         if "esx" in hypervisor_type:
             notes.append("Bug(Step3): server not support non-ascii character")
             notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1727203")
