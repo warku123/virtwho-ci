@@ -901,6 +901,11 @@ class Provision(Register):
             rhel_release = compose_id.split('-')[0] + '-' + compose_id.split('-')[1]
             repo_base = "{0}/updates/{1}/{2}/compose/Server/x86_64/os".format(
                     base_url, rhel_release, compose_id)
+            if "RHEL-8" in compose_id:
+                repo_base = "{0}/updates/{1}/{2}/compose/BaseOS/x86_64/os".format(
+                    base_url, rhel_release, compose_id)
+                repo_optional = "{0}/updates/{1}/{2}/compose/AppStream/x86_64/os".format(
+                        base_url, rhel_release, compose_id)
             if "RHEL-7" in compose_id:
                 repo_optional = "{0}/updates/{1}/{2}/compose/Server-optional/x86_64/os".format(
                         base_url, rhel_release, compose_id)
