@@ -20,11 +20,14 @@ class Testcase(Testing):
             raise FailException("virt-who pkg is not found")
         if compose_id is None or compose_id == "":
             raise FailException("compose_id is not defined")
+        rhel_url = "http://download.eng.bos.redhat.com"
+        rhel_release = compose_id.split('.')[0]
         if "updates" in compose_id:
-            rhel_release = compose_id.split('-')[0] + '-' + compose_id.split('-')[1]
-            baseurl = "http://download.eng.pek2.redhat.com/rel-eng/updates/{0}".format(rhel_release)
+            baseurl = "{0}/{1}/rel-eng/updates/{2}".format(
+                rhel_url, rhel_release.lower(), rhel_release)
         else:
-            baseurl = "http://download.eng.bos.redhat.com/rhel-7/rel-eng/RHEL-7"
+            baseurl = "{0}/{1}/rel-eng/{2}".format(
+                rhel_url, rhel_release.lower(), rhel_release)
         if "RHEL-8" in compose_id:
             arch_list = ['x86_64', 'ppc64le', 'aarch64', 's390x']
         if "RHEL-7" in compose_id:
@@ -49,10 +52,11 @@ class Testcase(Testing):
         # case steps
         for arch in arch_list:
             if "RHEL-8" in compose_id:
-                baseurl = "http://download.eng.bos.redhat.com/rhel-8/rel-eng/RHEL-8"
-                pkg_url = "{0}/{1}/compose/AppStream/{2}/os/Packages/{3}".format(baseurl, compose_id, arch, pkg)
+                pkg_url = "{0}/{1}/compose/AppStream/{2}/os/Packages/{3}".format(
+                    baseurl, compose_id, arch, pkg)
             else:
-                pkg_url = "{0}/{1}/compose/{2}/os/Packages/{3}".format(baseurl, compose_id, arch, pkg)
+                pkg_url = "{0}/{1}/compose/{2}/os/Packages/{3}".format(
+                    baseurl, compose_id, arch, pkg)
             if self.url_validation(pkg_url):
                 results.setdefault('step1', []).append(True)
                 logger.info("{0} is exist in arch: {1}".format(pkg, arch))
