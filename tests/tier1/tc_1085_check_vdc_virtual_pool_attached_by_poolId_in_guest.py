@@ -49,4 +49,9 @@ class Testcase(Testing):
         results.setdefault('step4', []).append(res)
 
         # case result
-        self.vw_case_result(results)
+        notes = list()
+        server_type = self.get_config('register_type')
+        if 'stage' in server_type:
+            notes.append("Bug(Step*): Failed to synchronize cache for repo 'rhel-8-for-x86_64-baseos-rpms'")
+            notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1719177")
+        self.vw_case_result(results, notes)
