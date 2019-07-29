@@ -86,4 +86,9 @@ class Testcase(Testing):
         self.system_custom_facts_remove(self.ssh_host())
 
         # case result
-        self.vw_case_result(results)
+        notes = list()
+        server_type = self.get_config('register_type')
+        if 'stage' in server_type:
+            notes.append("Bug(Step6): SKU RH00003 has different consumer behaviors for servers")
+            notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1703336")
+        self.vw_case_result(results, notes)
