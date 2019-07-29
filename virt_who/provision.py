@@ -1,3 +1,5 @@
+import self as self
+
 from virt_who import *
 from virt_who.base import Base
 from virt_who.register import Register
@@ -1707,6 +1709,8 @@ class Provision(Register):
         # self.qa_enable_rhel_repo(ssh_libvirt)
         # self.libvirt_pkg_install(ssh_libvirt)
         # self.bridge_setup("br0", ssh_libvirt)
+        cmd = "service libvirtd restart"
+        ret, output = self.runcmd(cmd, ssh_libvirt)
         guest_ip = self.libvirt_guest_ip(guest_name, ssh_libvirt)
         if not guest_ip:
             self.libvirt_guests_all_clean(ssh_libvirt)
