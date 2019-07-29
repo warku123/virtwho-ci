@@ -27,15 +27,16 @@ class Testcase(Testing):
         host_name = self.get_hypervisor_hostname()
         register_owner = register_config['owner']
         active_key = 'Virtwho_AK'
+        cmd = 'subscription-manager register  --org="{0}" --activationkey="{1}"'.format(
+            register_owner, active_key)
+        msg = 'System has been registered with ID.*'
 
         # Case Steps
         logger.info(">>>step1: register host and guest using activation key")
         for system in [self.ssh_host(), self.ssh_guest()]:
-            cmd = 'subscription-manager register  --org="{0}" --activationkey="{1}"'.format(
-                    register_owner, active_key)
             self.system_unregister(system)
             ret, output = self.runcmd(cmd, system)
-            res1 = self.vw_msg_search(output, 'System has been registered with ID.*', exp_exist=True)
+            res1 = self.vw_msg_search(output, msg, exp_exist=True)
             results.setdefault('step1', []).append(res1)
 
         logger.info(">>>step2: check temporary sku is attached by auto in guest")
@@ -43,26 +44,26 @@ class Testcase(Testing):
         res1 = self.vw_msg_search(output, 'Subscription Type: .*Temporary', exp_exist=True)
         results.setdefault('step2', []).append(res1)
 
-        logger.info(">>>step3: start virt-who service")
+        logger.info(">>>step3: start virt-who service to check temporary sku disappeared")
         data, tty_output, rhsm_output = self.vw_start(exp_send=1)
-        res = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
-        results.setdefault('step3', []).append(res)
+        res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+        output = self.system_sku_consumed(self.ssh_guest())
+        res2 = self.vw_msg_search(output, 'Subscription Type: .*Temporary', exp_exist=False)
+        results.setdefault('step3', []).append(res1)
+        results.setdefault('step3', []).append(res2)
 
-        logger.info(">>>step4: attach physical sku for host/hypervisor, temporary sku should be changed to stable sku")
+        logger.info(">>>step4: attach physical sku for host/hypervisor  \
+                    then register guest using activation key again")
         sku_attrs = self.system_sku_attr(self.ssh_host(), vdc_physical_sku, "physical")
         pool_id = sku_attrs['pool_id']
+        self.vw_web_unattach(host_name, host_uuid)
         self.vw_web_attach(host_name, host_uuid, pool_id)
-        output = self.system_sku_consumed(self.ssh_guest())
-        res1 = self.vw_msg_search(output, vdc_virtual_sku, exp_exist=True)
-        res2 = self.vw_msg_search(output, 'Subscription Type: .*Temporary', exp_exist=False)
-        results.setdefault('step4', []).append(res1)
-        results.setdefault('step4', []).append(res2)
+        self.system_unregister(self.ssh_guest())
+        ret, output = self.runcmd(cmd, self.ssh_guest())
+        res = self.vw_msg_search(output, msg, exp_exist=True)
+        results.setdefault('step4', []).append(res)
 
-        logger.info(">>>step5: attach virtual sku for guest")
-        self.system_sku_unattach(self.ssh_guest())
-        sku_attrs = self.system_sku_attr(self.ssh_guest(), vdc_virtual_sku, "virtual")
-        pool_id = sku_attrs['pool_id']
-        self.system_sku_attach(self.ssh_guest(), pool_id=pool_id)
+        logger.info(">>>step5: check stable virtual sku is attached by auto in guest")
         output = self.system_sku_consumed(self.ssh_guest())
         res = self.vw_msg_search(output, vdc_virtual_sku, exp_exist=True)
         results.setdefault('step5', []).append(res)
