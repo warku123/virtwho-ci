@@ -1,5 +1,3 @@
-import self as self
-
 from virt_who import *
 from virt_who.base import Base
 from virt_who.register import Register
