@@ -2,38 +2,35 @@ from virt_who import *
 from virt_who.base import Base
 
 class Register(Base):
-    #**************************************
-    # QualityAssurance Register and Attach
-    #**************************************
-    def qa_register(self, ssh):
+    #*****************************************
+    # Attach Employee SKU and enable rhel repo
+    #*****************************************
+    def employee_sku_attach(self, ssh):
         self.rhsm_recovery(ssh)
         host = ssh['host']
         serverurl = "--serverurl={0}".format(deploy.register.serverurl)
         baseurl = "--baseurl={0}".format(deploy.register.baseurl)
         account = "--username={0} --password={1}".format(deploy.register.username, deploy.register.password)
-        employee_sku_phys = deploy.register.employee_sku_phys
-        employee_sku_virt = deploy.register.employee_sku_virt
-        employee_sku = {'physical': employee_sku_phys, 'virtual': employee_sku_virt}
+        employee_sku = deploy.register.employee_sku
         is_registered = ""
         cmd = "subscription-manager clean; subscription-manager register {0} {1} {2}".format(serverurl, baseurl, account)
         for i in range(10):
-            ret, output = self.runcmd(cmd, ssh, desc="register host to QualityAssurance")
+            ret, output = self.runcmd(cmd, ssh, desc="register host to {0}".format(deploy.register.username))
             if ret == 0 or "already registered" in output:
-                logger.info("Succeeded to register to QualityAssurance({0})".format(host))
+                logger.info("Succeeded to register ({0}) to Stage Candlepin".format(host))
                 is_registered = "Yes"
                 break
             time.sleep(10)
         if is_registered != "Yes":
-            raise FailException("Failed to register to QualityAssurance({0})".format(ssh))
-        for sku_type, sku_id in sorted(employee_sku.items(), key=lambda item:item[0]):
-            cmd = "subscription-manager subscribe --pool={0}; subscription-manager repos --disable=*".format(sku_id)
-            status, output = self.run_loop(cmd, ssh, desc="attach {0} Employee SKU".format(sku_type))
-            if status == "Yes":
-                logger.info("Succeeded to attach Employee SKU({0})".format(host))
-                return
-        raise FailException("Failed to attach Employee SKU({0})".format(host))
+            raise FailException("Failed to register ({0})".format(host))
+        cmd = "subscription-manager subscribe --pool={0}; subscription-manager repos --disable=*".format(employee_sku)
+        status, output = self.run_loop(cmd, ssh, desc="attach Employee SKU")
+        if status == "Yes":
+            logger.info("Succeeded to attach Employee SKU({0})".format(host))
+        else:
+            raise FailException("Failed to attach Employee SKU({0})".format(host))
 
-    def qa_enable_rhel_repo(self, ssh):
+    def rhel_repo_enable(self, ssh):
         rhel_ver = self.rhel_version(ssh)
         cmd = "subscription-manager repos \
                 --enable=rhel-{0}-server-rpms \
