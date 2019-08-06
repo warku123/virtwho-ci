@@ -1289,7 +1289,7 @@ class Provision(Register):
         return sat_ver, rhel_ver
 
     def satellite_cdn_pool_attach(self, ssh_sat):
-        pool_id = "8a85f981519abf020151a22d3c387f2a"
+        pool_id = "8a99f9a06c534888016c64de986338f8"
         sat_host = ssh_sat['host']
         cmd = "subscription-manager subscribe --pool={0}".format(pool_id)
         for i in range(10):
@@ -1420,8 +1420,8 @@ class Provision(Register):
         if "dogfood" in sat_type:
             self.satellite_qa_dogfood_enable(ssh_sat, sat_ver, rhel_ver, repo_type="satellite")
         if "cdn" in sat_type:
-            self.qa_register(ssh_sat)
-            self.qa_enable_rhel_repo(ssh_sat)
+            self.employee_sku_attach(ssh_sat)
+            self.rhel_repo_enable(ssh_sat)
             self.satellite_cdn_pool_attach(ssh_sat)
             self.satellite_cdn_repo_enable(ssh_sat, sat_ver, rhel_ver)
         self.satellite_pkg_install(ssh_sat)
@@ -1689,8 +1689,8 @@ class Provision(Register):
         ssh_libvirt = {"host":remote_host,"username":remote_user,"password":remote_passwd}
         '''remote libvirt is stable env'''
         # self.stop_firewall(ssh_libvirt)
-        # self.qa_register(ssh_libvirt)
-        # self.qa_enable_rhel_repo(ssh_libvirt)
+        # self.employee_sku_attach(ssh_libvirt)
+        # self.rhel_repo_enable(ssh_libvirt)
         # self.libvirt_pkg_install(ssh_libvirt)
         # self.bridge_setup("br0", ssh_libvirt)
         guest_ip = self.libvirt_guest_ip(guest_name, ssh_libvirt)
@@ -3264,6 +3264,6 @@ class Provision(Register):
         if trigger_type == "trigger-rhev":
             self.nmap_pkg_ready(ssh_vdsm)
         else:
-            self.qa_register(ssh_vdsm)
+            self.employee_sku_attach(ssh_vdsm)
             self.vdsm_repo_enable(rhel_ver, rhevm_version, ssh_vdsm)
             self.vdsm_pkg_install(ssh_vdsm)
