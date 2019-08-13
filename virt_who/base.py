@@ -381,6 +381,7 @@ class Base(unittest.TestCase):
 
     def system_init(self, key, ssh):
         if self.ssh_is_connected(ssh):
+            self.rhsm_backup(ssh)
             host_ip = self.get_ipaddr(ssh)
             host_name = self.get_hostname(ssh)
             if "localhost" in host_name or "unused" in host_name or "openshift" in host_name or host_name is None:

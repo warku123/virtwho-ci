@@ -246,6 +246,7 @@ class Provision(Register):
         conf_guest = dict()
         ssh_rhev = {"host": rhev_host,"username":rhev_user,"password":rhev_passwd}
         self.rhev_install_by_grub(ssh_rhev, rhev_iso)
+        self.system_init("ci-host-rhev", ssh_rhev)
         self.ssh_no_passwd_access(ssh_rhev)
         self.install_epel_packages(ssh_rhev)
         guest_ip = self.guest_vdsm_setup(ssh_rhev)
@@ -263,6 +264,7 @@ class Provision(Register):
         username = deploy.beaker.default_user
         password = deploy.beaker.default_passwd
         ssh_host = {"host": host_ip,"username": username,"password": password}
+        self.system_init("ci-host-arch", ssh_host)
         self.ssh_no_passwd_access(ssh_host)
         self.install_base_packages(ssh_host)
         queue.put((func_name, conf_host))
@@ -283,6 +285,7 @@ class Provision(Register):
         local_passwd = deploy.libvirt.local_passwd
         ssh_libvirt = {"host": local_host,"username":local_user,"password":local_passwd}
         self.rhel_install_by_grub(ssh_libvirt, compose_id)
+        self.system_init("ci-host-libvirt-local", ssh_libvirt)
         self.ssh_no_passwd_access(ssh_libvirt)
         guest_ip = self.guest_libvirt_local_setup(ssh_libvirt)
         conf_host["libvirt-local-host-ip"] = local_host
@@ -299,6 +302,7 @@ class Provision(Register):
         master_passwd = deploy.vdsm.master_passwd
         ssh_vdsm = {"host":master,"username":master_user,"password":master_passwd}
         self.rhel_install_by_grub(ssh_vdsm, compose_id)
+        self.system_init("ci-host-vdsm", ssh_vdsm)
         self.ssh_no_passwd_access(ssh_vdsm)
         guest_ip = self.guest_vdsm_setup(ssh_vdsm)
         conf_host["vdsm-host-ip"] = master
@@ -696,8 +700,6 @@ class Provision(Register):
         self.system_unregister(ssh_host)
 
     def jenkins_job_init(self, register_type, register_config, ssh_host, ssh_guest):
-        self.rhsm_backup(ssh_host)
-        self.rhsm_backup(ssh_guest)
         self.jenkins_virtwho_install(register_type, ssh_host)
         if "stage" in register_type:
             self.stage_consumer_clean(ssh_host, register_config)
@@ -1722,7 +1724,6 @@ class Provision(Register):
         guest_name = deploy.libvirt.guest_name
         guest_user = deploy.libvirt.guest_user
         guest_passwd = deploy.libvirt.guest_passwd
-        self.system_init("ci-host-libvirt-local", ssh_libvirt)
         self.libvirt_pkg_install(ssh_libvirt)
         self.bridge_setup("br0", ssh_libvirt)
         self.libvirt_guests_all_clean(ssh_libvirt)
@@ -2083,7 +2084,7 @@ class Provision(Register):
 
     def hyperv_guest_ip(self, ssh_hyperv, guest_name):
         cmd = "powershell (Get-VMNetworkAdapter -VMName %s).IpAddresses" % (guest_name)
-        for i in range(60):
+        for i in range(20):
             time.sleep(30)
             ret, output = self.runcmd(cmd, ssh_hyperv)
             if ret == 0 and output != "":
@@ -3273,10 +3274,7 @@ class Provision(Register):
 
     def vdsm_host_init(self, ssh_vdsm, rhevm_version):
         trigger_type = deploy.trigger.type
-        host_ip = self.get_ipaddr(ssh_vdsm)
-        host_name = self.get_hostname(ssh_vdsm)
         rhel_ver = self.rhel_version(ssh_vdsm)
-        self.system_init("ci-host-vdsm", ssh_vdsm)
         if trigger_type == "trigger-rhev":
             self.nmap_pkg_ready(ssh_vdsm)
         else:
