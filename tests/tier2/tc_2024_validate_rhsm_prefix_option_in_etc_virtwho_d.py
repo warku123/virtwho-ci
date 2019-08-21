@@ -4,6 +4,7 @@ from virt_who.base import Base
 from virt_who.register import Register
 from virt_who.testing import Testing
 
+
 class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-137169')
@@ -30,7 +31,8 @@ class Testcase(Testing):
 
         # Case Steps
         try:
-            logger.info(">>>step1: run virt-who with rhsm_hostname, rhsm_port, rhsm_prefix good value")
+            logger.info(">>>step1: run virt-who with rhsm_hostname, "
+                        "rhsm_port, rhsm_prefix good value")
             self.vw_option_add("rhsm_hostname", register_server, config_file)
             self.vw_option_add("rhsm_port", "443", config_file)
             self.vw_option_add("rhsm_prefix", register_prefix, config_file)
@@ -49,7 +51,7 @@ class Testcase(Testing):
             logger.info(">>>step3: run virt-who with rhsm_prefix null value")
             self.vw_option_update_value("rhsm_prefix", " ", config_file)
             data, tty_output, rhsm_output = self.vw_start()
-            res1 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
+            res1 = self.op_normal_value(data, exp_error="1|2", exp_thread=1, exp_send=0)
             res2 = self.vw_msg_search(rhsm_output, 'HTTP error', exp_exist=True)
             results.setdefault('step3', []).append(res1)
             results.setdefault('step3', []).append(res2)
@@ -57,10 +59,10 @@ class Testcase(Testing):
             logger.info(">>>step4: run virt-who with rhsm_prefix disable")
             self.vw_option_disable("rhsm_prefix", config_file)
             data, tty_output, rhsm_output = self.vw_start()
-            res1 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
+            res1 = self.op_normal_value(data, exp_error="1|2", exp_thread=1, exp_send=0)
             res2 = self.vw_msg_search(rhsm_output, 'HTTP error', exp_exist=True)
-            results.setdefault('step4', []).append(res1)
-            results.setdefault('step4', []).append(res2)
+            results.setdefault('step3', []).append(res1)
+            results.setdefault('step3', []).append(res2)
 
         except:
             results.setdefault('step', []).append(False)
@@ -73,6 +75,7 @@ class Testcase(Testing):
         notes = list()
         server_type = self.get_config('register_type')
         if "stage" in server_type:
-            notes.append("Bug(Step3,4): virt-who send out mappings to Stage Candlepin without rhsm_prefix")
+            notes.append("Bug(Step3,4): virt-who send out mappings to Stage Candlepin "
+                         "without rhsm_prefix")
             notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1720072")
         self.vw_case_result(results, notes)

@@ -4,6 +4,7 @@ from virt_who.base import Base
 from virt_who.register import Register
 from virt_who.testing import Testing
 
+
 class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-136631')
@@ -11,7 +12,6 @@ class Testcase(Testing):
         if hypervisor_type in ('libvirt-local', 'vdsm'):
             self.vw_case_skip(hypervisor_type)
         self.vw_case_init()
-
 
         # Case Config
         results = dict()
@@ -29,7 +29,8 @@ class Testcase(Testing):
         self.system_unregister(self.ssh_host())
 
         # Case Steps
-        logger.info(">>>step1: run virt-who with rhsm_hostname, rhsm_port, rhsm_prefix good value")
+        logger.info(">>>step1: run virt-who with rhsm_hostname, "
+                    "rhsm_port, rhsm_prefix good value")
         self.vw_option_add("rhsm_hostname", register_server, config_file)
         self.vw_option_add("rhsm_port", "443", config_file)
         self.vw_option_add("rhsm_prefix", register_prefix, config_file)
@@ -40,28 +41,31 @@ class Testcase(Testing):
         results.setdefault('step1', []).append(res)
 
         logger.info(">>>step2: run virt-who with rhsm_password=xxxxxx")
+        error_msg = "Communication with subscription manager failed"
         self.vw_option_update_value("rhsm_password", "xxxxxx", config_file)
         data, tty_output, rhsm_output = self.vw_start()
-        res1 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
-        res2 = self.vw_msg_search(rhsm_output, "Communication with subscription manager failed", exp_exist=True)
+        res1 = self.op_normal_value(data, exp_error="1|2", exp_thread=1, exp_send=0)
+        res2 = self.vw_msg_search(rhsm_output, error_msg, exp_exist=True)
         results.setdefault('step2', []).append(res1)
         results.setdefault('step2', []).append(res2)
 
         logger.info(">>>step3: run virt-who with rhsm_password=红帽©¥®ðπ∉")
         '''红帽©¥®ðπ∉ password is supported by candlepin'''
-        msg_list = ["codec can't decode|Communication with subscription manager failed"]
+        msg_list = ["codec can't decode|"
+                    "Communication with subscription manager failed"]
         self.vw_option_update_value("rhsm_password", "红帽©¥®ðπ∉", config_file)
         data, tty_output, rhsm_output = self.vw_start()
-        res1 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
+        res1 = self.op_normal_value(data, exp_error="1|2", exp_thread=1, exp_send=0)
         res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
         results.setdefault('step3', []).append(res1)
         results.setdefault('step3', []).append(res2)
 
         logger.info(">>>step4: run virt-who with rhsm_password null value")
+        error_msg = "system is not registered or you are not root"
         self.vw_option_update_value("rhsm_password", " ", config_file)
         data, tty_output, rhsm_output = self.vw_start()
         res1 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
-        res2 = self.vw_msg_search(rhsm_output, "system is not registered or you are not root")
+        res2 = self.vw_msg_search(rhsm_output, error_msg)
         results.setdefault('step4', []).append(res1)
         results.setdefault('step4', []).append(res2)
 
@@ -69,7 +73,7 @@ class Testcase(Testing):
         self.vw_option_disable("rhsm_password", config_file)
         data, tty_output, rhsm_output = self.vw_start()
         res1 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
-        res2 = self.vw_msg_search(rhsm_output, "system is not registered or you are not root")
+        res2 = self.vw_msg_search(rhsm_output, error_msg)
         results.setdefault('step5', []).append(res1)
         results.setdefault('step5', []).append(res2)
 
