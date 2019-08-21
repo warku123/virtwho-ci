@@ -67,11 +67,11 @@ class Testcase(Testing):
                 results.setdefault('step2', []).append(False)
 
             logger.info(">>>step3: Register guest with auto-attach enabled by default, no sku in the key")
-            # guest will be auto-attached the best matched pool, vdc has the high priority
+            # guest will be auto-attached the best matched pool, limit has the high priority
             self.system_register_with_ak(self.ssh_guest(), register_config, ak_name)
             output = self.system_sku_consumed(self.ssh_guest())
-            res1 = self.vw_msg_search(output, virtual_limit_pool_id, exp_exist=False)
-            res2 = self.vw_msg_search(output, virtual_vdc_pool_id, exp_exist=True)
+            res1 = self.vw_msg_search(output, virtual_limit_pool_id, exp_exist=True)
+            res2 = self.vw_msg_search(output, virtual_vdc_pool_id, exp_exist=False)
             results.setdefault('step3', []).append(res1)
             results.setdefault('step3', []).append(res2)
 
@@ -126,7 +126,5 @@ class Testcase(Testing):
             self.satellite_active_key_delete(ssh_sat, register_config, ak_name, default_org_id)
 
         # Case Result
-        notes = list()
-        notes.append("Bug(Step3,Step5): Which SKU has the high priority to auto-attach?")
-        notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1712821")
-        self.vw_case_result(results, notes)
+        self.vw_case_result(results)
+
