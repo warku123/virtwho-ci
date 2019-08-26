@@ -6,14 +6,20 @@ import uuid
 import time
 import shutil
 import random
-
+import string
 import logging
-import StringIO
 import socket
 import select
-import Queue
 import threading
 import paramiko
+
+try:
+   import queue
+except ImportError:
+   import Queue as queue
+
+from six import StringIO
+from six import BytesIO
 
 if sys.version_info < (2, 7):
     import unittest2 as unittest

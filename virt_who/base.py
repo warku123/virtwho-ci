@@ -11,8 +11,8 @@ class Base(unittest.TestCase):
             chan.settimeout(timeout)
             try:
                 chan.exec_command(cmd)
-                contents = StringIO.StringIO()
-                error = StringIO.StringIO()
+                contents = BytesIO()
+                error = BytesIO()
                 data = chan.recv(1024)
                 while data:
                     contents.write(data)
@@ -22,12 +22,13 @@ class Base(unittest.TestCase):
                     error.write(error_buff)
                     error_buff = chan.recv_stderr(1024)
                 exit_status = chan.recv_exit_status()
-                return exit_status, contents.getvalue()+error.getvalue()
+                output = contents.getvalue()+error.getvalue()
+                return exit_status, output.decode("utf-8")
             except socket.timeout:
                 msg = "timeout exceeded ...({0})".format(host)
                 logger.info(msg)
                 return -1, msg
-        except Exception, e: 
+        except Exception as e:
             return -1, str(e)
 
     def paramiko_getfile(self, host, username, password, from_path, to_path, port=22):
@@ -66,7 +67,7 @@ class Base(unittest.TestCase):
                     remote_file = os.path.join(remote_dir,a)
                     try:
                         sftp.put(local_file,remote_file)
-                    except Exception,e:
+                    except Exception as e:
                         sftp.mkdir(os.path.split(remote_file)[0])
                         sftp.put(local_file,remote_file)
                 for name in dirs:
@@ -75,10 +76,10 @@ class Base(unittest.TestCase):
                     remote_path = os.path.join(remote_dir,a)
                     try:
                         sftp.mkdir(remote_path)
-                    except Exception,e:
+                    except Exception as e:
                         logger.info(e)
             t.close()
-        except Exception,e:
+        except Exception as e:
             logger.info(e)
 
     def runcmd(self, cmd, ssh, timeout=None, desc=None, debug=True, port=22):
@@ -175,7 +176,7 @@ class Base(unittest.TestCase):
     def is_json(self, data):
         try:
             json_object = json.loads(data)
-        except ValueError, e:
+        except ValueError as e:
             logger.warning("No JSON object could be decoded")
             return False
         return json_object
@@ -385,7 +386,7 @@ class Base(unittest.TestCase):
             host_ip = self.get_ipaddr(ssh)
             host_name = self.get_hostname(ssh)
             if "localhost" in host_name or "unused" in host_name or "openshift" in host_name or host_name is None:
-                random_str = ''.join(map(lambda xx:(hex(ord(xx))[2:]),os.urandom(8)))[0:8]
+                random_str = ''.join(random.sample(string.ascii_letters + string.digits, 8))
                 host_name = "%s-%s.redhat.com" % (key, random_str)
             etc_hosts_value = "%s %s" % (host_ip, host_name)
             self.set_hostname(host_name, ssh)

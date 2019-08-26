@@ -818,7 +818,7 @@ class Provision(Register):
             else:
                 logger.info("JJB({0})-Status: {1}".format(job_tips, status))
                 return True
-        except Exception, e:
+        except Exception as e:
             logger.warning("Failed to check job status by: {0}".format(cmd))
             logger.warning(str(e))
             return False
@@ -1006,7 +1006,7 @@ class Provision(Register):
         time.sleep(60)
 
     def rhel_install_by_grub(self, ssh_host, compose_id):
-        random_str = ''.join(map(lambda xx:(hex(ord(xx))[2:]),os.urandom(8)))[0:8]
+        random_str = ''.join(random.sample(string.ascii_letters + string.digits, 8))
         base_url = deploy.repo.rhel
         nfs_server = deploy.nfs.server
         nfs_server_user = deploy.nfs.server_user
@@ -1089,7 +1089,7 @@ class Provision(Register):
             if self.ssh_is_connected(ssh_host):
                 self.rhel_compose_repo(ssh_host, compose_id, "/etc/yum.repos.d/compose.repo")
                 self.install_base_packages(ssh_host)
-        except Exception, e:
+        except Exception as e:
             logger.error(e)
         finally:
             cmd = "rm -rf %s" % (ks_path)
@@ -1098,7 +1098,7 @@ class Provision(Register):
     def rhev_install_by_grub(self, ssh_host, iso_url):
         if self.url_validation(iso_url) is False:
             raise FailException("iso_url is not available")
-        random_dir = ''.join(map(lambda xx:(hex(ord(xx))[2:]),os.urandom(8)))[0:8] 
+        random_dir = ''.join(random.sample(string.ascii_letters + string.digits, 8))
         nfs_server = deploy.nfs.server
         nfs_server_user = deploy.nfs.server_user
         nfs_server_passwd = deploy.nfs.server_passwd
@@ -1156,7 +1156,7 @@ class Provision(Register):
             initrd_url = "{0}/{1}/mnt/isolinux/initrd.img".format(nfs_rhev_url, random_dir)
             self.rhel_grub_update(ssh_host, ks_url, vmlinuz_url, initrd_url, repo_url, is_rhev=True)
             self.ssh_is_connected(ssh_host)
-        except Exception, e:
+        except Exception as e:
             logger.error(e)
         finally:
             cmd = "umount {0}; rm -rf {1}".format(mnt_path, workspace)
