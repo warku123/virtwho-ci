@@ -67,19 +67,19 @@ def install_satellite(args):
     admin_password = deploy.satellite.admin_passwd
     manifest_url = deploy.satellite.manifest
     ssh_sat = {'host':host, 'username':username, 'password':password}
-    provision.system_init("satellite-host-virtwho", ssh_sat)
-    sat_ver, rhel_ver = provision.satellite_version(sat_type)
-    if "dogfood" in sat_type:
-        provision.satellite_qa_dogfood_enable(
-            ssh_sat, sat_ver, rhel_ver, repo_type="satellite")
-    if "cdn" in sat_type:
-        provision.employee_sku_attach(ssh_sat)
-        provision.rhel_repo_enable(ssh_sat)
-        provision.satellite_cdn_pool_attach(ssh_sat)
-        provision.satellite_cdn_repo_enable(ssh_sat, sat_ver, rhel_ver)
-    provision.satellite_pkg_install(ssh_sat)
-    provision.satellite_deploy(
-        ssh_sat, admin_username, admin_password, manifest_url, sat_ver)
+    # provision.system_init("satellite-host-virtwho", ssh_sat)
+    # sat_ver, rhel_ver = provision.satellite_version(sat_type)
+    # if "dogfood" in sat_type:
+        # provision.satellite_qa_dogfood_enable(
+            # ssh_sat, sat_ver, rhel_ver, repo_type="satellite")
+    # if "cdn" in sat_type:
+        # provision.employee_sku_attach(ssh_sat)
+        # provision.rhel_repo_enable(ssh_sat)
+        # provision.satellite_cdn_pool_attach(ssh_sat)
+        # provision.satellite_cdn_repo_enable(ssh_sat, sat_ver, rhel_ver)
+    # provision.satellite_pkg_install(ssh_sat)
+    # provision.satellite_deploy(
+    #     ssh_sat, admin_username, admin_password, manifest_url, sat_ver)
     cmd = "rm -f {1}; curl -L {0} -o {1}; sync".format(
         deploy.kubevirt.kube_config_url,
         deploy.kubevirt.kube_config_file)
@@ -89,8 +89,6 @@ def install_satellite(args):
     update_section('satellite', 'ssh_password', password)
     update_section('satellite', 'admin_username', admin_username)
     update_section('satellite', 'admin_password', admin_username)
-    update_section('satellite', 'sku_vdc_physical', 'RH00001')
-    update_section('satellite', 'sku_vdc_virtual', 'RH00049')
 
 def setup_esx():
     vcenter_ip = deploy.vcenter.ip
