@@ -1,9 +1,10 @@
 #!/usr/bin/python
 
+import os
 import sys
 import argparse
 from configparser import ConfigParser
-sys.path.append('../')
+sys.path.append(os.getcwd())
 from virt_who import *
 from virt_who.provision import Provision
 
