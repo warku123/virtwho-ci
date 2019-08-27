@@ -3,8 +3,9 @@
 import os
 import sys
 import argparse
-from configparser import ConfigParser
-sys.path.append(os.getcwd())
+curPath = os.path.abspath(os.path.dirname(__file__))
+rootPath = os.path.split(curPath)[0]
+sys.path.append(rootPath)
 from virt_who import *
 from virt_who.provision import Provision
 
