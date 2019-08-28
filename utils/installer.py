@@ -25,24 +25,21 @@ def update_section(section, option=None, value=None):
 def install_rhel_by_beaker(args):
     ssh_username = deploy.beaker.default_user
     ssh_password = deploy.beaker.default_passwd
-    # job_name = 'virtwho-ci-{}'.format(args.rhel_compose)
-    # job_id = provision.beaker_Jsubmit(
-        # args.os_type,
-        # args.variant,
-        # args.arch,
-        # args.rhel_compose,
-        # job_name,
-    # )
-    # while(provision.beaker_Jstatus({job_name:job_id})):
-        # time.sleep(60)
-    # results = provision.beaker_Jresult({job_name:job_id})
-    # if results[job_name]:
-        # update_section('host', 'hostname', results[job_name])
-        # update_section('host', 'ssh_username', ssh_username)
-    #     update_section('host', 'ssh_password', ssh_password)
-    update_section('host', 'hostname', 'ent-02-vm-07.lab.eng.nay.redhat.com')
-    update_section('host', 'ssh_username', ssh_username)
-    update_section('host', 'ssh_password', ssh_password)
+    job_name = 'virtwho-ci-{}'.format(args.rhel_compose)
+    job_id = provision.beaker_Jsubmit(
+        args.os_type,
+        args.variant,
+        args.arch,
+        args.rhel_compose,
+        job_name,
+    )
+    while(provision.beaker_Jstatus({job_name:job_id})):
+        time.sleep(60)
+    results = provision.beaker_Jresult({job_name:job_id})
+    if results[job_name]:
+        update_section('host', 'hostname', results[job_name])
+        update_section('host', 'ssh_username', ssh_username)
+        update_section('host', 'ssh_password', ssh_password)
 
 def install_rhel_by_grub(args):
     host = args.host
@@ -67,19 +64,19 @@ def install_satellite(args):
     admin_password = deploy.satellite.admin_passwd
     manifest_url = deploy.satellite.manifest
     ssh_sat = {'host':host, 'username':username, 'password':password}
-    # provision.system_init("satellite-host-virtwho", ssh_sat)
-    # sat_ver, rhel_ver = provision.satellite_version(sat_type)
-    # if "dogfood" in sat_type:
-        # provision.satellite_qa_dogfood_enable(
-            # ssh_sat, sat_ver, rhel_ver, repo_type="satellite")
-    # if "cdn" in sat_type:
-        # provision.employee_sku_attach(ssh_sat)
-        # provision.rhel_repo_enable(ssh_sat)
-        # provision.satellite_cdn_pool_attach(ssh_sat)
-        # provision.satellite_cdn_repo_enable(ssh_sat, sat_ver, rhel_ver)
-    # provision.satellite_pkg_install(ssh_sat)
-    # provision.satellite_deploy(
-    #     ssh_sat, admin_username, admin_password, manifest_url, sat_ver)
+    provision.system_init("satellite-host-virtwho", ssh_sat)
+    sat_ver, rhel_ver = provision.satellite_version(sat_type)
+    if "dogfood" in sat_type:
+        provision.satellite_qa_dogfood_enable(
+            ssh_sat, sat_ver, rhel_ver, repo_type="satellite")
+    if "cdn" in sat_type:
+        provision.employee_sku_attach(ssh_sat)
+        provision.rhel_repo_enable(ssh_sat)
+        provision.satellite_cdn_pool_attach(ssh_sat)
+        provision.satellite_cdn_repo_enable(ssh_sat, sat_ver, rhel_ver)
+    provision.satellite_pkg_install(ssh_sat)
+    provision.satellite_deploy(
+        ssh_sat, admin_username, admin_password, manifest_url, sat_ver)
     cmd = "rm -f {1}; curl -L {0} -o {1}; sync".format(
         deploy.kubevirt.kube_config_url,
         deploy.kubevirt.kube_config_file)
@@ -377,7 +374,7 @@ if __name__ == "__main__":
         os.path.realpath(os.path.join(os.path.dirname(__file__), os.pardir)),
         'provision.ini')
     if not os.path.exists(provision_ini):
-        logger.error('There is no provision.ini provided!')
+        logger.error('{} is not existing.'.format(provision_ini))
         sys.exit(1)
     args = parser_arguments()
     provision = Provision()
