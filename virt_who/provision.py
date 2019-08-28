@@ -1193,8 +1193,7 @@ class Provision(Register):
             hostrequire = '''{0} --hostrequire "hypervisor!=" --hostrequire "memory > 7000"'''.format(ent_vm)
         else:
             # hostrequire = '''--hostrequire "hypervisor=" --hostrequire "<cpu><flag value='vmx'/></cpu>" --hostrequire "memory > 4000"'''
-            # hostrequire = '''--hostrequire "hypervisor=" --hostrequire "memory > 4000"'''
-            hostrequire = ""
+            hostrequire = '''--hostrequire "hypervisor=" --hostrequire "memory > 7000"'''
         cmd = '''bkr workflow-simple --prettyxml --variant={0} --arch={1} --distro={2} {3} {4} {5} {6} {7}'''\
                 .format(variant, arch, distro, task, whiteboard, job_group, hostrequire, reserve) 
         ret, output = self.runcmd_beaker(cmd, desc="provsion host from beaker")
