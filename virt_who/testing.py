@@ -779,6 +779,11 @@ class Testing(Provision):
                     facts['type'] = item['facts']['hypervisor.type']
                     facts['version'] = item['facts']['hypervisor.version']
                     facts['socket'] = item['facts']['cpu.cpu_socket(s)']
+                    facts['dmi'] = item['facts']['dmi.system.uuid']
+                    if item['facts'].has_key('hypervisor.cluster'):
+                        facts['cluster'] = item['facts']['hypervisor.cluster']
+                    else:
+                        facts['cluster'] = ''
                     guests = list()
                     for guest in item['guestIds']:
                         guestId = guest['guestId']
