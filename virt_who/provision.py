@@ -2382,11 +2382,12 @@ class Provision(Register):
                 break
             if self.kubevirt_guest_status(ssh_kubvirt, guest_name) != "Running":
                 break
-            node_name = self.kubevirt_guest_node_name(ssh_kubvirt, guest_name)
+            # node_name = self.kubevirt_guest_node_name(ssh_kubvirt, guest_name)
+            master = deploy.kubevirt.master
             guest_port = deploy.kubevirt.guest_port
             guest_user = deploy.kubevirt.guest_user
             guest_passwd = deploy.kubevirt.guest_passwd
-            guest_ip = "{0}:{1}".format(node_name, guest_port)
+            guest_ip = "{0}:{1}".format(master, guest_port)
             ssh_guest = {"host":guest_ip,"username":guest_user,"password":guest_passwd}
             if self.ssh_is_connected(ssh_guest):
                 return guest_ip
