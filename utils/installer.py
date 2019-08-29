@@ -81,6 +81,12 @@ def install_satellite(args):
         deploy.kubevirt.kube_config_url,
         deploy.kubevirt.kube_config_file)
     provision.runcmd(cmd, ssh_sat)
+    provision.runcmd(
+        'hammer settings set --name=failed_login_attempts_limit --value=0',
+        ssh_sat)
+    provision.runcmd(
+        'hammer settings set --name=unregister_delete_host --value=true',
+        ssh_sat)
     update_section('satellite', 'hostname', host)
     update_section('satellite', 'ssh_username', username)
     update_section('satellite', 'ssh_password', password)
