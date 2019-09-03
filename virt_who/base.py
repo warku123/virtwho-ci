@@ -394,7 +394,7 @@ class Base(unittest.TestCase):
             self.stop_firewall(ssh)
             logger.info("Finished to init system {0}".format(host_name))
         else:
-            raise FailException("Failed to ssh login %s" % host_ip)
+            raise FailException("Failed to ssh login {0}".format(ssh['host']))
 
     def pkg_check(self, ssh, package):
         cmd = "rpm -qa {0}".format(package)

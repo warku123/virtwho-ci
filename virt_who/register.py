@@ -674,8 +674,8 @@ class Register(Base):
                 if pool_id in output and "subscription_id" in output and "product_id" in output:
                     logger.info("Succeeded to attach pool({0}) for host_id({0})".format(pool_id, host_id))
                     return True
-                time.sleep(15)
                 logger.warning("can't attach pool({0}) for host_id({1}), try again after 15s".format(pool_id, host_id))
+                time.sleep(15)
         raise FailException("Failed to attach pool({0}) for host_id({1})".format(pool_id, host_id))
 
     def satellite_host_unattach(self, ssh, register_config, host_name, host_uuid):

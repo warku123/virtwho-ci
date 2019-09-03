@@ -1011,8 +1011,9 @@ class Testing(Provision):
                 % (len(pending_job), is_429, loop_num, loop_time, send_num, error_num, thread_num))
         return pending_job, is_429, loop_num, loop_time, send_num, error_num, error_list, thread_num
 
-    def vw_thread_timeout(self, t1, queue, timeout, exp_send, exp_loopnum, oneshot, exp_error, event):
-        while(t1.is_alive()):
+    def vw_thread_timeout(
+            self, t1, q, timeout, exp_send, exp_loopnum, oneshot, exp_error, event):
+        while t1.is_alive():
             time.sleep(3)
         if event is not None:
             time.sleep(60)
@@ -1020,16 +1021,29 @@ class Testing(Provision):
         while True:
             time.sleep(6)
             ret, output = self.runcmd("ls /var/log/rhsm/", self.ssh_host())
-            if ret == 0 and output is not None and output !="" \
-                    and "Unable to connect to" not in output \
-                    and "No such file or directory" not in output:
+            if (
+                ret == 0
+                and output is not None
+                and output != ""
+                and "Unable to connect to" not in output
+                and "No such file or directory" not in output
+            ):
                 break
-        start=time.time()
+        start = time.time()
         while True:
             time.sleep(5)
-            end=time.time()
+            end = time.time()
             spend_time = int(end-start)
-            pending_job, is_429, loop_num, loop_time, send_num, error_num, error_list, thread_num = self.vw_thread_callback()
+            (
+                pending_job,
+                is_429,
+                loop_num,
+                loop_time,
+                send_num,
+                error_num,
+                error_list,
+                thread_num
+            ) = self.vw_thread_callback()
             if is_429 == "yes":
                 logger.info("virt-who is terminated by 429 status")
                 break
@@ -1044,7 +1058,9 @@ class Testing(Provision):
                 break
             if oneshot is False:
                 if send_num >= exp_send and loop_num >= exp_loopnum:
-                    logger.info("virt-who is terminated by expected_send and expected_loop ready")
+                    logger.info(
+                        "virt-who is terminated by expected_send and expected_loop ready"
+                    )
                     break
         data = dict()
         data['pending_job'] = pending_job
@@ -1058,10 +1074,10 @@ class Testing(Provision):
         self.vw_stop()
         cmd = "cat /var/log/rhsm/rhsm.log"
         ret, rhsm_output = self.runcmd(cmd, self.ssh_host())
-        queue.put(("rhsm_output", rhsm_output, data))
+        q.put(("rhsm_output", rhsm_output, data))
 
-    def vw_thread_run(self, t1, queue, cli):
-        while(t1.is_alive()):
+    def vw_thread_run(self, t1, q, cli):
+        while t1.is_alive():
             time.sleep(3)
         if cli is not None:
             logger.info("Start to run virt-who by cli: %s" % cli)
@@ -1069,29 +1085,33 @@ class Testing(Provision):
         else:
             logger.info("Start to run virt-who by service")
             ret, tty_output = self.run_service(self.ssh_host(), "virt-who", "start")
-        queue.put(("tty_output", tty_output))
+        q.put(("tty_output", tty_output))
 
     def vw_thread_clean(self):
         self.vw_stop()
         cmd = "rm -rf /var/log/rhsm/*"
         ret, output = self.runcmd(cmd, self.ssh_host())
 
-    def vw_start_thread(self, cli, timeout, exp_send, exp_loopnum, oneshot, event, exp_error):
-        queue = Queue.Queue()
+    def vw_start_thread(
+            self, cli, timeout, exp_send, exp_loopnum, oneshot, event, exp_error):
+        q = queue.Queue()
         results = list()
         threads = list()
-        t1 = threading.Thread(target=self.vw_thread_clean, args=( ))
+        t1 = threading.Thread(target=self.vw_thread_clean, args=())
         threads.append(t1)
-        t2 = threading.Thread(target=self.vw_thread_run, args=(t1, queue, cli))
+        t2 = threading.Thread(target=self.vw_thread_run, args=(t1, q, cli))
         threads.append(t2)
-        t3 = threading.Thread(target=self.vw_thread_timeout, args=(t1, queue, timeout, exp_send, exp_loopnum, oneshot, exp_error, event))
+        t3 = threading.Thread(
+            target=self.vw_thread_timeout,
+            args=(t1, q, timeout, exp_send, exp_loopnum, oneshot, exp_error, event)
+        )
         threads.append(t3)
         for t in threads:
             t.start()
         for t in threads:
             t.join()
-        while not queue.empty():
-            results.append(queue.get())
+        while not q.empty():
+            results.append(q.get())
         for item in results:
             if item[0] == "tty_output":
                 tty_output = item[1]

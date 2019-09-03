@@ -110,29 +110,64 @@ class Provision(Register):
         else:
             rhel_compose = deploy.trigger.rhel_compose
         remote_modes, local_modes = self.hypervisors_validation()
-        queue = Queue.Queue()
+        q = queue.Queue()
         results = list()
         threads = list()
-        threads.append(threading.Thread(target=self.provision_register_servers, args=(queue,)))
+        threads.append(
+            threading.Thread(
+                target=self.provision_register_servers,
+                args=(q,)
+            )
+        )
         if len(remote_modes) > 0:
-            threads.append(threading.Thread(target=self.provision_remote_guests, args=(queue, remote_modes)))
+            threads.append(
+                threading.Thread(
+                    target=self.provision_remote_guests,
+                    args=(q, remote_modes)
+                )
+            )
         if deploy.trigger.type == "trigger-rhev":
-            threads.append(threading.Thread(target=self.provision_rhev_host, args=(queue,)))
+            threads.append(
+                threading.Thread(
+                    target=self.provision_rhev_host,
+                    args=(q,)
+                )
+            )
         elif deploy.trigger.type == "trigger-multiarch":
-            threads.append(threading.Thread(target=self.provision_arch_host, args=(queue, rhel_compose)))
+            threads.append(
+                threading.Thread(
+                    target=self.provision_arch_host,
+                    args=(q, rhel_compose)
+                )
+            )
         else:
             if len(remote_modes) > 0:
-                threads.append(threading.Thread(target=self.provision_docker_hosts, args=(queue, rhel_compose, remote_modes)))
+                threads.append(
+                    threading.Thread(
+                        target=self.provision_docker_hosts,
+                        args=(q, rhel_compose, remote_modes)
+                    )
+                )
             if "libvirt-local" in local_modes:
-                threads.append(threading.Thread(target=self.provision_libvirt_local_host, args=(queue, rhel_compose)))
+                threads.append(
+                    threading.Thread(
+                        target=self.provision_libvirt_local_host,
+                        args=(q, rhel_compose)
+                    )
+                )
             if "vdsm" in local_modes:
-                threads.append(threading.Thread(target=self.provision_vdsm_host, args=(queue, rhel_compose)))
+                threads.append(
+                    threading.Thread(
+                        target=self.provision_vdsm_host,
+                        args=(q, rhel_compose)
+                    )
+                )
         for t in threads:
             t.start()
         for t in threads:
             t.join()
-        while not queue.empty():
-            results.append(queue.get())
+        while not q.empty():
+            results.append(q.get())
         for item in results:
             logger.info(item)
         register_servers, virtwho_hosts, guests = self.provision_report(results)
@@ -140,7 +175,8 @@ class Provision(Register):
             if "kubevirt" in remote_modes:
                 remote_modes.remove('kubevirt')
             if len(remote_modes) > 1 and deploy.trigger.type != "trigger-gating":
-                self.jenkins_oneshot_job(register_servers, virtwho_hosts, guests, remote_modes)
+                self.jenkins_oneshot_job(
+                    register_servers, virtwho_hosts, guests, remote_modes)
         except:
             pass
         self.jenkins_job_scheduler(register_servers, virtwho_hosts, guests)
@@ -176,7 +212,7 @@ class Provision(Register):
                     guests['vdsm-guest-ip'] = item[2]['vdsm-guest-ip']
         return register_servers, hosts, guests
 
-    def provision_register_servers(self, queue):
+    def provision_register_servers(self, q):
         logger.info("Start to provision register servers")
         func_name = sys._getframe().f_code.co_name
         register_list = deploy.trigger.register_list.lower()
@@ -189,11 +225,16 @@ class Provision(Register):
                 sat_list.append(register_type)
         job_passed = self.satellite_machines(sat_list)
         if job_passed:
-            sat_queue = Queue.Queue()
+            sat_queue = queue.Queue()
             sat_results = []
             sat_threads = []
             for sat_type, sat_host in job_passed.items():
-                sat_threads.append(threading.Thread(target=self.satellite_setup, args=(sat_queue, sat_type, sat_host)))
+                sat_threads.append(
+                    threading.Thread(
+                        target=self.satellite_setup,
+                        args=(sat_queue, sat_type, sat_host)
+                    )
+                )
             for t in sat_threads:
                 t.start()
             for t in sat_threads:
@@ -202,29 +243,59 @@ class Provision(Register):
                 sat_results.append(sat_queue.get())
             for item in sat_results:
                 servers_ip[item[0]] = item[1]
-        queue.put((func_name, servers_ip))
+        q.put((func_name, servers_ip))
 
-    def provision_remote_guests(self, queue, remote_modes):
+    def provision_remote_guests(self, q, remote_modes):
         logger.info("Start to provision remote hypervisor and guests")
         func_name = sys._getframe().f_code.co_name
         conf_guests = dict()
-        mode_queue = Queue.Queue()
+        mode_queue = queue.Queue()
         mode_results = []
         mode_threads = []
         for mode_type in remote_modes:
             mode_type = "%s-guest-ip" % mode_type
             if "libvirt-remote" in mode_type:
-                mode_threads.append(threading.Thread(target=self.guest_libvirt_remote_setup, args=(mode_queue, mode_type)))
+                mode_threads.append(
+                    threading.Thread(
+                        target=self.guest_libvirt_remote_setup,
+                        args=(mode_queue, mode_type)
+                    )
+                )
             if "rhevm" in mode_type:
-                mode_threads.append(threading.Thread(target=self.guest_rhevm_setup, args=(mode_queue, mode_type)))
+                mode_threads.append(
+                    threading.Thread(
+                        target=self.guest_rhevm_setup,
+                        args=(mode_queue, mode_type)
+                    )
+                )
             if "xen" in mode_type:
-                mode_threads.append(threading.Thread(target=self.guest_xen_setup, args=(mode_queue, mode_type)))
+                mode_threads.append(
+                    threading.Thread(
+                        target=self.guest_xen_setup,
+                        args=(mode_queue, mode_type)
+                    )
+                )
             if "hyperv" in mode_type:
-                mode_threads.append(threading.Thread(target=self.guest_hyperv_setup, args=(mode_queue, mode_type)))
+                mode_threads.append(
+                    threading.Thread(
+                        target=self.guest_hyperv_setup,
+                        args=(mode_queue, mode_type)
+                    )
+                )
             if "esx" in mode_type:
-                mode_threads.append(threading.Thread(target=self.guest_esx_setup, args=(mode_queue, mode_type)))
+                mode_threads.append(
+                    threading.Thread(
+                        target=self.guest_esx_setup,
+                        args=(mode_queue, mode_type)
+                    )
+                )
             if "kubevirt" in mode_type:
-                mode_threads.append(threading.Thread(target=self.guest_kubevirt_setup, args=(mode_queue, mode_type)))
+                mode_threads.append(
+                    threading.Thread(
+                        target=self.guest_kubevirt_setup,
+                        args=(mode_queue, mode_type)
+                    )
+                )
         for t in mode_threads:
             t.start()
         for t in mode_threads:
@@ -233,9 +304,9 @@ class Provision(Register):
             mode_results.append(mode_queue.get())
         for item in mode_results:
             conf_guests[item[0]] = item[1]
-        queue.put((func_name, conf_guests))
+        q.put((func_name, conf_guests))
 
-    def provision_rhev_host(self, queue):
+    def provision_rhev_host(self, q):
         func_name = sys._getframe().f_code.co_name
         logger.info("Start to provision rhev host and guest")
         rhev_iso = deploy.trigger.rhev_iso
@@ -244,7 +315,11 @@ class Provision(Register):
         rhev_passwd = deploy.vdsm.master_passwd
         conf_host = dict()
         conf_guest = dict()
-        ssh_rhev = {"host": rhev_host,"username":rhev_user,"password":rhev_passwd}
+        ssh_rhev = {
+            "host": rhev_host,
+            "username": rhev_user,
+            "password": rhev_passwd
+        }
         self.rhev_install_by_grub(ssh_rhev, rhev_iso)
         self.system_init("ci-host-rhev", ssh_rhev)
         self.ssh_no_passwd_access(ssh_rhev)
@@ -252,9 +327,9 @@ class Provision(Register):
         guest_ip = self.guest_vdsm_setup(ssh_rhev)
         conf_host["virtwho-host-ip"] = rhev_host
         conf_guest["vdsm-guest-ip"] = guest_ip
-        queue.put((func_name, conf_host, conf_guest))
+        q.put((func_name, conf_host, conf_guest))
 
-    def provision_arch_host(self, queue, compose_id):
+    def provision_arch_host(self, q, compose_id):
         func_name = sys._getframe().f_code.co_name
         logger.info("Start to provision multiarch host")
         conf_host = dict()
@@ -263,19 +338,23 @@ class Provision(Register):
         conf_host["virtwho-host-ip"] = host_ip 
         username = deploy.beaker.default_user
         password = deploy.beaker.default_passwd
-        ssh_host = {"host": host_ip,"username": username,"password": password}
+        ssh_host = {
+            "host": host_ip,
+            "username": username,
+            "password": password
+        }
         self.system_init("ci-host-arch", ssh_host)
         self.ssh_no_passwd_access(ssh_host)
         self.install_base_packages(ssh_host)
-        queue.put((func_name, conf_host))
+        q.put((func_name, conf_host))
 
-    def provision_docker_hosts(self, queue, compose_id, remote_modes):
+    def provision_docker_hosts(self, q, compose_id, remote_modes):
         logger.info("Start to provision virt-who docker hosts")
         func_name = sys._getframe().f_code.co_name
         conf_hosts = self.docker_compose_setup(compose_id, remote_modes)
-        queue.put((func_name, conf_hosts))
+        q.put((func_name, conf_hosts))
 
-    def provision_libvirt_local_host(self, queue, compose_id):
+    def provision_libvirt_local_host(self, q, compose_id):
         logger.info("Start to provision local libvirt host and its guest")
         func_name = sys._getframe().f_code.co_name
         conf_host = dict()
@@ -283,16 +362,20 @@ class Provision(Register):
         local_host = deploy.libvirt.local
         local_user = deploy.libvirt.local_user
         local_passwd = deploy.libvirt.local_passwd
-        ssh_libvirt = {"host": local_host,"username":local_user,"password":local_passwd}
+        ssh_libvirt = {
+            "host": local_host,
+            "username": local_user,
+            "password": local_passwd
+        }
         self.rhel_install_by_grub(ssh_libvirt, compose_id)
         self.system_init("ci-host-libvirt-local", ssh_libvirt)
         self.ssh_no_passwd_access(ssh_libvirt)
         guest_ip = self.guest_libvirt_local_setup(ssh_libvirt)
         conf_host["libvirt-local-host-ip"] = local_host
         conf_guest["libvirt-local-guest-ip"] = guest_ip
-        queue.put((func_name, conf_host, conf_guest))
+        q.put((func_name, conf_host, conf_guest))
 
-    def provision_vdsm_host(self, queue, compose_id):
+    def provision_vdsm_host(self, q, compose_id):
         logger.info("Start to provision vdsm host and its guest")
         func_name = sys._getframe().f_code.co_name
         conf_host = dict()
@@ -300,14 +383,18 @@ class Provision(Register):
         master = deploy.vdsm.master
         master_user = deploy.vdsm.master_user
         master_passwd = deploy.vdsm.master_passwd
-        ssh_vdsm = {"host":master,"username":master_user,"password":master_passwd}
+        ssh_vdsm = {
+            "host": master,
+            "username": master_user,
+            "password": master_passwd
+        }
         self.rhel_install_by_grub(ssh_vdsm, compose_id)
         self.system_init("ci-host-vdsm", ssh_vdsm)
         self.ssh_no_passwd_access(ssh_vdsm)
         guest_ip = self.guest_vdsm_setup(ssh_vdsm)
         conf_host["vdsm-host-ip"] = master
         conf_guest["vdsm-guest-ip"] = guest_ip
-        queue.put((func_name, conf_host, conf_guest))
+        q.put((func_name, conf_host, conf_guest))
 
     #*************************************************
     # Jenkins Job Scheduler 
