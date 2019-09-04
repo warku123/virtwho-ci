@@ -2000,7 +2000,7 @@ class Provision(Register):
 
     def vcenter_guest_ip(self, cert, ssh_vcenter, guest_name):
         cmd = "%s Get-VM %s | %%{(Get-View $_.Id).Guest}" % (cert, guest_name)
-        for i in range(60):
+        for i in range(10):
             ret, output = self.runcmd(cmd, ssh_vcenter)
             if ret == 0 and "IpAddress" in output:
                 datalines = output.splitlines()

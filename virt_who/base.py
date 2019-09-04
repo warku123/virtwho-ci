@@ -273,7 +273,7 @@ class Base(unittest.TestCase):
     def ssh_is_connected(self, ssh):
         host = ssh['host']
         cmd ="rpm -qa filesystem"
-        for i in range(360):
+        for i in range(60):
             ret, output = self.runcmd(cmd, ssh)
             if ret == 0 and "filesystem" in output:
                 logger.info("Succeeded to connect host {0} by ssh".format(host))
