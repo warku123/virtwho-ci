@@ -23,7 +23,9 @@ class Base(unittest.TestCase):
                     error_buff = chan.recv_stderr(1024)
                 exit_status = chan.recv_exit_status()
                 output = contents.getvalue()+error.getvalue()
-                return exit_status, output.decode("utf-8")
+                if type(output) is bytes:
+                    output = output.decode("utf-8")
+                return exit_status, output
             except socket.timeout:
                 msg = "timeout exceeded ...({0})".format(host)
                 logger.info(msg)
@@ -96,7 +98,7 @@ class Base(unittest.TestCase):
         fd.write("Command: {0}\n".format(cmd))
         fd.write("Retcode: {0}\n".format(retcode))
         if debug or retcode != 0:
-            fd.write("Output:\n{0}\n".format(stdout))
+            fd.write("Output:\n{0}\n".format(stdout.encode("utf8")))
         fd.close()
         return retcode, stdout.strip()
 
