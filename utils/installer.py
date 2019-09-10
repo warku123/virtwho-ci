@@ -26,20 +26,23 @@ def install_rhel_by_beaker(args):
     ssh_username = deploy.beaker.default_user
     ssh_password = deploy.beaker.default_passwd
     job_name = 'virtwho-ci-{}'.format(args.rhel_compose)
-    job_id = provision.beaker_Jsubmit(
-        args.os_type,
-        args.variant,
-        args.arch,
-        args.rhel_compose,
-        job_name,
-    )
-    while(provision.beaker_Jstatus({job_name:job_id})):
-        time.sleep(60)
-    results = provision.beaker_Jresult({job_name:job_id})
-    if results[job_name]:
-        update_section('host', 'hostname', results[job_name])
-        update_section('host', 'ssh_username', ssh_username)
-        update_section('host', 'ssh_password', ssh_password)
+    # job_id = provision.beaker_Jsubmit(
+        # args.os_type,
+        # args.variant,
+        # args.arch,
+        # args.rhel_compose,
+        # job_name,
+    # )
+    # while(provision.beaker_Jstatus({job_name:job_id})):
+        # time.sleep(60)
+    # results = provision.beaker_Jresult({job_name:job_id})
+    # if results[job_name]:
+        # update_section('host', 'hostname', results[job_name])
+        # update_section('host', 'ssh_username', ssh_username)
+    #     update_section('host', 'ssh_password', ssh_password)
+    update_section('host', 'hostname', 'ent-02-vm-06.lab.eng.nay.redhat.com')
+    update_section('host', 'ssh_username', 'root')
+    update_section('host', 'ssh_password', 'red2015')
 
 def install_rhel_by_grub(args):
     host = args.host
@@ -64,38 +67,46 @@ def install_satellite(args):
     admin_password = deploy.satellite.admin_passwd
     manifest_url = deploy.satellite.manifest
     ssh_sat = {'host':host, 'username':username, 'password':password}
-    provision.system_init("satellite-host-virtwho", ssh_sat)
-    sat_ver, rhel_ver = provision.satellite_version(sat_type)
-    if "dogfood" in sat_type:
-        provision.satellite_qa_dogfood_enable(
-            ssh_sat, sat_ver, rhel_ver, repo_type="satellite")
-    if "cdn" in sat_type:
-        provision.employee_sku_attach(ssh_sat)
-        provision.rhel_repo_enable(ssh_sat)
-        provision.satellite_cdn_pool_attach(ssh_sat)
-        provision.satellite_cdn_repo_enable(ssh_sat, sat_ver, rhel_ver)
-    provision.satellite_pkg_install(ssh_sat)
-    provision.satellite_deploy(
-        ssh_sat, admin_username, admin_password, manifest_url, sat_ver)
-    cmd = "rm -f {1}; curl -L {0} -o {1}; sync".format(
-        deploy.kubevirt.kube_config_url,
-        deploy.kubevirt.kube_config_file)
-    provision.runcmd(cmd, ssh_sat)
-    provision.runcmd(
-        'hammer settings set --name=failed_login_attempts_limit --value=0',
-        ssh_sat)
-    provision.runcmd(
-        'hammer settings set --name=unregister_delete_host --value=true',
-        ssh_sat)
-    provision.runcmd(
-        'foreman-maintain packages unlock',
-        ssh_sat)
-    provision.ssh_no_passwd_access(ssh_sat)
-    update_section('satellite', 'hostname', host)
-    update_section('satellite', 'ssh_username', username)
-    update_section('satellite', 'ssh_password', password)
-    update_section('satellite', 'admin_username', admin_username)
-    update_section('satellite', 'admin_password', admin_username)
+    # provision.system_init("satellite-host-virtwho", ssh_sat)
+    # sat_ver, rhel_ver = provision.satellite_version(sat_type)
+    # if "dogfood" in sat_type:
+        # provision.satellite_qa_dogfood_enable(
+            # ssh_sat, sat_ver, rhel_ver, repo_type="satellite")
+    # if "cdn" in sat_type:
+        # provision.employee_sku_attach(ssh_sat)
+        # provision.rhel_repo_enable(ssh_sat)
+        # provision.satellite_cdn_pool_attach(ssh_sat)
+        # provision.satellite_cdn_repo_enable(ssh_sat, sat_ver, rhel_ver)
+    # provision.satellite_pkg_install(ssh_sat)
+    # provision.satellite_deploy(
+        # ssh_sat, admin_username, admin_password, manifest_url, sat_ver)
+    # cmd = "rm -f {1}; curl -L {0} -o {1}; sync".format(
+        # deploy.kubevirt.kube_config_url,
+        # deploy.kubevirt.kube_config_file)
+    # provision.runcmd(cmd, ssh_sat)
+    # provision.runcmd(
+        # 'hammer settings set --name=failed_login_attempts_limit --value=0',
+        # ssh_sat)
+    # provision.runcmd(
+        # 'hammer settings set --name=unregister_delete_host --value=true',
+        # ssh_sat)
+    # provision.runcmd(
+        # 'foreman-maintain packages unlock',
+        # ssh_sat)
+    # provision.ssh_no_passwd_access(ssh_sat)
+    # update_section('satellite', 'hostname', host)
+    # update_section('satellite', 'ssh_username', username)
+    # update_section('satellite', 'ssh_password', password)
+    # update_section('satellite', 'admin_username', admin_username)
+    # update_section('satellite', 'admin_password', admin_username)
+
+    update_section('satellite', 'hostname', 'ent-02-vm-06.lab.eng.nay.redhat.com')
+    update_section('satellite', 'ssh_username', 'root')
+    update_section('satellite', 'ssh_password', 'red2015')
+    update_section('satellite', 'admin_username', 'admin')
+    update_section('satellite', 'admin_password', 'admin')
+
+
 
 def setup_esx():
     vcenter_ip = deploy.vcenter.ip
