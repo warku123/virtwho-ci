@@ -23,11 +23,6 @@ class Testcase(Testing):
         config_name = "virtwho-config"
         config_file = "/etc/virt-who.d/{0}.conf".format(config_name)
         self.vw_etc_d_mode_create(config_name, config_file)
-        msg_list = [
-            "Name or service not known|"
-            "Connection timed out|"
-            "Failed to connect|"
-            "Error in .* backend"]
 
         # Case Steps
         logger.info(">>>step1: run virt-who with all good configurations")
@@ -35,12 +30,13 @@ class Testcase(Testing):
         res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
         results.setdefault('step1', []).append(res1)
 
-        logger.info(">>>step2: add useless line with tab spaces after server=")
-        cmd = "sed -i '/^server=/a \\\txxx=xxx' {0}".format(config_file)
+        logger.info(">>>step2: add useless line with tab spaces after type=")
+        cmd = "sed -i '/^type=/a \\\txxx=xxx' {0}".format(config_file)
         ret, output = self.runcmd(cmd, self.ssh_host(), desc="add new line with tab")
         data, tty_output, rhsm_output = self.vw_start(exp_send=0)
-        res1 = self.op_normal_value(data, exp_error="nz", exp_thread=1, exp_send=0)
-        res2 = self.msg_validation(rhsm_output, msg_list)
+        msg = "virt-who can't be started"
+        res1 = self.op_normal_value(data, exp_error=1, exp_thread=0, exp_send=0)
+        res2 = self.vw_msg_search(rhsm_output, msg)
         results.setdefault('step2', []).append(res1)
         results.setdefault('step2', []).append(res2)
 

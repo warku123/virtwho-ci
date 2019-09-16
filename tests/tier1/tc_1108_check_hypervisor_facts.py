@@ -77,7 +77,12 @@ class Testcase(Testing):
             results.setdefault('step3', []).append(False)
 
         logger.info(">>>step4: check dmi.system.uuid value")
-        if facts_dic['dmi'] == host_uuid:
+        if hypervisor_type == "rhevm":
+            host_hwuuid = self.get_hypervisor_hwuuid()
+            dmi = host_hwuuid
+        else:
+            dmi = host_uuid
+        if facts_dic['dmi'] == dmi:
             logger.info("succeeded to check dmi.system.uuid={0}".format(host_uuid))
             results.setdefault('step4', []).append(True)
         else:
@@ -96,8 +101,4 @@ class Testcase(Testing):
                 results.setdefault('step5', []).append(False)
 
         # Case Result
-        notes = list()
-        if hypervisor_type == 'xen':
-            notes.append("(step4) [RHEVM] dmi.system.uuid is not uuid")
-            notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1744057")
-        self.vw_case_result(results, notes)
+        self.vw_case_result(results)

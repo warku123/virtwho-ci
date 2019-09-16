@@ -878,6 +878,7 @@ class Testing(Provision):
         ret, output = self.runcmd(cmd, self.ssh_host(), desc="virt-who placing number check")
         keys = re.findall(r'Report for config "(.*?)"', output)
         if output is not None and output != "" and len(keys) > 0:
+            keys[0] = keys[0].encode("utf8")
             key = "Report for config \"%s\" gathered, placing in datastore" % keys[0]
             cmd = "grep '%s' /var/log/rhsm/rhsm.log | wc -l" % key
             ret, output = self.runcmd(cmd, self.ssh_host(), desc="virt-who placing number check")
