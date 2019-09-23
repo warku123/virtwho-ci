@@ -17,7 +17,6 @@ class Testcase(Testing):
         config_name = "virtwho-config"
         config_file = "/etc/virt-who.d/{0}.conf".format(config_name)
         self.vw_etc_d_mode_create(config_name, config_file)
-        host_uuid = self.get_hypervisor_hostuuid()
         guest_uuid = self.get_hypervisor_guestuuid()
 
         # case steps
@@ -56,15 +55,15 @@ class Testcase(Testing):
         results.setdefault('step5', []).append(res1)
         results.setdefault('step5', []).append(res2)
 
-        # logger.info('>>>step5: Configure "print_=true" then start virt-who service')
-        # self.vw_stop()
-        # data, tty_output, rhsm_output = self.vw_start()
-        # res1 = self.op_normal_value(data, exp_error=0, exp_thread=0, exp_send=0)
-        # res2 = self.vw_msg_search(rhsm_output, guest_uuid, exp_exist=True)
-        # results.setdefault('step5', []).append(res1)
-        # results.setdefault('step5', []).append(res2)
+        logger.info('>>>step5: Configure "print_=true" then start virt-who service')
+        self.vw_stop()
+        data, tty_output, rhsm_output = self.vw_start("virt-who")
+        res1 = self.op_normal_value(data, exp_error=0, exp_thread=0, exp_send=0)
+        res2 = self.vw_msg_search(rhsm_output, guest_uuid, exp_exist=False)
+        results.setdefault('step5', []).append(res1)
+        results.setdefault('step5', []).append(res2)
 
-        logger.info('>>>step5: Configure "print_=xxx" then start virt-who service')
+        logger.info('>>>step6: Configure "print_=xxx" then start virt-who service')
         msg = "print_ must be a valid boolean"
         self.vw_option_update_value("print_", 'xxx', virtwho_conf)
         data, tty_output, rhsm_output = self.vw_start()
