@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 
 """
 example usage:
-    $ python merge_junit_results.py results1.xml results2.xml > results.xml
+    $ python merge-xunit.py results1.xml results2.xml > results.xml
 """
 
 def main():
@@ -50,7 +50,7 @@ def merge_results(xml_files):
 
 def usage():
     this_file = os.path.basename(__file__)
-    print("Usage: python merge_junit_results.py results1.xml results2.xml > results.xml")
+    print("Usage: python merge-xunit.py results1.xml results2.xml > results.xml")
 
 if __name__ == '__main__':
     main()
