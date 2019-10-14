@@ -4,11 +4,13 @@ from virt_who.base import Base
 from virt_who.register import Register
 from virt_who.testing import Testing
 
+
 class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133696')
-        if self.pkg_check(self.ssh_host(), 'virt-who')[9:15] >= '0.23.3':
-            self.vw_case_skip("virt-who version")
+        compose_id = self.get_config('rhel_compose')
+        if "RHEL-8" in compose_id:
+            self.vw_case_skip("RHEL-8")
         self.vw_case_init()
 
         # Case Config
@@ -16,10 +18,10 @@ class Testcase(Testing):
         guest_uuid = self.get_hypervisor_guestuuid()
         cmd1 = self.vw_cli_base() + "-d -m"
         cmd2 = self.vw_cli_base() + "-d --log-per-config"
-        steps = {'step1':cmd1, 'step2':cmd2}
+        steps = {'step1': cmd1, 'step2': cmd2}
 
         # Case Steps
-        for step, cmd in sorted(steps.items(),key=lambda item:item[0]):
+        for step, cmd in sorted(steps.items(), key=lambda item: item[0]):
             logger.info(">>>{0}: run virt-who cli to check log-per-config".format(step))
             data, tty_output, rhsm_output = self.vw_start(cmd, exp_send=1)
             res = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)

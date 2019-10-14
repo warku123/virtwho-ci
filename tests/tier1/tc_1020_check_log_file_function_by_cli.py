@@ -7,8 +7,9 @@ from virt_who.testing import Testing
 class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-134122')
-        if self.pkg_check(self.ssh_host(), 'virt-who')[9:15] >= '0.23.3':
-            self.vw_case_skip("virt-who version")
+        compose_id = self.get_config('rhel_compose')
+        if "RHEL-8" in compose_id:
+            self.vw_case_skip("RHEL-8")
         self.vw_case_init()
 
         # case config
