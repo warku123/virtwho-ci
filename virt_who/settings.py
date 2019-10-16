@@ -295,6 +295,11 @@ class SetSatellite(FeatureSettings):
         self.rhel8_compose = None
         self.manifest = None
         self.activation_key = None
+        self.foreman_proxy_dns = None
+        self.foreman_proxy_tftp = None
+        self.katello_proxy_url = None
+        self.katello_proxy_username = None
+        self.katello_proxy_password = None
 
     def read(self, reader):
         self.admin_user = reader.get('satellite', 'admin_user')
@@ -307,6 +312,12 @@ class SetSatellite(FeatureSettings):
         self.rhel8_compose = reader.get('satellite', 'rhel8_compose')
         self.manifest = reader.get('satellite', 'manifest')
         self.activation_key = reader.get('satellite', 'activation_key')
+        self.foreman_proxy_dns = reader.get('satellite', 'foreman_proxy_dns')
+        self.foreman_proxy_tftp = reader.get('satellite', 'foreman_proxy_tftp')
+        self.katello_proxy_url = reader.get('satellite', 'katello_proxy_url')
+        self.katello_proxy_username = reader.get('satellite', 'katello_proxy_username')
+        self.katello_proxy_password = reader.get('satellite', 'katello_proxy_password')
+        
 
 class SetVcenter(FeatureSettings):
     def __init__(self, *args, **kwargs):

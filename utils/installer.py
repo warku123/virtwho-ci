@@ -74,9 +74,15 @@ def install_satellite(args):
         provision.rhel_repo_enable(ssh_sat)
         provision.satellite_cdn_pool_attach(ssh_sat)
         provision.satellite_cdn_repo_enable(ssh_sat, sat_ver, rhel_ver)
-    provision.satellite_pkg_install(ssh_sat)
-    provision.satellite_deploy(
-        ssh_sat, admin_username, admin_password, manifest_url, sat_ver)
+    if "nightly" in sat_type:
+        provision.employee_sku_attach(ssh_sat)
+        provision.rhel_repo_enable(ssh_sat)
+        provision.satellite_nightly_deploy(
+            ssh_sat, admin_username, admin_password, manifest_url)
+    else:
+        provision.satellite_pkg_install(ssh_sat)
+        provision.satellite_deploy(
+            ssh_sat, admin_username, admin_password, manifest_url, sat_ver)
     cmd = "rm -f {1}; curl -L {0} -o {1}; sync".format(
         deploy.kubevirt.kube_config_url,
         deploy.kubevirt.kube_config_file)

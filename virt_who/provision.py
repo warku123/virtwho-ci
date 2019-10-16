@@ -1378,6 +1378,8 @@ class Provision(Register):
             sat_ver = "6.3"
         elif "6.2" in sat_type or "62" in sat_type:
             sat_ver = "6.2"
+        elif "upstream" in sat_type:
+            sat_ver = "upstream"
         else:
             raise FailException("Unknown satellite version")
         if "rhel6" in sat_type or "rhel-6" in sat_type:
@@ -1490,6 +1492,81 @@ class Provision(Register):
             raise FailException("Failed to refresh satellite manifest({0})".format(sat_host))
         logger.info("Succeeded to refresh satellite manifest({0})".format(sat_host))
         logger.info("Succeeded to deploy satellite({0})".format(sat_host))
+
+    def satellite_nightly_deploy(self, ssh_sat, admin_user, admin_passwd, manifest_url):
+        sat_host = ssh_sat['host']
+        manifest_path = "/tmp/manifest"
+        self.runcmd("rm -rf {0}; mkdir -p {0}".format(manifest_path), ssh_sat)
+        self.runcmd("wget {0} -P {1}".format(manifest_url, manifest_path), ssh_sat)
+        ret, output = self.runcmd("ls {0}".format(manifest_path), ssh_sat)
+        if output is not None:
+            manifest_filename = "{0}/{1}".format(manifest_path, output.strip())
+        else:
+            raise FailException("No manifest file found")
+        self.rhel_epel_repo(ssh_sat)
+        self.runcmd("yum install -y ntp;systemctl enable ntpd;systemctl start ntpd", ssh_sat)
+        self.runcmd("yum install -y ansible git", ssh_sat)
+        self.runcmd("git clone -q https://github.com/theforeman/forklift.git", ssh_sat)
+        ansible_playbook = (
+            'cd forklift; '
+            'ansible-playbook -c local -i,$(hostname) '
+            '-e katello_version=nightly '
+            '-e foreman_installer_skip_installer=True playbooks/katello.yml'
+        )
+        plugin_install = (
+            'yum install -y '
+            'foreman-{ec2,gce,libvirt,openstack,ovirt,rackspace,vmware} '
+            'tfm-rubygem-hammer_cli_{csv,foreman_admin,foreman_discovery,'
+            'foreman_openscap,foreman_remote_execution} *virt_who_configure')
+        foreman_install = (
+            'foreman-installer --scenario katello  -v '
+            '--foreman-initial-admin-password="{0}" '
+            '--disable-system-checks '
+            '--foreman-proxy-dns="true" '
+            '--foreman-proxy-dns-interface="eth0" '
+            '--foreman-proxy-dns-zone="{1}" '
+            '--foreman-proxy-dhcp="true" '
+            '--foreman-proxy-dhcp-interface="eth0" '
+            '--foreman-proxy-tftp="true" '
+            '--foreman-proxy-tftp-servername="{2}" '
+            '--foreman-proxy-register-in-foreman="true" '
+            '--foreman-proxy-puppetca="true" '
+            '--foreman-proxy-puppet="true"  '
+            '--katello-proxy-url="{3}" '
+            '--katello-proxy-port="3128" '
+            '--katello-proxy-username="{4}" '
+            '--katello-proxy-password="{5}" '
+            '--enable-foreman-plugin-remote-execution '
+            '--enable-foreman-proxy-plugin-remote-execution-ssh '
+            '--enable-foreman-plugin-discovery '
+            '--enable-foreman-proxy-plugin-discovery '
+            '--enable-foreman-plugin-openscap '
+            '--enable-foreman-proxy-plugin-openscap '
+            '--enable-foreman-plugin-ansible '
+            '--enable-foreman-proxy-plugin-ansible'
+        ).format(
+            admin_passwd,
+            deploy.satellite.foreman_proxy_dns,
+            deploy.satellite.foreman_proxy_tftp,
+            deploy.satellite.katello_proxy_url,
+            deploy.satellite.katello_proxy_username,
+            deploy.satellite.katello_proxy_password)
+        upload_manifest = (
+            'hammer -u {0} -p {1} subscription upload '
+            '--organization-label Default_Organization '
+            '--file {2}'
+        ).format(admin_user, admin_passwd, manifest_filename)
+        refresh_manifest = (
+            'hammer -u {0} -p {1} subscription refresh-manifest '
+            '--organization="Default Organization"'
+        ).format(admin_user, admin_passwd)
+        self.runcmd(ansible_playbook, ssh_sat)
+        self.runcmd(plugin_install, ssh_sat)
+        ret, output = self.runcmd(foreman_install, ssh_sat)
+        if ret != 0:
+            raise FailException("Failed to run: {}").format(foreman_install)
+        self.run_loop(upload_manifest, ssh_sat)
+        self.run_loop(refresh_manifest, ssh_sat)
 
     def satellite_setup(self, sat_queue, sat_type, sat_host):
         logger.info("Start to deploy %s:%s" % (sat_type, sat_host))
