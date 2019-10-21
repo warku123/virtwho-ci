@@ -13,10 +13,10 @@ class Testcase(Testing):
         # case config
         results = dict()
         json_file = "/tmp/file.json"
-        hypervisor_type = self.get_config('hypervisor_type')
         host_uuid = self.get_hypervisor_hostuuid()
         guest_uuid = self.get_hypervisor_guestuuid()
         compose_id = self.get_config('rhel_compose')
+        hypervisor_type = self.get_config('hypervisor_type')
         if "RHEL-8" in compose_id:
             config_name = "virtwho-config"
             config_file = "/etc/virt-who.d/{0}.conf".format(config_name)
@@ -47,4 +47,9 @@ class Testcase(Testing):
                 results.setdefault(step, []).append(res)
 
         # case result
-        self.vw_case_result(results)
+        notes = list()
+        hypervisor_type = self.get_config('hypervisor_type')
+        if hypervisor_type == 'kubevirt':
+            notes.append("(step1,2) No kubeconfig option for cli")
+            notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1751441")
+        self.vw_case_result(results, notes)

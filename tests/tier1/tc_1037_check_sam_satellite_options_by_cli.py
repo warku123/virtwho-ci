@@ -30,4 +30,9 @@ class Testcase(Testing):
         # case result
         notes = list()
         notes.append("Bug 1760175 - Remove --sam/--satellite6 or repair them?")
+        notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1760175")
+        hypervisor_type = self.get_config('hypervisor_type')
+        if hypervisor_type == 'kubevirt':
+            notes.append("(step1,2) No kubeconfig option for cli")
+            notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1751441")
         self.vw_case_result(results, notes)

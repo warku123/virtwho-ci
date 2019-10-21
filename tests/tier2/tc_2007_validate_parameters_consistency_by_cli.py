@@ -43,4 +43,8 @@ class Testcase(Testing):
         results.setdefault('step2', []).append(res2)
 
         # Case Result
-        self.vw_case_result(results)
+        notes = list()
+        if hypervisor_type == 'kubevirt':
+            notes.append("(step1) No kubeconfig option for cli")
+            notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1751441")
+        self.vw_case_result(results, notes)
