@@ -95,10 +95,10 @@ class Base(unittest.TestCase):
         retcode, stdout = self.paramiko_run(cmd, host, username, password, timeout, port)
         fd = open(DEBUG_FILE, 'a')
         fd.write(">>> Running in: {0}:{1}, Desc: {2}\n".format(host, port, desc))
-        fd.write("Command: {0}\n".format(cmd))
+        fd.write("Command: {0}\n".format(str(cmd)))
         fd.write("Retcode: {0}\n".format(retcode))
         if debug or retcode != 0:
-            fd.write("Output:\n{0}\n".format(stdout.encode("utf8")))
+            fd.write("Output:\n{0}\n".format(str(stdout)))
         fd.close()
         return retcode, stdout.strip()
 

@@ -600,7 +600,7 @@ class Register(Base):
             rex = [host_name, host_name.lower(), host_uuid, host_uuid.lower()]
             ret, output = self.runcmd(cmd, ssh, desc="satellite hosts list", debug=False)
             output = self.is_json(output.strip())
-            if output is not False and output is not None and output != "" and output.has_key('results'):
+            if output is not False and output is not None and output != "" and 'results' in output.keys():
                 results = dict()
                 for item in output['results']:
                     if ret == 0 and any(key in item['name'] for key in rex):
@@ -629,7 +629,7 @@ class Register(Base):
         for i in range(3):
             ret, output = self.runcmd(cmd, ssh, desc="satellite pools list", debug=False)
             output = self.is_json(output.strip())
-            if output is not False and output is not None and output != "" and output.has_key('results'):
+            if output is not False and output is not None and output != "" and 'results' in output.keys():
                 for item in output['results']:
                     if pool_id in item['cp_id']:
                         katello_id = str(item['id']).strip()
@@ -691,9 +691,9 @@ class Register(Base):
             for i in range(3):
                 ret, output = self.runcmd(cmd, ssh, desc="satellite host consumed list", debug=False)
                 output = self.is_json(output.strip())
-                if output is not False and output is not None and output != "" and output.has_key('results'):
+                if output is not False and output is not None and output != "" and 'results' in output.keys():
                     for item in output['results']:
-                        if item.has_key('cp_id'):
+                        if 'cp_id' in item.keys():
                             katello_ids[item['cp_id']] = str(item['id']).strip()
                     break
                 logger.warning("no results found for host subscriptions, try again after 15s...")
@@ -765,7 +765,7 @@ class Register(Base):
         if ret == 0 and output is not False and output is not None and output != "":
             for i in range(3):
                 output = self.satellite_org_list(ssh, register_config)
-                if output.has_key('results'):
+                if 'results' in output.keys():
                     for item in output['results']:
                         if item['name'] == org_name:
                             logger.info("succeeded to create organization {0}".format(org_name))
@@ -790,7 +790,7 @@ class Register(Base):
     def satellite_org_id_get(self, ssh, register_config, org_name):
         for i in range(3):
             org_list = self.satellite_org_list(ssh, register_config)
-            if org_list.has_key('results'):
+            if 'results' in org_list.keys():
                 for item in org_list['results']:
                     if item['label'] == org_name:
                         org_id = item['id']
@@ -816,7 +816,7 @@ class Register(Base):
 
     def satellite_hosts_search(self, ssh, register_config, org_name, hostname, hostuuid, exp_exist=True):
         hosts = self.satellite_hosts_list(ssh, register_config, org_name)
-        if hosts.has_key('results'):
+        if 'results' in hosts.keys():
             name_list = []
             for item in hosts['results']:
                 name = item['name']
@@ -881,7 +881,7 @@ class Register(Base):
         if ret == 0 and output is not False and output is not None and output != "":
             for i in range(5):
                 output = self.satellite_active_key_list(ssh, register_config, org_id)
-                if output.has_key('results'):
+                if 'results' in output.keys():
                     for item in output['results']:
                         if item['name'] == key_name:
                             logger.info("succeeded to create activation_key")

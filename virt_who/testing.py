@@ -437,7 +437,7 @@ class Testing(Provision):
     def vw_case_skip(self, skip_reason=None):
         try:
             self.skipTest("SkipTest, not avaialbe for {0}".format(skip_reason))
-        except Exception, SkipTest:
+        except:
             logger.info(str(SkipTest))
             raise SkipTest
         finally:
@@ -447,11 +447,9 @@ class Testing(Provision):
         for key, value in results.items():
             if False in value:
                 logger.error('Failed step: {0}'.format(key))
-                print 'Failed step: {0}'.format(key)
         if notes is not None:
             for msg in notes:
                 logger.warning(msg)
-                print msg
         if any(False in res for res in results.values()):
             raise FailException("Failed to run case, please check the failed steps\n")
         else:
@@ -770,7 +768,7 @@ class Testing(Provision):
                 org_data["hypervisor_num"] = len(hypervisors)
                 for item in hypervisors:
                     hypervisorId =  item['hypervisorId']['hypervisorId']
-                    if item.has_key('name'):
+                    if 'name' in item.keys():
                         hypervisor_name =  item['name']
                     else:
                         hypervisor_name = ""
@@ -780,7 +778,7 @@ class Testing(Provision):
                     facts['version'] = item['facts']['hypervisor.version']
                     facts['socket'] = item['facts']['cpu.cpu_socket(s)']
                     facts['dmi'] = item['facts']['dmi.system.uuid']
-                    if item['facts'].has_key('hypervisor.cluster'):
+                    if 'hypervisor.cluster' in item['facts'].keys():
                         facts['cluster'] = item['facts']['hypervisor.cluster']
                     else:
                         facts['cluster'] = ''
@@ -878,7 +876,6 @@ class Testing(Provision):
         ret, output = self.runcmd(cmd, self.ssh_host(), desc="virt-who placing number check")
         keys = re.findall(r'Report for config "(.*?)"', output)
         if output is not None and output != "" and len(keys) > 0:
-            keys[0] = keys[0].encode("utf8")
             key = "Report for config \"%s\" gathered, placing in datastore" % keys[0]
             cmd = "grep '%s' /var/log/rhsm/rhsm.log | wc -l" % key
             ret, output = self.runcmd(cmd, self.ssh_host(), desc="virt-who placing number check")
@@ -1181,14 +1178,14 @@ class Testing(Provision):
         mode = hypervisor_config['type']
         owner = register_config['owner']
         if "libvirt-local" in mode or "vdsm" in mode:
-            if data.has_key(guest_uuid):
+            if guest_uuid in data.keys():
                 logger.info("Succeeded to check the associated info by rhsm.log")
                 return True
             else:
                 logger.error("Faild to check the associated info by rhsm.log")
                 return False
         else:
-            if data[owner].has_key(guest_uuid) and host_uuid in data[owner][guest_uuid]['guest_hypervisor']:
+            if guest_uuid in data[owner].keys() and host_uuid in data[owner][guest_uuid]['guest_hypervisor']:
                 logger.info("Succeeded to check the associated info by rhsm.log")
                 return True
             else:

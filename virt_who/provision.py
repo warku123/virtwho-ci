@@ -58,7 +58,7 @@ class Provision(Register):
         ci_msg_content = self.get_exported_param("CI_MESSAGE")
         if ci_msg_content:
             msg = json.loads(ci_msg_content)
-            if msg.has_key('info'):
+            if 'info' in msg.keys():
                 build_id = msg['info']['build_id']
                 task_id = msg['info']['task_id']
             else:
@@ -193,22 +193,22 @@ class Provision(Register):
             if item[0] == "provision_docker_hosts":
                 hosts.update(item[1])
             if item[0] == "provision_rhev_host":
-                if item[1].has_key('virtwho-host-ip'):
+                if 'virtwho-host-ip' in item[1].keys():
                     hosts['virtwho-host-ip'] = item[1]['virtwho-host-ip']
-                if item[2].has_key('vdsm-guest-ip'):
+                if 'vdsm-guest-ip' in item[2].keys():
                     guests['vdsm-guest-ip'] = item[2]['vdsm-guest-ip']
             if item[0] == "provision_arch_host":
-                if item[1].has_key('virtwho-host-ip'):
+                if 'virtwho-host-ip' in item[1].keys():
                     hosts['virtwho-host-ip'] = item[1]['virtwho-host-ip']
             if item[0] == "provision_libvirt_local_host":
-                if item[1].has_key('libvirt-local-host-ip'):
+                if 'libvirt-local-host-ip' in item[1].keys():
                     hosts['libvirt-local-host-ip'] = item[1]['libvirt-local-host-ip']
-                if item[2].has_key('libvirt-local-guest-ip'):
+                if 'libvirt-local-guest-ip' in item[2].keys():
                     guests['libvirt-local-guest-ip'] = item[2]['libvirt-local-guest-ip']
             if item[0] == "provision_vdsm_host":
-                if item[1].has_key('vdsm-host-ip'):
+                if 'vdsm-host-ip' in item[1].keys():
                     hosts['vdsm-host-ip'] = item[1]['vdsm-host-ip']
-                if item[2].has_key('vdsm-guest-ip'):
+                if 'vdsm-guest-ip' in item[2].keys():
                     guests['vdsm-guest-ip'] = item[2]['vdsm-guest-ip']
         return register_servers, hosts, guests
 
@@ -508,7 +508,7 @@ class Provision(Register):
                 if "vdsm" in key:
                     job_name = "runtest-vdsm"
                 if len(register_servers) > 0 \
-                        and virtwho_hosts.has_key('virtwho-host-ip') \
+                        and 'virtwho-host-ip' in virtwho_hosts.keys() \
                         and guest_ip != "" \
                         and job_name != "":
                     host_ip = virtwho_hosts['virtwho-host-ip']
@@ -520,28 +520,28 @@ class Provision(Register):
                 host_ip = value
                 job_name = ""
                 guest_ip = ""
-                if "esx" in key and guests.has_key('esx-guest-ip'):
+                if "esx" in key and 'esx-guest-ip' in guests.keys():
                     job_name = "runtest-esx"
                     guest_ip = guests['esx-guest-ip']
-                if "xen" in key and guests.has_key('xen-guest-ip'):
+                if "xen" in key and 'xen-guest-ip' in guests.keys():
                     job_name = "runtest-xen"
                     guest_ip = guests['xen-guest-ip']
-                if "hyperv" in key and guests.has_key('hyperv-guest-ip'):
+                if "hyperv" in key and 'hyperv-guest-ip' in guests.keys():
                     job_name = "runtest-hyperv"
                     guest_ip = guests['hyperv-guest-ip']
-                if "rhevm" in key and guests.has_key('rhevm-guest-ip'):
+                if "rhevm" in key and 'rhevm-guest-ip' in guests.keys():
                     job_name = "runtest-rhevm"
                     guest_ip = guests['rhevm-guest-ip']
-                if "kubevirt" in key and guests.has_key('kubevirt-guest-ip'):
+                if "kubevirt" in key and 'kubevirt-guest-ip' in guests.keys():
                     job_name = "runtest-kubevirt"
                     guest_ip = guests['kubevirt-guest-ip']
-                if "libvirt-remote" in key and guests.has_key('libvirt-remote-guest-ip'):
+                if "libvirt-remote" in key and 'libvirt-remote-guest-ip' in guests.keys():
                     job_name = "runtest-libvirt-remote"
                     guest_ip = guests['libvirt-remote-guest-ip']
-                if "libvirt-local" in key and guests.has_key('libvirt-local-guest-ip'):
+                if "libvirt-local" in key and 'libvirt-local-guest-ip' in guests.keys():
                     job_name = "runtest-libvirt-local"
                     guest_ip = guests['libvirt-local-guest-ip']
-                if "vdsm" in key and guests.has_key('vdsm-guest-ip'):
+                if "vdsm" in key and 'vdsm-guest-ip' in guests.keys():
                     job_name = "runtest-vdsm"
                     guest_ip = guests['vdsm-guest-ip']
                 if len(register_servers) > 0 and host_ip != "" and guest_ip != "" and job_name != "":
