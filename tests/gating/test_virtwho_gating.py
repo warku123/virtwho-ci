@@ -86,10 +86,6 @@ class VirtWhoGatingTestCase(Testing):
                 hypervisorId = self.host_uuid
             assert(hypervisorId in data[register_owner].keys())
             self.vw_option_del("hypervisor_id", self.config_file)
-            if "satellite" in register_type:
-                self.vw_web_host_delete(self.host_name, hypervisorId)
-        if "stage" in register_type:
-            self.stage_consumer_clean(self.ssh_host(), register_config)
 
     def test_virtwho_fake_mode(self):
         self.vw_etc_d_mode_create(self.config_name, self.config_file)
@@ -103,11 +99,9 @@ class VirtWhoGatingTestCase(Testing):
         assert(self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1))
         assert(self.vw_rhsm_associate(data, self.host_uuid, self.guest_uuid))
         sku_attrs = self.system_sku_attr(self.ssh_host(), "RH00001", "physical")
-        pool_id = sku_attrs['pool_id']
-        self.vw_web_attach(self.host_name, self.host_uuid, pool_id)
+        self.vw_web_attach(self.host_name, self.host_uuid, sku_attrs['pool_id'])
         sku_attrs = self.system_sku_attr(self.ssh_guest(), "RH00049", "virtual")
-        pool_id = sku_attrs['pool_id']
-        self.system_sku_attach(self.ssh_guest(), pool_id=pool_id)
+        self.system_sku_attach(self.ssh_guest(), pool_id=sku_attrs['pool_id'])
         output = self.system_sku_consumed(self.ssh_guest())
         assert(self.vw_msg_search(output, 'RH00049', exp_exist=True))
 
@@ -129,6 +123,7 @@ class VirtWhoGatingTestCase(Testing):
         self.system_register(self.ssh_host(), register_type, register_config)
 
     def test_virtwho_vdc_subscription(self):
+        self.vw_case_init()
         self.vw_option_enable('[global]', self.global_file)
         self.vw_option_enable('debug', self.global_file)
         self.vw_option_update_value('debug', 'True', self.global_file)
