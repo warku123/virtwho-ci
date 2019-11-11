@@ -1468,7 +1468,7 @@ class Provision(Register):
             manifest_filename = "{0}/{1}".format(manifest_path, output.strip())
         else:
             raise FailException("No manifest file found")
-        if sat_ver == "6.6":
+        if sat_ver >= "6.6":
             options = "--disable-system-checks --foreman-initial-admin-password={0}".format(admin_passwd)
         else:
             options = "--disable-system-checks --foreman-admin-password={0}".format(admin_passwd)
