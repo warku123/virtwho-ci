@@ -585,7 +585,8 @@ class Testing(Provision):
         if self.pkg_check(self.ssh_host(), 'virt-who')[9:15] >= '0.24.6':
             cf_env = ''
         if mode == "vdsm":
-            cmd = "echo -e '[{0}]\ntype={1}' > {2}".format(config_name, mode, config_file)
+            cmd = "echo -e '[{0}]\ntype={1}\nowner={2}' > {3}".format(
+                config_name, mode, owner, config_file)
         elif mode == "kubevirt":
             cf_kube = 'kubeconfig={0}\n'.format(hypervisor_config['server_config'])
             cmd = ('cat <<EOF > {0}''{1}''{2}''{3}''{4}''{5}''EOF').format(
