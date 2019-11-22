@@ -435,13 +435,7 @@ class Testing(Provision):
             self.pkg_install(self.ssh_host(), 'virt-who')
 
     def vw_case_skip(self, skip_reason=None):
-        try:
-            self.skipTest("SkipTest, not avaialbe for {0}".format(skip_reason))
-        except:
-            logger.info(str(SkipTest))
-            raise SkipTest
-        finally:
-            logger.info("Succeeded to skip case\n")
+        self.skipTest("Succeeded to skip case, not avaialbe for {0}".format(skip_reason))
 
     def vw_case_result(self, results, notes=None):
         for key, value in results.items():
