@@ -20,7 +20,7 @@ def parser_args(options):
             '''check arg is a xml file or not'''
             ET.parse(arg)
             files.append(arg)
-        except Exception,e:
+        except Exception as e:
             logger.warning('%s is not a xml file' % arg)
     if len(files) > 0:
         return files
@@ -182,11 +182,11 @@ def polarion_caseid_mapping(xml_file):
         classname = node.attrib['classname']
         req = re.findall(r".tc_(.*?)_", classname)
         if len(req) > 0:
-            tc_id = "tc_"+ req[0]
-            if mapping.has_key(tc_id):
+            tc_id = "tc_" + req[0]
+            if tc_id in mapping.keys():
                 polarion_case_id = mapping[tc_id]
                 properties_node = xml_createNode(node, "properties", '', '')
-                attrs = {'name': 'polarion-testcase-id','value': polarion_case_id}
+                attrs = {'name': 'polarion-testcase-id', 'value': polarion_case_id}
                 propertie_node = xml_createNode(properties_node, "property", attrs, '')
     write_file(xml_file, fomatTree(rootNode))
 
