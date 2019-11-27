@@ -2,10 +2,10 @@ from virt_who import *
 
 class Base(unittest.TestCase):
     def paramiko_run(self, cmd, host, username, password, timeout=1800, port=22):
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(host, port, username, password, banner_timeout=300)
         try:
-            ssh = paramiko.SSHClient()
-            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            ssh.connect(host, port, username, password, banner_timeout=300)
             ssh._transport.window_size = 2147483647
             chan = ssh.get_transport().open_session()
             chan.settimeout(timeout)
@@ -25,6 +25,7 @@ class Base(unittest.TestCase):
                 output = contents.getvalue()+error.getvalue()
                 if type(output) is bytes:
                     output = output.decode("utf-8")
+                ssh.close()
                 return exit_status, output
             except socket.timeout:
                 msg = "timeout exceeded ...({0})".format(host)
@@ -32,6 +33,8 @@ class Base(unittest.TestCase):
                 return -1, msg
         except Exception as e:
             return -1, str(e)
+        finally:
+            ssh.close()
 
     def paramiko_getfile(self, host, username, password, from_path, to_path, port=22):
         scp = paramiko.Transport((host, port))
