@@ -4,6 +4,7 @@ from virt_who.base import Base
 from virt_who.register import Register
 from virt_who.testing import Testing
 
+
 class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133683')
@@ -30,11 +31,13 @@ class Testcase(Testing):
         data, tty_output, rhsm_output = self.vw_start(exp_send=1)
         res = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
         results.setdefault('step1', []).append(res)
-        if data.has_key(register_owner) and data[register_owner].has_key(guest_uuid):
-            logger.info("Succeeded to check, mapping info is specified to {0}".format(register_owner))
+        if register_owner in data.keys() and guest_uuid in data[register_owner].keys():
+            logger.info("Succeeded to check, mapping info is specified to {0}".format(
+                register_owner))
             results.setdefault('step1', []).append(True)
         else:
-            logger.error("Failed to check, mapping info is not specified to {0}".format(register_owner))
+            logger.error("Failed to check, mapping info is not specified to {0}".format(
+                register_owner))
             results.setdefault('step1', []).append(False)
 
         # case result

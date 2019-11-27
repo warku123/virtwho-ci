@@ -36,7 +36,7 @@ class Testcase(Testing):
         data, tty_output, rhsm_output = self.vw_start(exp_send=1)
         res = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
         results.setdefault('step', []).append(res)
-        if data[register_owner].has_key(host_name):
+        if host_name in data[register_owner].keys():
             logger.info("Succeeded to search hypervisorId:{0}".format(host_name))
             results.setdefault('step', []).append(True)
         else:

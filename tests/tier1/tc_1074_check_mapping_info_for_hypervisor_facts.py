@@ -4,6 +4,7 @@ from virt_who.base import Base
 from virt_who.register import Register
 from virt_who.testing import Testing
 
+
 class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-134056')
@@ -32,14 +33,15 @@ class Testcase(Testing):
         logger.info(">>>step1: Run virt-who servie to check hypervisor's facts")
         data, tty_output, rhsm_output = self.vw_start(exp_send=1)
         res = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+        facts = data[register_owner][host_uuid]
         results.setdefault('step1', []).append(res)
         results.setdefault('step1', []).append(data['is_async'] == "hypervisors_async")
-        results.setdefault('step1', []).append(data[register_owner][host_uuid].has_key('type'))
-        results.setdefault('step1', []).append(data[register_owner][host_uuid].has_key('version'))
-        results.setdefault('step1', []).append(data[register_owner][host_uuid].has_key('socket'))
-        logger.info("hypervisor.type: {0} ".format(data[register_owner][host_uuid]['type']))
-        logger.info("cpu.cpu_socket(s): {0}".format(data[register_owner][host_uuid]['socket']))
-        logger.info("hypervisor.version: {0}".format(data[register_owner][host_uuid]['version']))
+        results.setdefault('step1', []).append('type' in facts.keys())
+        results.setdefault('step1', []).append('version' in facts.keys())
+        results.setdefault('step1', []).append('socket' in facts.keys())
+        logger.info("hypervisor.type: {0} ".format(facts['type']))
+        logger.info("cpu.cpu_socket(s): {0}".format(facts['socket']))
+        logger.info("hypervisor.version: {0}".format(facts['version']))
 
         # case result
         self.vw_case_result(results)

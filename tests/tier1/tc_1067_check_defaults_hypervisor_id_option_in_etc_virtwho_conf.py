@@ -47,7 +47,7 @@ class Testcase(Testing):
                 hypervisorId = host_name
             else:
                 hypervisorId = host_uuid
-            if data[register_owner].has_key(hypervisorId):
+            if hypervisorId in data[register_owner].keys():
                 logger.info("Succeeded to search hypervisorId:{0}".format(hypervisorId))
                 results.setdefault(step, []).append(True)
             else:

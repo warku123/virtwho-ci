@@ -50,7 +50,7 @@ class Testcase(Testing):
         data, tty_output, rhsm_output = self.vw_start(exp_send=1)
         res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
         results.setdefault('step1', []).append(res1)
-        if data[register_owner].has_key(host_uuid):
+        if host_uuid in data[register_owner].keys():
             facts_dic = data[register_owner][host_uuid]
             logger.info("succeeded to get hypervisor facts dict: {0}".format(facts_dic))
             results.setdefault('step1', []).append(True)
@@ -59,7 +59,7 @@ class Testcase(Testing):
 
         logger.info(">>>step2: check all facts item exiting")
         for item in facts_items:
-            if facts_dic.has_key(item) and facts_dic[item] is not None:
+            if item in facts_dic.keys() and facts_dic[item] is not None:
                 logger.info("succeeded to check {0}={1} in {2} facts"
                             .format(item, facts_dic[item], hypervisor_type))
                 results.setdefault('step2', []).append(True)

@@ -46,7 +46,7 @@ class Testcase(Testing):
             s1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
             results.setdefault(step, []).append(s1)
             hypervisor_num = data[register_owner]['hypervisor_num']
-            if data[register_owner].has_key(hypervisorId) and hypervisor_num == 1:
+            if hypervisorId in data[register_owner].keys() and hypervisor_num == 1:
                 logger.info("Succeeded to search, {0} hypervisorId({1}) found".format(hypervisor_num, hypervisorId))
                 results.setdefault(step, []).append(True)
             else:

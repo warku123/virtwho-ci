@@ -104,9 +104,9 @@ class Testcase(Testing):
         hypervisor_type = self.get_config('hypervisor_type')
         if exp_state is False:
             if hypervisor_type in ('libvirt-local', 'vdsm'):
-                state = data.has_key(guest_uuid)
+                state = guest_uuid in data.keys()
             else:
-                state = data[owner].has_key(guest_uuid)
+                state = guest_uuid in data[owner].keys()
         else:
             if hypervisor_type in ('libvirt-local', 'vdsm'):
                 state = data[guest_uuid]['state']

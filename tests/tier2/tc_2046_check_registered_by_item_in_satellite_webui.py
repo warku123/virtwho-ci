@@ -56,7 +56,7 @@ class Testcase(Testing):
                                                   guest_name, guest_uuid, "get guest info")
             if output is not None:
                 user = output["subscription_facet_attributes"]["user"]
-                if user is not False and user is not None and user.has_key('login'):
+                if user is not False and user is not None and 'login' in user.keys():
                     registered_by = user['login']
                     if registered_by == exp:
                         logger.info("succeded to check registered_by is '{}'".format(exp))
