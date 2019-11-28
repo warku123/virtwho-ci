@@ -34,7 +34,7 @@ def get_exported_param(param_name):
 
 def write_file(filename, content):
     try:
-        fd = open(filename,'w')
+        fd = open(filename, 'wb')
         fcntl.flock(fd, fcntl.LOCK_EX)
         fd.write(content.encode("UTF-8"))
         fcntl.flock(fd, fcntl.LOCK_UN)
@@ -62,8 +62,7 @@ def fomatTree(elem):
     root_str = ET.tostring(elem, 'UTF-8')
     reparse = minidom.parseString(root_str)
     return reparse.toprettyxml(
-            encoding = "utf-8"
-            ).replace("\t\t\n", "").replace("\t\n", "").replace("\n\n", "\n")
+        ).replace("\t\t\n", "").replace("\t\n", "").replace("\n\n", "\n")
 
 def xml_init(xmlFile, root_node):
     if os.path.exists(xmlFile):
