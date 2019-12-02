@@ -4,8 +4,8 @@ class Base(unittest.TestCase):
     def paramiko_run(self, cmd, host, username, password, timeout=1800, port=22):
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(host, port, username, password, banner_timeout=300)
         try:
+            ssh.connect(host, port, username, password, banner_timeout=300)
             ssh._transport.window_size = 2147483647
             chan = ssh.get_transport().open_session()
             chan.settimeout(timeout)
