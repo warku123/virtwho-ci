@@ -40,7 +40,7 @@ class Testcase(Testing):
             data, tty_output, rhsm_output = self.vw_start(exp_send=1)
             res = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
             results.setdefault(step, []).append(res)
-            data['reporter_id'] = data['reporter_id'].encode("utf8")
+            data['reporter_id'] = data['reporter_id']
             if value == reporter_id_null:
                 value = default_reporter_id
             if value == data['reporter_id']:

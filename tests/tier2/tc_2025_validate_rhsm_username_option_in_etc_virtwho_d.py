@@ -52,7 +52,8 @@ class Testcase(Testing):
         logger.info(">>>step3: run virt-who with rhsm_username=红帽©¥®ðπ∉")
         '''红帽©¥®ðπ∉ username is not supported by candlepin'''
         msg_list = ["codec can't decode|"
-                    "Communication with subscription manager failed"]
+                    "Communication with subscription manager failed|"
+                    "option 'rhsm_username': is not in latin1 encoding"]
         self.vw_option_update_value("rhsm_username", "红帽©¥®ðπ∉", config_file)
         data, tty_output, rhsm_output = self.vw_start()
         res1 = self.op_normal_value(data, exp_error="1|2", exp_thread=1, exp_send=0)
