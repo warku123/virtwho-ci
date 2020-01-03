@@ -752,7 +752,7 @@ class Testing(Provision):
             org_data = dict()
             for org in orgs:
                 key = "Host-to-guest mapping being sent to '%s'" % org
-                rex = re.compile(r'(?<=: ){.*?}\n+(?=201|$)', re.S)
+                rex = re.compile(r'(?<=: ){.*?}\n+(?=202|$)', re.S)
                 mapping_info = rex.findall(rhsm_output)[-1]
                 try:
                     mapping_info = json.loads(mapping_info.replace('\n', ''), strict=False)
