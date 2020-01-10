@@ -28,7 +28,7 @@ class Testcase(Testing):
         sku_id = sku_attrs['sku_id']
         pool_id = sku_attrs['pool_id']
         results.setdefault('step1', []).append('Temporary' in sku_type)
-        results.setdefault('step1', []).append( vdc_virtual_sku in sku_id)
+        results.setdefault('step1', []).append(vdc_virtual_sku in sku_id)
 
         logger.info(">>>step2: attach virtual temporary sku in guest")
         self.system_sku_attach(self.ssh_guest(), pool_id=pool_id)
@@ -44,12 +44,10 @@ class Testcase(Testing):
 
         logger.info(">>>step4: check temporary sku is changed to stable in guest")
         output = self.system_sku_consumed(self.ssh_guest())
-        results.setdefault('step4', []).append(self.vw_msg_search(output, vdc_virtual_sku, exp_exist=True))
+        virtual_sku = ["RH00049|RH00050"]
+        results.setdefault('step4', []).append(self.msg_validation(output, virtual_sku, exp_exist=True))
         results.setdefault('step4', []).append(self.vw_msg_search(output, 'Subscription Type: .*Temporary', exp_exist=False))
         results.setdefault('step4', []).append(self.vw_msg_search(output, "Status Details: .*Subscription is current", exp_exist=True))
 
         # case result
-        notes = list()
-        notes.append("Bug(Step4): After start virt-who service, the attached Temporary SKU(RH00049) will be changed to RH00050")
-        notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1716802")
-        self.vw_case_result(results, notes)
+        self.vw_case_result(results)
