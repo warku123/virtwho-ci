@@ -101,7 +101,11 @@ class Base(unittest.TestCase):
         fd.write("Command: {0}\n".format(str(cmd)))
         fd.write("Retcode: {0}\n".format(retcode))
         if debug or retcode != 0:
-            fd.write("Output:\n{0}\n".format(str(stdout)))
+            try:
+                fd.write("Output:\n{0}\n".format(str(stdout)))
+            except:
+                fd.write("Output:\n{0}\n".format(str(stdout.encode("utf-8"))))
+                pass
         fd.close()
         return retcode, stdout.strip()
 
