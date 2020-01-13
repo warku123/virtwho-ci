@@ -826,8 +826,8 @@ class Testing(Provision):
 
     def vw_local_mode_log(self, data, rhsm_output):
         key = "Domain info:"
-        rex = re.compile(r'(?<=Domain info: )\[.*?\]\n+(?=201|$)', re.S)
-        mapping_info = rex.findall(rhsm_output)[-1]
+        rex = re.compile(r'(?<=Domain info: )\[.*?\]\n+(?=\d\d\d\d|$)', re.S)
+        mapping_info = rex.findall(rhsm_output)[0]
         try:
             mapping_info = json.loads(mapping_info.replace('\n', ''), strict=False)
         except:
