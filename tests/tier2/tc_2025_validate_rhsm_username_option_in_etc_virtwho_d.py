@@ -51,18 +51,26 @@ class Testcase(Testing):
 
         logger.info(">>>step3: run virt-who with rhsm_username=红帽©¥®ðπ∉")
         '''红帽©¥®ðπ∉ username is not supported by candlepin'''
-        pkg = self.pkg_check(self.ssh_host(), 'python-requests').split('-')[2]
+        msg_list = ["codec can't decode|"
+                    "Communication with subscription manager failed"]
         self.vw_option_update_value("rhsm_username", "红帽©¥®ðπ∉", config_file)
         data, tty_output, rhsm_output = self.vw_start()
-        if pkg[16:21] >= '2.20':
-            msg_list = ["codec can't decode|"
-                        "Communication with subscription manager failed"]
-            res1 = self.op_normal_value(data, exp_error="1|2", exp_thread=1, exp_send=0)
-            res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
+        compose_id = self.get_config('rhel_compose')
+        if "RHEL-7" in compose_id:
+            pkg = self.pkg_check(self.ssh_host(), 'python-requests').split('-')[2]
+            if pkg[16:21] >= '2.20':
+                res1 = self.op_normal_value(
+                    data, exp_error="1|2", exp_thread=1, exp_send=0)
+                res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
+            else:
+                msg = "not in latin1 encoding"
+                res1 = self.op_normal_value(
+                    data, exp_error="1|2", exp_thread=0, exp_send=0)
+                res2 = self.vw_msg_search(rhsm_output, msg, exp_exist=True)
         else:
-            msg = "not in latin1 encoding"
-            res1 = self.op_normal_value(data, exp_error="1|2", exp_thread=0, exp_send=0)
-            res2 = self.vw_msg_search(rhsm_output, msg, exp_exist=True)
+            res1 = self.op_normal_value(
+                data, exp_error="1|2", exp_thread=1, exp_send=0)
+            res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
         results.setdefault('step3', []).append(res1)
         results.setdefault('step3', []).append(res2)
 
