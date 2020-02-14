@@ -109,6 +109,7 @@ class SetRepo(FeatureSettings):
         super(SetRepo, self).__init__(*args, **kwargs)
         self.rhel = None
         self.rhel_update = None
+        self.rhel_nightly = None
         self.rhel_brew = None
         self.rhel_sat = None
         self.epel = None
@@ -117,6 +118,7 @@ class SetRepo(FeatureSettings):
     def read(self, reader):
         self.rhel = reader.get('repo', 'rhel')
         self.rhel_update = reader.get('repo', 'rhel_update')
+        self.rhel_nightly = reader.get('repo', 'rhel_nightly')
         self.rhel_brew = reader.get('repo', 'rhel_brew')
         self.rhel_sat = reader.get('repo', 'rhel_sat')
         self.epel = reader.get('repo', 'epel')

@@ -1003,6 +1003,18 @@ class Provision(Register):
                     base_url, rhel_release, compose_id)
                 repo_optional = "{0}/rhel-6/rel-eng/updates/{1}/{2}/compose/Server/optional/x86_64/os".format(
                         base_url, rhel_release, compose_id)
+        elif ".n" in compose_id:
+            base_url = deploy.repo.rhel_nightly
+            if "RHEL-8" in compose_id:
+                repo_base = "{0}/rhel-8/nightly/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
+                    base_url, compose_id)
+                repo_optional = "{0}/rhel-8/nightly/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
+                    base_url, compose_id)
+            if "RHEL-7" in compose_id:
+                repo_base = "{0}/rhel-7/nightly/RHEL-7/{1}/compose/Server/x86_64/os".format(
+                    base_url, compose_id)
+                repo_optional = "{0}/rhel-7/nightly/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
+                    base_url, compose_id)
         else:
             if "RHEL-8" in compose_id:
                 repo_base = "{0}/rhel-8/rel-eng/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
@@ -1121,6 +1133,18 @@ class Provision(Register):
                     base_url, rhel_release, compose_id)
                 extra_repo = "{0}/rhel-6/rel-eng/updates/{1}/{2}/compose/Server/optional/x86_64/os".format(
                         base_url, rhel_release, compose_id)
+        elif ".n" in compose_id:
+            base_url = deploy.repo.rhel_nightly
+            if "RHEL-8" in compose_id:
+                base_repo = "{0}/rhel-8/nightly/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
+                    base_url, compose_id)
+                extra_repo = "{0}/rhel-8/nightly/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
+                    base_url, compose_id)
+            if "RHEL-7" in compose_id:
+                base_repo = "{0}/rhel-7/nightly/RHEL-7/{1}/compose/Server/x86_64/os".format(
+                    base_url, compose_id)
+                extra_repo = "{0}/rhel-7/nightly/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
+                    base_url, compose_id)
         else:
             if "RHEL-8" in compose_id:
                 base_repo = "{0}/rhel-8/rel-eng/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
