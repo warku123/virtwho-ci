@@ -52,17 +52,15 @@ class Testcase(Testing):
 
         logger.info(">>>step3: 'configs' is wrong value")
         self.vw_option_update_value('configs', 'xxxxxx', virtwho_conf)
-        error_msg = 'Unable to read configuration file xxxxxx'
-        data, tty_output, rhsm_output = self.vw_start(exp_send=1, exp_error=True)
-        res1 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=1)
-        res2 = self.vw_msg_search(str(data), error_msg, exp_exist=True)
+        error_msg_1 = 'Unable to read configuration file'
+        error_msg_2 = 'No valid configuration file provided using -c/--config'
+        data, tty_output, rhsm_output = self.vw_start(exp_send=0, exp_error=True)
+        res1 = self.op_normal_value(data, exp_error=2, exp_thread=0, exp_send=0)
+        res2 = self.vw_msg_search(rhsm_output, error_msg_1, exp_exist=True)
+        res3 = self.vw_msg_search(rhsm_output, error_msg_2, exp_exist=True)
         results.setdefault('step3', []).append(res1)
         results.setdefault('step3', []).append(res2)
-        # check virt-who has run config_file_2
-        num = rhsm_output.count('"guestId": "{0}"'.format(guest_uuid))
-        logger.info("Actual mapping info num: {0}".format(num))
-        logger.info("Expected mapping info num: 1 for sat63 above and stage")
-        results.setdefault('step3', []).append(num == 1)
+        results.setdefault('step3', []).append(res3)
 
         # Case Result
         self.vw_case_result(results)
