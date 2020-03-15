@@ -93,9 +93,6 @@ def install_satellite(args):
     provision.runcmd(
         'hammer settings set --name=unregister_delete_host --value=true',
         ssh_sat)
-    provision.runcmd(
-        'foreman-maintain packages unlock',
-        ssh_sat)
     provision.ssh_no_passwd_access(ssh_sat)
     update_section('satellite', 'hostname', host)
     update_section('satellite', 'ssh_username', username)
