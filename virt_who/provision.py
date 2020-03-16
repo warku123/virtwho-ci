@@ -984,53 +984,59 @@ class Provision(Register):
               ).format(epel_url)
         ret, output = self.runcmd(cmd, ssh_host, desc="enable epel repo")
 
-    def rhel_compose_repo(self, ssh_host, compose_id, repo_file):
+    def rhel_compose_url(self, compose_id):
         base_url = deploy.repo.rhel
+        repo_base = ""
+        repo_extra = ""
         if "updates" in compose_id:
             if "RHEL-8" in compose_id:
                 repo_base = "{0}/rhel-8/rel-eng/updates/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
                     base_url, compose_id)
-                repo_optional = "{0}/rhel-8/rel-eng/updates/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
+                repo_extra = "{0}/rhel-8/rel-eng/updates/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
                     base_url, compose_id)
-            if "RHEL-7" in compose_id:
+            elif "RHEL-7" in compose_id:
                 repo_base = "{0}/rhel-7/rel-eng/updates/RHEL-7/{1}/compose/Server/x86_64/os".format(
                     base_url, compose_id)
-                repo_optional = "{0}/rhel-7/rel-eng/updates/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
+                repo_extra = "{0}/rhel-7/rel-eng/updates/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
                     base_url, compose_id)
-            if "RHEL-6" in compose_id:
+            elif "RHEL-6" in compose_id:
                 rhel_release = compose_id.split('-')[0] + '-' + compose_id.split('-')[1]
                 repo_base = "{0}/rhel-6/rel-eng/updates/{1}/{2}/compose/Server/x86_64/os".format(
                     base_url, rhel_release, compose_id)
-                repo_optional = "{0}/rhel-6/rel-eng/updates/{1}/{2}/compose/Server/optional/x86_64/os".format(
-                        base_url, rhel_release, compose_id)
+                repo_extra = "{0}/rhel-6/rel-eng/updates/{1}/{2}/compose/Server/optional/x86_64/os".format(
+                    base_url, rhel_release, compose_id)
         elif ".n" in compose_id:
             base_url = deploy.repo.rhel_nightly
             if "RHEL-8" in compose_id:
                 repo_base = "{0}/rhel-8/nightly/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
                     base_url, compose_id)
-                repo_optional = "{0}/rhel-8/nightly/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
+                repo_extra = "{0}/rhel-8/nightly/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
                     base_url, compose_id)
-            if "RHEL-7" in compose_id:
+            elif "RHEL-7" in compose_id:
                 repo_base = "{0}/rhel-7/nightly/RHEL-7/{1}/compose/Server/x86_64/os".format(
                     base_url, compose_id)
-                repo_optional = "{0}/rhel-7/nightly/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
+                repo_extra = "{0}/rhel-7/nightly/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
                     base_url, compose_id)
         else:
             if "RHEL-8" in compose_id:
                 repo_base = "{0}/rhel-8/rel-eng/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
                     base_url, compose_id)
-                repo_optional = "{0}/rhel-8/rel-eng/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
+                repo_extra = "{0}/rhel-8/rel-eng/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
                     base_url, compose_id)
-            if "RHEL-7" in compose_id:
+            elif "RHEL-7" in compose_id:
                 repo_base = "{0}/rhel-7/rel-eng/RHEL-7/{1}/compose/Server/x86_64/os".format(
                     base_url, compose_id)
-                repo_optional = "{0}/rhel-7/rel-eng/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
+                repo_extra = "{0}/rhel-7/rel-eng/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
                     base_url, compose_id)
-            if "RHEL-6" in compose_id:
+            elif "RHEL-6" in compose_id:
                 repo_base = "{0}/rhel-6/rel-eng/{1}/compose/Server/x86_64/os".format(
                     base_url, compose_id)
-                repo_optional = "{0}/rhel-6/rel-eng/{1}/compose/Server/optional/x86_64/os/".format(
+                repo_extra = "{0}/rhel-6/rel-eng/{1}/compose/Server/optional/x86_64/os/".format(
                     base_url, compose_id)
+        return repo_base, repo_extra
+
+    def rhel_compose_repo(self, ssh_host, compose_id, repo_file):
+        repo_base, repo_extra = self.rhel_compose_url(compose_id)
         cmd = ('cat <<EOF > {0}\n'
                '[{1}]\n'
                'name={1}\n'
@@ -1043,7 +1049,7 @@ class Provision(Register):
                'enabled=1\n'
                'gpgcheck=0\n'
                'EOF'
-              ).format(repo_file, compose_id, repo_base, repo_optional)
+              ).format(repo_file, compose_id, repo_base, repo_extra)
         ret, output = self.runcmd(cmd, ssh_host, desc="enable compose repo")
 
     def rhel_grub_update(self, ssh_host, ks_url, vmlinuz_url, initrd_url, repo_url, is_rhev=False):
@@ -1106,7 +1112,6 @@ class Provision(Register):
 
     def rhel_install_by_grub(self, ssh_host, compose_id):
         random_str = ''.join(random.sample(string.ascii_letters + string.digits, 8))
-        base_url = deploy.repo.rhel
         nfs_server = deploy.nfs.server
         nfs_server_user = deploy.nfs.server_user
         nfs_server_passwd = deploy.nfs.server_passwd
@@ -1114,53 +1119,9 @@ class Provision(Register):
         nfs_rhel_mount = deploy.nfs.rhel_mount
         ssh_nfs = {"host":nfs_server,"username":nfs_server_user,"password":nfs_server_passwd}
         ks_name = "{0}.cfg".format(random_str)
-        ks_url= "{0}/{1}".format(nfs_rhel_url, ks_name)
+        ks_url = "{0}/{1}".format(nfs_rhel_url, ks_name)
         ks_path = "{0}/{1}".format(nfs_rhel_mount, ks_name)
-        if "updates" in compose_id:
-            if "RHEL-8" in compose_id:
-                base_repo = "{0}/rhel-8/rel-eng/updates/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
-                    base_url, compose_id)
-                extra_repo = "{0}/rhel-8/rel-eng/updates/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
-                    base_url, compose_id)
-            if "RHEL-7" in compose_id:
-                base_repo = "{0}/rhel-7/rel-eng/updates/RHEL-7/{1}/compose/Server/x86_64/os".format(
-                    base_url, compose_id)
-                extra_repo = "{0}/rhel-7/rel-eng/updates/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
-                    base_url, compose_id)
-            if "RHEL-6" in compose_id:
-                rhel_release = compose_id.split('-')[0] + '-' + compose_id.split('-')[1]
-                base_repo = "{0}/rhel-6/rel-eng/updates/{1}/{2}/compose/Server/x86_64/os".format(
-                    base_url, rhel_release, compose_id)
-                extra_repo = "{0}/rhel-6/rel-eng/updates/{1}/{2}/compose/Server/optional/x86_64/os".format(
-                        base_url, rhel_release, compose_id)
-        elif ".n" in compose_id:
-            base_url = deploy.repo.rhel_nightly
-            if "RHEL-8" in compose_id:
-                base_repo = "{0}/rhel-8/nightly/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
-                    base_url, compose_id)
-                extra_repo = "{0}/rhel-8/nightly/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
-                    base_url, compose_id)
-            if "RHEL-7" in compose_id:
-                base_repo = "{0}/rhel-7/nightly/RHEL-7/{1}/compose/Server/x86_64/os".format(
-                    base_url, compose_id)
-                extra_repo = "{0}/rhel-7/nightly/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
-                    base_url, compose_id)
-        else:
-            if "RHEL-8" in compose_id:
-                base_repo = "{0}/rhel-8/rel-eng/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
-                    base_url, compose_id)
-                extra_repo = "{0}/rhel-8/rel-eng/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
-                    base_url, compose_id)
-            if "RHEL-7" in compose_id:
-                base_repo = "{0}/rhel-7/rel-eng/RHEL-7/{1}/compose/Server/x86_64/os".format(
-                    base_url, compose_id)
-                extra_repo = "{0}/rhel-7/rel-eng/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
-                    base_url, compose_id)
-            if "RHEL-6" in compose_id:
-                base_repo = "{0}/rhel-6/rel-eng/{1}/compose/Server/x86_64/os".format(
-                    base_url, compose_id)
-                extra_repo = "{0}/rhel-6/rel-eng/{1}/compose/Server/optional/x86_64/os/".format(
-                    base_url, compose_id)
+        repo_base, repo_extra = self.rhel_compose_url(compose_id)
         cmd = ('cat <<EOF > {0}\n'
                'install\n'
                'lang en_US.UTF-8\n'
@@ -1181,7 +1142,7 @@ class Provision(Register):
                '@base\n'
                '%end\n'
                'EOF'
-              ).format(ks_path, ssh_host['password'], base_repo, extra_repo)
+              ).format(ks_path, ssh_host['password'], repo_base, repo_extra)
         ks_iscreated = ""
         for i in range(10):
             ret, output = self.runcmd(cmd, ssh_nfs, desc="create ks file")
@@ -1193,10 +1154,10 @@ class Provision(Register):
             time.sleep(10)
         if ks_iscreated != "Yes":
             raise FailException("Failed to create ks file: {0}".format(ks_url))
-        vmlinuz_url = "{0}/isolinux/vmlinuz".format(base_repo)
-        initrd_url = "{0}/isolinux/initrd.img".format(base_repo)
+        vmlinuz_url = "{0}/isolinux/vmlinuz".format(repo_base)
+        initrd_url = "{0}/isolinux/initrd.img".format(repo_base)
         try:
-            self.rhel_grub_update(ssh_host, ks_url, vmlinuz_url, initrd_url, base_repo, is_rhev=False)
+            self.rhel_grub_update(ssh_host, ks_url, vmlinuz_url, initrd_url, repo_base, is_rhev=False)
             if self.ssh_is_connected(ssh_host):
                 self.rhel_compose_repo(ssh_host, compose_id, "/etc/yum.repos.d/compose.repo")
                 self.install_base_packages(ssh_host)

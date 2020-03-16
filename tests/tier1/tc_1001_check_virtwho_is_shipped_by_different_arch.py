@@ -20,11 +20,15 @@ class Testcase(Testing):
             raise FailException("virt-who pkg is not found")
         if compose_id is None or compose_id == "":
             raise FailException("compose_id is not defined")
-        rhel_url = "http://download.eng.bos.redhat.com"
+        rhel_url = deploy.repo.rhel
         rhel_release = compose_id.split('.')[0]
         if "updates" in compose_id:
             baseurl = "{0}/{1}/rel-eng/updates/{2}".format(
                 rhel_url, rhel_release.lower(), rhel_release)
+        elif ".n" in compose_id:
+            rhel_nightly_url = deploy.repo.rhel_nightly
+            baseurl = "{0}/{1}/nightly/{2}".format(
+                rhel_nightly_url, rhel_release.lower(), rhel_release)
         else:
             baseurl = "{0}/{1}/rel-eng/{2}".format(
                 rhel_url, rhel_release.lower(), rhel_release)
