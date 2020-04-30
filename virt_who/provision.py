@@ -1353,7 +1353,9 @@ class Provision(Register):
         return job_passed
 
     def satellite_version(self, sat_type):
-        if "6.7" in sat_type or "67" in sat_type:
+        if "6.8" in sat_type or "68" in sat_type:
+            sat_ver = "6.8"
+        elif "6.7" in sat_type or "67" in sat_type:
             sat_ver = "6.7"
         elif "6.6" in sat_type or "66" in sat_type:
             sat_ver = "6.6"
@@ -1419,7 +1421,7 @@ class Provision(Register):
             cmd = "yum -y localinstall {0}".format(repo)
             ret, output = self.runcmd(cmd, ssh_sat, desc="install katello-ca")
             cmd = "subscription-manager register --org Sat6-CI --activationkey '%s-%s.0-qa-rhel%s'" % (repo_type, sat_ver, rhel_ver)
-            if sat_ver == "6.7":
+            if sat_ver >= "6.7" or sat_ver >= "67":
                 cmd = "subscription-manager register --org Sat6-CI --activationkey '%s-%s-qa-rhel%s'" % (repo_type, sat_ver, rhel_ver)
             ret, output = self.runcmd(cmd, ssh_sat, desc="register and enable repo")
             if ret == 0:
