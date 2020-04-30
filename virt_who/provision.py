@@ -1471,12 +1471,21 @@ class Provision(Register):
             if ret != 0:
                 raise FailException("Failed to satellite-installer --scenario satellite({0})".format(sat_host))
         logger.info("Succeeded to run satellite-installer --scenario satellite({0})".format(sat_host))
-        cmd = "hammer -u {0} -p {1} subscription upload --organization-label Default_Organization --file {2}".format(
+        upload_manifest = "hammer -u {0} -p {1} subscription upload --organization-label Default_Organization --file {2}".format(
                 admin_user, admin_passwd, manifest_filename)
-        status, output = self.run_loop(cmd, ssh_sat)
-        if status != "Yes":
-            raise FailException("Failed to upload manifest to satellite({0})".format(sat_host))
-        logger.info("Succeeded to upload manifest to satellite({0})".format(sat_host))
+        delete_manifest = "hammer -u {0} -p {1} subscription delete-manifest --organization-label Default_Organization".format(
+                admin_user, admin_passwd)
+        is_uploaded = ''
+        for i in range(3):
+            ret, output = self.runcmd(upload_manifest, ssh_sat)
+            if ret == 0:
+                is_uploaded = 'yes'
+                logger.info("Succeeded to upload manifest to satellite({0})".format(sat_host))
+                break
+            time.sleep(15)
+            self.runcmd(delete_manifest, ssh_sat)
+        if is_uploaded != 'yes':
+            raise FailException("Failed to upload manifest")
         cmd = 'hammer -u {0} -p {1} subscription refresh-manifest --organization="Default Organization"'.format(admin_user, admin_passwd)
         status, output = self.run_loop(cmd, ssh_sat, desc="manifest refresh")
         if status != "Yes":
