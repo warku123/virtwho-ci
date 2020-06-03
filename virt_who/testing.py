@@ -718,9 +718,9 @@ class Testing(Provision):
         elif mode == "vdsm":
             cmd = "virt-who --vdsm "
         elif mode == "kubevirt":
-            server_config = hypervisor_config['server_config']
-            ret, output = self.runcmd("export KUBECONFIG={0}".format(server_config), self.ssh_host())
-            cmd = "virt-who {0} {1} {2} ".format(cf_type, cf_owner, cf_env)
+            kube_cfg = deploy.kubevirt.kube_config_file
+            cf_kube_cfg = "--{0}-cfg={1}".format(mode, kube_cfg)
+            cmd = "virt-who {0} {1} {2} {3} ".format(cf_type, cf_owner, cf_env, cf_kube_cfg)
         else:
             cmd = "virt-who {0} {1} {2} {3} {4} {5} ".format(
                     cf_type, cf_owner, cf_env, cf_server, cf_username, cf_password)
