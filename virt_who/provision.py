@@ -77,9 +77,9 @@ class Provision(Register):
         rhel_compose = self.get_exported_param("RHEL_COMPOSE")
         if not rhel_compose:
             if 'rhel-8' in rhel_release:
-                url = 'http://download.eng.bos.redhat.com/rel-eng/latest-RHEL-8/COMPOSE_ID'
+                url = 'http://download.eng.bos.redhat.com/rhel-8/rel-eng/RHEL-8/latest-RHEL-8/COMPOSE_ID'
             if 'rhel-7' in rhel_release:
-                url = 'http://download.eng.bos.redhat.com/rel-eng/latest-RHEL-7/COMPOSE_ID'
+                url = 'http://download.eng.bos.redhat.com/rhel-7/rel-eng/RHEL-7/latest-RHEL-7/COMPOSE_ID'
             if 'rhel-6' in rhel_release:
                 url = 'http://download.eng.bos.redhat.com/rel-eng/latest-RHEL-6/COMPOSE_ID'
             cmd = 'curl -s -k -L {0}'.format(url)
