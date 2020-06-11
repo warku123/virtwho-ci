@@ -21,6 +21,13 @@ class Testcase(Testing):
         config_name = "virtwho-config"
         config_file = "/etc/virt-who.d/{0}.conf".format(config_name)
         self.vw_etc_d_mode_create(config_name, config_file)
+        msg_list = ["Unable to login|"
+                    "incorrect user.*|"
+                    "Authentication failure|"
+                    "Incorrect.*username|"
+                    "Unauthorized|"
+                    "Error.* backend|"
+                    "Permission denied"]
 
         # Case Steps
         logger.info(">>>step1: password option is good value")
@@ -36,7 +43,6 @@ class Testcase(Testing):
             res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
             results.setdefault('step2', []).append(res1)
         else:
-            msg_list = ["Unable to login|incorrect user.*|Authentication failure|Incorrect.*username|Unauthorized|Error.* backend|Permission denied"]
             res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=1, exp_send=0)
             res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
             results.setdefault('step2', []).append(res1)
@@ -45,16 +51,23 @@ class Testcase(Testing):
         logger.info(">>>step3: password option is 红帽€467aa value")
         self.vw_option_update_value(option_tested, '红帽€467aa', config_file)
         data, tty_output, rhsm_output = self.vw_start()
-        if "libvirt-remote" in hypervisor_type:
-            logger.warning("libvirt-remote can use sshkey to connect, password value is not necessary")
-            res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
-            results.setdefault('step2', []).append(res1)
-        else:
-            msg_list = ["Unable to login|incorrect user.*|Authentication failure|Incorrect.*username|Unauthorized|Error.* backend|Permission denied"]
-            res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=1, exp_send=0)
-            res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
+        compose_id = self.get_config('rhel_compose')
+        if "RHEL-7" in compose_id:
+            msg = "'password': is not in latin1 encoding"
+            res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=0, exp_send=0)
+            res2 = self.vw_msg_search(rhsm_output, msg, exp_exist=True)
             results.setdefault('step3', []).append(res1)
             results.setdefault('step3', []).append(res2)
+        else:
+            if "libvirt-remote" in hypervisor_type:
+                logger.warning("libvirt-remote can use sshkey to connect, password value is not necessary")
+                res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+                results.setdefault('step3', []).append(res1)
+            else:
+                res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=1, exp_send=0)
+                res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
+                results.setdefault('step3', []).append(res1)
+                results.setdefault('step3', []).append(res2)
 
         logger.info(">>>step4: password option is null value")
         self.vw_option_update_value(option_tested, '', config_file)
@@ -64,7 +77,6 @@ class Testcase(Testing):
             res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
             results.setdefault('step4', []).append(res1)
         else:
-            msg_list = ["Unable to login|incorrect user.*|Authentication failure|Incorrect.*username|Unauthorized|Error.* backend|Permission denied"]
             res1 = self.op_normal_value(data, exp_error="0|1|2", exp_thread=1, exp_send=0)
             res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
             results.setdefault('step4', []).append(res1)
@@ -78,9 +90,9 @@ class Testcase(Testing):
             res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
             results.setdefault('step5', []).append(res1)
         else:
-            msg_list = ["PASSWORD.* not set|virt-who can't be started"]
+            msg_list_s5 = ["PASSWORD.* not set|virt-who can't be started"]
             res1 = self.op_normal_value(data, exp_error="0|1|2", exp_thread=0, exp_send=0)
-            res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
+            res2 = self.msg_validation(rhsm_output, msg_list_s5, exp_exist=True)
             results.setdefault('step5', []).append(res1)
             results.setdefault('step5', []).append(res2)
 
@@ -95,9 +107,9 @@ class Testcase(Testing):
             res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
             results.setdefault('step6', []).append(res1)
         else:
-            msg_list = ["PASSWORD.* not set"]
+            msg_list_s6 = ["PASSWORD.* not set"]
             res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=1, exp_send=1)
-            res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
+            res2 = self.msg_validation(rhsm_output, msg_list_s6, exp_exist=True)
             results.setdefault('step6', []).append(res1)
             results.setdefault('step6', []).append(res2)
 
@@ -110,14 +122,10 @@ class Testcase(Testing):
             res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
             results.setdefault('step7', []).append(res1)
         else:
-            msg_list = ["Unable to login|incorrect user.*|Authentication failure|Incorrect.*username|Unauthorized|Error.* backend|Permission denied"]
             res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=1, exp_send=1)
             res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
             results.setdefault('step7', []).append(res1)
             results.setdefault('step7', []).append(res2)
 
         # Case Result
-        notes = list()
-        notes.append("Bug(Step3): 'ascii' codec can't decode")
-        notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1703317")
-        self.vw_case_result(results, notes)
+        self.vw_case_result(results)
