@@ -26,8 +26,8 @@ class Testcase(Testing):
             cmd = "echo -e '[{0}]\ntype=libvirt\nowner={1}' > {2}".format(
                 config_name, owner, config_file)
             ret, output = self.runcmd(cmd, self.ssh_host())
-        proxy_server = "bootp-73-3-248.eng.pek2.redhat.com"
-        proxy_port = "3128"
+        proxy_server = deploy.proxy.server
+        proxy_port = deploy.proxy.port
         bad_proxy_server = "xxx.eng.pek2.redhat.com"
         bad_proxy_port = "0000"
         error_msg = ["Connection refused|"

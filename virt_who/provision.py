@@ -64,7 +64,7 @@ class Provision(Register):
             else:
                 build_id = re.findall(r'"build_id":(.*?),', ci_msg_content)[-1].strip()
                 task_id = re.findall(r'"task_id":(.*?),', ci_msg_content)[-1].strip()
-            brew_build_url = "https://brewweb.engineering.redhat.com/brew/buildinfo?buildID={0}".format(build_id)
+            brew_build_url = "{0}/brew/buildinfo?buildID={1}".format(deploy.repo.brew, build_id)
         else:
             brew_build_url = self.get_exported_param("BREW_BUILD_URL")
             build_id = re.findall(r'buildID=(.*?)$', brew_build_url)[-1]
@@ -76,12 +76,13 @@ class Provision(Register):
         rhel_release = items[3]
         rhel_compose = self.get_exported_param("RHEL_COMPOSE")
         if not rhel_compose:
+            base_url = deploy.repo.rhel
             if 'rhel-8' in rhel_release:
-                url = 'http://download.eng.bos.redhat.com/rhel-8/rel-eng/RHEL-8/latest-RHEL-8/COMPOSE_ID'
+                url = '{0}/rhel-8/rel-eng/RHEL-8/latest-RHEL-8/COMPOSE_ID'.format(base_url)
             if 'rhel-7' in rhel_release:
-                url = 'http://download.eng.bos.redhat.com/rhel-7/rel-eng/RHEL-7/latest-RHEL-7/COMPOSE_ID'
+                url = '{0}/rhel-7/rel-eng/RHEL-7/latest-RHEL-7/COMPOSE_ID'.format(base_url)
             if 'rhel-6' in rhel_release:
-                url = 'http://download.eng.bos.redhat.com/rel-eng/latest-RHEL-6/COMPOSE_ID'
+                url = '{0}/rel-eng/latest-RHEL-6/COMPOSE_ID'.format(base_url)
             cmd = 'curl -s -k -L {0}'.format(url)
             rhel_compose = os.popen(cmd).read().strip()
         if not pkg_url:
@@ -1382,7 +1383,7 @@ class Provision(Register):
         return sat_ver, rhel_ver
 
     def satellite_cdn_pool_attach(self, ssh_sat):
-        pool_id = "8a99f9a36df7fa2d016dfbeed744078a"
+        pool_id = deploy.register.satellite_sku
         sat_host = ssh_sat['host']
         cmd = "subscription-manager subscribe --pool={0}".format(pool_id)
         for i in range(10):

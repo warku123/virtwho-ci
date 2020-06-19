@@ -29,8 +29,8 @@ class Testcase(Testing):
         if "satellite" in register_type:
             ssh_sat = register_config['ssh_sat']
             register_server = self.get_hostname(ssh_sat)
-        proxy_server = "bootp-73-3-248.eng.pek2.redhat.com"
-        proxy_port = "3128"
+        proxy_server = deploy.proxy.server
+        proxy_port = deploy.proxy.port
         bad_proxy_server = "xxx.eng.pek2.redhat.com"
         bad_proxy_port = "0000"
         error_msg = "Connection refused|Unable to connect to: .*{0}".format(bad_proxy_server)
