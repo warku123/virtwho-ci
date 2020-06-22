@@ -625,6 +625,16 @@ class Testing(Provision):
             raise FailException("Failed to create fake config file: {0}".format(conf_file))
         logger.info("Succeeded to create fake config file: {0}".format(conf_file))
 
+    def vw_fake_json_update(self, name, rename, filename):
+        option = self.shell_escape_char(name)
+        rename = self.shell_escape_char(rename)
+        cmd = 'sed -i "s|%s|%s|g" %s' % (option, rename, filename)
+        ret, output = self.runcmd(cmd, self.ssh_host())
+        if ret == 0:
+            logger.info("Succeeded to update json value %s to %s" % (option, rename))
+        else:
+            raise FailException("Failed to update json value %s to %s" % (option, rename))
+
     def vw_option_update_name(self, option, rename, filename):
         option = self.shell_escape_char(option)
         rename = self.shell_escape_char(rename)
