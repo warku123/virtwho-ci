@@ -52,22 +52,21 @@ class Testcase(Testing):
         self.vw_option_update_value(option_tested, '红帽€467aa', config_file)
         data, tty_output, rhsm_output = self.vw_start()
         compose_id = self.get_config('rhel_compose')
-        if "RHEL-7" in compose_id:
-            msg = "'password': is not in latin1 encoding"
-            res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=0, exp_send=0)
-            res2 = self.vw_msg_search(rhsm_output, msg, exp_exist=True)
+        if "libvirt-remote" in hypervisor_type:
+            logger.warning("libvirt-remote can use sshkey to connect, "
+                           "password value is not necessary")
+            res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
             results.setdefault('step3', []).append(res1)
-            results.setdefault('step3', []).append(res2)
         else:
-            if "libvirt-remote" in hypervisor_type:
-                logger.warning("libvirt-remote can use sshkey to connect, password value is not necessary")
-                res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
-                results.setdefault('step3', []).append(res1)
+            if "RHEL-7" in compose_id:
+                msg = "'password': is not in latin1 encoding"
+                res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=0, exp_send=0)
+                res2 = self.vw_msg_search(rhsm_output, msg, exp_exist=True)
             else:
                 res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=1, exp_send=0)
                 res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
-                results.setdefault('step3', []).append(res1)
-                results.setdefault('step3', []).append(res2)
+            results.setdefault('step3', []).append(res1)
+            results.setdefault('step3', []).append(res2)
 
         logger.info(">>>step4: password option is null value")
         self.vw_option_update_value(option_tested, '', config_file)
