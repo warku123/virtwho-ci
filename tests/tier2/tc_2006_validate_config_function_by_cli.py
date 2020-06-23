@@ -47,25 +47,36 @@ class Testcase(Testing):
         logger.info("Expected mapping info num: 1 for sat63 above and stage")
         results.setdefault('step2', []).append(num == 1)
 
-        logger.info(">>>step3: run virt-who with -c option multiple times")
+        logger.info(">>>step3: check '#virt-who -o -c' with wrong config file")
+        wrong_file = "xxx"
+        error_msg = "No valid configuration file provided using -c/--config"
+        cmd = "virt-who -d -o -c {0}".format(wrong_file)
+        data, tty_output, rhsm_output = self.vw_start(cmd, exp_send=0)
+        res1 = self.op_normal_value(data, exp_error=2, exp_thread=0, exp_send=0)
+        res2 = self.vw_msg_search(tty_output, error_msg, exp_exist=True)
+        results.setdefault('step3', []).append(res1)
+        results.setdefault('step3', []).append(res2)
+
+        logger.info(">>>step4: run virt-who with -c option multiple times")
         self.vw_etc_d_delete_all()
         config_file_1 = "/root/{0}.conf".format(config_name_1)
         self.vw_etc_d_mode_create(config_name_1, config_file_1)
         cmd = "virt-who -c {0} -c {1}".format(config_file_1, config_file_2)
         data, tty_output, rhsm_output = self.vw_start(cmd, exp_send=1)
         res = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1, exp_interval=120)
-        results.setdefault('step3', []).append(res)
+        results.setdefault('step4', []).append(res)
 
-        logger.info(">>>step4: check virt-who has run both config")
+        logger.info(">>>step5: check virt-who has run both config")
         num = rhsm_output.count('"guestId": "{0}"'.format(guest_uuid))
         logger.info("Actual mapping info num: {0}".format(num))
         register_type = self.get_config('hypervisor_type')
         if "satellite62" in register_type:
             logger.info("Expected mapping info num: 1 for sat62")
-            results.setdefault('step2', []).append(num == 1)
+            results.setdefault('step5', []).append(num == 1)
         else:
             logger.info("Expected mapping info num: 2 for sat63 above and stage")
-            results.setdefault('step2', []).append(num == 2)
+            results.setdefault('step5', []).append(num == 2)
+
 
         # Case Result
         self.vw_case_result(results)
