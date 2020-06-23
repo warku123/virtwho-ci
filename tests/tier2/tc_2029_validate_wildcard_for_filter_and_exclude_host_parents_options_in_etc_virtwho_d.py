@@ -10,6 +10,10 @@ class Testcase(Testing):
         hypervisor_type = self.get_config('hypervisor_type')
         if hypervisor_type not in ('esx'):
             self.vw_case_skip(hypervisor_type)
+        # Bug 1461272 only be fixed in rhel8, so rhel7 doesn't support this function
+        compose_id = self.get_config('rhel_compose')
+        if "RHEL-7" in compose_id:
+            self.vw_case_skip(compose_id)
         self.vw_case_init()
 
         # Case Config
