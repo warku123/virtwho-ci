@@ -55,12 +55,18 @@ class Testcase(Testing):
         cli = self.vw_cli_base_update(base_cli,
                                       "--{0}-password=.*".format(hypervisor_type),
                                       "--{0}-password=红帽€467aa".format(hypervisor_type))
-        msg = "'password': is not in latin1 encoding"
-        data, tty_output, rhsm_output = self.vw_start(cli)
-        res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=0, exp_send=0)
-        res2 = self.vw_msg_search(rhsm_output, msg, exp_exist=True)
-        results.setdefault('step3', []).append(res1)
-        results.setdefault('step3', []).append(res2)
+        if "libvirt" in hypervisor_type:
+            logger.warning("libvirt-remote can use sshkey to connect, "
+                           "password value is not necessary")
+            res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+            results.setdefault('step3', []).append(res1)
+        else:
+            msg = "'password': is not in latin1 encoding"
+            data, tty_output, rhsm_output = self.vw_start(cli)
+            res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=0, exp_send=0)
+            res2 = self.vw_msg_search(rhsm_output, msg, exp_exist=True)
+            results.setdefault('step3', []).append(res1)
+            results.setdefault('step3', []).append(res2)
 
         logger.info(">>>step4: password option is null value")
         cli = self.vw_cli_base_update(base_cli,
