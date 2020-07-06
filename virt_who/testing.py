@@ -1124,11 +1124,17 @@ class Testing(Provision):
         return data, tty_output, rhsm_output
 
     def vw_start(self, cli=None, timeout=900, exp_send=1, exp_loopnum=0, oneshot=False, event=None, web_check=True, exp_error=False):
-        for i in range(3):
+        for i in range(4):
             data, tty_output, rhsm_output = self.vw_start_thread(cli, timeout, exp_send, exp_loopnum, oneshot, event, exp_error)
             if data['is_429'] == "yes":
                 wait_time = 60*(i+3)
-                logger.warning("429 code found, try again after %s seconds..." % wait_time)
+                logger.warning("429 code found, re-register virt-who host and try again after %s seconds..." % wait_time)
+                register_config = self.get_register_config()
+                register_type = register_config['type']
+                self.runcmd("\cp -f /etc/rhsm/rhsm.conf /root/rhsm429.conf", self.ssh_host())
+                self.system_register_config(self.ssh_host(), register_type, register_config)
+                self.system_register(self.ssh_host(), register_type, register_config)
+                self.runcmd("mv -f /root/rhsm429.conf /etc/rhsm/rhsm.conf", self.ssh_host())
                 time.sleep(wait_time)
             elif len(data['pending_job']) > 0:
                 wait_time = 60*(i+1)
