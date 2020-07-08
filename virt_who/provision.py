@@ -2057,11 +2057,20 @@ class Provision(Register):
         cmd = "%s Get-VM %s | %%{(Get-View $_.Id).config}" % (cert, guest_name)
         ret, output = self.runcmd(cmd, ssh_vcenter)
         if ret == 0:
+            version = ''
+            uuid = ''
             for line in output.splitlines():
+                if re.match(r"^Version.*:", line):
+                    version = line.split(':')[1].strip()
                 if re.match(r"^Uuid.*:", line):
                     uuid = line.split(':')[1].strip()
-                    logger.info("Succeeded to get vcenter guest uuid: {0}".format(uuid))
-                    return uuid
+            if uuid:
+                if version > "vmx-13":
+                    uuid = uuid[6:8] + uuid[4:6] + uuid[2:4] + uuid[0:2] + "-" + uuid[11:13] + uuid[9:11] + "-" + uuid[16:18] + uuid[14:16] + "-" + uuid[19:]
+                logger.info("Succeeded to get vcenter guest uuid: {0}".format(uuid))
+                return uuid
+            else:
+                raise FailException("Failed to get vcenter guest uuid")
         else:
             raise FailException("Failed to get vcenter guest uuid")
 
