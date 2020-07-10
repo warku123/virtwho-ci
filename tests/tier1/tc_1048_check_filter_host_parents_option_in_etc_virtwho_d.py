@@ -24,8 +24,8 @@ class Testcase(Testing):
         host_hwuuid = self.get_hypervisor_hwuuid()
 
         # case steps
-        logger.info(">>>step1: run virt-who with filter_host_parents=*")
-        self.vw_option_add("filter_host_parents", "*", filename=config_file)
+        logger.info(">>>step1: run virt-who with filter_host_parents='' to get domain_id")
+        self.vw_option_add("filter_host_parents", "", filename=config_file)
         data, tty_output, rhsm_output = self.vw_start()
         s1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
         results.setdefault('step1', []).append(s1)
@@ -42,12 +42,12 @@ class Testcase(Testing):
         s2 = self.vw_msg_search(str(data), host_uuid, exp_exist=True)
         results.setdefault('step2', []).append(s2)
 
-        logger.info(">>>step3: run virt-who with filter_host_parents=")
-        self.vw_option_update_value("filter_host_parents", "", filename=config_file)
+        logger.info(">>>step3: run virt-who with filter_host_parents=*")
+        self.vw_option_update_value("filter_host_parents", "*", filename=config_file)
         data, tty_output, rhsm_output = self.vw_start()
         s1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
         results.setdefault('step3', []).append(s1)
-        s2 = self.vw_msg_search(str(data), host_uuid, exp_exist=False)
+        s2 = self.vw_msg_search(str(data), host_uuid, exp_exist=True)
         results.setdefault('step3', []).append(s2)
 
         # case result

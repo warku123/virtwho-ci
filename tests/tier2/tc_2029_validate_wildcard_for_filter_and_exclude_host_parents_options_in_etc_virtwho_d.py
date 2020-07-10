@@ -31,8 +31,8 @@ class Testcase(Testing):
         host_name = self.get_hypervisor_hostname()
 
         # Case Steps
-        logger.info(">>>step1: run virt-who with filter_host_parents=* to check the domain_id")
-        self.vw_option_add("filter_host_parents", "*", config_file)
+        logger.info(">>>step1: run virt-who with filter_host_parents= to check the domain_id")
+        self.vw_option_add("filter_host_parents", "", config_file)
         data, tty_output, rhsm_output = self.vw_start()
         res = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
         results.setdefault('step1', []).append(res)
@@ -62,7 +62,7 @@ class Testcase(Testing):
                     self.vw_option_add("filter_host_parents", value, config_file)
                 data, tty_output, rhsm_output = self.vw_start()
                 res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
-                if key == "step2":
+                if key == "step4":
                     res2 = self.vw_msg_search(str(data), hypervisorId, exp_exist=False)
                 else:
                     res2 = self.vw_msg_search(str(data), hypervisorId, exp_exist=True)
@@ -77,7 +77,4 @@ class Testcase(Testing):
             self.stage_consumer_clean(self.ssh_host(), register_config)
 
         # Case Result
-        notes = list()
-        notes.append("Bug: wildcard(*) is not valid for filter_host_parents and exclude_host_parents")
-        notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1461272")
-        self.vw_case_result(results, notes)
+        self.vw_case_result(results)
