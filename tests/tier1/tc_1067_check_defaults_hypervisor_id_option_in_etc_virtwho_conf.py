@@ -54,8 +54,7 @@ class Testcase(Testing):
                 logger.error("Failed to search hypervisorId:{0}".format(hypervisorId))
                 results.setdefault(step, []).append(False)
             self.vw_option_del("hypervisor_id", filename=config_file)
-            if "satellite" in register_type:
-                self.vw_web_host_delete(host_name, hypervisorId)
+            self.vw_web_host_delete(host_name, hypervisorId)
         if "stage" in register_type:
             self.stage_consumer_clean(self.ssh_host(), register_config)
 
