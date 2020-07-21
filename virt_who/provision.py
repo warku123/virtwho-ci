@@ -2681,7 +2681,8 @@ class Provision(Register):
             logger.info("libvirt({0}) guest status is: {1}".format(host, status))
             return status
         else:
-            raise FailException("Failed to check libvirt({0}) guest status".format(host))
+            logger.info("Failed to check libvirt({0}) guest status".format(host))
+            return "false"
 
     def libvirt_guests_all_clean(self, ssh_libvirt):
         host = ssh_libvirt['host']
