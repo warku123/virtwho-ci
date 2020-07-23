@@ -576,7 +576,7 @@ class Register(Base):
             if output is not False and output is not None and output != "":
                 for item in output["results"]:
                     if item['name'] == "unregister_delete_host":
-                        curl_header = '-H "accept:application/json,version=2" -H "content-type:application/json"'
+                        curl_header = '-H "accept:application/json" -H "content-type:application/json"'
                         json_data = json.dumps('{"value":"true"}')
                         cmd = 'curl -X PUT -s -k {0} -u {1}:{2} -d {3} {4}/api/settings/{5}'.format(
                                 curl_header, username, password, json_data, api, item['id'])
@@ -665,7 +665,7 @@ class Register(Base):
         host_id = self.satellite_host_id(ssh, register_config, host_name, host_uuid)
         katello_id = self.satellite_katello_id(ssh, register_config, pool_id)
         if host_id is not None and host_id != "" and katello_id is not None and katello_id != "":
-            curl_header = '-H "accept:application/json,version=2" -H "content-type:application/json"'
+            curl_header = '-H "accept:application/json" -H "content-type:application/json"'
             json_data = json.dumps('{"subscriptions":[{"id":%s, "quantity":%s}]}' % (katello_id, quantity))
             cmd = 'curl -X PUT -s -k {0} -u {1}:{2} -d {3} {4}/api/v2/hosts/{5}/subscriptions/add_subscriptions'.format(
                     curl_header, username, password, json_data, api, host_id)
@@ -702,7 +702,7 @@ class Register(Base):
             if katello_ids:
                 logger.info("Succeeded to find consumed pools for host_id({0}): {1}".format(host_id, katello_ids))
                 for cp_id, katello_id in katello_ids.items():
-                    curl_header = '-H "accept:application/json,version=2" -H "content-type:application/json"'
+                    curl_header = '-H "accept:application/json" -H "content-type:application/json"'
                     json_data = json.dumps('{"subscriptions":[{"id":%s}]}' % katello_id)
                     cmd = 'curl -X PUT -s -k {0} -u {1}:{2} -d {3} {4}/api/v2/hosts/{5}/subscriptions/remove_subscriptions'.format(
                             curl_header, username, password, json_data, api, host_id)
@@ -755,7 +755,7 @@ class Register(Base):
         password = register_config['password']
         if org_label == "":
             org_label = org_name
-        curl_header = '-H "Accept:application/json,version=2" -H "Content-Type:application/json"'
+        curl_header = '-H "Accept:application/json" -H "Content-Type:application/json"'
         org_json = json.dumps('{"name":"%s", "label":"%s", "description":"%s"}' \
                             % (org_name, org_label, desc))
         cmd = "curl {0} -X POST -s -k -u {1}:{2} -d {3} {4}/katello/api/organizations".format(
@@ -866,7 +866,7 @@ class Register(Base):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
-        curl_header = '-H "Accept:application/json,version=2" -H "Content-Type:application/json"'
+        curl_header = '-H "Accept:application/json" -H "Content-Type:application/json"'
         active_key_json = json.dumps('\
                 {"organization_id":"%s", \
                 "name":"%s", "description":"%s", \
@@ -895,7 +895,7 @@ class Register(Base):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
-        curl_header = '-H "Accept:application/json,version=2" -H "Content-Type:application/json"'
+        curl_header = '-H "Accept:application/json" -H "Content-Type:application/json"'
         cmd = "curl {0} -X DELETE -s -k -u {1}:{2} {3}/katello/api/activation_keys/{4}".format(
                 curl_header, username, password, api, key_id)
         ret, output = self.runcmd(cmd, ssh)
@@ -943,7 +943,7 @@ class Register(Base):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
-        curl_header = '-H "accept:application/json,version=2" -H "content-type:application/json"'
+        curl_header = '-H "accept:application/json" -H "content-type:application/json"'
         data_json = json.dumps('{"id":"%s", "subscription_id":%s, "quantity":%s}' \
                  % (key_id, katello_id, quantity))
         cmd = "curl {0} -X PUT -s -k -u {1}:{2} -d {3} {4}/katello/api/v2/activation_keys/{5}/add_subscriptions".format(
@@ -960,7 +960,7 @@ class Register(Base):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
-        curl_header = '-H "Accept:application/json,version=2" -H "Content-Type:application/json"'
+        curl_header = '-H "Accept:application/json" -H "Content-Type:application/json"'
         data_json = json.dumps('{"id":"%s", "subscription_id":"%s"}' \
                  % (key_id, katello_id))
         cmd = "curl {0} -X PUT -s -k -u {1}:{2} -d {3} {4}/katello/api/v2/activation_keys/{5}/remove_subscriptions".format(
@@ -977,7 +977,7 @@ class Register(Base):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
-        curl_header = '-H "Accept:application/json,version=2" -H "Content-Type:application/json"'
+        curl_header = '-H "Accept:application/json" -H "Content-Type:application/json"'
         data_json = json.dumps('{"organization_id":"%s", "auto_attach":"%s"}' % (org_id, auto_attach))
         cmd = "curl {0} -X PUT -s -k -u {1}:{2} -d {3} {4}/katello/api/activation_keys/{5}".format(
                 curl_header, username, password, data_json, api, key_id)
