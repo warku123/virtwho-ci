@@ -41,6 +41,9 @@ class VirtWhoSmokeTestCase(Testing):
         assert (self.vw_web_associate(self.host_name, self.host_uuid, self.guest_name, self.guest_uuid))
 
     def test_vw_rhsm_options(self):
+        hypervisor_type = self.get_config('hypervisor_type')
+        if hypervisor_type in ('libvirt-local', 'vdsm'):
+            self.vw_case_skip(hypervisor_type)
         self.system_unregister(self.ssh_host())
         register_type = self.register_config['type']
         self.vw_option_add("rhsm_hostname", self.register_config['server'], self.config_file)
@@ -67,8 +70,10 @@ class VirtWhoSmokeTestCase(Testing):
             assert (self.vw_msg_search(rhsm_output, "Using proxy.*{0}".format(squid_server)))
 
     def test_vw_hypervisor_id(self):
-        register_owner = self.register_config['owner']
         hypervisor_type = self.get_config('hypervisor_type')
+        if hypervisor_type in ('libvirt-local', 'vdsm'):
+            self.vw_case_skip(hypervisor_type)
+        register_owner = self.register_config['owner']
         if hypervisor_type in ('esx', 'rhevm'):
             hypervisor_ids = ['uuid', 'hostname', 'hwuuid']
         else:
