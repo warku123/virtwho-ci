@@ -118,8 +118,12 @@ def polarion_xml_init():
     attrs = {
             'polarion-project-id': 'RedHatEnterpriseLinux7',
             'polarion-testrun-id': testrun_id,
-            'polarion_custom_assignee': 'hsun',
-            'polarion_custom_isautomated': 'true'}
+            'polarion-custom-assignee': 'hsun',
+            'polarion-custom-isautomated': 'true',
+            'polarion-custom-component': 'virt-who',
+            'polarion-custom-tags': 'virt-who',
+    }
+
     for name, value in attrs.items():
         attrs = {'name': name,'value': value}
         propertie_node = xml_createNode(properties_node, "property", attrs, '')
@@ -213,5 +217,5 @@ if __name__ == "__main__":
     xml_file, testrun_id = polarion_xml_init()
     polarion_xml_update(xml_file, files)
     polarion_caseid_mapping(xml_file)
-    # polarion_xml_import(xml_file, testrun_id)
+    polarion_xml_import(xml_file, testrun_id)
 
