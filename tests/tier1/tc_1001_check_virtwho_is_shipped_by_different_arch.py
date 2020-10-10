@@ -11,6 +11,9 @@ class Testcase(Testing):
         compose_id = self.get_config('rhel_compose')
         if "trigger-rhel" not in trigger_type:
             self.vw_case_skip(trigger_type)
+        pkg_info = self.pkg_info(self.ssh_host(), 'virt-who')
+        if "none" in pkg_info.get("Signature"):
+            self.vw_case_skip('Scratch Build')
 
         # case config
         results = dict()
