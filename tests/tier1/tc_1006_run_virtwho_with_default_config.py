@@ -11,6 +11,9 @@ class Testcase(Testing):
         hypervisor_type = self.get_config('hypervisor_type')
         if trigger_type in ('trigger-rhev', 'trigger-brew', 'trigger-multiarch'):
             self.vw_case_skip(trigger_type)
+        pkg_info = self.pkg_info(self.ssh_host(), 'virt-who')
+        if "none" in pkg_info.get("Signature"):
+            self.vw_case_skip('Scratch Build')
         self.vw_case_init()
 
         # case config
