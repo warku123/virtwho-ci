@@ -225,6 +225,9 @@ class Register(Base):
             self.system_sku_refresh(ssh)
             cmd = "subscription-manager list --av --all --matches=%s | tail -n +4" % sku_id
             ret, output = self.runcmd(cmd, ssh, desc="subscription list matches")
+            if 'Failed to synchronize cache' in output:
+                logger.warning('Failed to synchronize cache for repo..., refer to bz1719177')
+                output = re.sub('Failed to synchronize.*ignoring this repo.', '', output).strip()
             if ret == 0 and not output and exp_exist is False:
                 logger.info("Succeeded to search, unexpected sku %s(%s) is not exist" % (sku_id, sku_type))
                 return output
