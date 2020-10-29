@@ -1354,7 +1354,9 @@ class Provision(Register):
         return job_passed
 
     def satellite_version(self, sat_type):
-        if "6.8" in sat_type or "68" in sat_type:
+        if "6.9" in sat_type or "69" in sat_type:
+            sat_ver = "6.9"
+        elif "6.8" in sat_type or "68" in sat_type:
             sat_ver = "6.8"
         elif "6.7" in sat_type or "67" in sat_type:
             sat_ver = "6.7"
