@@ -20,20 +20,22 @@ class Testcase(Testing):
             raise FailException("virt-who pkg is not found")
         if compose_id is None or compose_id == "":
             raise FailException("compose_id is not defined")
-        rhel_url = deploy.repo.rhel
+        rhel_url = deploy.repo.rhel_base
         rhel_release = compose_id.split('.')[0]
         if "updates" in compose_id:
-            baseurl = "{0}/{1}/rel-eng/updates/{2}".format(
-                rhel_url, rhel_release.lower(), rhel_release)
+            baseurl = "{0}/{1}/rel-eng/updates/{2}".format(rhel_url, rhel_release.lower(), rhel_release)
         elif ".n" in compose_id:
-            rhel_nightly_url = deploy.repo.rhel_nightly
-            baseurl = "{0}/{1}/nightly/{2}".format(
-                rhel_nightly_url, rhel_release.lower(), rhel_release)
+            baseurl = "{0}/{1}/nightly/{2}".format(rhel_url, rhel_release.lower(), rhel_release)
+        elif ".d" in compose_id:
+            baseurl = "{0}/{1}/development/{2}".format(rhel_url, rhel_release.lower(), rhel_release)
         else:
-            baseurl = "{0}/{1}/rel-eng/{2}".format(
-                rhel_url, rhel_release.lower(), rhel_release)
+            baseurl = "{0}/{1}/rel-eng/{2}".format(rhel_url, rhel_release.lower(), rhel_release)
         if "RHEL-8" in compose_id:
-            arch_list = ['x86_64', 'ppc64le', 'aarch64', 's390x']
+            arch_list = [
+                    'x86_64',
+                    'ppc64le',
+                    'aarch64',
+                    's390x']
         if "RHEL-7" in compose_id:
             arch_list = [
                     'Client/x86_64',
