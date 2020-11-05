@@ -465,8 +465,8 @@ class Base(unittest.TestCase):
                 nmap = "{0}/nmap-7.70-4.el8.x86_64.rpm".format(ftp)
                 ncat = "{0}/nmap-ncat-7.70-4.el8.x86_64.rpm".format(ftp)
             if rhel_ver == "7":
-                nmap = "{0}/nmap-6.40-16.el7.x86_64.rpm".format(mirror)
-                ncat = "{0}/nmap-ncat-6.40-16.el7.x86_64.rpm".format(mirror)
+                nmap = "{0}/nmap-6.40-19.el7.x86_64.rpm".format(mirror)
+                ncat = "{0}/nmap-ncat-6.40-19.el7.x86_64.rpm".format(mirror)
             if rhel_ver == "6":
                 nmap = "{0}/nmap-5.51-6.el6.x86_64.rpm".format(mirror)
                 ncat = ""
