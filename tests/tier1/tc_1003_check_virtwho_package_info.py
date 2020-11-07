@@ -9,6 +9,7 @@ class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133656')
         pkg_info = self.pkg_info(self.ssh_host(), 'virt-who')
+        trigger_type = self.get_config('trigger_type')
         results = dict()
 
         logger.info(">>>step1: 'rpm -qi virt-who' contains valid 'Group' info")
@@ -31,27 +32,23 @@ class Testcase(Testing):
         logger.info(">>>step5: 'rpm -qi virt-who' contains valid 'Vendor' info")
         results.setdefault('step5', []).append(pkg_info.get("Vendor") == "Red Hat, Inc.")
 
-        logger.info(">>>step6: 'rpm -qi virt-who' contains valid 'RSA/SHA256' info")
-        results.setdefault('step6', []).append("RSA/SHA256" in pkg_info.get("Signature"))
-
-        logger.info(">>>step7: 'rpm -qi virt-who' contains valid 'Key ID' info")
-        results.setdefault('step7', []).append("Key ID" in pkg_info.get("Signature"))
-
-        logger.info(">>>step8: 'virt-who --version' to check version")
+        logger.info(">>>step6: 'rpm -qi virt-who' contains Signature info")
+        if trigger_type in ('trigger-brew'):
+            results.setdefault('step6', []).append("none" in pkg_info.get("Signature"))
+        else:
+            results.setdefault('step6', []).append("Key ID" in pkg_info.get("Signature"))
+        logger.info(">>>step7: 'virt-who --version' to check version")
         vw_pkg = self.pkg_check(self.ssh_host(), 'virt-who')[9:15]
         logger.info("virt-who version should be {0}".format(vw_pkg))
-        cmd = "virt-who --version"
-        ret, output = self.runcmd(cmd, self.ssh_host())
+        ret, output = self.runcmd('virt-who --version', self.ssh_host())
         logger.info("'virt-who --version' output is {0}".format(output))
         if ret == 0 and vw_pkg in output:
-            logger.info("succeed to check virt-who version {0}".format(vw_pkg))
-            results.setdefault('step8', []).append(True)
+            results.setdefault('step7', []).append(True)
         else:
-            logger.error("failed to check virt-who version by '#virt-who --version'")
-            results.setdefault('step8', []).append(False)
+            results.setdefault('step7', []).append(False)
 
         # case result
         notes = list()
-        notes.append("Bug(Step8): Get wrong virt-who version by #virt-who --version")
+        notes.append("Bug(Step7): Get wrong virt-who version by #virt-who --version")
         notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1759869")
         self.vw_case_result(results, notes)
