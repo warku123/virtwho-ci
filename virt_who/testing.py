@@ -1017,12 +1017,12 @@ class Testing(Provision):
     def vw_thread_timeout(
             self, t1, q, timeout, exp_send, exp_loopnum, oneshot, exp_error, event):
         while t1.is_alive():
-            time.sleep(3)
+            time.sleep(5)
         if event is not None:
             time.sleep(60)
             self.vw_hypervisor_event(event)
         while True:
-            time.sleep(6)
+            time.sleep(10)
             ret, output = self.runcmd("ls /var/log/rhsm/", self.ssh_host())
             if (
                 ret == 0
@@ -1034,7 +1034,7 @@ class Testing(Provision):
                 break
         start = time.time()
         while True:
-            time.sleep(5)
+            time.sleep(10)
             end = time.time()
             spend_time = int(end-start)
             (

@@ -69,4 +69,6 @@ class Testcase(Testing):
                 results.setdefault('step2', []).append(False)
 
         # Case Result
-        self.vw_case_result(results)
+        notes = list()
+        notes.append("Only for libvirt-remote bug: https://bugzilla.redhat.com/show_bug.cgi?id=1874371")
+        self.vw_case_result(results, notes)

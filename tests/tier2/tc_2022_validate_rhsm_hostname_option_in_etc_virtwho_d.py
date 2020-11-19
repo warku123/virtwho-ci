@@ -55,7 +55,7 @@ class Testcase(Testing):
                         "Communication with subscription manager failed"]
             self.vw_option_update_value("rhsm_hostname", " ", config_file)
             data, tty_output, rhsm_output = self.vw_start()
-            res1 = self.op_normal_value(data, exp_error="1|2", exp_thread=1, exp_send=0)
+            res1 = self.op_normal_value(data, exp_error="nz", exp_thread=1, exp_send=0)
             res2 = self.msg_validation(rhsm_output, msg_list)
             results.setdefault('step3', []).append(res1)
             results.setdefault('step3', []).append(res2)
@@ -63,7 +63,7 @@ class Testcase(Testing):
             logger.info(">>>step4: run virt-who with rhsm_hostname disable")
             self.vw_option_disable("rhsm_hostname", config_file)
             data, tty_output, rhsm_output = self.vw_start()
-            res1 = self.op_normal_value(data, exp_error="1|2", exp_thread=1, exp_send=0)
+            res1 = self.op_normal_value(data, exp_error="nz", exp_thread=1, exp_send=0)
             res2 = self.msg_validation(rhsm_output, msg_list)
             results.setdefault('step4', []).append(res1)
             results.setdefault('step4', []).append(res2)

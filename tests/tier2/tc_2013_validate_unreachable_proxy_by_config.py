@@ -30,8 +30,8 @@ class Testcase(Testing):
         register_server = register_config['server']
         hypervisor_config = self.get_hypervisor_config()
         hypervisor_server = hypervisor_config['ssh_hypervisor']['host']
-        good_squid_server = "10.73.3.248:3128"
-        wrong_squid_server = "10.73.3.24:3128"
+        good_squid_server = "{0}:{1}".format(deploy.proxy.server, deploy.proxy.port)
+        wrong_squid_server = "10.73.3.24:9999"
         types = {'type1': 'http_proxy',
                  'type2': 'https_proxy'}
 
