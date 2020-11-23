@@ -77,8 +77,10 @@ class Provision(Register):
         rhel_compose = self.get_exported_param("RHEL_COMPOSE")
         if not rhel_compose:
             base_url = deploy.repo.rhel_base
+            if 'rhel-9' in rhel_release:
+                url = '{0}/rhel-9/nightly/RHEL-9/latest-RHEL-9.0.0/COMPOSE_ID'.format(base_url)
             if 'rhel-8' in rhel_release:
-                url = '{0}/rhel-8/rel-eng/RHEL-8/latest-RHEL-8/COMPOSE_ID'.format(base_url)
+                url = '{0}/rhel-8/nightly/RHEL-8/latest-RHEL-8.4/COMPOSE_ID'.format(base_url)
             if 'rhel-7' in rhel_release:
                 url = '{0}/rhel-7/rel-eng/RHEL-7/latest-RHEL-7/COMPOSE_ID'.format(base_url)
             if 'rhel-6' in rhel_release:
