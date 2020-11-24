@@ -977,6 +977,8 @@ class Provision(Register):
             epel_url = "{0}/6/x86_64/".format(repo_epel)
         if rhel_ver == "7":
             epel_url = "{0}/7/x86_64/".format(repo_epel)
+        if rhel_ver == "8":
+            epel_url = "{0}/8/Everything/x86_64/".format(repo_epel)
         cmd = ('cat <<EOF > /etc/yum.repos.d/epel.repo\n'
                '[rhel-epel]\n'
                'name=rhel-epel\n'
@@ -1009,7 +1011,12 @@ class Provision(Register):
                 repo_extra = "{0}/rhel-6/rel-eng/updates/{1}/{2}/compose/Server/optional/x86_64/os".format(
                     base_url, rhel_release, compose_id)
         elif ".n" in compose_id:
-            if "RHEL-8" in compose_id:
+            if "RHEL-9" in compose_id:
+                repo_base = "{0}/rhel-9/nightly/RHEL-9/{1}/compose/BaseOS/x86_64/os".format(
+                    base_url, compose_id)
+                repo_extra = "{0}/rhel-9/nightly/RHEL-9/{1}/compose/AppStream/x86_64/os".format(
+                    base_url, compose_id)
+            elif "RHEL-8" in compose_id:
                 repo_base = "{0}/rhel-8/nightly/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
                     base_url, compose_id)
                 repo_extra = "{0}/rhel-8/nightly/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
@@ -1020,7 +1027,12 @@ class Provision(Register):
                 repo_extra = "{0}/rhel-7/nightly/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
                     base_url, compose_id)
         elif ".d" in compose_id:
-            if "RHEL-8" in compose_id:
+            if "RHEL-9" in compose_id:
+                repo_base = "{0}/rhel-9/development/RHEL-9/{1}/compose/BaseOS/x86_64/os".format(
+                    base_url, compose_id)
+                repo_extra = "{0}/rhel-9/development/RHEL-9/{1}/compose/AppStream/x86_64/os".format(
+                    base_url, compose_id)
+            elif "RHEL-8" in compose_id:
                 repo_base = "{0}/rhel-8/development/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
                     base_url, compose_id)
                 repo_extra = "{0}/rhel-8/development/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
@@ -1028,7 +1040,12 @@ class Provision(Register):
             else:
                 raise FailException("Development compose is only available for rhel8/9")
         else:
-            if "RHEL-8" in compose_id:
+            if "RHEL-9" in compose_id:
+                repo_base = "{0}/rhel-9/composes/RHEL-9/{1}/compose/BaseOS/x86_64/os".format(
+                    base_url, compose_id)
+                repo_extra = "{0}/rhel-9/composes/RHEL-9/{1}/compose/AppStream/x86_64/os".format(
+                    base_url, compose_id)
+            elif "RHEL-8" in compose_id:
                 repo_base = "{0}/rhel-8/rel-eng/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
                     base_url, compose_id)
                 repo_extra = "{0}/rhel-8/rel-eng/RHEL-8/{1}/compose/AppStream/x86_64/os".format(

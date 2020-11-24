@@ -28,9 +28,11 @@ class Testcase(Testing):
             baseurl = "{0}/{1}/nightly/{2}".format(rhel_url, rhel_release.lower(), rhel_release)
         elif ".d" in compose_id:
             baseurl = "{0}/{1}/development/{2}".format(rhel_url, rhel_release.lower(), rhel_release)
+        elif "RHEL-9" in compose_id:
+            baseurl = "{0}/{1}/composes/{2}".format(rhel_url, rhel_release.lower(), rhel_release)
         else:
             baseurl = "{0}/{1}/rel-eng/{2}".format(rhel_url, rhel_release.lower(), rhel_release)
-        if "RHEL-8" in compose_id:
+        if "RHEL-8" in compose_id or "RHEL-9" in compose_id:
             arch_list = [
                     'x86_64',
                     'ppc64le',
