@@ -67,7 +67,13 @@ fi
 echo -e "${container_user}:${container_password}" | docker exec -i $container_name chpasswd
 docker exec -i $container_name ifconfig
 docker exec -i $container_name hostname $container_name
-docker exec -i $container_name sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+if [[ $container_name =~ "rhel9" ]] || [[ $container_name =~ "rhel-9" ]] || [[ $container_name =~ "rhel.9" ]]
+then
+    docker exec -i $container_name sed -i 's/#*PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
+    docker exec -i $container_name sed -i 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd
+else
+    docker exec -i $container_name sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+fi
 docker exec -i $container_name sed -i 's/#UseDNS yes/UseDNS no/g' /etc/ssh/sshd_config
 docker exec -i $container_name sed -i 's/GSSAPIAuthentication yes/GSSAPIAuthentication no/g' /etc/ssh/sshd_config
 docker exec -i $container_name sed -i 's/#X11UseLocalhost yes/X11UseLocalhost no/g' /etc/ssh/sshd_config

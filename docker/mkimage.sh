@@ -115,15 +115,15 @@ fi
 for i in {1..5}
 do
     yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs --setopt=group_package_types=mandatory \
-        -y install @base openssh-server openssh-clients openssl-devel net-tools wget hostname sudo virt-who subscription-manager gcc expect
-    # different packages for rhel8 and rhel7/6
-    if [[ $name =~ "rhel8" ]] || [[ $name =~ "rhel-8" ]] || [[ $name =~ "rhel.8" ]]
+        -y install @base openssh-server openssh-clients openssl-devel net-tools wget hostname sudo subscription-manager gcc expect
+    # different packages for rhel8/9 and rhel7
+    if [[ $name =~ "rhel7" ]] || [[ $name =~ "rhel-7" ]] || [[ $name =~ "rhel.7" ]]
     then
         yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs --setopt=group_package_types=mandatory \
-            -y install cockpit subscription-manager-cockpit python3-pexpect python3-libvirt glibc-all-langpacks
+            -y install @x11 subscription-manager-gui pexpect libvirt-python python-devel
     else
         yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs --setopt=group_package_types=mandatory \
-            -y install @x11 subscription-manager-gui pexpect libvirt-python python-devel
+            -y install cockpit subscription-manager-cockpit python3-pexpect python3-libvirt glibc-all-langpacks
     fi
     # try again if failed to install
     if [ $? -eq 0 ]
