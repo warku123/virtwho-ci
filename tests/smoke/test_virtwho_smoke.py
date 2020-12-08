@@ -12,7 +12,6 @@ class VirtWhoSmokeTestCase(Testing):
         super(VirtWhoSmokeTestCase, cls).setUpClass()
         cls.config_name = "virtwho-config"
         cls.config_file = "/etc/virt-who.d/virtwo_smoke.conf"
-        cls.sys_file = '/etc/sysconfig/virt-who'
         cls.global_file = '/etc/virt-who.conf'
         cls.vw_case_init(cls())
         cls.register_config = cls.get_register_config(cls())
@@ -56,18 +55,21 @@ class VirtWhoSmokeTestCase(Testing):
         self.system_register(self.ssh_host(), register_type, self.register_config)
 
     def test_vw_http_proxy(self):
-        squid_server = "{0}:{1}".format(deploy.proxy.server, deploy.proxy.port)
-        proxy_type = ['http_proxy', 'https_proxy']
-        for type in proxy_type:
-            logger.info(">>> run virt-who to check {0}".format(type))
-            if type == "http_proxy":
-                proxy_url = "http://{0}".format(squid_server)
-            else:
-                proxy_url = "https://{0}".format(squid_server)
-            self.vw_option_add(type, proxy_url, "/etc/sysconfig/virt-who")
+        proxy_server = "{0}:{1}".format(deploy.proxy.server, deploy.proxy.port)
+        steps = {'step1':'http_proxy', 'step2':'https_proxy'}
+        self.vw_option_enable("[system_environment]", self.global_file)
+        for step, option in sorted(steps.items(),key=lambda item:item[0]):
+            logger.info(">>>{0}: run virt-who to check {1}".format(step, option))
+            if option == "http_proxy":
+                value = "http://{0}".format(proxy_server)
+            if option == "https_proxy":
+                value = "https://{0}".format(proxy_server)
+            self.vw_option_enable(option, self.global_file)
+            self.vw_option_update_value(option, value, self.global_file)
             data, tty_output, rhsm_output = self.vw_start(exp_send=1)
             assert (self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1))
-            assert (self.vw_msg_search(rhsm_output, "Using proxy.*{0}".format(squid_server)))
+            assert (self.vw_msg_search(rhsm_output, "Using proxy.*{0}".format(proxy_server)))
+            self.vw_option_disable(option, self.global_file)
 
     def test_vw_hypervisor_id(self):
         hypervisor_type = self.get_config('hypervisor_type')

@@ -495,13 +495,16 @@ class Testing(Provision):
             logger.info("Succeeded to disable all options in /etc/virt-who.conf")
 
     def vw_etc_sys_disable_all(self):
-        op_1 = '-e "s|^[^#]|#&|g"'
-        cmd = 'sed -i %s /etc/sysconfig/virt-who' % op_1
-        ret, output = self.runcmd(cmd, self.ssh_host())
-        if ret != 0:
-            raise FailException("Failed to disable all modes in /etc/sysconfig/virt-who")
+        if "RHEL-9" in self.get_config('rhel_compose'):
+            logger.warning('/etc/sysconfig/virt-who is not supported in rhel9')
         else:
-            logger.info("Succeeded to disable all options in /etc/sysconfig/virt-who")
+            op_1 = '-e "s|^[^#]|#&|g"'
+            cmd = 'sed -i %s /etc/sysconfig/virt-who' % op_1
+            ret, output = self.runcmd(cmd, self.ssh_host())
+            if ret != 0:
+                raise FailException("Failed to disable all modes in /etc/sysconfig/virt-who")
+            else:
+                logger.info("Succeeded to disable all options in /etc/sysconfig/virt-who")
 
     def vw_etc_d_delete_all(self):
         cmd = "rm -rf /etc/virt-who.d/*; rm -f /etc/virt-who.d/.*swp"
