@@ -17,15 +17,15 @@ class Testcase(Testing):
         guest_uuid = self.get_hypervisor_guestuuid()
         compose_id = self.get_config('rhel_compose')
         hypervisor_type = self.get_config('hypervisor_type')
-        if "RHEL-8" in compose_id:
+        if "RHEL-7" in compose_id:
+            cmd = self.vw_cli_base() + "-p > {0}".format(json_file)
+            cmd_debug = self.vw_cli_base() + "-d -p > {0}".format(json_file)
+        else:
             config_name = "virtwho-config"
             config_file = "/etc/virt-who.d/{0}.conf".format(config_name)
             self.vw_etc_d_mode_create(config_name, config_file)
             cmd = "virt-who -p > {0}".format(json_file)
             cmd_debug = "virt-who -d -p > {0}".format(json_file)
-        else:
-            cmd = self.vw_cli_base() + "-p > {0}".format(json_file)
-            cmd_debug = self.vw_cli_base() + "-d -p > {0}".format(json_file)
         steps = {
             'step1': cmd,
             'step2': cmd_debug

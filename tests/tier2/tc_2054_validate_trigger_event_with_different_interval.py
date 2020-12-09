@@ -7,6 +7,8 @@ from virt_who.testing import Testing
 class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id="RHEL-136726")
+        if self.pkg_check(self.ssh_host(), 'virt-who')[9:15] >= '1.31.0':
+            self.vw_case_skip("virt-who version")
         hypervisor_type = self.get_config('hypervisor_type')
         if hypervisor_type != 'esx':
             self.vw_case_skip(hypervisor_type)

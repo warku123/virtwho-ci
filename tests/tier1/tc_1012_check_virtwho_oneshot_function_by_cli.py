@@ -13,15 +13,15 @@ class Testcase(Testing):
         # case config
         results = dict()
         compose_id = self.get_config('rhel_compose')
-        if "RHEL-8" in compose_id:
+        if "RHEL-7" in compose_id:
+            cmd = self.vw_cli_base()
+            cmd_oneshot = self.vw_cli_base() + "-o"
+        else:
             config_name = "virtwho-config"
             config_file = "/etc/virt-who.d/{0}.conf".format(config_name)
             self.vw_etc_d_mode_create(config_name, config_file)
             cmd = "virt-who"
             cmd_oneshot = "virt-who -o"
-        else:
-            cmd = self.vw_cli_base()
-            cmd_oneshot = self.vw_cli_base() + "-o"
 
         # case step
         logger.info(">>>step1: Run virt-who by cli with -o option")

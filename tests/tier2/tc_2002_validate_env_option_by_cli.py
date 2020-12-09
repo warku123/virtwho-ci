@@ -12,8 +12,8 @@ class Testcase(Testing):
         compose_id = self.get_config('rhel_compose')
         if hypervisor_type in ('libvirt-local', 'vdsm'):
             self.vw_case_skip(hypervisor_type)
-        if "RHEL-8" in compose_id:
-            self.vw_case_skip("RHEL-8")
+        if "RHEL-7" not in compose_id:
+            self.vw_case_skip(compose_id)
         if self.pkg_check(self.ssh_host(), 'virt-who')[9:15] >= '0.24.6':
             self.vw_case_skip("virt-who version")
         self.vw_case_init()

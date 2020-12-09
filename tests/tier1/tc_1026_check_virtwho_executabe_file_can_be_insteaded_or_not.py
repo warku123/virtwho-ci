@@ -22,16 +22,7 @@ class Testcase(Testing):
         # Case Steps
         for step, option in sorted(steps.items(),key=lambda item:item[0]):
             logger.info(">>>{0}: run virt-who to check {1} instead or not".format(step, option))
-            if "RHEL-8" in compose_id:
-                cmd = ('cat <<EOF > %s\n'
-                        '#!/usr/libexec/platform-python\n'
-                        'print("%s")\n'
-                        'EOF'
-                      ) % (option, keywords)
-                ret, output = self.runcmd(cmd, self.ssh_host())
-                cmd = "/usr/libexec/platform-python {0}".format(option)
-                ret, output = self.runcmd(cmd, self.ssh_host())
-            else:
+            if "RHEL-7" in compose_id:
                 cmd = ('cat <<EOF > %s\n'
                         '#!/usr/bin/python\n'
                         'print "%s"\n'
@@ -39,6 +30,15 @@ class Testcase(Testing):
                       ) % (option, keywords)
                 ret, output = self.runcmd(cmd, self.ssh_host())
                 cmd = "python {0}".format(option)
+                ret, output = self.runcmd(cmd, self.ssh_host())
+            else:
+                cmd = ('cat <<EOF > %s\n'
+                        '#!/usr/libexec/platform-python\n'
+                        'print("%s")\n'
+                        'EOF'
+                      ) % (option, keywords)
+                ret, output = self.runcmd(cmd, self.ssh_host())
+                cmd = "/usr/libexec/platform-python {0}".format(option)
                 ret, output = self.runcmd(cmd, self.ssh_host())
             if ret == 0 and keywords in output:
                 logger.info("Succeeded to run {0}".format(option))

@@ -17,19 +17,15 @@ class Testcase(Testing):
 
         # case config
         results = dict()
-        conf_etc_sys = "/etc/sysconfig/virt-who"
         conf_etc = "/etc/virt-who.conf"
         config_name = "virtwho-config"
         config_file = "/etc/virt-who.d/{0}.conf".format(config_name)
 
         # case steps
         logger.info(">>>step1: create virt-who config")
-        logger.info("setting options in /etc/sysconfig/virt-who")
-        self.vw_option_enable("VIRTWHO_DEBUG", filename=conf_etc_sys)
-        self.vw_option_update_value("VIRTWHO_DEBUG", "1", filename=conf_etc_sys)
-
-        logger.info("setting options in /etc/virt-who.conf")
-        self.vw_option_enable("[global]", filename=conf_etc)
+        self.vw_option_enable('[global]', conf_etc)
+        self.vw_option_enable('debug', conf_etc)
+        self.vw_option_update_value('debug', 'True', conf_etc)
         self.vw_option_enable("interval", filename=conf_etc)
         self.vw_option_update_value("interval", '60', filename=conf_etc)
 

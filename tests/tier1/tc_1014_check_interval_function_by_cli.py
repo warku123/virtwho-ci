@@ -13,7 +13,12 @@ class Testcase(Testing):
         # case config
         results = dict()
         compose_id = self.get_config('rhel_compose')
-        if "RHEL-8" in compose_id:
+        if "RHEL-7" in compose_id:
+            cmd = self.vw_cli_base() + "-d"
+            cmd_i_10 = self.vw_cli_base() + "-d -i 10"
+            cmd_i_60 = self.vw_cli_base() + "-d -i 60"
+            cmd_i_120 = self.vw_cli_base() + "-d -i 120"
+        else:
             config_name = "virtwho-config"
             config_file = "/etc/virt-who.d/{0}.conf".format(config_name)
             self.vw_etc_d_mode_create(config_name, config_file)
@@ -21,11 +26,6 @@ class Testcase(Testing):
             cmd_i_10 = "virt-who -d -i 10"
             cmd_i_60 = "virt-who -d -i 60"
             cmd_i_120 = "virt-who -d -i 120"
-        else:
-            cmd = self.vw_cli_base() + "-d"
-            cmd_i_10 = self.vw_cli_base() + "-d -i 10"
-            cmd_i_60 = self.vw_cli_base() + "-d -i 60"
-            cmd_i_120 = self.vw_cli_base() + "-d -i 120"
 
         # case steps
         logger.info(">>>step1: run virt-who without -i option")

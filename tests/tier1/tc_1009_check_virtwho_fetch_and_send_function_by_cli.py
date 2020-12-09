@@ -15,13 +15,13 @@ class Testcase(Testing):
         host_uuid = self.get_hypervisor_hostuuid()
         guest_uuid = self.get_hypervisor_guestuuid()
         compose_id = self.get_config('rhel_compose')
-        if "RHEL-8" in compose_id:
+        if "RHEL-7" in compose_id:
+            cmd = self.vw_cli_base() + '-d'
+        else:
             config_name = "virtwho-config"
             config_file = "/etc/virt-who.d/{0}.conf".format(config_name)
             self.vw_etc_d_mode_create(config_name, config_file)
             cmd = "virt-who -d"
-        else:
-            cmd = self.vw_cli_base() + '-d'
 
         # case steps
         logger.info(">>>step1: run virt-who by cli")

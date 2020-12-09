@@ -100,20 +100,6 @@ class Testcase(Testing):
                 self.vw_option_del('rhsm_no_proxy', config_file)
             else:
                 logger.info('Skip step7 and step8 for {0}'.format(hypervisor_type))
-
-            logger.info(">>>step9: set no_proxy=[server_hostname] in /etc/sysconfig/virt-who")
-            self.vw_option_add('no_proxy', register_server, '/etc/sysconfig/virt-who')
-            data, tty_output, rhsm_output = self.vw_start()
-            s1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
-            results.setdefault('step9', []).append(s1)
-
-            logger.info(">>>step10: set no_proxy=* in /etc/sysconfig/virt-who")
-            self.vw_option_update_value('no_proxy', '*', '/etc/sysconfig/virt-who')
-            data, tty_output, rhsm_output = self.vw_start()
-            s1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
-            results.setdefault('step10', []).append(s1)
-            self.vw_option_del('rhsm_no_proxy', '/etc/sysconfig/virt-who')
-
         except:
             results.setdefault('step except', []).append(False)
             pass

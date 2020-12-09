@@ -764,7 +764,7 @@ class Provision(Register):
         if rhel_ver == "8":
             cmd = "localectl set-locale en_US.utf8; source /etc/profile.d/lang.sh"
             ret, output = self.runcmd(cmd, ssh_host)
-        cmd = "rm -f /var/lib/rpm/__db*; rm -rf /var/lib/yum/history/*.sqlite; rpm --rebuilddb"
+        cmd = "rm -rf /var/lib/rpm/; rm -rf /var/lib/yum/history/*.sqlite; rpm --rebuilddb"
         ret, output = self.runcmd(cmd, ssh_host)
         if trigger_type == "trigger-brew":
             pkg_url = deploy.trigger.brew_package

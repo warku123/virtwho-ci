@@ -13,7 +13,7 @@ class Testcase(Testing):
             self.vw_case_skip(hypervisor_type)
         compose_id = self.get_config('rhel_compose')
         if "RHEL-8" in compose_id:
-            self.vw_case_skip("RHEL-8")
+            self.vw_case_skip(compose_id)
         self.vw_case_init()
 
         # case config

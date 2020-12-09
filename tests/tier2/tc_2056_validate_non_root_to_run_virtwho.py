@@ -16,9 +16,9 @@ class Testcase(Testing):
         results = dict()
         config_name = "virtwho-config"
         config_file = "/etc/virt-who.d/{0}.conf".format(config_name)
-        virtwho_conf = "/etc/sysconfig/virt-who"
-        self.vw_option_enable("VIRTWHO_DEBUG", virtwho_conf)
-        self.vw_option_update_value("VIRTWHO_DEBUG", '1', virtwho_conf)
+        self.vw_option_enable('[global]', '/etc/virt-who.conf')
+        self.vw_option_enable('debug', '/etc/virt-who.conf')
+        self.vw_option_update_value('debug', 'True', '/etc/virt-who.conf')
         self.vw_etc_d_mode_create(config_name, config_file)
         new_user ="tester"
         new_passwd = "redhat"

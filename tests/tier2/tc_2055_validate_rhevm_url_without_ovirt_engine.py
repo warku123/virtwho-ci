@@ -16,9 +16,9 @@ class Testcase(Testing):
         results = dict()
         config_name = "virtwho-config"
         config_file = "/etc/virt-who.d/{0}.conf".format(config_name)
-        virt_config = "/etc/sysconfig/virt-who"
-        self.vw_option_enable("VIRTWHO_DEBUG", virt_config)
-        self.vw_option_update_value("VIRTWHO_DEBUG", '1', virt_config)
+        self.vw_option_enable('[global]', '/etc/virt-who.conf')
+        self.vw_option_enable('debug', '/etc/virt-who.conf')
+        self.vw_option_update_value('debug', 'True', '/etc/virt-who.conf')
         self.vw_etc_d_mode_create(config_name, config_file)
         config = self.get_hypervisor_config()
         hypervisor_server = config['server']

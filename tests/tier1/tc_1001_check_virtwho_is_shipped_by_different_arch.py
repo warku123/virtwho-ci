@@ -59,11 +59,11 @@ class Testcase(Testing):
                     'Workstation/x86_64',]
         # case steps
         for arch in arch_list:
-            if "RHEL-8" in compose_id:
-                pkg_url = "{0}/{1}/compose/AppStream/{2}/os/Packages/{3}".format(
+            if "RHEL-7" in compose_id:
+                pkg_url = "{0}/{1}/compose/{2}/os/Packages/{3}".format(
                     baseurl, compose_id, arch, pkg)
             else:
-                pkg_url = "{0}/{1}/compose/{2}/os/Packages/{3}".format(
+                pkg_url = "{0}/{1}/compose/AppStream/{2}/os/Packages/{3}".format(
                     baseurl, compose_id, arch, pkg)
             if self.url_validation(pkg_url):
                 results.setdefault('step1', []).append(True)
