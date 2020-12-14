@@ -758,8 +758,9 @@ class Provision(Register):
     def jenkins_virtwho_install(self, register_type, ssh_host):
         trigger_type = deploy.trigger.type
         rhel_ver = self.rhel_version(ssh_host)
-        cmd = "dbus-uuidgen > /var/lib/dbus/machine-id"
-        ret, output = self.runcmd(cmd, ssh_host)
+        if rhel_ver == "6":
+            cmd = "dbus-uuidgen > /var/lib/dbus/machine-id"
+            ret, output = self.runcmd(cmd, ssh_host)
         if rhel_ver == "8":
             cmd = "localectl set-locale en_US.utf8; source /etc/profile.d/lang.sh"
             ret, output = self.runcmd(cmd, ssh_host)
@@ -1666,20 +1667,13 @@ class Provision(Register):
             cmd = "docker images | grep '%s' | awk '{print $3 }' |xargs -I {} docker rmi -f {}" % image_name
             self.runcmd(cmd, ssh_docker, desc="docker delete image")
 
-    def docker_image_create(self, ssh_docker, compose_id, image_name):
+    def docker_image_create(self, ssh_docker, compose_id):
         image_name = compose_id.lower()
         if self.docker_image_exist(image_name, ssh_docker) is False:
             logger.info("Start to create docker image {0}".format(image_name))
-            root_path = os.path.abspath(os.path.join(os.getcwd(), "../"))
-            local_dir = os.path.join(root_path,'docker/')
-            remote_dir = "/tmp/docker/"
             compose_repo = "/tmp/docker/compose.repo"
-            self.runcmd("rm -rf /tmp/docker/; rm -rf /tmp/mkimage*; rm -f /etc/yum.repos.d/*.repo", ssh_docker)
-            self.runcmd("subscription-manager unregister", ssh_docker)
-            self.runcmd("subscription-manager clean", ssh_docker)
-            self.paramiko_putdir(ssh_docker, local_dir, remote_dir)
             self.rhel_compose_repo(ssh_docker, compose_id, compose_repo)
-            cmd = "sh /tmp/docker/mkimage.sh -y {0} {1}".format(compose_repo,image_name)
+            cmd = "sh /tmp/docker/mk_image.sh -y {0} {1}".format(compose_repo, image_name)
             logger.info("Command to create docker image: {0}".format(cmd))
             ret, output = self.runcmd(cmd, ssh_docker)
             if ret == 0:
@@ -1697,6 +1691,8 @@ class Provision(Register):
             return False
 
     def docker_container_clean(self, ssh_docker):
+        ret, output = self.runcmd('sh /tmp/docker/rm_containers.sh -d 3', ssh_docker)
+        logger.info("Delete all the containers which created above 3 days")
         ret, output = self.runcmd('docker ps -a |wc -l', ssh_docker)
         if int(output) > 8:
             cmd = "docker ps -a | awk '{print $1 }'|xargs -I {} docker stop {}"
@@ -1712,11 +1708,7 @@ class Provision(Register):
 
     def docker_container_create(self, ssh_docker, image_name, cont_name, cont_user, cont_passwd, cont_port):
         host = ssh_docker['host']
-        root_path = os.path.abspath(os.path.join(os.getcwd(), "../"))
-        local_dir = os.path.join(root_path,'docker/')
-        remote_dir = "/tmp/docker/"
-        self.paramiko_putdir(ssh_docker, local_dir, remote_dir)
-        cmd = "sh /tmp/docker/mkcontainer.sh -i {0} -c {1} -o {2} -u {3} -p {4}"\
+        cmd = "sh /tmp/docker/mk_container.sh -i {0} -c {1} -o {2} -u {3} -p {4}"\
                 .format(image_name, cont_name, cont_port, cont_user, cont_passwd)
         self.runcmd(cmd, ssh_docker)
         is_created = ""
@@ -1726,7 +1718,6 @@ class Provision(Register):
         else:
             logger.info("Command to create docker container: {0}".format(cmd))
             logger.error("Failed to create container: {0}".format(cont_name))
-        self.runcmd("rm -rf /tmp/docker/", ssh_docker)
         if is_created == "Yes":
             return True
         else:
@@ -1742,7 +1733,14 @@ class Provision(Register):
         container_passwd = deploy.docker.container_passwd
         image_name = compose_id.lower()
         self.runcmd("docker system prune -f", ssh_docker, desc="clean docker cache")
-        self.docker_image_create(ssh_docker, compose_id, image_name)
+        root_path = os.path.abspath(os.path.join(os.getcwd(), "../"))
+        local_dir = os.path.join(root_path,'docker/')
+        remote_dir = "/tmp/docker/"
+        self.runcmd("rm -rf /tmp/docker/; rm -rf /tmp/mkimage*; rm -f /etc/yum.repos.d/*.repo", ssh_docker)
+        self.runcmd("subscription-manager unregister", ssh_docker)
+        self.runcmd("subscription-manager clean", ssh_docker)
+        self.paramiko_putdir(ssh_docker, local_dir, remote_dir)
+        self.docker_image_create(ssh_docker, compose_id)
         self.docker_container_clean(ssh_docker)
         for mode in remote_modes:
             container_port = self.docker_container_port(ssh_docker)
