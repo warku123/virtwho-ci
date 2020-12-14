@@ -758,9 +758,8 @@ class Provision(Register):
     def jenkins_virtwho_install(self, register_type, ssh_host):
         trigger_type = deploy.trigger.type
         rhel_ver = self.rhel_version(ssh_host)
-        if rhel_ver == "6":
-            cmd = "dbus-uuidgen > /var/lib/dbus/machine-id"
-            ret, output = self.runcmd(cmd, ssh_host)
+        cmd = "dbus-uuidgen > /var/lib/dbus/machine-id"
+        ret, output = self.runcmd(cmd, ssh_host)
         if rhel_ver == "8":
             cmd = "localectl set-locale en_US.utf8; source /etc/profile.d/lang.sh"
             ret, output = self.runcmd(cmd, ssh_host)
@@ -1699,7 +1698,7 @@ class Provision(Register):
 
     def docker_container_clean(self, ssh_docker):
         ret, output = self.runcmd('docker ps -a |wc -l', ssh_docker)
-        if int(output) > 5:
+        if int(output) > 8:
             cmd = "docker ps -a | awk '{print $1 }'|xargs -I {} docker stop {}"
             self.runcmd(cmd, ssh_docker, desc="Stop all containers")
             cmd = "docker ps -a | awk '{print $1 }'|xargs -I {} docker rm -f {}"
