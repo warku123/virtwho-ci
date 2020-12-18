@@ -951,19 +951,18 @@ class Provision(Register):
         compose_id = deploy.trigger.rhel_compose
         cmd = "rm -f /var/lib/rpm/__db*; rm -rf /var/lib/yum/history/*.sqlite; rm -rf /var/cache/yum/; rpm --rebuilddb"
         ret, output = self.runcmd(cmd, ssh_host)
-        if "RHEL-8" in compose_id:
-            cmd = "yum clean all; yum install -y @core @base-x net-tools virt-who wget git nmap expect \
-                    subscription-manager subscription-manager-cockpit python3-pexpect python3-libvirt network-scripts"
-        else:
+        if "RHEL-7" in compose_id:
             cmd = "yum clean all; yum install -y @core @x11 net-tools virt-who wget git nmap \
                     subscription-manager-gui pexpect expect libvirt-python"
+        else:
+            cmd = "yum clean all; yum install -y @core @base-x net-tools virt-who wget git nmap expect \
+                    subscription-manager subscription-manager-cockpit python3-pexpect python3-libvirt network-scripts"
         status, output = self.run_loop(cmd, ssh_host, desc="install base required packages")
         if status != "Yes":
             raise FailException("Failed to install base required packages")
         logger.info("Succeeded to install base required packages")
-        if "RHEL-8" in compose_id:
-            # uninstall cockpit due to bug https://bugzilla.redhat.com/show_bug.cgi?id=1663812
-            self.runcmd("rpm -e cockpit cockpit-ws", ssh_host)
+        # uninstall cockpit due to bug https://bugzilla.redhat.com/show_bug.cgi?id=1663812
+        self.runcmd("rpm -e cockpit cockpit-ws subscription-manager-cockpit", ssh_host)
 
     def install_epel_packages(self, ssh_host):
         self.rhel_epel_repo(ssh_host)
@@ -1167,6 +1166,10 @@ class Provision(Register):
                'repo --name=extra --baseurl={3}\n'
                '%packages --ignoremissing\n'
                '@base\n'
+               '%end\n'
+               '%post\n'
+               'sed -i "s/#*PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config\n'
+               'sed -i "s@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g" /etc/pam.d/sshd\n'
                '%end\n'
                'EOF'
               ).format(ks_path, ssh_host['password'], repo_base, repo_extra)
