@@ -955,10 +955,10 @@ class Provision(Register):
         ret, output = self.runcmd(cmd, ssh_host)
         if "RHEL-7" in compose_id:
             cmd = "yum clean all; yum install -y @core @x11 net-tools virt-who wget git nmap \
-                    subscription-manager-gui pexpect expect libvirt-python"
+                    subscription-manager pexpect expect libvirt-python"
         else:
             cmd = "yum clean all; yum install -y @core @base-x net-tools virt-who wget git nmap expect \
-                    subscription-manager subscription-manager-cockpit python3-pexpect python3-libvirt network-scripts"
+                    subscription-manager python3-pexpect python3-libvirt"
         status, output = self.run_loop(cmd, ssh_host, desc="install base required packages")
         if status != "Yes":
             raise FailException("Failed to install base required packages")
