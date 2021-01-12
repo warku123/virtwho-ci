@@ -144,7 +144,7 @@ def polarion_xml_update(xml_file, files):
             ts_tests = ts_tests + int(re.findall(r'tests="(.*?)"', line)[0])
             ts_errors = ts_errors + int(re.findall(r'errors="(.*?)"', line)[0])
             ts_failures = ts_failures + int(re.findall(r'failures="(.*?)"', line)[0])
-            ts_skip = ts_skip + int(re.findall(r'skip="(.*?)"', line)[0])
+            ts_skip = ts_skip + int(re.findall(r'skipped="(.*?)"', line)[0])
         res = r'<testsuite .*?>(.*?)</testsuite>'
         cs_lines = re.findall(res, data, re.S|re.M)
         for line in cs_lines:
