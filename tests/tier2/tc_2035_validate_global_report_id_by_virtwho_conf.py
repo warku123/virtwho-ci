@@ -56,4 +56,6 @@ class Testcase(Testing):
         notes = list()
         notes.append("Bug(step2): virt-who still uses null value for reporter_id")
         notes.append("BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1750206")
+        notes.append("Bug(step3): error when configured the report_id with special")
+        notes.append("BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1910274")
         self.vw_case_result(results, notes)

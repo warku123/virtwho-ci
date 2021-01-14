@@ -44,7 +44,7 @@ class Testcase(Testing):
         logger.info(">>>step3: server option is 红帽€467aa value")
         self.vw_option_update_value(option_tested, '红帽€467aa', config_file)
         data, tty_output, rhsm_output = self.vw_start()
-        if "RHEL-8" in compose_id and "esx" in hypervisor_type:
+        if "RHEL-7" not in compose_id and "esx" in hypervisor_type:
             msg = "Option server needs to be ASCII characters only"
             res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=0, exp_send=0)
             res2 = self.vw_msg_search(rhsm_output, msg, exp_exist=True)
