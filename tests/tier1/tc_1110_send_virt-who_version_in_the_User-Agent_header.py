@@ -22,7 +22,7 @@ class Testcase(Testing):
         logger.info('>>>step1: set the environment in the virt-who host and run virt-who service')
         cmd = ('export SUBMAN_DEBUG_PRINT_REQUEST=1;'
                'export SUBMAN_DEBUG_PRINT_REQUEST_HEADER=1')
-        cmd = "{0}; virt-who -o -c {1}".format(cmd, config_file)
+        cmd = "{0}; virt-who -o".format(cmd)
         data, tty_output, rhsm_output = self.vw_start(cmd, exp_send=1)
         res1 = self.op_normal_value(data, exp_error=0, exp_thread=0, exp_send=1)
         results.setdefault('step1', []).append(res1)
