@@ -8,7 +8,7 @@ class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-136708')
         hypervisor_type = self.get_config('hypervisor_type')
-        if hypervisor_type not in ("esx", "libvirt-remote"):
+        if hypervisor_type != 'esx':
             self.vw_case_skip(hypervisor_type)
         self.vw_case_init()
 
@@ -33,12 +33,9 @@ class Testcase(Testing):
         # case steps
         try:
             logger.info(">>>step1: run virt-who for hostname without domain name")
-            if hypervisor_type == "esx":
-                cert = self.vcenter_cert(config['server'], config['username'], config['password'])
-                esx_host = self.vcenter_host_get(cert, ssh_hypervisor, guest_name)
-                self.vcenter_fqdn_set(cert, ssh_hypervisor, esx_host, hostname_non_domain)
-            if hypervisor_type == "libvirt-remote":
-                self.set_hostname(hostname_non_domain, ssh_hypervisor)
+            cert = self.vcenter_cert(config['server'], config['username'], config['password'])
+            esx_host = self.vcenter_host_get(cert, ssh_hypervisor, guest_name)
+            self.vcenter_fqdn_set(cert, ssh_hypervisor, esx_host, hostname_non_domain)
             data, tty_output, rhsm_output = self.vw_start(exp_send=1)
             res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
             res2 = self.vw_msg_search(str(data), hostname_non_domain, exp_exist=True)
@@ -55,12 +52,9 @@ class Testcase(Testing):
                 self.vw_web_host_delete(hostname_non_domain, host_uuid)
             if "stage" in register_type:
                 self.stage_consumer_clean(self.ssh_host(), register_config)
-            if hypervisor_type == "esx":
-                cert = self.vcenter_cert(config['server'], config['username'], config['password'])
-                esx_host = self.vcenter_host_get(cert, ssh_hypervisor, guest_name)
-                self.vcenter_fqdn_set(cert, ssh_hypervisor, esx_host, host_name)
-            if hypervisor_type == "libvirt-remote":
-                self.set_hostname(host_name, ssh_hypervisor)
+            cert = self.vcenter_cert(config['server'], config['username'], config['password'])
+            esx_host = self.vcenter_host_get(cert, ssh_hypervisor, guest_name)
+            self.vcenter_fqdn_set(cert, ssh_hypervisor, esx_host, host_name)
             if self.get_hypervisor_hostname() == host_name:
                 logger.info('Succeeded to change back hostname')
                 results.setdefault('step2', []).append(True)
@@ -69,6 +63,4 @@ class Testcase(Testing):
                 results.setdefault('step2', []).append(False)
 
         # Case Result
-        notes = list()
-        notes.append("Only for libvirt-remote bug: https://bugzilla.redhat.com/show_bug.cgi?id=1874371")
-        self.vw_case_result(results, notes)
+        self.vw_case_result(results)
