@@ -80,23 +80,22 @@ class Testcase(Testing):
             self.vw_option_enable("rhsm_no_proxy", vw_conf)
             self.vw_option_update_value("rhsm_no_proxy", register_server, vw_conf)
             data, tty_output, rhsm_output = self.vw_start(exp_send=1)
-            res3 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+            if hypervisor_type == 'xen':
+                res3 = self.op_normal_value(data, exp_error=2, exp_thread=1, exp_send=1)
+            else:
+                res3 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
             results.setdefault('step2', []).append(res3)
             self.vw_option_del('no_proxy', sysconfig_file)
             self.vw_option_del(option, sysconfig_file)
             self.vw_option_disable('rhsm_no_proxy', vw_conf)
 
         # Case Result
-        notes = list()
-        if hypervisor_type == 'xen':
-            notes.append("(step2) [XEN] Print errors when send mapping")
-            if "RHEL-8" in compose_id:
-                notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1739358")
-            elif "RHEL-7" in compose_id:
-                notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1764004")
-        self.vw_case_result(results, notes)
+        self.vw_case_result(results)
 
-        '''WONTFI bz1716337 - virt-who doesn't connect all hypervisors by proxy'''
+        '''WONTFIX bz1739358 - [XEN] virt-who can send mapping to server but always print 
+        errors when bad http(s)_proxy and good no_proxy values are configured'''
+
+        '''WONTFIX bz1716337 - virt-who doesn't connect all hypervisors by proxy'''
 
         '''
         For below scenarios, virt-who connect hypervisor not by proxy.
