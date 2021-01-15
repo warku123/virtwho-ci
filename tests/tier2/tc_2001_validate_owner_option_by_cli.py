@@ -9,10 +9,10 @@ class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-136568')
         hypervisor_type = self.get_config('hypervisor_type')
+        compose_id = self.get_config('rhel_compose')
         if hypervisor_type in ('libvirt-local', 'vdsm'):
             self.vw_case_skip(hypervisor_type)
-        compose_id = self.get_config('rhel_compose')
-        if "RHEL-8" in compose_id:
+        if "RHEL-7" not in compose_id:
             self.vw_case_skip(compose_id)
         self.vw_case_init()
 

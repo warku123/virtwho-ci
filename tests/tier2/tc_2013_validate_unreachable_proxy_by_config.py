@@ -14,6 +14,9 @@ class Testcase(Testing):
             self.vw_case_skip("virt-who version")
         if hypervisor_type in ('libvirt-local', 'vdsm'):
             self.vw_case_skip(hypervisor_type)
+        '''http_proxy, no_proxy are moved to /etc/virt-who.conf, will not test this exception for rhel9'''
+        if "RHEL-9" in compose_id:
+            self.vw_case_skip(compose_id)
         self.vw_case_init()
 
         # Case Config
