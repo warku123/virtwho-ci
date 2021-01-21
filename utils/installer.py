@@ -258,9 +258,9 @@ def setup_libvirt():
 
 
 def setup_kubevirt():
-    master = deploy.kubevirt.master
-    master_username = deploy.kubevirt.master_user
-    master_password = deploy.kubevirt.master_passwd
+    master = deploy.kubevirt.endpoint
+    master_username = ''
+    master_password = deploy.kubevirt.token
     guest_name = deploy.kubevirt.guest_name
     guest_username = deploy.kubevirt.guest_user
     guest_password = deploy.kubevirt.guest_passwd
@@ -268,7 +268,7 @@ def setup_kubevirt():
         'host': master,
         'username': master_username,
         'password': master_password}
-    guest = provision.kubevirt_guest_ip(ssh_master, guest_name)
+    guest = provision.kubevirt_guest_ip(guest_name)
     if guest:
         ssh_guest = {
             'host': guest,

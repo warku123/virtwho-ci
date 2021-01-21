@@ -544,9 +544,8 @@ class SetLibvirt(FeatureSettings):
 class SetKubevirt(FeatureSettings):
     def __init__(self, *args, **kwargs):
         super(SetKubevirt, self).__init__(*args, **kwargs)
-        self.master = None
-        self.master_user = None
-        self.master_passwd = None
+        self.endpoint = None
+        self.token = None
         self.guest_name = None
         self.guest_user = None
         self.guest_passwd = None
@@ -555,9 +554,8 @@ class SetKubevirt(FeatureSettings):
         self.kube_config_url = None
 
     def read(self, reader):
-        self.master = reader.get('kubevirt', 'master')
-        self.master_user = reader.get('kubevirt', 'master_user')
-        self.master_passwd = reader.get('kubevirt', 'master_passwd')
+        self.endpoint = reader.get('kubevirt', 'endpoint')
+        self.token = reader.get('kubevirt', 'token')
         self.guest_name = reader.get('kubevirt', 'guest_name')
         self.guest_user = reader.get('kubevirt', 'guest_user')
         self.guest_passwd = reader.get('kubevirt', 'guest_passwd')

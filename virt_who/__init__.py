@@ -12,6 +12,10 @@ import socket
 import select
 import threading
 import paramiko
+import urllib3
+from six import PY3
+from urllib3.util.timeout import Timeout
+urllib3.disable_warnings()
 
 try:
    import queue
