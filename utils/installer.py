@@ -264,10 +264,6 @@ def setup_kubevirt():
     guest_name = deploy.kubevirt.guest_name
     guest_username = deploy.kubevirt.guest_user
     guest_password = deploy.kubevirt.guest_passwd
-    ssh_master ={
-        'host': master,
-        'username': master_username,
-        'password': master_password}
     guest = provision.kubevirt_guest_ip(guest_name)
     if guest:
         ssh_guest = {
