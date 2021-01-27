@@ -501,6 +501,22 @@ class Register(Base):
             logger.info("Host({0}) is not found in stage server".format(host_name))
         return True
 
+    def stage_consumer_display(self, ssh, register_config, host_name, host_uuid, retry=True):
+        api = register_config['api']
+        username = register_config['username']
+        password = register_config['password']
+        consumer_uuid = self.stage_consumer_uuid(ssh, register_config, host_name, host_uuid, retry)
+        if consumer_uuid is not None and consumer_uuid != "":
+            cmd = "curl -s -k -u {0}:{1} -X GET {2}/consumers/{3}".format(
+                    username, password, api, consumer_uuid)
+            ret, output = self.runcmd(cmd, ssh)
+            if ret == 0 and output is not False and output is not None:
+                output = self.is_json(output.strip())
+                logger.info("Succeeded to get host display info :{0}".format(output['name']))
+            return output['name']
+        else:
+            logger.info("Failed to get host display info")
+
     def stage_consumer_attach(self, ssh, register_config, host_name, host_uuid, pool_id):
         api = register_config['api']
         username = register_config['username']
@@ -593,7 +609,7 @@ class Register(Base):
         logger.error("Failed to set satellite host for unregister_delete_host")
         return False
 
-    def satellite_host_id(self, ssh, register_config, host_name, host_uuid, retry=True):
+    def satellite_host_id(self, ssh, register_config, host_name, host_uuid, host_hwuuid=None, retry=True):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
@@ -601,6 +617,8 @@ class Register(Base):
                 username, password, api)
         for i in range(3):
             rex = [host_name, host_name.lower(), host_uuid, host_uuid.lower()]
+            if host_hwuuid is not None:
+                rex = [host_name, host_name.lower(), host_uuid, host_uuid.lower(), host_hwuuid, host_hwuuid.lower()]
             ret, output = self.runcmd(cmd, ssh, desc="satellite hosts list", debug=False)
             output = self.is_json(output.strip())
             if output is not False and output is not None and output != "" and 'results' in output.keys():
@@ -647,7 +665,7 @@ class Register(Base):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
-        host_id = self.satellite_host_id(ssh, register_config, host_name, host_uuid, retry)
+        host_id = self.satellite_host_id(ssh, register_config, host_name, host_uuid, retry=retry)
         if host_id is not None and host_id != "":
             cmd = "curl -X DELETE -s -k -u {0}:{1} {2}/api/v2/hosts/{3}".format(
                     username, password, api, host_id)
@@ -848,12 +866,12 @@ class Register(Base):
                 logger.info("Succeeded to search, unexpected host is not exist in org {0}".format(org_name))
                 return True
 
-    def satellite_hosts_get(self, ssh, register_config, host_name, host_uuid, desc=""):
+    def satellite_hosts_get(self, ssh, register_config, host_name, host_uuid, host_hwuuid=None, desc=""):
         admin_user = register_config['username']
         admin_passwd = register_config['password']
         server = register_config['server']
         baseurl = "https://{0}".format(server)
-        host_id = self.satellite_host_id(ssh, register_config, host_name, host_uuid)
+        host_id = self.satellite_host_id(ssh, register_config, host_name, host_uuid, host_hwuuid, True)
         cmd = "curl -X GET -s -k -u {0}:{1} {2}/api/v2/hosts/{3}" \
             .format(admin_user, admin_passwd, baseurl, host_id)
         ret, output = self.runcmd(str(cmd), ssh, desc=desc)
@@ -864,6 +882,12 @@ class Register(Base):
         else:
             logger.info("Failed to get host info")
             return None
+
+    def satellite_host_display(self, ssh, register_config, host_name, host_uuid, host_hwuuid=None,
+                               desc="get host dispaly name"):
+        output = self.satellite_hosts_get(ssh, register_config, host_name, host_uuid, host_hwuuid, desc)
+        return output['name']
+
 
     def satellite_active_key_create(self, ssh, register_config, key_name, org_id=1, desc=""):
         api = register_config['api']

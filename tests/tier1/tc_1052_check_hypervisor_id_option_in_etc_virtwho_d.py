@@ -40,15 +40,31 @@ class Testcase(Testing):
             results.setdefault(step, []).append(s1)
             if option == "hwuuid":
                 hypervisorId = host_hwuuid
+                hypervisor_display = host_hwuuid
             elif option == "hostname":
                 hypervisorId = host_name
+                hypervisor_display = host_name
             else:
                 hypervisorId = host_uuid
+                hypervisor_display = host_uuid
             if hypervisorId in data[register_owner].keys():
                 logger.info("Succeeded to search hypervisorId:{0}".format(hypervisorId))
                 results.setdefault(step, []).append(True)
             else:
                 logger.error("Failed to search hypervisorId:{0}".format(hypervisorId))
+                results.setdefault(step, []).append(False)
+            if 'satellite' in register_type:
+                host_display = self.satellite_host_display(self.ssh_host(), register_config,
+                                        host_name, host_uuid, host_hwuuid)
+            else:
+                hypervisor_display = host_name
+                host_display = self.stage_consumer_display(self.ssh_host(), register_config,
+                                        host_name, host_uuid, retry=True)
+            if hypervisor_display in host_display:
+                logger.info("Succeeded to search hypervisorDisplay:{0}".format(hypervisor_display))
+                results.setdefault(step, []).append(True)
+            else:
+                logger.error("Failed to search hypervisorDisplay:{0}".format(hypervisor_display))
                 results.setdefault(step, []).append(False)
             self.vw_option_del("hypervisor_id", filename=config_file)
             self.vw_web_host_delete(host_name, hypervisorId)
