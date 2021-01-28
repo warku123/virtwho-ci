@@ -884,10 +884,9 @@ class Register(Base):
             return None
 
     def satellite_host_display(self, ssh, register_config, host_name, host_uuid, host_hwuuid=None,
-                               desc="get host dispaly name"):
+                               desc="get host display name"):
         output = self.satellite_hosts_get(ssh, register_config, host_name, host_uuid, host_hwuuid, desc)
         return output['name']
-
 
     def satellite_active_key_create(self, ssh, register_config, key_name, org_id=1, desc=""):
         api = register_config['api']
