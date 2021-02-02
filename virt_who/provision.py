@@ -704,8 +704,6 @@ class Provision(Register):
 
     def jenkins_parameter(self, hypervisor_config, register_config):
         parameter = list()
-        node_label = self.get_exported_param("NODE_LABEL")
-        parameter.append('-d NODE_LABEL={0}'.format(node_label))
         parameter.append('-d TRIGGER_TYPE={0}'.format(deploy.trigger.type))
         parameter.append('-d VIRTWHO_HOST_IP={0}'.format(hypervisor_config['host_ip']))
         parameter.append('-d VIRTWHO_HOST_USER={0}'.format(hypervisor_config['host_user']))
@@ -740,6 +738,8 @@ class Provision(Register):
             parameter.append('-d BREW_TASK_ID={0}'.format(task_id))
             parameter.append('-d PACKAGE_NVR={0}'.format(pkg_nvr))
         else:
+            node_label = self.get_exported_param("NODE_LABEL")
+            parameter.append('-d NODE_LABEL={0}'.format(node_label))
             parameter.append('-d RHEL_COMPOSE={0}'.format(deploy.trigger.rhel_compose))
             parameter.append('-d TRIGGER_LEVEL={0}'.format(deploy.trigger.level))
         data = ' '.join(parameter)
