@@ -50,10 +50,10 @@ class Testcase(Testing):
             logger.info(">>>exp:{0}".format(exp))
             if check_type == "hypervisor":
                 output = self.satellite_hosts_get(self.ssh_host(), register_config,
-                                                  host_name, host_uuid, "get hypervisor info")
+                                                  host_name, host_uuid, desc="get hypervisor info")
             else:
                 output = self.satellite_hosts_get(self.ssh_host(), register_config,
-                                                  guest_name, guest_uuid, "get guest info")
+                                                  guest_name, guest_uuid, desc="get guest info")
             if output is not None:
                 user = output["subscription_facet_attributes"]["user"]
                 if user is not False and user is not None and 'login' in user.keys():

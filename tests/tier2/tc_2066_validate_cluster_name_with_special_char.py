@@ -49,7 +49,7 @@ class Testcase(Testing):
 
             logger.info(">>>step3: check the hyperivsor fact by hammer command")
             output = self.satellite_hosts_get(self.ssh_host(), register_config,
-                                              host_name, host_uuid, "get hypervisor info")
+                                              host_name, host_uuid, desc="get hypervisor info")
             cmd = "hammer host facts --name {}".format(output['name'])
             _, result = self.runcmd(cmd, ssh_register)
 
