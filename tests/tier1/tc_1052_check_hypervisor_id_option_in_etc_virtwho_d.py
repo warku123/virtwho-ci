@@ -54,13 +54,15 @@ class Testcase(Testing):
                 logger.error("Failed to search hypervisorId:{0}".format(hypervisorId))
                 results.setdefault(step, []).append(False)
             if 'satellite' in register_type:
-                host_display = self.satellite_host_display(self.ssh_host(), register_config,
-                                        host_name, host_uuid, host_hwuuid)
+                host_display = self.satellite_hosts_get(self.ssh_host(), register_config,
+                                        host_name, host_uuid, host_hwuuid, desc="get host display name")
+                host_display_name = host_display['name']
             else:
                 hypervisor_display = host_name
                 host_display = self.stage_consumer_display(self.ssh_host(), register_config,
                                         host_name, host_uuid, retry=True)
-            if hypervisor_display in host_display:
+                host_display_name = host_display['name']
+            if hypervisor_display in host_display_name:
                 logger.info("Succeeded to search hypervisorDisplay:{0}".format(hypervisor_display))
                 results.setdefault(step, []).append(True)
             else:

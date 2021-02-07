@@ -513,7 +513,7 @@ class Register(Base):
             if ret == 0 and output is not False and output is not None:
                 output = self.is_json(output.strip())
                 logger.info("Succeeded to get host display info :{0}".format(output['name']))
-            return output['name']
+            return output
         else:
             logger.info("Failed to get host display info")
 
@@ -882,11 +882,6 @@ class Register(Base):
         else:
             logger.info("Failed to get host info")
             return None
-
-    def satellite_host_display(self, ssh, register_config, host_name, host_uuid, host_hwuuid=None,
-                               desc="get host display name"):
-        output = self.satellite_hosts_get(ssh, register_config, host_name, host_uuid, host_hwuuid, desc)
-        return output['name']
 
     def satellite_active_key_create(self, ssh, register_config, key_name, org_id=1, desc=""):
         api = register_config['api']
