@@ -53,7 +53,7 @@ class Testcase(Testing):
         results.setdefault('step3', []).append(res2)
 
         logger.info(">>>step4: run virt-who with the new hypervisor's fqdn")
-        new_name = "newserver.rhts.eng.pek2.redhat.com"
+        new_name = "new" + str(random.randint(1, 10000)) + ".rhts.eng.pek2.redhat.com"
         self.vw_fake_json_update(host_name, new_name, json_file)
         data, tty_output, rhsm_output = self.vw_start(exp_send=1)
         res3 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
