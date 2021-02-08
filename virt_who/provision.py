@@ -740,6 +740,8 @@ class Provision(Register):
         else:
             node_label = self.get_exported_param("NODE_LABEL")
             parameter.append('-d NODE_LABEL={0}'.format(node_label))
+            provision_ini = self.get_exported_param("PROVISION_INI")
+            parameter.append('-d PROVISION_INI={0}'.format(provision_ini))
             parameter.append('-d RHEL_COMPOSE={0}'.format(deploy.trigger.rhel_compose))
             parameter.append('-d TRIGGER_LEVEL={0}'.format(deploy.trigger.level))
         data = ' '.join(parameter)
