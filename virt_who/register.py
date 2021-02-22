@@ -501,15 +501,15 @@ class Register(Base):
             logger.info("Host({0}) is not found in stage server".format(host_name))
         return True
 
-    def stage_consumer_display(self, ssh, register_config, host_name, host_uuid, retry=True):
+    def stage_consumer_get(self, ssh, register_config, host_name, host_uuid, desc=""):
         api = register_config['api']
         username = register_config['username']
         password = register_config['password']
-        consumer_uuid = self.stage_consumer_uuid(ssh, register_config, host_name, host_uuid, retry)
+        consumer_uuid = self.stage_consumer_uuid(ssh, register_config, host_name, host_uuid, True)
         if consumer_uuid is not None and consumer_uuid != "":
             cmd = "curl -s -k -u {0}:{1} -X GET {2}/consumers/{3}".format(
                     username, password, api, consumer_uuid)
-            ret, output = self.runcmd(cmd, ssh)
+            ret, output = self.runcmd(cmd, ssh, desc=desc)
             if ret == 0 and output is not False and output is not None:
                 output = self.is_json(output.strip())
                 logger.info("Succeeded to get host display info :{0}".format(output['name']))

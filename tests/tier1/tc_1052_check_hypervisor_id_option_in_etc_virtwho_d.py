@@ -59,8 +59,8 @@ class Testcase(Testing):
                 host_display_name = host_display['name']
             else:
                 hypervisor_display = host_name
-                host_display = self.stage_consumer_display(self.ssh_host(), register_config,
-                                        host_name, host_uuid, retry=True)
+                host_display = self.stage_consumer_get(self.ssh_host(), register_config,
+                                        host_name, host_uuid)
                 host_display_name = host_display['name']
             if hypervisor_display in host_display_name:
                 logger.info("Succeeded to search hypervisorDisplay:{0}".format(hypervisor_display))
