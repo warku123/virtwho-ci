@@ -552,6 +552,7 @@ class SetKubevirt(FeatureSettings):
         self.guest_port = None
         self.kube_config_file = None
         self.kube_config_url = None
+        self.kube_config_url_no_cert = None
 
     def read(self, reader):
         self.endpoint = reader.get('kubevirt', 'endpoint')
@@ -562,6 +563,7 @@ class SetKubevirt(FeatureSettings):
         self.guest_port = reader.get('kubevirt', 'guest_port')
         self.kube_config_file = reader.get('kubevirt', 'kube_config_file')
         self.kube_config_url = reader.get('kubevirt', 'kube_config_url')
+        self.kube_config_url_no_cert = reader.get('kubevirt', 'kube_config_url_no_cert')
 
 class DeploySettings(Settings):
     def __init__(self):
