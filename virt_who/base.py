@@ -319,27 +319,13 @@ class Base(unittest.TestCase):
         self.runcmd(cmd, ssh, desc="disable selinux")
 
     def bridge_setup(self, bridge_name, ssh):
-        host = ssh['host']
-        cmd = "ip route get 8.8.8.8 | awk 'NR==2 {print $1}' RS='dev'"
-        ret, output = self.runcmd(cmd, ssh, desc="get network device")
-        if ret == 0:
-            network_dev = output.strip()
-            if bridge_name not in output:
-                cmd_1 = "sed -i '/^BOOTPROTO/d' /etc/sysconfig/network-scripts/ifcfg-%s;" % network_dev
-                cmd_2 = "echo 'BRIDGE=%s' >> /etc/sysconfig/network-scripts/ifcfg-%s;" % (bridge_name, network_dev)
-                cmd_3 = "echo 'DEVICE=%s\nBOOTPROTO=dhcp\nONBOOT=yes\nTYPE=Bridge' > /etc/sysconfig/network-scripts/ifcfg-%s" % (bridge_name, bridge_name)
-                cmd = "%s %s %s" % (cmd_1, cmd_2, cmd_3)
-                ret, output = self.runcmd(cmd, ssh, desc="setup bridge")
-                if ret == 0:
-                    logger.info("Succeeded to create bridge:%s (%s)" % (bridge_name, host))
-                else:
-                    raise FailException("Failed to create bridge(%s)" % host)
-                cmd = "service NetworkManager stop; service network restart"
-                ret, output = self.runcmd(cmd, ssh, desc="restart network")
-            else:
-                logger.info("Bridge(%s) is ready(%s)" %(bridge_name, host))
-        else:
-            raise FailException("Failed to create bridge(%s)" % host)
+        root_path = os.path.abspath(os.path.join(os.getcwd(), "../"))
+        local_file = os.path.join(root_path,'utils/bridge_setup.sh')
+        remote_file = "/tmp/bridge_setup.sh"
+        self.paramiko_putfile(ssh, local_file, remote_file)
+        cmd = 'sh {0} -b {1}'.format(remote_file, bridge_name)
+        ret, output = self.runcmd(cmd, ssh)
+        logger.info(output)
 
     def get_hostname(self, ssh):
         ret, output = self.runcmd('hostname', ssh)
