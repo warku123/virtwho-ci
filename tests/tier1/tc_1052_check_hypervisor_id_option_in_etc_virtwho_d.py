@@ -62,7 +62,7 @@ class Testcase(Testing):
                 host_display = self.stage_consumer_get(self.ssh_host(), register_config,
                                         host_name, host_uuid)
                 host_display_name = host_display['name']
-            if hypervisor_display in host_display_name:
+            if hypervisor_display or hypervisor_display.lower() in host_display_name:
                 logger.info("Succeeded to search hypervisorDisplay:{0}".format(hypervisor_display))
                 results.setdefault(step, []).append(True)
             else:
