@@ -779,7 +779,7 @@ class Provision(Register):
             is_created = ""
             for i in range(3):
                 output = os.popen(cmd).readlines()
-                if 'Location:' in str(output):
+                if 'Location:' in str(output) or 'location:' in str(output):
                     is_created = 'yes'
                     break
                 logger.info(cmd)
@@ -795,8 +795,8 @@ class Provision(Register):
 
     def jenkins_job_url(self, data):
         for line in data:
-            if "Location" in line:
-                url = line.split('Location:')[1].strip()
+            if "Location" in line or "location" in line:
+                url = line.split('ocation:')[1].strip()
                 break
         cmd = "curl -k -s -u {0}:{1} {2}/api/json".format(
                 deploy.jenkins.username, deploy.jenkins.password, url)
