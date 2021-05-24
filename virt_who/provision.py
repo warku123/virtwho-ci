@@ -78,9 +78,9 @@ class Provision(Register):
         if not rhel_compose:
             base_url = deploy.repo.rhel_base
             if 'rhel-9' in rhel_release:
-                url = '{0}/rhel-9/nightly/RHEL-9/latest-RHEL-9.0.0/COMPOSE_ID'.format(base_url)
+                url = '{0}/rhel-9/nightly/RHEL-9-Beta/latest-RHEL-9.0.0/COMPOSE_ID'.format(base_url)
             if 'rhel-8' in rhel_release:
-                url = '{0}/rhel-8/nightly/RHEL-8/latest-RHEL-8.4/COMPOSE_ID'.format(base_url)
+                url = '{0}/rhel-8/nightly/RHEL-8/latest-RHEL-8.5/COMPOSE_ID'.format(base_url)
             if 'rhel-7' in rhel_release:
                 url = '{0}/rhel-7/rel-eng/RHEL-7/latest-RHEL-7/COMPOSE_ID'.format(base_url)
             if 'rhel-6' in rhel_release:
@@ -922,12 +922,7 @@ class Provision(Register):
                 repo_extra = "{0}/rhel-6/rel-eng/updates/{1}/{2}/compose/Server/optional/x86_64/os".format(
                     base_url, rhel_release, compose_id)
         elif ".n" in compose_id:
-            if "RHEL-9" in compose_id:
-                repo_base = "{0}/rhel-9/nightly/RHEL-9/{1}/compose/BaseOS/x86_64/os".format(
-                    base_url, compose_id)
-                repo_extra = "{0}/rhel-9/nightly/RHEL-9/{1}/compose/AppStream/x86_64/os".format(
-                    base_url, compose_id)
-            elif "RHEL-8" in compose_id:
+            if "RHEL-8" in compose_id:
                 repo_base = "{0}/rhel-8/nightly/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
                     base_url, compose_id)
                 repo_extra = "{0}/rhel-8/nightly/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
@@ -939,9 +934,9 @@ class Provision(Register):
                     base_url, compose_id)
         elif ".d" in compose_id:
             if "RHEL-9" in compose_id:
-                repo_base = "{0}/rhel-9/development/RHEL-9/{1}/compose/BaseOS/x86_64/os".format(
+                repo_base = "{0}/rhel-9/development/RHEL-9-Beta/{1}/compose/BaseOS/x86_64/os".format(
                     base_url, compose_id)
-                repo_extra = "{0}/rhel-9/development/RHEL-9/{1}/compose/AppStream/x86_64/os".format(
+                repo_extra = "{0}/rhel-9/development/RHEL-9-Beta/{1}/compose/AppStream/x86_64/os".format(
                     base_url, compose_id)
             elif "RHEL-8" in compose_id:
                 repo_base = "{0}/rhel-8/development/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
