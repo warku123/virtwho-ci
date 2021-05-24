@@ -1361,9 +1361,7 @@ class Provision(Register):
             ret, output = self.runcmd(cmd, ssh_sat, desc="uninstall katello-ca-consumer")
             cmd = "yum -y localinstall {0}".format(repo)
             ret, output = self.runcmd(cmd, ssh_sat, desc="install katello-ca")
-            cmd = "subscription-manager register --org Sat6-CI --activationkey '%s-%s.0-qa-rhel%s'" % (repo_type, sat_ver, rhel_ver)
-            if sat_ver >= "6.7" or sat_ver >= "67":
-                cmd = "subscription-manager register --org Sat6-CI --activationkey '%s-%s-qa-rhel%s'" % (repo_type, sat_ver, rhel_ver)
+            cmd = "subscription-manager register --org Sat6-CI --activationkey '%s-%s-qa-rhel%s'" % (repo_type, sat_ver, rhel_ver)
             ret, output = self.runcmd(cmd, ssh_sat, desc="register and enable repo")
             if ret == 0:
                 cmd = "subscription-manager attach --pool 8a88800f5ca45116015cc807610319ed"
