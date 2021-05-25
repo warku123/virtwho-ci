@@ -1394,10 +1394,7 @@ class Provision(Register):
             manifest_filename = "{0}/{1}".format(manifest_path, output.strip())
         else:
             raise FailException("No manifest file found")
-        if sat_ver >= "6.6":
-            options = "--disable-system-checks --foreman-initial-admin-password={0}".format(admin_passwd)
-        else:
-            options = "--disable-system-checks --foreman-admin-password={0}".format(admin_passwd)
+        options = "--disable-system-checks --foreman-initial-admin-password={0}".format(admin_passwd)
         cmd = "satellite-installer --scenario satellite {0}".format(options)
         ret, output = self.runcmd(cmd, ssh_sat)
         if ret != 0:
