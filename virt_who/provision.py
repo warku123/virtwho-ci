@@ -1343,7 +1343,8 @@ class Provision(Register):
                 --enable=rhel-{0}-server-satellite-maintenance-6-rpms \
                 --enable=rhel-{0}-server-satellite-capsule-{1}-rpms \
                 --enable=rhel-{0}-server-satellite-{1}-rpms \
-                --enable=rhel-{0}-server-satellite-tools-{1}-rpms".format(rhel_ver, sat_ver)
+                --enable=rhel-{0}-server-satellite-tools-{1}-rpms \
+                --enable=rhel-{0}-server-ansible-2.9-rpms".format(rhel_ver, sat_ver)
         status, output = self.run_loop(cmd, ssh_sat, desc="enable satellite repos")
         if status != "Yes":
             raise FailException("Failed to enable satellite repos({0})".format(sat_host))
