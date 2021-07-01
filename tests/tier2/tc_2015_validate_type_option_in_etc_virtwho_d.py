@@ -8,6 +8,7 @@ class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-136586')
         hypervisor_type = self.get_config('hypervisor_type')
+        compose_id = self.get_config('rhel_compose')
         if hypervisor_type in ('libvirt-local', 'vdsm'):
             self.vw_case_skip(hypervisor_type)
         self.vw_case_init()
@@ -28,32 +29,19 @@ class Testcase(Testing):
         res = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
         results.setdefault('step1', []).append(res)
 
-        logger.info(">>>step2: type option is wrong value")
-        self.vw_option_update_value(option_tested, "xxxxxx", config_file)
-        data, tty_output, rhsm_output = self.vw_start()
-        msg_list = ["virt-who can't be started"]
-        res1 = self.op_normal_value(data, exp_error=1, exp_thread=0, exp_send=0)
-        res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
-        results.setdefault('step2', []).append(res1)
-        results.setdefault('step2', []).append(res2)
-
-        logger.info(">>>step3: type option is 红帽€467aa value")
-        self.vw_option_update_value(option_tested, '红帽€467aa', config_file)
-        data, tty_output, rhsm_output = self.vw_start()
-        msg_list = ["virt-who can't be started"]
-        res1 = self.op_normal_value(data, exp_error=1, exp_thread=0, exp_send=0)
-        res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
-        results.setdefault('step3', []).append(res1)
-        results.setdefault('step3', []).append(res2)
-
-        logger.info(">>>step4: type option is null value")
-        self.vw_option_update_value(option_tested, '', config_file)
-        data, tty_output, rhsm_output = self.vw_start()
-        msg_list = ["virt-who can't be started"]
-        res1 = self.op_normal_value(data, exp_error=1, exp_thread=0, exp_send=0)
-        res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
-        results.setdefault('step4', []).append(res1)
-        results.setdefault('step4', []).append(res2)
+        steps = {'step2': 'xxx', 'step3': '红帽€467aa', 'step4': ''}
+        for step, value in sorted(steps.items(), key=lambda item: item[0]):
+            logger.info(f">>>{step}: type option is wrong '{value}'")
+            self.vw_option_update_value(option_tested, f"{value}", config_file)
+            data, tty_output, rhsm_output = self.vw_start()
+            res1 = self.op_normal_value(data, exp_error="1|2", exp_thread=0, exp_send=0)
+            res2 = self.msg_validation(rhsm_output, ["virt-who can't be started"])
+            results.setdefault(f'{step}', []).append(res1)
+            results.setdefault(f'{step}', []).append(res2)
+            if "RHEL-9" in compose_id:
+                res3 = self.msg_validation(rhsm_output,
+                                           [f"Unsupported virtual type '{value}' is set"])
+                results.setdefault(f'{step}', []).append(res3)
 
         logger.info(">>>step5: type option is disable")
         logger.warning("libvirt-local mode will be used to instead when type option is disabled")
@@ -83,7 +71,10 @@ class Testcase(Testing):
         self.vw_option_enable(option_tested, config_file)
         self.vw_option_update_value(option_tested, '', config_file)
         data, tty_output, rhsm_output = self.vw_start(exp_error=True)
-        res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+        error_num = 0
+        if "RHEL-9" in compose_id:
+            error_num = 1
+        res1 = self.op_normal_value(data, exp_error=error_num, exp_thread=1, exp_send=1)
         results.setdefault('step7', []).append(res1)
 
         # Case Result
