@@ -8,6 +8,7 @@ class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133657')
         trigger_type = self.get_config('trigger_type')
+        compose_id = self.get_config('rhel_compose')
         if "trigger-rhev" in trigger_type:
             self.vw_case_skip(trigger_type)
 
@@ -20,6 +21,8 @@ class Testcase(Testing):
         ret, output = self.runcmd("man virt-who-config", self.ssh_host())
         results.setdefault('step2', []).append("configuration for virt-who" in output)
         msg = "backend names: libvirt, esx, rhevm, hyperv, fake, xen, or kube.*\n.*virt"
+        if "RHEL-9" in compose_id:
+            msg = "backend names: libvirt, esx, rhevm, hyperv, fake, or kubevirt"
         results.setdefault('step2', []).append(self.vw_msg_search(output, msg))
 
         logger.info(">>>step3: virt-who have correct help page")
