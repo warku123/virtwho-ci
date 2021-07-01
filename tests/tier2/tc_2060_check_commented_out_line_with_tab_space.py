@@ -36,7 +36,7 @@ class Testcase(Testing):
         ret, output = self.runcmd(cmd, self.ssh_host(), desc="add new line with tab")
         data, tty_output, rhsm_output = self.vw_start(exp_send=0)
         msg = "virt-who can't be started"
-        res1 = self.op_normal_value(data, exp_error=1, exp_thread=0, exp_send=0)
+        res1 = self.op_normal_value(data, exp_error="1|2", exp_thread=0, exp_send=0)
         res2 = self.vw_msg_search(rhsm_output, msg)
         results.setdefault('step2', []).append(res1)
         results.setdefault('step2', []).append(res2)
@@ -44,14 +44,14 @@ class Testcase(Testing):
         logger.info(">>>step3: comment out the useless line")
         cmd = 'sed -i "s/xxx/#xxx/" {0}'.format(config_file)
         ret, output = self.runcmd(cmd, self.ssh_host())
-        if "RHEL-8" in compose_id:
-            data, tty_output, rhsm_output = self.vw_start(exp_send=1)
-            res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
         if "RHEL-7" in compose_id:
             war_msg = "A line continuation (line starts with space) that is commented " \
                       "out was detected in file"
             data, tty_output, rhsm_output = self.vw_start(exp_send=0)
             res1 = self.op_normal_value(data, exp_error=1, exp_thread=0, exp_send=0)
+        else:
+            data, tty_output, rhsm_output = self.vw_start(exp_send=1)
+            res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
         results.setdefault('step3', []).append(res1)
 
         # Case Result
