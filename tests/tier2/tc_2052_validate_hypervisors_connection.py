@@ -80,11 +80,5 @@ class Testcase(Testing):
                 results.setdefault('step3', []).append(False)
 
         # case result
-        if 'kubevirt' in hypervisor_type:
-            notes = list()
-            notes.append("Bug(Step2): No any response after kubevirt lost its connection with virt-who host")
-            notes.append("BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1712300")
-            self.vw_case_result(results, notes)
-        else:
-            self.vw_case_result(results)
+        self.vw_case_result(results)
 
