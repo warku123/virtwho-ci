@@ -14,8 +14,11 @@ class Testcase(Testing):
 
         results = dict()
         logger.info(">>>step1: virt-who have correct man page")
+        msg = "Agent for reporting virtual guest IDs to Subscription"
+        if "RHEL-9" in compose_id:
+            msg = "Agent  for  reporting  virtual guest IDs to an entitlement.*\n.*server"
         ret, output = self.runcmd("man virt-who", self.ssh_host(), desc="run man virt-who")
-        results.setdefault('step1', []).append("Agent for reporting virtual guest IDs to Subscription" in output)
+        results.setdefault('step1', []).append(self.vw_msg_search(output, msg))
 
         logger.info(">>>step2: virt-who-config have correct man page")
         ret, output = self.runcmd("man virt-who-config", self.ssh_host())
