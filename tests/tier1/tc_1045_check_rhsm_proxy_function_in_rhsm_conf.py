@@ -49,7 +49,7 @@ class Testcase(Testing):
             self.vw_option_update_value("proxy_hostname", bad_proxy_server, '/etc/rhsm/rhsm.conf')
             self.vw_option_update_value("proxy_port", bad_proxy_port, '/etc/rhsm/rhsm.conf')
             data, tty_output, rhsm_output = self.vw_start()
-            s1 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
+            s1 = self.op_normal_value(data, exp_error='1|2', exp_thread=1, exp_send=0)
             s2 = self.msg_validation(rhsm_output, error_msg, exp_exist=True)
             results.setdefault('step2', []).append(s1)
             results.setdefault('step2', []).append(s2)
