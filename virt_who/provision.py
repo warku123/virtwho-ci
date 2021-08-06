@@ -2590,6 +2590,9 @@ class Provision(Register):
             guest_mac = self.randomMAC()
             cmd = "sed -i -e 's|<mac address=.*/>|<mac address=\"{0}\"/>|g' {1}".format(guest_mac, guest_xml)
             self.runcmd(cmd, ssh_libvirt, desc="libvirt xml mac address update")
+            if self.rhel_version(ssh_libvirt) == "9":
+                cmd = "sed -i -e 's|<graphics type=.* |<graphics type=\"vnc\" |g' {0}".format(guest_xml)
+                self.runcmd(cmd, ssh_libvirt, desc="libvirt graphics type update")
         cmd = "virsh define {0}".format(guest_xml)
         ret, output = self.runcmd(cmd, ssh_libvirt, desc="libvirt define guest")
         logger.info("Succeeded to download libvirt image to {0}".format(ssh_libvirt['host']))
