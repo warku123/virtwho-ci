@@ -1431,3 +1431,33 @@ class Testing(Provision):
                 logger.info("virtwho loop time(%s) is expected" % loop_time)
         logger.info("Finished to validate all the expected options")
         return True
+
+    def vw_status(self, cmd='virt-who --status', if_json=False):
+        status_data = dict()
+        if if_json != False:
+            cmd += ' --json'
+        ret, output = self.runcmd(cmd, self.ssh_host())
+        if not if_json and 'Configuration Name' in output:
+            status = output.strip().split('\n')
+            for item in status:
+                num = status.index(item)
+                if 'Configuration Name' in item:
+                    config_name = item.split(':')[1].strip()
+                    status_data[config_name] = dict()
+                    if 'Source Status:' in status[num+1]:
+                        status_data[config_name]['source_status'] = \
+                            status[num+1].split(':')[1].strip()
+                    if 'Destination Status:' in status[num+2]:
+                        status_data[config_name]['destination_status'] = \
+                            status[num+2].split(':')[1].strip()
+        if if_json and 'configurations' in output:
+            output = json.loads(output.replace('\n', ''), strict=False)
+            configurations = output['configurations']
+            for item in configurations:
+                name = item['name']
+                status_data[name] = dict()
+                if 'source' in item.keys():
+                    status_data[name]['source'] = item['source']
+                if 'destination' in item.keys():
+                    status_data[name]['destination'] = item['destination']
+        return status_data
