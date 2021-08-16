@@ -77,6 +77,7 @@ fi
 docker exec -i $container_name sed -i 's/#UseDNS yes/UseDNS no/g' /etc/ssh/sshd_config
 docker exec -i $container_name sed -i 's/GSSAPIAuthentication yes/GSSAPIAuthentication no/g' /etc/ssh/sshd_config
 docker exec -i $container_name sed -i 's/#X11UseLocalhost yes/X11UseLocalhost no/g' /etc/ssh/sshd_config
+docker exec -i $container_name rm -rf /.dockerenv
 echo -e "" | docker exec -i $container_name ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key > /dev/null 2>&1
 echo -e "" | docker exec -i $container_name ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key > /dev/null 2>&1
 docker exec -i $container_name /usr/sbin/sshd
