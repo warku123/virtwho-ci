@@ -263,6 +263,9 @@ class SetStage(FeatureSettings):
         self.libvirt_local_user = None
         self.libvirt_local_passwd = None
         self.libvirt_local_org = None
+        self.ahv_user = None
+        self.ahv_passwd = None
+        self.ahv_org = None
 
     def read(self, reader):
         self.server = reader.get('stage', 'server')
@@ -293,6 +296,9 @@ class SetStage(FeatureSettings):
         self.libvirt_local_user = reader.get('stage', 'libvirt_local_user')
         self.libvirt_local_passwd = reader.get('stage', 'libvirt_local_passwd')
         self.libvirt_local_org = reader.get('stage', 'libvirt_local_org')
+        self.ahv_user = reader.get('stage', 'ahv_user')
+        self.ahv_passwd = reader.get('stage', 'ahv_passwd')
+        self.ahv_org = reader.get('stage', 'ahv_org')
 
 class SetSatellite(FeatureSettings):
     def __init__(self, *args, **kwargs):
