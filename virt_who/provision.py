@@ -519,6 +519,11 @@ class Provision(Register):
                 password = deploy.stage.libvirt_local_passwd
                 owner = deploy.stage.libvirt_local_org
                 env = deploy.stage.libvirt_local_org
+            if "ahv" in job_name:
+                username = deploy.stage.ahv_user
+                password = deploy.stage.ahv_passwd
+                owner = deploy.stage.ahv_org
+                env = deploy.stage.ahv_org
             if deploy.trigger.type == "trigger-gating":
                 username = deploy.stage.gate_user
                 password = deploy.stage.gate_passwd
