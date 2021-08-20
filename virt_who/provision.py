@@ -605,6 +605,14 @@ class Provision(Register):
             guest_name = deploy.hyperv.guest_name
             guest_user = deploy.hyperv.guest_user
             guest_passwd = deploy.hyperv.guest_passwd
+        if "ahv" in job_name:
+            hypervisor_type = "ahv"
+            hypervisor_server = deploy.ahv.master
+            hypervisor_user = deploy.ahv.master_user
+            hypervisor_passwd = deploy.ahv.master_passwd
+            guest_name = deploy.ahv.guest_name
+            guest_user = deploy.ahv.guest_user
+            guest_passwd = deploy.ahv.guest_passwd
         if "kubevirt" in job_name:
             hypervisor_type = "kubevirt"
             hypervisor_server = deploy.kubevirt.endpoint
