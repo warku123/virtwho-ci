@@ -194,7 +194,7 @@ class Testing(Provision):
                 'kubevirt',
                 'ahv',
                 'libvirt-remote',
-                'libvirt-local',
+                'libvirt-local'
                 ):
             return True
         raise FailException("Unsupported hypervisor_type: {0}".format(hypervisor_type))
