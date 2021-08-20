@@ -192,6 +192,7 @@ class Testing(Provision):
                 'vdsm',
                 'xen',
                 'kubevirt',
+                'ahv',
                 'libvirt-remote',
                 'libvirt-local'
                 ):
