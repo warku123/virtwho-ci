@@ -565,6 +565,32 @@ class SetKubevirt(FeatureSettings):
         self.kube_config_url = reader.get('kubevirt', 'kube_config_url')
         self.kube_config_url_no_cert = reader.get('kubevirt', 'kube_config_url_no_cert')
 
+class SetAhv(FeatureSettings):
+    def __init__(self, *args, **kwargs):
+        super(SetAhv, self).__init__(*args, **kwargs)
+        self.master = None
+        self.master_user = None
+        self.master_passwd = None
+        self.guest_name = None
+        self.guest_user = None
+        self.guest_passwd = None
+        self.host_name = None
+        self.host_uuid = None
+        self.guest_ip = None
+        self.guest_uuid = None
+
+    def read(self, reader):
+        self.master = reader.get('ahv', 'master')
+        self.master_user = reader.get('ahv', 'master_user')
+        self.master_passwd = reader.get('ahv', 'master_passwd')
+        self.guest_name = reader.get('ahv', 'guest_name')
+        self.guest_user = reader.get('ahv', 'guest_user')
+        self.guest_passwd = reader.get('ahv', 'guest_passwd')
+        self.host_name = reader.get('ahv', 'host_name')
+        self.host_uuid = reader.get('ahv', 'host_uuid')
+        self.guest_ip = reader.get('ahv', 'guest_ip')
+        self.guest_uuid = reader.get('ahv', 'guest_uuid')
+
 class DeploySettings(Settings):
     def __init__(self):
         self.trigger = SetTrigger()
@@ -585,6 +611,7 @@ class DeploySettings(Settings):
         self.vdsm = SetVDSM()
         self.libvirt = SetLibvirt()
         self.kubevirt = SetKubevirt()
+        self.ahv = SetAhv()
 
 class ConfigureVirtwho(FeatureSettings):
     def __init__(self, *args, **kwargs):

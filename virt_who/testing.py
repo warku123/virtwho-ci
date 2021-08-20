@@ -214,6 +214,8 @@ class Testing(Provision):
             hostname = self.get_hostname(ssh_hypervisor)
         if hypervisor_type == "kubevirt":
             hostname = self.kubevirt_guest_attrs(guest_name)['guest_node']
+        if hypervisor_type == "ahv":
+            hostname = self.ahv_host_name()
         if hypervisor_type == "rhevm":
             rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_hypervisor)
             hostname = self.rhevm_host_name_by_guestname(ssh_hypervisor, rhevm_shell, guest_name)
@@ -242,6 +244,8 @@ class Testing(Provision):
         if hypervisor_type == "kubevirt":
             node_name = self.kubevirt_guest_attrs(guest_name)['guest_node']
             uuid = self.kubevirt_host_attrs(node_name)['host_uuid']
+        if hypervisor_type == "ahv":
+            uuid = self.ahv_host_uuid()
         if hypervisor_type == "libvirt-local":
             uuid = self.libvirt_host_uuid(self.ssh_host())
         if hypervisor_type == "libvirt-remote":
@@ -283,6 +287,8 @@ class Testing(Provision):
             uuid = self.xen_guest_uuid(ssh_hypervisor, guest_name)
         if hypervisor_type == "kubevirt":
             uuid = self.kubevirt_guest_attrs(guest_name)['guest_id']
+        if hypervisor_type == "ahv":
+            uuid = self.ahv_guest_uuid()
         if hypervisor_type == "libvirt-local":
             uuid = self.libvirt_guest_uuid(guest_name, self.ssh_host())
         if hypervisor_type == "libvirt-remote":

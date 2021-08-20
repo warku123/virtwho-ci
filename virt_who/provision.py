@@ -47,6 +47,8 @@ class Provision(Register):
             remote_modes.append("kubevirt")
         if "libvirt-remote" in hypervisor_list:
             remote_modes.append("libvirt-remote")
+        if "ahv" in hypervisor_list:
+            remote_modes.append("ahv")
         if "libvirt-local" in hypervisor_list:
             local_modes.append("libvirt-local")
         if "vdsm" in hypervisor_list:
@@ -277,6 +279,13 @@ class Provision(Register):
                         args=(mode_queue, mode_type)
                     )
                 )
+            if "ahv" in mode_type:
+                mode_threads.append(
+                    threading.Thread(
+                        target=self.guest_ahv_setup,
+                        args=(mode_queue, mode_type)
+                    )
+                )
             if "esx" in mode_type:
                 mode_threads.append(
                     threading.Thread(
@@ -410,6 +419,8 @@ class Provision(Register):
                     job_name = "runtest-rhevm"
                 if "kubevirt" in key:
                     job_name = "runtest-kubevirt"
+                if "ahv" in key:
+                    job_name = "runtest-ahv"
                 if "libvirt-remote" in key:
                     job_name = "runtest-libvirt-remote"
                 if "libvirt-local" in key:
@@ -444,6 +455,9 @@ class Provision(Register):
                 if "kubevirt" in key and 'kubevirt-guest-ip' in guests.keys():
                     job_name = "runtest-kubevirt"
                     guest_ip = guests['kubevirt-guest-ip']
+                if "ahv" in key and 'ahv-guest-ip' in guests.keys():
+                    job_name = "runtest-ahv"
+                    guest_ip = guests['ahv-guest-ip']
                 if "libvirt-remote" in key and 'libvirt-remote-guest-ip' in guests.keys():
                     job_name = "runtest-libvirt-remote"
                     guest_ip = guests['libvirt-remote-guest-ip']
@@ -1714,6 +1728,16 @@ class Provision(Register):
         self.system_init("ci-guest-hyperv", ssh_guest)
         mode_queue.put((mode_type, guest_ip))
 
+    def guest_ahv_setup(self, mode_queue, mode_type):
+        guest_name = deploy.ahv.guest_name
+        guest_user = deploy.ahv.guest_user
+        guest_passwd = deploy.ahv.guest_passwd
+        guest_ip = self.ahv_guest_ip()
+        logger.info("Succeeded to get ahv guest ip: {0}".format(guest_ip))
+        ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
+        self.system_init("ci-guest-ahv", ssh_guest)
+        mode_queue.put((mode_type, guest_ip))
+
     def guest_xen_setup(self, mode_queue, mode_type):
         # get deploy settings for xen mode
         master = deploy.xen.master
@@ -2511,6 +2535,22 @@ class Provision(Register):
         guest_port = deploy.kubevirt.guest_port
         guest_ip = "{0}:{1}".format(guest_attrs['guest_node'], guest_port)
         return guest_ip
+
+    #*********************************************
+    # Hypervisor Nutanix Function
+    #*********************************************
+
+    def ahv_guest_ip(self):
+        return deploy.ahv.guest_ip
+
+    def ahv_guest_uuid(self):
+        return deploy.ahv.guest_uuid
+
+    def ahv_host_uuid(self):
+        return deploy.ahv.host_uuid
+
+    def ahv_host_name(self):
+        return deploy.ahv.host_name
 
     #*********************************************
     # Hypervisor Libvirt Function
