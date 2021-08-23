@@ -11,6 +11,7 @@ class Testcase(Testing):
 
         # case config
         results = dict()
+        guest_uuid = self.get_hypervisor_guestuuid()
         virt_type = {
                 'libvirt-local'     :'kvm',
                 'libvirt-remote'    :'kvm',
@@ -20,6 +21,7 @@ class Testcase(Testing):
                 'hyperv'            :'hyperv',
                 'xen'               :'xen',
                 'kubevirt'          :'kvm',
+                'ahv'               :'nutanix_ahv'
                 }
 
         # case steps
@@ -28,7 +30,7 @@ class Testcase(Testing):
         ret, output = self.runcmd(cmd, self.ssh_guest())
         logger.info(output)
         virt_uuid = output.split(':')[1].strip()
-        results.setdefault('step1', []).append(virt_uuid is not None and virt_uuid !="")
+        results.setdefault('step1', []).append(virt_uuid.lower() == guest_uuid.lower())
 
         logger.info(">>>step2: check virt.host_type fact by subscription-manager in guest")
         hypervisor_type = self.get_config('hypervisor_type')
@@ -36,7 +38,7 @@ class Testcase(Testing):
         ret, output = self.runcmd(cmd, self.ssh_guest())
         logger.info(output)
         virt_host_type = output.split(':')[1].strip()
-        results.setdefault('step2', []).append(virt_type[hypervisor_type.lower()] in virt_host_type)
+        results.setdefault('step2', []).append(virt_type[hypervisor_type.lower()] == virt_host_type)
 
         logger.info(">>>step3: check virt.is_guest fact by subscription-manager in guest")
         cmd = "subscription-manager facts --list | grep virt.is_guest"
