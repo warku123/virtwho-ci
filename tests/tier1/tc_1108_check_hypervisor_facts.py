@@ -28,21 +28,22 @@ class Testcase(Testing):
         register_config = self.get_register_config()
         register_owner = register_config['owner']
         host_uuid = self.get_hypervisor_hostuuid()
-        if hypervisor_type in ('esx', 'rhevm'):
-            facts_items = ('socket', 'type', 'dmi', 'version', 'cluster')
-        else:
-            facts_items = ('socket', 'type', 'dmi', 'version')
+        facts_items = ['socket', 'type', 'dmi', 'version']
+        if hypervisor_type in ('esx', 'rhevm', 'ahv'):
+            facts_items.append('cluster')
         type_values = {
             'kubevirt': 'qemu',
             'xen': 'XenServer',
             'hyperv': 'hyperv',
             'esx': 'VMware ESXi',
             'libvirt-remote': 'QEMU',
-            'rhevm': 'qemu'
+            'rhevm': 'qemu',
+            'ahv': 'ahv'
         }
         cluster_values = {
-            'esx': 'virtwho-test',
-            'rhevm': 'Default'
+            'esx': deploy.vcenter.cluster,
+            'rhevm': deploy.rhevm.cluster,
+            'ahv': deploy.ahv.cluster
         }
 
         # Case Steps
@@ -89,7 +90,7 @@ class Testcase(Testing):
             logger.error("dmi.system.uuid is not {0}".format(host_uuid))
             results.setdefault('step4', []).append(False)
 
-        if hypervisor_type in ('esx', 'rhevm'):
+        if hypervisor_type in ('esx', 'rhevm', 'ahv'):
             logger.info(">>>step5: check hypervisor.cluster value")
             cluster_value = cluster_values[hypervisor_type]
             if facts_dic['cluster'] == cluster_value:

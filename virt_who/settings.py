@@ -348,6 +348,7 @@ class SetVcenter(FeatureSettings):
         self.master = None
         self.master_user = None
         self.master_passwd = None
+        self.cluster = None
         self.slave = None
         self.slave_user = None
         self.slave_passwd = None
@@ -365,6 +366,7 @@ class SetVcenter(FeatureSettings):
         self.master = reader.get('vcenter', 'master')
         self.master_user = reader.get('vcenter', 'master_user')
         self.master_passwd = reader.get('vcenter', 'master_passwd')
+        self.cluster = reader.get('vcenter', 'cluster')
         self.slave = reader.get('vcenter', 'slave')
         self.slave_user = reader.get('vcenter', 'slave_user')
         self.slave_passwd = reader.get('vcenter', 'slave_passwd')
@@ -577,6 +579,7 @@ class SetAhv(FeatureSettings):
         self.master = None
         self.master_user = None
         self.master_passwd = None
+        self.cluster = None
         self.guest_name = None
         self.guest_user = None
         self.guest_passwd = None
@@ -589,6 +592,7 @@ class SetAhv(FeatureSettings):
         self.master = reader.get('ahv', 'master')
         self.master_user = reader.get('ahv', 'master_user')
         self.master_passwd = reader.get('ahv', 'master_passwd')
+        self.cluster = reader.get('ahv', 'cluster')
         self.guest_name = reader.get('ahv', 'guest_name')
         self.guest_user = reader.get('ahv', 'guest_user')
         self.guest_passwd = reader.get('ahv', 'guest_passwd')
