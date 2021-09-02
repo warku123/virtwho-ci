@@ -424,12 +424,12 @@ class Testing(Provision):
                 cmd2 = "NetSh Advfirewall set allprofiles state off"
             ret, output = self.runcmd(cmd1, ssh_hypervisor)
             ret, output = self.runcmd(cmd2, ssh_hypervisor)
-        if hypervisor_type == "kubevirt":
-            kubevirt_host = ssh_hypervisor['host']
+        if hypervisor_type == "kubevirt" or hypervisor_type == "ahv":
+            hypervisor_host = ssh_hypervisor['host']
             if action == "off":
-                cmd = "iptables -I INPUT -s {0} -j DROP".format(kubevirt_host)
+                cmd = "iptables -I INPUT -s {0} -j DROP".format(hypervisor_host)
             if action == "on":
-                cmd = "iptables -D INPUT -s {0} -j DROP".format(kubevirt_host)
+                cmd = "iptables -D INPUT -s {0} -j DROP".format(hypervisor_host)
             ret, output = self.runcmd(cmd, ssh_host)
 
     #******************************************
