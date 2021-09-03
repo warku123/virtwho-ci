@@ -9,6 +9,7 @@ class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-136627')
         hypervisor_type = self.get_config('hypervisor_type')
+        compose_id = self.get_config('rhel_compose')
         if hypervisor_type in ('libvirt-local', 'vdsm'):
             self.vw_case_skip(hypervisor_type)
         self.vw_case_init()
@@ -45,7 +46,10 @@ class Testcase(Testing):
             logger.info(">>>step2: run virt-who with rhsm_hostname=xxxxxx")
             self.vw_option_update_value("rhsm_hostname", "xxxxxx", config_file)
             data, tty_output, rhsm_output = self.vw_start()
-            res1 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
+            error_num = 1
+            if 'RHEL-9' in compose_id:
+                error_num = 2
+            res1 = self.op_normal_value(data, exp_error=error_num, exp_thread=1, exp_send=0)
             res2 = self.vw_msg_search(rhsm_output, "Name or service not known")
             results.setdefault('step2', []).append(res1)
             results.setdefault('step2', []).append(res2)

@@ -9,6 +9,7 @@ class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-136631')
         hypervisor_type = self.get_config('hypervisor_type')
+        compose_id = self.get_config('rhel_compose')
         if hypervisor_type in ('libvirt-local', 'vdsm'):
             self.vw_case_skip(hypervisor_type)
         self.vw_case_init()
@@ -53,7 +54,6 @@ class Testcase(Testing):
         '''红帽©¥®ðπ∉ password is supported by candlepin'''
         self.vw_option_update_value("rhsm_password", "红帽©¥®ðπ∉", config_file)
         data, tty_output, rhsm_output = self.vw_start()
-        compose_id = self.get_config('rhel_compose')
         if "RHEL-7" in compose_id:
             msg = "not in latin1 encoding"
             res1 = self.op_normal_value(data, exp_error="1|2", exp_thread=0, exp_send=0)
@@ -70,7 +70,10 @@ class Testcase(Testing):
         error_msg = "system is not registered or you are not root"
         self.vw_option_update_value("rhsm_password", " ", config_file)
         data, tty_output, rhsm_output = self.vw_start()
-        res1 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
+        error_num = 1
+        if 'RHEL-9' in compose_id:
+            error_num = 2
+        res1 = self.op_normal_value(data, exp_error=error_num, exp_thread=1, exp_send=0)
         res2 = self.vw_msg_search(rhsm_output, error_msg)
         results.setdefault('step4', []).append(res1)
         results.setdefault('step4', []).append(res2)
@@ -78,7 +81,7 @@ class Testcase(Testing):
         logger.info(">>>step5: run virt-who with rhsm_password disable")
         self.vw_option_disable("rhsm_password", config_file)
         data, tty_output, rhsm_output = self.vw_start()
-        res1 = self.op_normal_value(data, exp_error=1, exp_thread=1, exp_send=0)
+        res1 = self.op_normal_value(data, exp_error=error_num, exp_thread=1, exp_send=0)
         res2 = self.vw_msg_search(rhsm_output, error_msg)
         results.setdefault('step5', []).append(res1)
         results.setdefault('step5', []).append(res2)
