@@ -38,7 +38,8 @@ class Testcase(Testing):
                     "Incorrect.*username|"
                     "Unauthorized|"
                     "Error.* backend|"
-                    "Permission denied"]
+                    "Permission denied|"
+                    "HTTP Auth Failed"]
         res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=1, exp_send=0)
         res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
         results.setdefault('step2', []).append(res1)
@@ -51,7 +52,8 @@ class Testcase(Testing):
                     "Incorrect.*username|"
                     "Unauthorized|"
                     "Error.* backend|"
-                    "Permission denied"]
+                    "Permission denied|"
+                    "HTTP Auth Failed"]
         self.vw_option_update_value(option_tested, '红帽€467aa', config_file)
         data, tty_output, rhsm_output = self.vw_start()
         compose_id = self.get_config('rhel_compose')
@@ -88,7 +90,8 @@ class Testcase(Testing):
                         "Incorrect.*username|"
                         "Unauthorized|"
                         "Error.* backend|"
-                        "Permission denied"]
+                        "Permission denied|"
+                        "HTTP Auth Failed"]
             res1 = self.op_normal_value(data, exp_error="0|1|2", exp_thread=1, exp_send=0)
             res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
             results.setdefault('step4', []).append(res1)
@@ -143,7 +146,8 @@ class Testcase(Testing):
                         "Incorrect.*username|"
                         "Unauthorized|"
                         "Error.* backend|"
-                        "Permission denied"]
+                        "Permission denied|"
+                        "HTTP Auth Failed"]
             res1 = self.op_normal_value(data, exp_error="1|2", exp_thread=1, exp_send=1)
             res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
             results.setdefault('step7', []).append(res1)

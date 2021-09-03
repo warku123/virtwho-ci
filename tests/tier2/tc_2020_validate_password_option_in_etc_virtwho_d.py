@@ -27,7 +27,8 @@ class Testcase(Testing):
                     "Incorrect.*username|"
                     "Unauthorized|"
                     "Error.* backend|"
-                    "Permission denied"]
+                    "Permission denied|"
+                    "HTTP Auth Failed"]
 
         # Case Steps
         logger.info(">>>step1: password option is good value")
