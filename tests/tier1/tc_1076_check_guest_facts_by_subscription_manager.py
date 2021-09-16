@@ -38,7 +38,7 @@ class Testcase(Testing):
         ret, output = self.runcmd(cmd, self.ssh_guest())
         logger.info(output)
         virt_host_type = output.split(':')[1].strip()
-        results.setdefault('step2', []).append(virt_type[hypervisor_type.lower()] == virt_host_type)
+        results.setdefault('step2', []).append(virt_type[hypervisor_type.lower()] in virt_host_type)
 
         logger.info(">>>step3: check virt.is_guest fact by subscription-manager in guest")
         cmd = "subscription-manager facts --list | grep virt.is_guest"
