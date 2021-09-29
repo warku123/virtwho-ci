@@ -50,6 +50,7 @@ class Testing(Provision):
             server = self.get_exported_param("HYPERVISOR_{0}_SERVER".format(uid))
             username = self.get_exported_param("HYPERVISOR_{0}_USERNAME".format(uid))
             password = self.get_exported_param("HYPERVISOR_{0}_PASSWORD".format(uid))
+            ssh_ip = self.get_exported_param("HYPERVISOR_{0}_SSH_IP".format(uid))
             ssh_user = self.get_exported_param("HYPERVISOR_{0}_SSH_USER".format(uid))
             ssh_passwd = self.get_exported_param("HYPERVISOR_{0}_SSH_PASSWD".format(uid))
             guest_ip = self.get_exported_param("HYPERVISOR_{0}_GUEST_IP".format(uid))
@@ -62,6 +63,7 @@ class Testing(Provision):
             server = self.get_exported_param("HYPERVISOR_SERVER")
             username = self.get_exported_param("HYPERVISOR_USERNAME")
             password = self.get_exported_param("HYPERVISOR_PASSWORD")
+            ssh_ip = self.get_exported_param("HYPERVISOR_SSH_IP")
             ssh_user = self.get_exported_param("HYPERVISOR_SSH_USER")
             ssh_passwd = self.get_exported_param("HYPERVISOR_SSH_PASSWD")
             guest_ip = self.get_exported_param("GUEST_IP")
@@ -75,6 +77,8 @@ class Testing(Provision):
                 username = config.hypervisor.server_username
             if not password:
                 password = config.hypervisor.server_password
+            if not ssh_ip:
+                ssh_ip = config.hypervisor.server_ssh_ip
             if not ssh_user:
                 ssh_user = config.hypervisor.server_ssh_user
             if not ssh_passwd:
@@ -103,7 +107,8 @@ class Testing(Provision):
             if "//" not in server:
                 server = self.rhevm_admin_get(ssh_hypervisor)
         if "esx" in hypervisor_type:
-            ssh_hypervisor = {"host":server_ip,"username":ssh_user,"password":ssh_passwd}
+            # the ssh_hypervisor of esx is the windows to run powercli command
+            ssh_hypervisor = {"host":ssh_ip,"username":ssh_user,"password":ssh_passwd}
         configs = {
                 'type':hypervisor_type,
                 'server':server,

@@ -1698,8 +1698,9 @@ class Provision(Register):
     def guest_esx_setup(self, mode_queue, mode_type):
         # get deploy settings for esx mode
         vcenter_ip = deploy.vcenter.ip
-        vcenter_ssh_user = deploy.vcenter.ssh_user
-        vcenter_ssh_passwd = deploy.vcenter.ssh_passwd
+        cli_ssh_ip = deploy.vcenter.ssh_ip
+        cli_ssh_user = deploy.vcenter.ssh_user
+        cli_ssh_passwd = deploy.vcenter.ssh_passwd
         vcenter_admin_user = deploy.vcenter.admin_user
         vcenter_admin_passwd = deploy.vcenter.admin_passwd
         master = deploy.vcenter.master
@@ -1710,13 +1711,13 @@ class Provision(Register):
         guest_passwd = deploy.vcenter.guest_passwd
         image_path = deploy.vcenter.image_path
         # set ssh env for vcenter, master
-        ssh_vcenter = {"host":vcenter_ip,"username":vcenter_ssh_user,"password":vcenter_ssh_passwd}
+        ssh_cli = {"host":cli_ssh_ip,"username":cli_ssh_user,"password":cli_ssh_passwd}
         cert = self.vcenter_cert(vcenter_ip, vcenter_admin_user, vcenter_admin_passwd)
-        guest_ip = self.vcenter_guest_ip(cert, ssh_vcenter, guest_name)
+        guest_ip = self.vcenter_guest_ip(cert, ssh_cli, guest_name)
         if not guest_ip:
             ssh_master = {"host":master,"username":master_user,"password":master_passwd}
-            self.vcenter_host_ready(cert, ssh_vcenter, ssh_master)
-            guest_ip = self.vcenter_guest_add(cert, ssh_vcenter, ssh_master, guest_name, image_path)
+            self.vcenter_host_ready(cert, ssh_cli, ssh_master)
+            guest_ip = self.vcenter_guest_add(cert, ssh_cli, ssh_master, guest_name, image_path)
         logger.info("Succeeded to get vcenter guest ip: {0}".format(guest_ip))
         ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
         self.system_init("ci-guest-esx", ssh_guest)
@@ -1898,9 +1899,9 @@ class Provision(Register):
                 % (admin_server, admin_user, admin_passwd)
         return cert 
 
-    def vcenter_host_get(self, cert, ssh_vcenter, guest_name):
+    def vcenter_host_get(self, cert, ssh_cli, guest_name):
         cmd = "%s Get-VM %s | select *" % (cert, guest_name)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
+        ret, output = self.runcmd(cmd, ssh_cli)
         if ret == 0:
             for line in output.splitlines():
                 if re.match(r"^VMHost .*:", line):
@@ -1909,17 +1910,17 @@ class Provision(Register):
         else:
             raise FailException("Failed to get vcenter host")
 
-    def vcenter_fqdn_set(self, cert, ssh_vcenter, esx_host, fqdn):
+    def vcenter_fqdn_set(self, cert, ssh_cli, esx_host, fqdn):
         cmd = "%s (Get-EsxCli -VMhost %s).system.hostname.set($null, '%s', $null)" % (cert, esx_host, fqdn)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
+        ret, output = self.runcmd(cmd, ssh_cli)
         if ret == 0:
-            return self.vcenter_fqdn_get(cert, ssh_vcenter, esx_host)
+            return self.vcenter_fqdn_get(cert, ssh_cli, esx_host)
         else:
             raise FailException("Failed to set vcenter host fqdn")
 
-    def vcenter_fqdn_get(self, cert, ssh_vcenter, esx_host):
+    def vcenter_fqdn_get(self, cert, ssh_cli, esx_host):
         cmd = "%s (Get-EsxCli -VMhost %s).system.hostname.get()|select FullyQualifiedDomainName" % (cert, esx_host)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
+        ret, output = self.runcmd(cmd, ssh_cli)
         if ret == 0:
             for line in output.splitlines():
                 if re.match(r"^FullyQualifiedDomainName .*:", line):
@@ -1928,23 +1929,23 @@ class Provision(Register):
         else:
             raise FailException("Failed to get vcenter host fqdn")
 
-    def vcenter_host_exist(self, cert, ssh_vcenter, esx_host):
+    def vcenter_host_exist(self, cert, ssh_cli, esx_host):
         cmd = "%s Get-VMHost -Name %s" % (cert, esx_host)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
+        ret, output = self.runcmd(cmd, ssh_cli)
         if ret == 0:
             return True
         else:
             return False
 
-    def vcenter_host_ready(self, cert, ssh_vcenter, ssh_esx):
-        if self.vcenter_host_exist(cert, ssh_vcenter, ssh_esx['host']):
+    def vcenter_host_ready(self, cert, ssh_cli, ssh_esx):
+        if self.vcenter_host_exist(cert, ssh_cli, ssh_esx['host']):
             return "ready"
         else:
-            self.vcenter_host_add(cert, ssh_vcenter, ssh_esx)
+            self.vcenter_host_add(cert, ssh_cli, ssh_esx)
 
-    def vcenter_host_uuid(self, cert, ssh_vcenter, esx_host):
+    def vcenter_host_uuid(self, cert, ssh_cli, esx_host):
         cmd = "%s Get-VMHost -Name %s | %%{(Get-View $_.Id).Hardware.SystemInfo}" % (cert, esx_host)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
+        ret, output = self.runcmd(cmd, ssh_cli)
         if ret == 0:
             for line in output.splitlines():
                 if re.match(r"^Uuid.*:", line):
@@ -1954,9 +1955,9 @@ class Provision(Register):
         else:
             raise FailException("Failed to get esx host uuid")
 
-    def vcenter_host_hwuuid(self, cert, ssh_vcenter, esx_host):
+    def vcenter_host_hwuuid(self, cert, ssh_cli, esx_host):
         cmd = "%s Get-VMHost -Name %s | %%{(Get-View $_.Id).MoRef}" % (cert, esx_host)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
+        ret, output = self.runcmd(cmd, ssh_cli)
         if ret == 0 and "HostSystem" in output:
             for line in output.splitlines():
                 if re.match(r"^Value.*:", line):
@@ -1966,9 +1967,9 @@ class Provision(Register):
         else:
             raise FailException("Failed to get esx host hwuuid")
 
-    def vcenter_host_datastore(self, cert, ssh_vcenter, esx_host):
+    def vcenter_host_datastore(self, cert, ssh_cli, esx_host):
         cmd = "%s Get-Datastore -VMHost %s | %%{(Get-View $_.Id)}" % (cert, esx_host)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
+        ret, output = self.runcmd(cmd, ssh_cli)
         if ret == 0:
             for line in output.splitlines():
                 if re.match(r"^Name.*:", line):
@@ -1977,20 +1978,20 @@ class Provision(Register):
         else:
             raise FailException("Failed to get esx host datastore")
 
-    def vcenter_host_add(self, cert, ssh_vcenter, ssh_esx):
+    def vcenter_host_add(self, cert, ssh_cli, ssh_esx):
         esx_host = ssh_esx['host']
         esx_host_user = ssh_esx['username']
         esx_host_passwd = ssh_esx['password']
         cmd = "%s Add-VMHost %s -Location Datacenter -User %s -Password %s -confirm:$false" \
                 % (cert, esx_host, esx_host_user, esx_host_passwd)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
-        if self.vcenter_host_exist(cert, ssh_vcenter, esx_host) is False:
+        ret, output = self.runcmd(cmd, ssh_cli)
+        if self.vcenter_host_exist(cert, ssh_cli, esx_host) is False:
             raise FailException("Failed to add esx host {0}".format(esx_host))
 
-    def vcenter_host_delete(self, cert, ssh_vcenter, esx_host):
+    def vcenter_host_delete(self, cert, ssh_cli, esx_host):
         cmd = "%s Remove-VMHost %s -confirm:$false" % (cert, esx_host)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
-        if self.vcenter_host_exist(cert, ssh_vcenter, esx_host):
+        ret, output = self.runcmd(cmd, ssh_cli)
+        if self.vcenter_host_exist(cert, ssh_cli, esx_host):
             raise FailException("Failed to delete esx host")
 
     def vcenter_guest_images(self, ssh_esx, guest_name, image_path):
@@ -2007,17 +2008,17 @@ class Provision(Register):
         cmd = "rm -f /vmfs/volumes/datastore*/*.tar.gz"
         ret, output = self.runcmd(cmd, ssh_esx)
 
-    def vcenter_guest_exist(self, cert, ssh_vcenter, guest_name):
+    def vcenter_guest_exist(self, cert, ssh_cli, guest_name):
         cmd = "%s Get-VM -Name %s" % (cert, guest_name)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
+        ret, output = self.runcmd(cmd, ssh_cli)
         if ret == 0:
             return True
         else:
             return False
 
-    def vcenter_guest_uuid(self, cert, ssh_vcenter, guest_name):
+    def vcenter_guest_uuid(self, cert, ssh_cli, guest_name):
         cmd = "%s Get-VM %s | %%{(Get-View $_.Id).config}" % (cert, guest_name)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
+        ret, output = self.runcmd(cmd, ssh_cli)
         if ret == 0:
             version = ''
             uuid = ''
@@ -2036,9 +2037,9 @@ class Provision(Register):
         else:
             raise FailException("Failed to get vcenter guest uuid")
 
-    def vcenter_guest_status(self, cert, ssh_vcenter, guest_name):
+    def vcenter_guest_status(self, cert, ssh_cli, guest_name):
         cmd = "%s Get-VM -Name %s" % (cert, guest_name)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
+        ret, output = self.runcmd(cmd, ssh_cli)
         if ret == 0:
             for line in output.splitlines():
                 if re.match(r"^PowerState.*:", line):
@@ -2047,10 +2048,10 @@ class Provision(Register):
         else:
             raise FailException("Failed to get esx guest status")
 
-    def vcenter_guest_ip(self, cert, ssh_vcenter, guest_name):
+    def vcenter_guest_ip(self, cert, ssh_cli, guest_name):
         cmd = "%s Get-VM %s | %%{(Get-View $_.Id).Guest}" % (cert, guest_name)
         for i in range(10):
-            ret, output = self.runcmd(cmd, ssh_vcenter)
+            ret, output = self.runcmd(cmd, ssh_cli)
             if ret == 0 and "IpAddress" in output:
                 datalines = output.splitlines()
                 for line in datalines:
@@ -2061,31 +2062,31 @@ class Provision(Register):
             logger.info("No guest ip found for vcenter, try again after 30s...")
             time.sleep(30)
 
-    def vcenter_guest_add(self, cert, ssh_vcenter, ssh_esx, guest_name, image_path):
+    def vcenter_guest_add(self, cert, ssh_cli, ssh_esx, guest_name, image_path):
         esx_host = ssh_esx['host']
-        if self.vcenter_guest_exist(cert, ssh_vcenter, guest_name):
-            self.vcenter_guest_delete(cert, ssh_vcenter, guest_name)
+        if self.vcenter_guest_exist(cert, ssh_cli, guest_name):
+            self.vcenter_guest_delete(cert, ssh_cli, guest_name)
         self.vcenter_guest_images(ssh_esx, guest_name, image_path)
-        datastore = self.vcenter_host_datastore(cert, ssh_vcenter, esx_host)
+        datastore = self.vcenter_host_datastore(cert, ssh_cli, esx_host)
         vmxFile = "'[{0}] {1}/{1}.vmx'".format(datastore, guest_name)
         cmd = "%s New-VM -VMFilePath %s -VMHost %s" % (cert, vmxFile, esx_host)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
-        if self.vcenter_guest_exist(cert, ssh_vcenter, guest_name):
+        ret, output = self.runcmd(cmd, ssh_cli)
+        if self.vcenter_guest_exist(cert, ssh_cli, guest_name):
             logger.info("Succeeded to add vcenter guest")
         else:
             raise FailException("Failed to add vcenter guest")
-        return self.vcenter_guest_start(cert, ssh_vcenter, guest_name)
+        return self.vcenter_guest_start(cert, ssh_cli, guest_name)
 
-    def vcenter_guest_delete(self, cert, ssh_vcenter, guest_name):
-        if self.vcenter_guest_status(cert, ssh_vcenter, guest_name) == "PoweredOn":
-            self.vcenter_guest_stop(cert, ssh_vcenter, guest_name)
+    def vcenter_guest_delete(self, cert, ssh_cli, guest_name):
+        if self.vcenter_guest_status(cert, ssh_cli, guest_name) == "PoweredOn":
+            self.vcenter_guest_stop(cert, ssh_cli, guest_name)
         for i in range(5):
             cmd = "%s Remove-VM -VM %s -DeletePermanently -Confirm:$false" % (cert, guest_name)
-            ret, output = self.runcmd(cmd, ssh_vcenter)
+            ret, output = self.runcmd(cmd, ssh_cli)
             if ret !=0 and "Powered on" in output:
                 logger.info("guest still power on, try again")
-                self.vcenter_guest_stop(cert, ssh_vcenter, guest_name)
-            elif self.vcenter_guest_exist(cert, ssh_vcenter, guest_name):
+                self.vcenter_guest_stop(cert, ssh_cli, guest_name)
+            elif self.vcenter_guest_exist(cert, ssh_cli, guest_name):
                 logger.info("guest still exist, try again")
             else:
                 logger.info("Succeeded to delete vcenter guest")
@@ -2093,57 +2094,57 @@ class Provision(Register):
             time(10)
         raise FailException("Failed to delete vcenter guest")
 
-    def vcenter_guest_start(self, cert, ssh_vcenter, guest_name):
+    def vcenter_guest_start(self, cert, ssh_cli, guest_name):
         cmd = "%s Start-VM -VM %s -Confirm:$false" % (cert, guest_name)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
+        ret, output = self.runcmd(cmd, ssh_cli)
         for i in range(10):
             cmd = '%s Get-VM %s | Get-VMQuestion | Set-VMQuestion -Option "button.uuid.copiedTheVM" -Confirm:$false' \
                     % (cert, guest_name)
-            ret, output = self.runcmd(cmd, ssh_vcenter, desc="vcenter guest question check")
+            ret, output = self.runcmd(cmd, ssh_cli, desc="vcenter guest question check")
             time.sleep(30)
-            if self.vcenter_guest_status(cert, ssh_vcenter, guest_name) == "PoweredOn":
+            if self.vcenter_guest_status(cert, ssh_cli, guest_name) == "PoweredOn":
                 logger.info("Succeeded to start vcenter guest")
-                guest_ip = self.vcenter_guest_ip(cert, ssh_vcenter, guest_name)
+                guest_ip = self.vcenter_guest_ip(cert, ssh_cli, guest_name)
                 return guest_ip
             logger.warning("vcenter guest status is not PoweredOn, check again after 15s...")
         raise FailException("Failed to start vcenter guest")
 
-    def vcenter_guest_stop(self, cert, ssh_vcenter, guest_name):
+    def vcenter_guest_stop(self, cert, ssh_cli, guest_name):
         cmd = "%s Stop-VM -VM %s -Kill -Confirm:$false" % (cert, guest_name)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
+        ret, output = self.runcmd(cmd, ssh_cli)
         for i in range(10):
-            if self.vcenter_guest_status(cert, ssh_vcenter, guest_name) == "PoweredOff":
+            if self.vcenter_guest_status(cert, ssh_cli, guest_name) == "PoweredOff":
                 logger.info("Succeeded to stop vcenter guest")
                 return True
             logger.warning("vcenter guest status is not PoweredOff, check again after 15s...")
             time.sleep(15)
         raise FailException("Failed to stop vcenter guest")
 
-    def vcenter_guest_suspend(self, cert, ssh_vcenter, guest_name):
+    def vcenter_guest_suspend(self, cert, ssh_cli, guest_name):
         cmd = "%s Suspend-VM -VM %s -Confirm:$false" % (cert, guest_name)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
+        ret, output = self.runcmd(cmd, ssh_cli)
         for i in range(10):
-            if self.vcenter_guest_status(cert, ssh_vcenter, guest_name) == "Suspended":
+            if self.vcenter_guest_status(cert, ssh_cli, guest_name) == "Suspended":
                 logger.info("Succeeded to suspend vcenter guest")
                 return True
             logger.warning("vcenter guest status is not Suspended, check again after 15s...")
             time.sleep(15)
         raise FailException("Failed to suspend vcenter guest")
 
-    def vcenter_guest_resume(self, cert, ssh_vcenter, guest_name):
+    def vcenter_guest_resume(self, cert, ssh_cli, guest_name):
         cmd = "%s Start-VM -VM %s -Confirm:$false" % (cert, guest_name)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
+        ret, output = self.runcmd(cmd, ssh_cli)
         for i in range(10):
-            if self.vcenter_guest_status(cert, ssh_vcenter, guest_name) == "PoweredOn":
+            if self.vcenter_guest_status(cert, ssh_cli, guest_name) == "PoweredOn":
                 logger.info("Succeeded to resume vcenter guest")
                 return True
             logger.warning("vcenter guest status is not PoweredOn, check again after 15s...")
             time.sleep(15)
         raise FailException("Failed to resume vcenter guest")
 
-    def vcenter_cluster_get(self, cert, ssh_vcenter, option='Name'):
+    def vcenter_cluster_get(self, cert, ssh_cli, option='Name'):
         cmd = "%s Get-Cluster | select *" % (cert)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
+        ret, output = self.runcmd(cmd, ssh_cli)
         if ret == 0:
             for line in output.splitlines():
                 if re.match(r"^{} .*:".format(option), line):
@@ -2152,15 +2153,15 @@ class Provision(Register):
         else:
             raise FailException("Failed to get cluster {}".format(option))
 
-    def vcenter_cluster_name_set(self, cert, ssh_vcenter, old_name, new_name):
-        if self.vcenter_cluster_get(cert, ssh_vcenter) == new_name:
+    def vcenter_cluster_name_set(self, cert, ssh_cli, old_name, new_name):
+        if self.vcenter_cluster_get(cert, ssh_cli) == new_name:
             logger.info("The cluster name is already {}, no need to reset".format(new_name))
             return
         cmd = "{0} Set-Cluster -Cluster {1} -Name {2} -Confirm:$false".format(
             cert, old_name, new_name)
-        ret, output = self.runcmd(cmd, ssh_vcenter)
+        ret, output = self.runcmd(cmd, ssh_cli)
         if ret == 0:
-            if self.vcenter_cluster_get(cert, ssh_vcenter) == new_name:
+            if self.vcenter_cluster_get(cert, ssh_cli) == new_name:
                 logger.info("Succeeded to set the cluster name to {}".format(new_name))
                 return
         else:

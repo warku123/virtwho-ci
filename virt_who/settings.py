@@ -343,6 +343,7 @@ class SetVcenter(FeatureSettings):
         self.ip = None
         self.admin_user = None
         self.admin_passwd = None
+        self.ssh_ip = None
         self.ssh_user = None
         self.ssh_passwd = None
         self.master = None
@@ -361,7 +362,8 @@ class SetVcenter(FeatureSettings):
         self.ip = reader.get('vcenter', 'ip')
         self.admin_user = reader.get('vcenter', 'admin_user')
         self.admin_passwd = reader.get('vcenter', 'admin_passwd') 
-        self.ssh_user = reader.get('vcenter', 'ssh_user') 
+        self.ssh_ip = reader.get('vcenter', 'ssh_ip')
+        self.ssh_user = reader.get('vcenter', 'ssh_user')
         self.ssh_passwd = reader.get('vcenter', 'ssh_passwd')
         self.master = reader.get('vcenter', 'master')
         self.master_user = reader.get('vcenter', 'master_user')
@@ -646,6 +648,7 @@ class ConfigureHypervisor(FeatureSettings):
         self.server = None
         self.server_username = None
         self.server_password = None
+        self.server_ssh_ip = None
         self.server_ssh_user = None
         self.server_ssh_passwd = None
         self.server_config = None
@@ -659,6 +662,7 @@ class ConfigureHypervisor(FeatureSettings):
         self.server = reader.get('hypervisor', 'server')
         self.server_username = reader.get('hypervisor', 'server_username')
         self.server_password = reader.get('hypervisor', 'server_password')
+        self.server_ssh_ip = reader.get('hypervisor', 'server_ssh_ip')
         self.server_ssh_user = reader.get('hypervisor', 'server_ssh_user')
         self.server_ssh_passwd = reader.get('hypervisor', 'server_ssh_passwd')
         self.server_config = reader.get('hypervisor', 'server_config')
