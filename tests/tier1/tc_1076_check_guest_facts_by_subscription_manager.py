@@ -11,6 +11,13 @@ class Testcase(Testing):
 
         # case config
         results = dict()
+        virtwho_conf = "/etc/virt-who.conf"
+        self.vw_option_enable('[global]', virtwho_conf)
+        self.vw_option_enable('debug', virtwho_conf)
+        self.vw_option_update_value('debug', 'True', virtwho_conf)
+        config_name = "virtwho-config"
+        config_file = "/etc/virt-who.d/{0}.conf".format(config_name)
+        self.vw_etc_d_mode_create(config_name, config_file)
         guest_uuid = self.get_hypervisor_guestuuid()
         virt_type = {
                 'libvirt-local'     :'kvm',
