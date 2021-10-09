@@ -961,9 +961,9 @@ class Provision(Register):
                     base_url, compose_id)
         elif ".d" in compose_id:
             if "RHEL-9" in compose_id:
-                repo_base = "{0}/rhel-9/development/RHEL-9-Beta/{1}/compose/BaseOS/x86_64/os".format(
+                repo_base = "{0}/rhel-9/composes/RHEL-9/{1}/compose/BaseOS/x86_64/os".format(
                     base_url, compose_id)
-                repo_extra = "{0}/rhel-9/development/RHEL-9-Beta/{1}/compose/AppStream/x86_64/os".format(
+                repo_extra = "{0}/rhel-9/composes/RHEL-9/{1}/compose/AppStream/x86_64/os".format(
                     base_url, compose_id)
             elif "RHEL-8" in compose_id:
                 repo_base = "{0}/rhel-8/development/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
