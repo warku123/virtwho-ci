@@ -42,7 +42,8 @@ class Testcase(Testing):
             'xen':              'xen_ak',
             'vdsm':             'vdsm_ak',
             'rhevm':            'rhevm_ak',
-            'kubevirt':         'kubevirt_ak'
+            'kubevirt':         'kubevirt_ak',
+            'ahv':              'ahv_ak'
             }
         ak_name = ak_list[hypervisor_type]
         host_uuid = self.get_hypervisor_hostuuid()
