@@ -576,6 +576,7 @@ class Provision(Register):
         else:
             host_user = deploy.docker.container_user
             host_passwd = deploy.docker.container_passwd
+        hypervisor_ssh_ip = ""
         hypervisor_ssh_user = ""
         hypervisor_ssh_passwd = ""
         hypervisor_config_file = ""
@@ -584,6 +585,7 @@ class Provision(Register):
             hypervisor_server = deploy.vcenter.ip
             hypervisor_user = deploy.vcenter.admin_user
             hypervisor_passwd = deploy.vcenter.admin_passwd
+            hypervisor_ssh_ip = deploy.vcenter.ssh_ip
             hypervisor_ssh_user = deploy.vcenter.ssh_user
             hypervisor_ssh_passwd = deploy.vcenter.ssh_passwd
             guest_name = deploy.vcenter.guest_name
@@ -673,6 +675,7 @@ class Provision(Register):
                 'hypervisor_server':hypervisor_server,
                 'hypervisor_user':hypervisor_user,
                 'hypervisor_passwd':hypervisor_passwd,
+                'hypervisor_ssh_ip':hypervisor_ssh_ip,
                 'hypervisor_ssh_user':hypervisor_ssh_user,
                 'hypervisor_ssh_passwd':hypervisor_ssh_passwd,
                 'hypervisor_config_file':hypervisor_config_file,
@@ -739,6 +742,7 @@ class Provision(Register):
         parameter.append('-d HYPERVISOR_SERVER={0}'.format(hypervisor_config['hypervisor_server']))
         parameter.append('-d HYPERVISOR_USERNAME={0}'.format(hypervisor_config['hypervisor_user']))
         parameter.append('-d HYPERVISOR_PASSWORD={0}'.format(hypervisor_config['hypervisor_passwd']))
+        parameter.append('-d HYPERVISOR_SSH_IP={0}'.format(hypervisor_config['hypervisor_ssh_ip']))
         parameter.append('-d HYPERVISOR_SSH_USER={0}'.format(hypervisor_config['hypervisor_ssh_user']))
         parameter.append('-d HYPERVISOR_SSH_PASSWD={0}'.format(hypervisor_config['hypervisor_ssh_passwd']))
         parameter.append('-d HYPERVISOR_CONFIG_FILE={0}'.format(hypervisor_config['hypervisor_config_file']))
