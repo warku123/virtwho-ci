@@ -32,14 +32,14 @@ class Testcase(Testing):
         res1 = self.op_normal_value(data, exp_error=0, exp_thread=0, exp_send=1)
         results.setdefault('step1', []).append(res1)
 
-        logger.info(">>>step2: Check #virt-who --status")
+        logger.info(">>>step2: Check '#virt-who --status' with good configuration")
         status = self.vw_status()
         results.setdefault('step2', []).append(
             'success' in status[config_name]['source_status'] and
             'success' in status[config_name]['destination_status']
         )
 
-        logger.info(">>>step3: Check #virt-who -s")
+        logger.info(">>>step3: Check '#virt-who -s' with good configuration")
         status = self.vw_status(cmd='virt-who -s')
         results.setdefault('step3', []).append(
             'success' in status[config_name]['source_status'] and
@@ -71,6 +71,27 @@ class Testcase(Testing):
             destination['status'] == 'success' and
             destination['last_successful_send'].split(' ')[2] == 'UTC' and
             destination['last_successful_send_job_status'] == 'FINISHED'
+        )
+
+        logger.info(">>>step5: Check '#virt-who -s' with bad configuration")
+        if 'kubevirt' in hypervisor_type:
+            self.vw_option_update_value('kubeconfig', 'xxx', config_file)
+        else:
+            self.vw_option_update_value('server', 'xxx', config_file)
+        self.vw_option_update_value('owner', 'xxx', config_file)
+        status = self.vw_status(cmd='virt-who -s')
+        results.setdefault('step5', []).append(
+            'failure' in status[config_name]['source_status'] and
+            'failure' in status[config_name]['destination_status']
+        )
+
+        logger.info(">>>step6: Check '#virt-who --status --json' with bad configuration")
+        json = self.vw_status(if_json=True)
+        source = json[config_name]['source']
+        destination = json[config_name]['destination']
+        results.setdefault('step6', []).append(
+            source['status'] == 'failure' and
+            destination['status'] == 'failure'
         )
 
         # case result
