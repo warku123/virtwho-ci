@@ -1009,3 +1009,15 @@ class Register(Base):
         else:
             raise FailException("Failed to set auto_attach")
 
+    def satellite_sca_enable(self, ssh, register_config, org_id=1):
+        api = register_config['api']
+        username = register_config['username']
+        password = register_config['password']
+        curl_header = '-H "Accept:application/json" -H "Content-Type:application/json"'
+        cmd = "curl {0} -X PUT -s -k -u {1}:{2} {3}/katello/api/organizations/{4}/upstream_subscriptions/simple_content_access/enable".format(
+                curl_header, username, password, api, org_id)
+        ret, output = self.runcmd(cmd, ssh)
+        if ret == 0 and output is not False and output is not None and output != "":
+            logger.info("Succeeded to enable SCA for satellite")
+        else:
+            raise FailException("Failed to enable SCA for satellite")
