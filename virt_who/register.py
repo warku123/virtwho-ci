@@ -581,6 +581,23 @@ class Register(Base):
                 ret, output = self.runcmd(cmd, ssh)
                 logger.info("Finished to cancel job {0}".format(job_id))
 
+    def stage_sca_set(self, ssh, register_config, enable=True):
+        api = register_config['api']
+        username = register_config['username']
+        password = register_config['password']
+        owner = register_config['owner']
+        curl_header = '-H "accept: application/json" -H "Content-Type: application/json"'
+        data = '{"contentAccessMode": "org_environment"}'
+        if not enable:
+            data = '{"contentAccessMode": "entitlement"}'
+        json_data = json.dumps(data)
+        cmd = f"curl -X PUT -s -k -u {username}:{password} -d {json_data} {curl_header} {api}/owners/{owner}"
+        ret, output = self.runcmd(cmd, ssh)
+        if ret == 0:
+            logger.info(f"Succeeded to set stage candlepin with SCA={enable}")
+        else:
+            raise FailException(f"Failed to set stage candlepin with SCA={enable}")
+
     #**************************************
     # Satellite API Function
     #**************************************
