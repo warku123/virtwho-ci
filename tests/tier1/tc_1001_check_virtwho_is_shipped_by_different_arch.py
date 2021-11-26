@@ -14,31 +14,21 @@ class Testcase(Testing):
 
         # case config
         results = dict()
-        arch_list = list()
         pkg = self.pkg_check(self.ssh_host(), 'virt-who')
         if pkg is False:
             raise FailException("virt-who pkg is not found")
         if compose_id is None or compose_id == "":
             raise FailException("compose_id is not defined")
-        rhel_url = deploy.repo.rhel_base
-        rhel_release = compose_id.split('.')[0]
-        if "updates" in compose_id:
-            baseurl = "{0}/{1}/rel-eng/updates/{2}".format(rhel_url, rhel_release.lower(), rhel_release)
-        elif ".n" in compose_id:
-            baseurl = "{0}/{1}/nightly/{2}".format(rhel_url, rhel_release.lower(), rhel_release)
-        elif ".d" in compose_id:
-            baseurl = "{0}/{1}/development/{2}".format(rhel_url, rhel_release.lower(), rhel_release)
-        elif "RHEL-9" in compose_id:
-            baseurl = "{0}/{1}/composes/{2}".format(rhel_url, rhel_release.lower(), rhel_release)
-        else:
-            baseurl = "{0}/{1}/rel-eng/{2}".format(rhel_url, rhel_release.lower(), rhel_release)
-        if "RHEL-8" in compose_id or "RHEL-9" in compose_id:
-            arch_list = [
-                    'x86_64',
-                    'ppc64le',
-                    'aarch64',
-                    's390x']
+        repo_base, repo_extra = self.rhel_compose_url(compose_id)
+
+        baseurl = repo_extra.split("/x86_64/")[0]
+        arch_list = [
+                'x86_64',
+                'ppc64le',
+                'aarch64',
+                's390x']
         if "RHEL-7" in compose_id:
+            baseurl = repo_base.split("/Server/x86_64/")[0]
             arch_list = [
                     'Client/x86_64',
                     'Server/x86_64',
@@ -46,25 +36,10 @@ class Testcase(Testing):
                     'Server/ppc64le', 
                     'Server/s390x', 
                     'Workstation/x86_64']
-        if "RHEL-6" in compose_id:
-            arch_list = [
-                    'Client/x86_64',
-                    'Client/i386', 
-                    'ComputeNode/x86_64', 
-                    'Server/i386', 
-                    'Server/x86_64', 
-                    'Server/ppc64', 
-                    'Server/s390x', 
-                    'Workstation/i386', 
-                    'Workstation/x86_64',]
+
         # case steps
         for arch in arch_list:
-            if "RHEL-7" in compose_id:
-                pkg_url = "{0}/{1}/compose/{2}/os/Packages/{3}".format(
-                    baseurl, compose_id, arch, pkg)
-            else:
-                pkg_url = "{0}/{1}/compose/AppStream/{2}/os/Packages/{3}".format(
-                    baseurl, compose_id, arch, pkg)
+            pkg_url = f"{baseurl}/{arch}/os/Packages/{pkg}"
             if self.url_validation(pkg_url):
                 results.setdefault('step1', []).append(True)
                 logger.info("{0} is exist in arch: {1}".format(pkg, arch))
