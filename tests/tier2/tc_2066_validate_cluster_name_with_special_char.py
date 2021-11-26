@@ -35,8 +35,8 @@ class Testcase(Testing):
         host_name = self.get_hypervisor_hostname()
 
         cert = self.vcenter_cert(config['server'], config['username'], config['password'])
-        cluster_name = self.vcenter_cluster_get(cert, ssh_hypervisor)
-        new_cluster_name = "virtwho/test"
+        cluster_name = deploy.vcenter.cluster
+        new_cluster_name = "virtwho/test-" + ''.join(random.sample(string.digits, 6))
 
         # Case Steps
         try:

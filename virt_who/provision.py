@@ -2131,24 +2131,25 @@ class Provision(Register):
         cmd = "%s Get-Cluster | select *" % (cert)
         ret, output = self.runcmd(cmd, ssh_cli)
         if ret == 0:
+            name_list = []
             for line in output.splitlines():
                 if re.match(r"^{} .*:".format(option), line):
                     cluster_name = line.split(':')[1].strip()
-                    return cluster_name
+                    name_list.append(cluster_name)
+            return name_list
         else:
             raise FailException("Failed to get cluster {}".format(option))
 
     def vcenter_cluster_name_set(self, cert, ssh_cli, old_name, new_name):
-        if self.vcenter_cluster_get(cert, ssh_cli) == new_name:
-            logger.info("The cluster name is already {}, no need to reset".format(new_name))
+        if new_name in self.vcenter_cluster_get(cert, ssh_cli):
+            logger.info("The cluster name {} is already exist, no need to reset".format(new_name))
             return
         cmd = "{0} Set-Cluster -Cluster {1} -Name {2} -Confirm:$false".format(
             cert, old_name, new_name)
         ret, output = self.runcmd(cmd, ssh_cli)
-        if ret == 0:
-            if self.vcenter_cluster_get(cert, ssh_cli) == new_name:
-                logger.info("Succeeded to set the cluster name to {}".format(new_name))
-                return
+        if ret == 0 and new_name in self.vcenter_cluster_get(cert, ssh_cli):
+            logger.info("Succeeded to set the cluster name {0} to {1}".format(old_name, new_name))
+            return
         else:
             raise FailException("Failed to set the cluster name")
 
