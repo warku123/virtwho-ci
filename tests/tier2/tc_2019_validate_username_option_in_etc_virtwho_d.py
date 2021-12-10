@@ -22,6 +22,15 @@ class Testcase(Testing):
         config_name = "virtwho-config"
         config_file = "/etc/virt-who.d/{0}.conf".format(config_name)
         self.vw_etc_d_mode_create(config_name, config_file)
+        error_msg = ["Unable to login|"
+                     "incorrect user.*|"
+                     "Authentication failure|"
+                     "Authentication failed|"
+                     "Incorrect.*username|"
+                     "Unauthorized|"
+                     "Error.* backend|"
+                     "Permission denied|"
+                     "HTTP Auth Failed"]
 
         # Case Steps
         logger.info(">>>step1: username option is good value")
@@ -32,30 +41,12 @@ class Testcase(Testing):
         logger.info(">>>step2: username option is wrong value")
         self.vw_option_update_value(option_tested, "xxxxxx", config_file)
         data, tty_output, rhsm_output = self.vw_start()
-        msg_list = ["Unable to login|"
-                    "incorrect user.*|"
-                    "Authentication failure|"
-                    "Authentication failed|"
-                    "Incorrect.*username|"
-                    "Unauthorized|"
-                    "Error.* backend|"
-                    "Permission denied|"
-                    "HTTP Auth Failed"]
         res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=1, exp_send=0)
-        res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
+        res2 = self.msg_validation(rhsm_output, error_msg, exp_exist=True)
         results.setdefault('step2', []).append(res1)
         results.setdefault('step2', []).append(res2)
 
         logger.info(">>>step3: username option is 红帽€467aa value")
-        msg_list = ["Unable to login|"
-                    "incorrect user.*|"
-                    "Authentication failure|"
-                    "Authentication failed|"
-                    "Incorrect.*username|"
-                    "Unauthorized|"
-                    "Error.* backend|"
-                    "Permission denied|"
-                    "HTTP Auth Failed"]
         self.vw_option_update_value(option_tested, '红帽€467aa', config_file)
         data, tty_output, rhsm_output = self.vw_start()
         compose_id = self.get_config('rhel_compose')
@@ -64,7 +55,7 @@ class Testcase(Testing):
             if pkg[16:21] >= '2.20':
                 res1 = self.op_normal_value(
                     data, exp_error="1|2|3", exp_thread=1, exp_send=0)
-                res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
+                res2 = self.msg_validation(rhsm_output, error_msg, exp_exist=True)
             else:
                 msg = "not in latin1 encoding"
                 res1 = self.op_normal_value(
@@ -73,7 +64,7 @@ class Testcase(Testing):
         else:
             res1 = self.op_normal_value(
                 data, exp_error="1|2|3", exp_thread=1, exp_send=0)
-            res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
+            res2 = self.msg_validation(rhsm_output, error_msg, exp_exist=True)
         results.setdefault('step3', []).append(res1)
         results.setdefault('step3', []).append(res2)
 
@@ -86,17 +77,8 @@ class Testcase(Testing):
             res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
             results.setdefault('step4', []).append(res1)
         else:
-            msg_list = ["Unable to login|"
-                        "incorrect user.*|"
-                        "Authentication failure|"
-                        "Authentication failed|"
-                        "Incorrect.*username|"
-                        "Unauthorized|"
-                        "Error.* backend|"
-                        "Permission denied|"
-                        "HTTP Auth Failed"]
             res1 = self.op_normal_value(data, exp_error="0|1|2", exp_thread=1, exp_send=0)
-            res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
+            res2 = self.msg_validation(rhsm_output, error_msg, exp_exist=True)
             results.setdefault('step4', []).append(res1)
             results.setdefault('step4', []).append(res2)
 
@@ -143,17 +125,8 @@ class Testcase(Testing):
             res1 = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
             results.setdefault('step7', []).append(res1)
         else:
-            msg_list = ["Unable to login|"
-                        "incorrect user.*|"
-                        "Authentication failure|"
-                        "Authentication failed|"
-                        "Incorrect.*username|"
-                        "Unauthorized|"
-                        "Error.* backend|"
-                        "Permission denied|"
-                        "HTTP Auth Failed"]
             res1 = self.op_normal_value(data, exp_error="1|2", exp_thread=1, exp_send=1)
-            res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
+            res2 = self.msg_validation(rhsm_output, error_msg, exp_exist=True)
             results.setdefault('step7', []).append(res1)
             results.setdefault('step7', []).append(res2)
 
