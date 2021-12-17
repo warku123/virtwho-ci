@@ -24,6 +24,7 @@ class Testcase(Testing):
         msg_list = ["Unable to login|"
                     "incorrect user.*|"
                     "Authentication failure|"
+                    "Authentication failed|"
                     "Incorrect.*username|"
                     "Unauthorized|"
                     "Error.* backend|"
