@@ -407,35 +407,14 @@ class Testing(Provision):
         config = self.get_hypervisor_config(uid)
         hypervisor_type = config['type']
         ssh_hypervisor = config['ssh_hypervisor']
-        ssh_host = self.ssh_host()
-        host = ssh_host['host']
-        if ":" in host:
-            var = host.split(':')
-            host = var[0]
-        if hypervisor_type == "rhevm" \
-                or hypervisor_type == "libvirt-remote" \
-                or hypervisor_type == "xen":
-            if action == "off":
-                cmd = "iptables -I INPUT -s {0} -j DROP".format(host)
-            if action == "on":
-                cmd = "iptables -D INPUT -s {0} -j DROP".format(host)
-            ret, output = self.runcmd(cmd, ssh_hypervisor)
-        if hypervisor_type == "esx" or hypervisor_type == "hyperv":
-            if action == "off":
-                cmd1 = "NetSh Advfirewall set allprofiles state on"
-                cmd2 = r'netsh advfirewall firewall add rule name="BLOCKED IP" interface=any dir=in action=block remoteip={0}'.format(host)
-            if action == "on":
-                cmd1 = r'netsh advfirewall firewall delete rule name="BLOCKED IP" remoteip={0}'.format(host)
-                cmd2 = "NetSh Advfirewall set allprofiles state off"
-            ret, output = self.runcmd(cmd1, ssh_hypervisor)
-            ret, output = self.runcmd(cmd2, ssh_hypervisor)
-        if hypervisor_type == "kubevirt" or hypervisor_type == "ahv":
-            hypervisor_host = ssh_hypervisor['host']
-            if action == "off":
-                cmd = "iptables -I INPUT -s {0} -j DROP".format(hypervisor_host)
-            if action == "on":
-                cmd = "iptables -D INPUT -s {0} -j DROP".format(hypervisor_host)
-            ret, output = self.runcmd(cmd, ssh_host)
+        hypervisor_host = ssh_hypervisor['host']
+        # for esx mode, the hypervisor_host is just the windows client
+        if hypervisor_type == "esx":
+            hypervisor_host = config['server']
+        cmd = "iptables -D INPUT -s {0} -j DROP".format(hypervisor_host)
+        if action == "off":
+            cmd = "iptables -I INPUT -s {0} -j DROP".format(hypervisor_host)
+        ret, output = self.runcmd(cmd, self.ssh_host())
 
     #******************************************
     # virt-who config function
