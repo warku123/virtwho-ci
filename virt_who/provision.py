@@ -1210,7 +1210,7 @@ class Provision(Register):
         reserve = "--reserve --reserve-duration 259200 --priority Urgent"
         job_group = "--job-group=virt-who-ci-server-group"
         if os_type == "virtual":
-            ent_vm = '''--hostrequire "<and><system><name op='like' value='%ent-02-vm%'/></system></and>"'''
+            ent_vm = '''--hostrequire "<and><system><name op='like' value='%hp-dl360g9-08-vm%'/></system></and>"'''
             hostrequire = '''{0} --hostrequire "hypervisor!=" --hostrequire "memory > 7000"'''.format(ent_vm)
         else:
             # hostrequire = '''--hostrequire "hypervisor=" --hostrequire "<cpu><flag value='vmx'/></cpu>" --hostrequire "memory > 4000"'''
