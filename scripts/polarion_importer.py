@@ -116,7 +116,7 @@ def polarion_xml_init():
     rootNode = tree.getroot()
     properties_node = xml_createNode(rootNode, "properties", '', '')
     attrs = {
-            'polarion-project-id': 'RedHatEnterpriseLinux7',
+            'polarion-project-id': 'RHELSS',
             'polarion-testrun-id': testrun_id,
             'polarion-custom-assignee': 'hsun',
             'polarion-custom-isautomated': 'true',
