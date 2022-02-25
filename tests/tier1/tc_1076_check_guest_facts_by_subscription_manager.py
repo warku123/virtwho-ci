@@ -28,7 +28,7 @@ class Testcase(Testing):
                 'hyperv'            :'hyperv',
                 'xen'               :'xen',
                 'kubevirt'          :'kvm',
-                'ahv'               :'nutanix_ahv'
+                'ahv'               :'kvm'
                 }
 
         # case steps
