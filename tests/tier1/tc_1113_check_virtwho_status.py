@@ -56,9 +56,8 @@ class Testcase(Testing):
             source_conn = f'https://{hypervisor_server}'
         elif 'rhevm' in hypervisor_type:
             source_conn = hypervisor_server.split('ovirt-engine')[0].strip()
-        # There is bug 1987247 for kubevirt mode
         elif 'kubevirt' in hypervisor_type:
-            source_conn = 'xxx'
+            source_conn = deploy.kubevirt.endpoint
         else:
             source_conn = hypervisor_server
         results.setdefault('step4', []).append(
@@ -74,10 +73,12 @@ class Testcase(Testing):
         )
 
         logger.info(">>>step5: Check '#virt-who -s' with bad configuration")
+        option = 'password'
         if 'kubevirt' in hypervisor_type:
-            self.vw_option_update_value('kubeconfig', 'xxx', config_file)
-        else:
-            self.vw_option_update_value('server', 'xxx', config_file)
+            option = 'kubeconfig'
+        if 'libvirt-remote' in hypervisor_type:
+            option = 'server'
+        self.vw_option_update_value(f'{option}', 'xxx', config_file)
         self.vw_option_update_value('owner', 'xxx', config_file)
         status = self.vw_status(cmd='virt-who -s')
         results.setdefault('step5', []).append(
