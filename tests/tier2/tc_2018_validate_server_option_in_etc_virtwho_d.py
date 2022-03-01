@@ -35,8 +35,12 @@ class Testcase(Testing):
         msg_list = ["Name or service not known|"
                     "Connection timed out|"
                     "Failed to connect|"
-                    "Error in .* backend"]
-        res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=1, exp_send=0)
+                    "Error in .* backend|"
+                    "Invalid server IP address"]
+        if "ahv" in hypervisor_type:
+            res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=0, exp_send=0)
+        else:
+            res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=1, exp_send=0)
         res2 = self.msg_validation(rhsm_output, msg_list, exp_exist=True)
         results.setdefault('step2', []).append(res1)
         results.setdefault('step2', []).append(res2)
@@ -44,8 +48,10 @@ class Testcase(Testing):
         logger.info(">>>step3: server option is 红帽€467aa value")
         self.vw_option_update_value(option_tested, '红帽€467aa', config_file)
         data, tty_output, rhsm_output = self.vw_start()
-        if "RHEL-7" not in compose_id and "esx" in hypervisor_type:
+        if "esx" in hypervisor_type or "ahv" in hypervisor_type:
             msg = "Option server needs to be ASCII characters only"
+            if "ahv" in hypervisor_type:
+                msg = "Invalid server IP address provided"
             res1 = self.op_normal_value(data, exp_error="1|2|3", exp_thread=0, exp_send=0)
             res2 = self.vw_msg_search(rhsm_output, msg, exp_exist=True)
         else:
