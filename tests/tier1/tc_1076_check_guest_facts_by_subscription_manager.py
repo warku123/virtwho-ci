@@ -22,7 +22,6 @@ class Testcase(Testing):
         virt_type = {
                 'libvirt-local'     :'kvm',
                 'libvirt-remote'    :'kvm',
-                'vdsm'              :'rhev',
                 'rhevm'             :'rhev',
                 'esx'               :'vmware',
                 'hyperv'            :'hyperv',
@@ -41,11 +40,16 @@ class Testcase(Testing):
 
         logger.info(">>>step2: check virt.host_type fact by subscription-manager in guest")
         hypervisor_type = self.get_config('hypervisor_type')
-        cmd = "subscription-manager facts --list | grep virt.host_type"
-        ret, output = self.runcmd(cmd, self.ssh_guest())
-        logger.info(output)
-        virt_host_type = output.split(':')[1].strip()
-        results.setdefault('step2', []).append(virt_type[hypervisor_type.lower()] in virt_host_type)
+        _, output1 = self.runcmd("virt-what",
+                                 self.ssh_guest())
+        _, output2 = self.runcmd("subscription-manager facts --list | grep virt.host_type",
+                                 self.ssh_guest())
+        logger.info(output2)
+        results.setdefault('step2', []).append(
+            virt_type[hypervisor_type.lower()] in output1
+            and
+            virt_type[hypervisor_type.lower()] in output2
+        )
 
         logger.info(">>>step3: check virt.is_guest fact by subscription-manager in guest")
         cmd = "subscription-manager facts --list | grep virt.is_guest"
