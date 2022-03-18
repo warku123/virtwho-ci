@@ -48,7 +48,9 @@ class Testcase(Testing):
             if 'RHEL-9' in compose_id:
                 error_num = 2
             res1 = self.op_normal_value(data, exp_error=error_num, exp_thread=1, exp_send=0)
-            res2 = self.vw_msg_search(rhsm_output, "Connection refused", exp_exist=True)
+            error_msg = ["Connection refused|"
+                         "Connection timed out"]
+            res2 = self.msg_validation(rhsm_output, error_msg)
             results.setdefault('step2', []).append(res1)
             results.setdefault('step2', []).append(res2)
 
