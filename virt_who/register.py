@@ -843,7 +843,7 @@ class Register(Base):
         username = register_config['username']
         password = register_config['password']
         org_id = self.satellite_org_id_get(ssh, register_config, org_name)
-        cmd = "curl -X GET -s -k -u {0}:{1} '{2}/api/organizations/{3}/hosts'".format(username, password, api, org_id)
+        cmd = "curl -X GET -s -k -u {0}:{1} '{2}/api/organizations/{3}/hosts/?per_page=1000'".format(username, password, api, org_id)
         ret, output = self.runcmd(cmd, ssh, debug=False)
         output = self.is_json(output.strip())
         if ret == 0 and output is not False and output is not None and output != "":
