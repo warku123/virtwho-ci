@@ -44,10 +44,7 @@ class Testcase(Testing):
             logger.info(">>>step2: run virt-who with rhsm_port=123")
             self.vw_option_update_value("rhsm_port", "123", config_file)
             data, tty_output, rhsm_output = self.vw_start()
-            error_num = 1
-            if 'RHEL-9' in compose_id:
-                error_num = 2
-            res1 = self.op_normal_value(data, exp_error=error_num, exp_thread=1, exp_send=0)
+            res1 = self.op_normal_value(data, exp_error='1|2', exp_thread=1, exp_send=0)
             error_msg = ["Connection refused|"
                          "Connection timed out"]
             res2 = self.msg_validation(rhsm_output, error_msg)
