@@ -9,6 +9,7 @@ class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133656')
         pkg_info = self.pkg_info(self.ssh_host(), 'virt-who')
+        compose_id = self.get_config('rhel_compose')
         trigger_type = self.get_config('trigger_type')
         results = dict()
 
@@ -17,7 +18,12 @@ class Testcase(Testing):
             pkg_info.get("Group") == "System Environment/Base")
 
         logger.info(">>>step2: 'rpm -qi virt-who' contains valid 'License' info")
-        results.setdefault('step2', []).append(pkg_info.get("License") == "GPLv2+")
+        if "RHEL-9" in compose_id:
+            results.setdefault('step2', []).append(
+                pkg_info.get("License") == "GPLv2+ and LGPLv3+")
+        else:
+            results.setdefault('step2', []).append(
+                pkg_info.get("License") == "GPLv2+")
 
         logger.info(">>>step3: 'rpm -qi virt-who' contains valid 'URL' info")
         urls = ['https://github.com/virt-who/virt-who',
@@ -48,7 +54,4 @@ class Testcase(Testing):
             results.setdefault('step7', []).append(False)
 
         # case result
-        notes = list()
-        notes.append("Bug(Step7): Get wrong virt-who version by #virt-who --version")
-        notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1759869")
-        self.vw_case_result(results, notes)
+        self.vw_case_result(results)
