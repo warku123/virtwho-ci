@@ -1210,10 +1210,9 @@ class Provision(Register):
         reserve = "--reserve --reserve-duration 259200 --priority Urgent"
         job_group = "--job-group=virt-who-ci-server-group"
         if os_type == "virtual":
-            ent_vm = '''--hostrequire "<and><system><name op='like' value='%hp-dl360g9-08-vm%'/></system></and>"'''
-            hostrequire = '''{0} --hostrequire "hypervisor!=" --hostrequire "memory > 7000"'''.format(ent_vm)
+            satellite_vm = f'''--hostrequire "<and><system><name op='like' value='{deploy.trigger.satellite_host}'/></system></and>"'''
+            hostrequire = '''{0} --hostrequire "hypervisor!=" --hostrequire "memory > 7000"'''.format(satellite_vm)
         else:
-            # hostrequire = '''--hostrequire "hypervisor=" --hostrequire "<cpu><flag value='vmx'/></cpu>" --hostrequire "memory > 4000"'''
             hostrequire = '''--hostrequire "hypervisor=" --hostrequire "memory > 7000"'''
         cmd = '''bkr workflow-simple --prettyxml --variant={0} --arch={1} --distro={2} {3} {4} {5} {6} {7}'''\
                 .format(variant, arch, distro, task, whiteboard, job_group, hostrequire, reserve) 

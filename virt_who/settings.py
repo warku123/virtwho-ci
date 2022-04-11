@@ -70,6 +70,7 @@ class SetTrigger(FeatureSettings):
         self.rhel_compose = None
         self.hypervisor_list = None
         self.register_list = None
+        self.satellite_host = None
         self.rhev_iso = None
         self.brew_package = None
         self.virtwho_upstream = None
@@ -81,6 +82,7 @@ class SetTrigger(FeatureSettings):
         self.rhel_compose = get_exported_param("RHEL_COMPOSE")
         self.hypervisor_list = get_exported_param("HYPERVISOR_LIST")
         self.register_list = get_exported_param("REGISTER_LIST")
+        self.satellite_host = get_exported_param("SATELLITE_HOST")
         self.rhev_iso = get_exported_param("RHEV_ISO")
         self.brew_package = get_exported_param("VIRTWHO_BREW_PACKAGE")
         self.virtwho_upstream = get_exported_param("VIRTWHO_UPSTREAM")
@@ -95,6 +97,8 @@ class SetTrigger(FeatureSettings):
             self.hypervisor_list = reader.get('trigger', 'hypervisor_list')
         if not self.register_list:
             self.register_list = reader.get('trigger', 'register_list')
+        if not self.satellite_host:
+            self.satellite_host = reader.get('trigger', 'satellite_host')
         if not self.rhev_iso:
             self.rhev_iso = reader.get('trigger', 'rhev_iso')
         if not self.brew_package:
