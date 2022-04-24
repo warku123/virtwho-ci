@@ -63,14 +63,20 @@ class Provision(Register):
             if 'info' in msg.keys():
                 build_id = msg['info']['build_id']
                 task_id = msg['info']['task_id']
+                owner_name = msg['info']['owner_name']
+                source = msg['info']['source']
             else:
                 build_id = re.findall(r'"build_id":(.*?),', ci_msg_content)[-1].strip()
                 task_id = re.findall(r'"task_id":(.*?),', ci_msg_content)[-1].strip()
+                owner_name = re.findall(r'"owner_name":(.*?),', ci_msg_content)[-1].strip()
+                source = re.findall(r'"source":(.*?),', ci_msg_content)[-1].strip()
             brew_build_url = "{0}/brew/buildinfo?buildID={1}".format(deploy.repo.brew, build_id)
         else:
             brew_build_url = self.get_exported_param("BREW_BUILD_URL")
             build_id = re.findall(r'buildID=(.*?)$', brew_build_url)[-1]
             task_id = build_id
+            owner_name = 'wpoteat'
+            source = ''
         cmd = 'curl -k -s -i {0}'.format(brew_build_url)
         output = os.popen(cmd).read()
         pkg_url = re.findall(r'<a href="http://(.*?).noarch.rpm">download</a>', output)[-1]
@@ -95,6 +101,8 @@ class Provision(Register):
             raise FailException("no rhel compose found")
         env['build_id'] = build_id
         env['task_id'] = task_id
+        env['owner_name'] = owner_name
+        env['source'] = source
         env['pkg_url'] = 'http://'+pkg_url+'.noarch.rpm'
         env['pkg_name'] = items[5]
         env['pkg_version'] = items[6]
@@ -764,10 +772,14 @@ class Provision(Register):
             build_id = env['build_id']
             task_id = env['task_id']
             pkg_nvr = env['pkg_nvr']
+            owner_name = env['owner_name']
+            source = env['source']
             parameter.append('-d RHEL_COMPOSE={0}'.format(rhel_compose))
             parameter.append('-d BREW_BUILD_ID={0}'.format(build_id))
             parameter.append('-d BREW_TASK_ID={0}'.format(task_id))
             parameter.append('-d PACKAGE_NVR={0}'.format(pkg_nvr))
+            parameter.append('-d OWNER_NAME={0}'.format(owner_name))
+            parameter.append('-d SOURCE={0}'.format(source))
         else:
             node_label = self.get_exported_param("NODE_LABEL")
             parameter.append('-d NODE_LABEL={0}'.format(node_label))
