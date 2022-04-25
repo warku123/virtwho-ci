@@ -1315,8 +1315,6 @@ class Provision(Register):
     def satellite_version(self, sat_type):
         if "6.11" in sat_type or "611" in sat_type:
             sat_ver = "6.11"
-        elif "7.0" in sat_type or "70" in sat_type:
-            sat_ver = "7.0"
         elif "6.10" in sat_type or "610" in sat_type:
             sat_ver = "6.10"
         elif "6.9" in sat_type or "69" in sat_type:
@@ -1335,6 +1333,8 @@ class Provision(Register):
             sat_ver = "6.3"
         elif "6.2" in sat_type or "62" in sat_type:
             sat_ver = "6.2"
+        elif "7.0" in sat_type or "70" in sat_type:
+            sat_ver = "7.0"
         elif "upstream" in sat_type:
             sat_ver = "upstream"
         else:
