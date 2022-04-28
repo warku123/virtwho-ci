@@ -1391,6 +1391,9 @@ class Provision(Register):
             ret, output = self.runcmd(cmd, ssh_sat, desc="install katello-ca")
             cmd = "subscription-manager register --org Sat6-CI --activationkey '%s-%s-qa-rhel%s'" % (repo_type, sat_ver, rhel_ver)
             ret, output = self.runcmd(cmd, ssh_sat, desc="register and enable repo")
+            if rhel_ver == "8":
+                cmd = "dnf -y module enable satellite:el8"
+                _, output = self.runcmd(cmd, ssh_sat, desc="enable satellite rhel8 module")
             if ret == 0:
                 cmd = "subscription-manager attach --pool 8a88800f5ca45116015cc807610319ed"
                 ret, output = self.runcmd(cmd, ssh_sat, desc="attach Satellite Maintenance Composes")
