@@ -2177,7 +2177,7 @@ class Provision(Register):
     #*********************************************
     def hyperv_host_uuid(self, ssh_hyperv):
         # Windows UUID needs to be decoded
-        cmd = "powershell gwmi -namespace 'root/cimv2' Win32_ComputerSystemProduct | select *"
+        cmd = '''powershell "gwmi -namespace 'root/cimv2' Win32_ComputerSystemProduct | select *"'''
         ret, output = self.runcmd(cmd, ssh_hyperv, desc="hyperv host uuid check")
         if ret == 0 and "UUID" in output: 
             for line in output.splitlines():
@@ -2237,7 +2237,7 @@ class Provision(Register):
             raise FailException("Failed to get hyperv guest uuid")
 
     def hyperv_guest_status(self, ssh_hyperv, guest_name):
-        cmd = "powershell Get-VM %s | select *" % (guest_name)
+        cmd = '''powershell "Get-VM %s | select *"''' % (guest_name)
         ret, output = self.runcmd(cmd, ssh_hyperv)
         if ret == 0 and output != "":
             for line in output.splitlines():
