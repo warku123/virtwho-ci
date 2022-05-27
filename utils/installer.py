@@ -192,36 +192,12 @@ def setup_rhevm():
     guest_name = deploy.rhevm.guest_name
     guest_username = deploy.rhevm.guest_user
     guest_password = deploy.rhevm.guest_passwd
-    cluster = deploy.rhevm.cluster
-    cputype = deploy.rhevm.cputype
-    template = deploy.rhevm.template
-    disk = deploy.rhevm.disk
-    datacenter = deploy.rhevm.datacenter
-    storage = deploy.rhevm.storage
     ssh_rhevm = {
         'host': deploy.rhevm.rhevm_ip,
         'username': deploy.rhevm.rhevm_ssh_user,
         'password': deploy.rhevm.rhevm_ssh_passwd}
-    ssh_master = {
-        'host': deploy.rhevm.master,
-        'username': deploy.rhevm.master_user,
-        'password': deploy.rhevm.master_passwd}
-    rhevm_version = provision.rhevm_version_get(ssh_rhevm)
     rhevm_url = provision.rhevm_admin_get(ssh_rhevm)
-    rhevm_shell, rhevm_shellrc = provision.rhevm_shell_get(ssh_rhevm)
-    provision.rhevm_shell_config(ssh_rhevm, rhevm_url,
-        rhevm_admin_username, rhevm_admin_password)
-    provision.rhevm_cpu_set(ssh_rhevm, rhevm_shell, cluster, cputype)
-    guest_ip = provision.rhevm_guest_ip(
-        ssh_rhevm, rhevm_shell, ssh_master, guest_name)
-    if not guest_ip:
-        provision.rhevm_template_ready(
-            ssh_rhevm, rhevm_shell, template, disk)
-        provision.rhevm_host_ready(
-            ssh_rhevm, rhevm_shell, ssh_master, datacenter, storage)
-        guest_ip = provision.rhevm_guest_add(
-            ssh_rhevm, rhevm_shell, ssh_master, guest_name,
-            template, cluster, disk)
+    guest_ip = provision.rhevm_guest_ip(ssh_rhevm, guest_name)
     ssh_guest = {
         'host': guest_ip,
         'username': guest_username,

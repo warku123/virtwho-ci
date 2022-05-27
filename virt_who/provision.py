@@ -139,13 +139,13 @@ class Provision(Register):
                     args=(q, remote_modes)
                 )
             )
-        if deploy.trigger.type == "trigger-rhev":
-            threads.append(
-                threading.Thread(
-                    target=self.provision_rhev_host,
-                    args=(q,)
-                )
-            )
+        # if deploy.trigger.type == "trigger-rhev":
+        #     threads.append(
+        #         threading.Thread(
+        #             target=self.provision_rhev_host,
+        #             args=(q,)
+        #         )
+        #     )
         elif deploy.trigger.type == "trigger-multiarch":
             threads.append(
                 threading.Thread(
@@ -168,13 +168,13 @@ class Provision(Register):
                         args=(q, rhel_compose)
                     )
                 )
-            if "vdsm" in local_modes:
-                threads.append(
-                    threading.Thread(
-                        target=self.provision_vdsm_host,
-                        args=(q, rhel_compose)
-                    )
-                )
+            # if "vdsm" in local_modes:
+            #     threads.append(
+            #         threading.Thread(
+            #             target=self.provision_vdsm_host,
+            #             args=(q, rhel_compose)
+            #         )
+            #     )
         for t in threads:
             t.start()
         for t in threads:
@@ -318,28 +318,28 @@ class Provision(Register):
             conf_guests[item[0]] = item[1]
         q.put((func_name, conf_guests))
 
-    def provision_rhev_host(self, q):
-        func_name = sys._getframe().f_code.co_name
-        logger.info("Start to provision rhev host and guest")
-        rhev_iso = deploy.trigger.rhev_iso
-        rhev_host = deploy.vdsm.master
-        rhev_user = deploy.vdsm.master_user
-        rhev_passwd = deploy.vdsm.master_passwd
-        conf_host = dict()
-        conf_guest = dict()
-        ssh_rhev = {
-            "host": rhev_host,
-            "username": rhev_user,
-            "password": rhev_passwd
-        }
-        self.rhev_install_by_grub(ssh_rhev, rhev_iso)
-        self.system_init("ci-host-rhev", ssh_rhev)
-        self.ssh_no_passwd_access(ssh_rhev)
-        self.install_epel_packages(ssh_rhev)
-        guest_ip = self.guest_vdsm_setup(ssh_rhev)
-        conf_host["virtwho-host-ip"] = rhev_host
-        conf_guest["vdsm-guest-ip"] = guest_ip
-        q.put((func_name, conf_host, conf_guest))
+    # def provision_rhev_host(self, q):
+    #     func_name = sys._getframe().f_code.co_name
+    #     logger.info("Start to provision rhev host and guest")
+    #     rhev_iso = deploy.trigger.rhev_iso
+    #     rhev_host = deploy.vdsm.master
+    #     rhev_user = deploy.vdsm.master_user
+    #     rhev_passwd = deploy.vdsm.master_passwd
+    #     conf_host = dict()
+    #     conf_guest = dict()
+    #     ssh_rhev = {
+    #         "host": rhev_host,
+    #         "username": rhev_user,
+    #         "password": rhev_passwd
+    #     }
+    #     self.rhev_install_by_grub(ssh_rhev, rhev_iso)
+    #     self.system_init("ci-host-rhev", ssh_rhev)
+    #     self.ssh_no_passwd_access(ssh_rhev)
+    #     self.install_epel_packages(ssh_rhev)
+    #     guest_ip = self.guest_vdsm_setup(ssh_rhev)
+    #     conf_host["virtwho-host-ip"] = rhev_host
+    #     conf_guest["vdsm-guest-ip"] = guest_ip
+    #     q.put((func_name, conf_host, conf_guest))
 
     def provision_arch_host(self, q, compose_id):
         func_name = sys._getframe().f_code.co_name
@@ -387,26 +387,26 @@ class Provision(Register):
         conf_guest["libvirt-local-guest-ip"] = guest_ip
         q.put((func_name, conf_host, conf_guest))
 
-    def provision_vdsm_host(self, q, compose_id):
-        logger.info("Start to provision vdsm host and its guest")
-        func_name = sys._getframe().f_code.co_name
-        conf_host = dict()
-        conf_guest = dict()
-        master = deploy.vdsm.master
-        master_user = deploy.vdsm.master_user
-        master_passwd = deploy.vdsm.master_passwd
-        ssh_vdsm = {
-            "host": master,
-            "username": master_user,
-            "password": master_passwd
-        }
-        self.rhel_install_by_grub(ssh_vdsm, compose_id)
-        self.system_init("ci-host-vdsm", ssh_vdsm)
-        self.ssh_no_passwd_access(ssh_vdsm)
-        guest_ip = self.guest_vdsm_setup(ssh_vdsm)
-        conf_host["vdsm-host-ip"] = master
-        conf_guest["vdsm-guest-ip"] = guest_ip
-        q.put((func_name, conf_host, conf_guest))
+    # def provision_vdsm_host(self, q, compose_id):
+    #     logger.info("Start to provision vdsm host and its guest")
+    #     func_name = sys._getframe().f_code.co_name
+    #     conf_host = dict()
+    #     conf_guest = dict()
+    #     master = deploy.vdsm.master
+    #     master_user = deploy.vdsm.master_user
+    #     master_passwd = deploy.vdsm.master_passwd
+    #     ssh_vdsm = {
+    #         "host": master,
+    #         "username": master_user,
+    #         "password": master_passwd
+    #     }
+    #     self.rhel_install_by_grub(ssh_vdsm, compose_id)
+    #     self.system_init("ci-host-vdsm", ssh_vdsm)
+    #     self.ssh_no_passwd_access(ssh_vdsm)
+    #     guest_ip = self.guest_vdsm_setup(ssh_vdsm)
+    #     conf_host["vdsm-host-ip"] = master
+    #     conf_guest["vdsm-guest-ip"] = guest_ip
+    #     q.put((func_name, conf_host, conf_guest))
 
     #*************************************************
     # Jenkins Job Scheduler 
@@ -512,11 +512,11 @@ class Provision(Register):
                 password = deploy.stage.kubevirt_passwd
                 owner = deploy.stage.kubevirt_org
                 env = deploy.stage.kubevirt_org
-            if "vdsm" in job_name:
-                username = deploy.stage.vdsm_user
-                password = deploy.stage.vdsm_passwd
-                owner = deploy.stage.vdsm_org
-                env = deploy.stage.vdsm_org
+            # if "vdsm" in job_name:
+            #     username = deploy.stage.vdsm_user
+            #     password = deploy.stage.vdsm_passwd
+            #     owner = deploy.stage.vdsm_org
+            #     env = deploy.stage.vdsm_org
             if "libvirt-remote" in job_name:
                 username = deploy.stage.libvirt_remote_user
                 password = deploy.stage.libvirt_remote_passwd
@@ -644,20 +644,20 @@ class Provision(Register):
             guest_name = deploy.rhevm.guest_name
             guest_user = deploy.rhevm.guest_user
             guest_passwd = deploy.rhevm.guest_passwd
-        if "vdsm" in job_name:
-            hypervisor_type = "vdsm"
-            rhevm_ip =  deploy.vdsm.rhevm_ip
-            hypervisor_ssh_user = deploy.vdsm.rhevm_ssh_user
-            hypervisor_ssh_passwd = deploy.vdsm.rhevm_ssh_passwd
-            ssh_rhevm = {'host':rhevm_ip,'username':hypervisor_ssh_user,'password':hypervisor_ssh_passwd}
-            hypervisor_server = self.rhevm_admin_get(ssh_rhevm)
-            hypervisor_user = deploy.vdsm.rhevm_admin_user
-            hypervisor_passwd = deploy.vdsm.rhevm_admin_passwd
-            host_user = deploy.vdsm.master_user
-            host_passwd = deploy.vdsm.master_passwd
-            guest_name = deploy.vdsm.guest_name
-            guest_user = deploy.vdsm.guest_user
-            guest_passwd = deploy.vdsm.guest_passwd
+        # if "vdsm" in job_name:
+        #     hypervisor_type = "vdsm"
+        #     rhevm_ip =  deploy.vdsm.rhevm_ip
+        #     hypervisor_ssh_user = deploy.vdsm.rhevm_ssh_user
+        #     hypervisor_ssh_passwd = deploy.vdsm.rhevm_ssh_passwd
+        #     ssh_rhevm = {'host':rhevm_ip,'username':hypervisor_ssh_user,'password':hypervisor_ssh_passwd}
+        #     hypervisor_server = self.rhevm_admin_get(ssh_rhevm)
+        #     hypervisor_user = deploy.vdsm.rhevm_admin_user
+        #     hypervisor_passwd = deploy.vdsm.rhevm_admin_passwd
+        #     host_user = deploy.vdsm.master_user
+        #     host_passwd = deploy.vdsm.master_passwd
+        #     guest_name = deploy.vdsm.guest_name
+        #     guest_user = deploy.vdsm.guest_user
+        #     guest_passwd = deploy.vdsm.guest_passwd
         if "libvirt-remote" in job_name:
             hypervisor_type = "libvirt-remote"
             hypervisor_server = deploy.libvirt.remote
@@ -1793,35 +1793,18 @@ class Provision(Register):
         rhevm_ip = deploy.rhevm.rhevm_ip
         rhevm_ssh_user = deploy.rhevm.rhevm_ssh_user
         rhevm_ssh_passwd = deploy.rhevm.rhevm_ssh_passwd
-        rhevm_admin_user = deploy.rhevm.rhevm_admin_user
-        rhevm_admin_passwd = deploy.rhevm.rhevm_admin_passwd
-        master = deploy.rhevm.master
-        master_user = deploy.rhevm.master_user
-        master_passwd = deploy.rhevm.master_passwd
         guest_name = deploy.rhevm.guest_name
         guest_user = deploy.rhevm.guest_user
         guest_passwd = deploy.rhevm.guest_passwd
-        cluster = deploy.rhevm.cluster
-        cputype = deploy.rhevm.cputype
-        template = deploy.rhevm.template
-        disk = deploy.rhevm.disk
-        datacenter = deploy.rhevm.datacenter
-        storage = deploy.rhevm.storage
         # set ssh env for rhevm, master
-        ssh_rhevm = {"host":rhevm_ip,"username":rhevm_ssh_user,"password":rhevm_ssh_passwd}
-        ssh_master = {"host":master,"username":master_user,"password":master_passwd}
-        rhevm_version = self.rhevm_version_get(ssh_rhevm)
-        rhevm_admin_server = self.rhevm_admin_get(ssh_rhevm)
-        rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_rhevm)
-        self.rhevm_shell_config(ssh_rhevm, rhevm_admin_server, rhevm_admin_user, rhevm_admin_passwd)
-        self.rhevm_cpu_set(ssh_rhevm, rhevm_shell, cluster, cputype)
-        guest_ip = self.rhevm_guest_ip(ssh_rhevm, rhevm_shell, ssh_master, guest_name)
-        if not guest_ip:
-            self.rhevm_template_ready(ssh_rhevm, rhevm_shell, template, disk)
-            self.rhevm_host_ready(ssh_rhevm, rhevm_shell, ssh_master, datacenter, storage)
-            guest_ip = self.rhevm_guest_add(ssh_rhevm, rhevm_shell, ssh_master, guest_name, template, cluster, disk)
-        logger.info("Succeeded to get rhevm({0}) guest ip: {1} for rhevm mode".format(rhevm_ip, guest_ip))
-        ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
+        ssh_rhevm = {"host": rhevm_ip, "username": rhevm_ssh_user,
+                     "password": rhevm_ssh_passwd}
+        guest_ip = self.rhevm_guest_ip(ssh_rhevm, guest_name)
+        logger.info(
+            "Succeeded to get rhevm({0}) guest ip: {1} for rhevm mode".format(
+                rhevm_ip, guest_ip))
+        ssh_guest = {"host": guest_ip, "username": guest_user,
+                     "password": guest_passwd}
         self.system_init("ci-guest-rhevm", ssh_guest)
         mode_queue.put((mode_type, guest_ip))
 
@@ -1863,36 +1846,36 @@ class Provision(Register):
         self.system_init("ci-guest-libvirt-local", ssh_guest)
         return guest_ip
 
-    def guest_vdsm_setup(self, ssh_vdsm):
-        rhevm_ip = deploy.vdsm.rhevm_ip
-        rhevm_ssh_user = deploy.vdsm.rhevm_ssh_user
-        rhevm_ssh_passwd = deploy.vdsm.rhevm_ssh_passwd
-        rhevm_admin_user = deploy.vdsm.rhevm_admin_user
-        rhevm_admin_passwd = deploy.vdsm.rhevm_admin_passwd
-        guest_name = deploy.vdsm.guest_name
-        guest_user = deploy.vdsm.guest_user
-        guest_passwd = deploy.vdsm.guest_passwd
-        cluster = deploy.vdsm.cluster
-        cputype = deploy.vdsm.cputype
-        template = deploy.vdsm.template
-        disk = deploy.vdsm.disk
-        datacenter = deploy.vdsm.datacenter
-        storage = deploy.vdsm.storage
-        ssh_rhevm = {"host":rhevm_ip,"username":rhevm_ssh_user,"password":rhevm_ssh_passwd}
-        rhevm_version = self.rhevm_version_get(ssh_rhevm)
-        rhevm_admin_server = self.rhevm_admin_get(ssh_rhevm)
-        rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_rhevm)
-        self.vdsm_host_init(ssh_vdsm, rhevm_version)
-        self.rhevm_shell_config(ssh_rhevm, rhevm_admin_server, rhevm_admin_user, rhevm_admin_passwd)
-        self.rhevm_cpu_set(ssh_rhevm, rhevm_shell, cluster, cputype)
-        self.rhevm_template_ready(ssh_rhevm, rhevm_shell, template, disk)
-        self.rhevm_hosts_all_clean(ssh_rhevm, rhevm_shell)
-        self.rhevm_host_ready(ssh_rhevm, rhevm_shell, ssh_vdsm, datacenter, storage)
-        guest_ip = self.rhevm_guest_add(ssh_rhevm, rhevm_shell, ssh_vdsm, guest_name, template, cluster, disk)
-        logger.info("Succeeded to get rhevm({0}) guest ip: {1} for vdsm mode".format(rhevm_ip, guest_ip))
-        ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
-        self.system_init("ci-guest-vdsm", ssh_guest)
-        return guest_ip
+    # def guest_vdsm_setup(self, ssh_vdsm):
+    #     rhevm_ip = deploy.vdsm.rhevm_ip
+    #     rhevm_ssh_user = deploy.vdsm.rhevm_ssh_user
+    #     rhevm_ssh_passwd = deploy.vdsm.rhevm_ssh_passwd
+    #     rhevm_admin_user = deploy.vdsm.rhevm_admin_user
+    #     rhevm_admin_passwd = deploy.vdsm.rhevm_admin_passwd
+    #     guest_name = deploy.vdsm.guest_name
+    #     guest_user = deploy.vdsm.guest_user
+    #     guest_passwd = deploy.vdsm.guest_passwd
+    #     cluster = deploy.vdsm.cluster
+    #     cputype = deploy.vdsm.cputype
+    #     template = deploy.vdsm.template
+    #     disk = deploy.vdsm.disk
+    #     datacenter = deploy.vdsm.datacenter
+    #     storage = deploy.vdsm.storage
+    #     ssh_rhevm = {"host":rhevm_ip,"username":rhevm_ssh_user,"password":rhevm_ssh_passwd}
+    #     rhevm_version = self.rhevm_version_get(ssh_rhevm)
+    #     rhevm_admin_server = self.rhevm_admin_get(ssh_rhevm)
+    #     rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_rhevm)
+    #     self.vdsm_host_init(ssh_vdsm, rhevm_version)
+    #     self.rhevm_shell_config(ssh_rhevm, rhevm_admin_server, rhevm_admin_user, rhevm_admin_passwd)
+    #     self.rhevm_cpu_set(ssh_rhevm, rhevm_shell, cluster, cputype)
+    #     self.rhevm_template_ready(ssh_rhevm, rhevm_shell, template, disk)
+    #     self.rhevm_hosts_all_clean(ssh_rhevm, rhevm_shell)
+    #     self.rhevm_host_ready(ssh_rhevm, rhevm_shell, ssh_vdsm, datacenter, storage)
+    #     guest_ip = self.rhevm_guest_add(ssh_rhevm, rhevm_shell, ssh_vdsm, guest_name, template, cluster, disk)
+    #     logger.info("Succeeded to get rhevm({0}) guest ip: {1} for vdsm mode".format(rhevm_ip, guest_ip))
+    #     ssh_guest = {"host":guest_ip, "username":guest_user, "password":guest_passwd}
+    #     self.system_init("ci-guest-vdsm", ssh_guest)
+    #     return guest_ip
 
     #*********************************************
     # Hypervisor ESXi Function
@@ -2812,652 +2795,174 @@ class Provision(Register):
     #*********************************************
     # Hypervisor VDSM and RHEVM function
     #*********************************************
-    def rhevm_version_get(self, ssh_rhevm):
-        ret, output1 = self.runcmd("rpm -qa rhevm", ssh_rhevm, desc="rhevm-3 package")
-        ret, output2 = self.runcmd("rpm -qa rhvm", ssh_rhevm, desc="rhvm-4 package")
-        if output1 is not None and "rhevm-3" in output1:
-            return "rhevm-3"
-        elif output2 is not None and "rhvm-4" in output2:
-            return "rhevm-4"
-        else:
-            raise FailException("Unknown rhevm version")
-
-    def rhevm_shell_get(self, ssh_rhevm):
-        rhevm_version = self.rhevm_version_get(ssh_rhevm)
-        if rhevm_version == "rhevm-4":
-            rhevm_shell = "ovirt-shell"
-            rhevm_shellrc = "/root/.ovirtshellrc"
-        if rhevm_version == "rhevm-3":
-            rhevm_shell = "rhevm-shell"
-            rhevm_shellrc = "/root/.rhevmshellrc"
-        return rhevm_shell, rhevm_shellrc 
-
     def rhevm_admin_get(self, ssh_rhevm):
-        rhevm_version = self.rhevm_version_get(ssh_rhevm)
         hostname = self.get_hostname(ssh_rhevm)
-        if rhevm_version == "rhevm-4":
-            admin_server = "https://{0}:443/ovirt-engine".format(hostname)
-        if rhevm_version == "rhevm-3":
-            admin_server = "https://{0}:443".format(hostname)
+        admin_server = "https://{0}:443/ovirt-engine".format(hostname)
         return admin_server
 
-    def rhevm_config_get(self, ssh_rhevm, hypervisor_type="rhevm"):
+    def rhevm_config_get(self):
         config = dict()
-        if hypervisor_type == "rhevm":
-            config['admin_user'] = deploy.rhevm.rhevm_admin_user
-            config['admin_passwd'] = deploy.rhevm.rhevm_admin_passwd
-            config['master'] = deploy.rhevm.master
-            config['master_user'] = deploy.rhevm.master_user
-            config['master_passwd'] = deploy.rhevm.master_passwd
-            config['slave'] = deploy.rhevm.slave
-            config['slave_user'] = deploy.rhevm.slave_user
-            config['slave_passwd'] = deploy.rhevm.slave_passwd
-            config['datacenter'] = deploy.rhevm.datacenter
-            config['cluster'] = deploy.rhevm.cluster
-            config['cputype'] = deploy.rhevm.cputype
-            config['storage'] = deploy.rhevm.storage
-            config['guest_name'] = deploy.rhevm.guest_name
-            config['guest_user'] = deploy.rhevm.guest_user
-            config['guest_passwd'] = deploy.rhevm.guest_passwd
-            config['template'] = deploy.rhevm.template
-            config['disk'] = deploy.rhevm.disk
-            config['nfs_path'] = deploy.rhevm.nfs_path
-        if hypervisor_type == "vdsm":
-            config['admin_user'] = deploy.vdsm.vdsm_admin_user
-            config['admin_passwd'] = deploy.vdsm.vdsm_admin_passwd
-            config['master'] = deploy.vdsm.master
-            config['master_user'] = deploy.vdsm.master_user
-            config['master_passwd'] = deploy.vdsm.master_passwd
-            config['slave'] = deploy.vdsm.slave
-            config['slave_user'] = deploy.vdsm.slave_user
-            config['slave_passwd'] = deploy.vdsm.slave_passwd
-            config['datacenter'] = deploy.vdsm.datacenter
-            config['cluster'] = deploy.vdsm.cluster
-            config['cputype'] = deploy.vdsm.cputype
-            config['storage'] = deploy.vdsm.storage
-            config['guest_name'] = deploy.vdsm.guest_name
-            config['guest_user'] = deploy.vdsm.guest_user
-            config['guest_passwd'] = deploy.vdsm.guest_passwd
-            config['template'] = deploy.vdsm.template
-            config['disk'] = deploy.vdsm.disk
-            config['nfs_path'] = deploy.vdsm.nfs_path
+        config['admin_user'] = deploy.rhevm.rhevm_admin_user
+        config['admin_passwd'] = deploy.rhevm.rhevm_admin_passwd
+        config['master'] = deploy.rhevm.master
+        config['master_user'] = deploy.rhevm.master_user
+        config['master_passwd'] = deploy.rhevm.master_passwd
+        config['slave'] = deploy.rhevm.slave
+        config['slave_user'] = deploy.rhevm.slave_user
+        config['slave_passwd'] = deploy.rhevm.slave_passwd
+        config['datacenter'] = deploy.rhevm.datacenter
+        config['cluster'] = deploy.rhevm.cluster
+        config['cputype'] = deploy.rhevm.cputype
+        config['storage'] = deploy.rhevm.storage
+        config['guest_name'] = deploy.rhevm.guest_name
+        config['guest_user'] = deploy.rhevm.guest_user
+        config['guest_passwd'] = deploy.rhevm.guest_passwd
+        config['template'] = deploy.rhevm.template
+        config['disk'] = deploy.rhevm.disk
+        config['nfs_path'] = deploy.rhevm.nfs_path
         return config
 
-    def rhevm_shell_config(self, ssh_rhevm, admin_server, admin_user, admin_passwd):
-        rhevm_shell, rhevm_shellrc = self.rhevm_shell_get(ssh_rhevm)
-        api_url = "{0}/api".format(admin_server)
-        ca_file = "/etc/pki/ovirt-engine/ca.pem"
-        options = "insecure = False\nno_paging = False\nfilter = False\ntimeout = -1"
-        cmd = "echo -e '[ovirt-shell]\nusername = {0}\npassword = {1}\nca_file = {2}\nurl = {3}\n{4}' > {5}"\
-                .format(admin_user, admin_passwd, ca_file, api_url, options, rhevm_shellrc)
-        self.runcmd(cmd, ssh_rhevm)
-        self.runcmd("ovirt-aaa-jdbc-tool user unlock admin", ssh_rhevm)
-        cmd = "{0} -c -E  'ping'".format(rhevm_shell)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="ping rhevm shell")
-        if ret == 0 and "success" in output:
-            logger.info("Succeeded to config rhevm({0}) shell".format(ssh_rhevm['host']))
-        else:
-            raise FailException("Failed to config rhevm({0}) shell".format(ssh_rhevm['host']))
+    def rhevm_api_data(self, ssh_rhevm):
+        rhevm_config = self.rhevm_config_get()
+        rhevm_url = self.rhevm_admin_get(ssh_rhevm)
+        api_url = f'{rhevm_url}/api'
+        curl_header = f'-H "Accept: application/xml" ' \
+                      f'-H "Content-Type: application/xml" ' \
+                      f'-H "Version: 4" ' \
+                      f'-s -k -u {rhevm_config["admin_user"]}:{rhevm_config["admin_passwd"]}'
+        return api_url, curl_header
 
-    def rhevm_cpu_set(self, ssh_rhevm, rhevm_shell, cluster, cputype):
-        cmd = "{0} -c -E \"update cluster {1} --cpu-id '{2}'\"".format(rhevm_shell, cluster, cputype)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="update rhevm cluster cpu type")
-        if ret == 0:
-            logger.info("Succeeded to update rhevm({0}) cluster cpu".format(ssh_rhevm['host']))
-        else:
-            raise FailException("Failed to update rhevm({0}) cluster cpu".format(ssh_rhevm['host']))
-
-    def rhevm_template_ready(self, ssh_rhevm, rhevm_shell, template, disk):
-        cmd = "{0} -c -E 'show template {1}' |grep '^name'".format(rhevm_shell, template)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm template exist check")
-        if ret != 0 or template not in output:
-            raise FailException("rhevm({0}) template is not available".format(ssh_rhevm['host']))
-        cmd = "{0} -c -E 'show template {1}' |grep '^status-state'".format(rhevm_shell, template)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm template status check")
-        if ret != 0 or "ok" not in output:
-            raise FailException("rhevm({0}) template is not ok status".format(ssh_rhevm['host']))
-
-        if rhevm_shell == "ovirt-shell":
-            options = "list disks --parent-template-name {0} --show-all".format(template)
-        if rhevm_shell == "rhevm-shell":
-            options = "list disks --template-identifier {0} --show-all".format(template)
-        cmd = "{0} -c -E '{1}' | grep '^name'".format(rhevm_shell, options)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm template disk exist check")
-        if ret != 0 or disk not in output:
-            raise FailException("rhevm({0}) template disk is not available".format(ssh_rhevm['host']))
-        cmd = "{0} -c -E '{1}' | grep '^status-state'".format(rhevm_shell, options)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm template disk status check")
-        if ret != 0 or "ok" not in output:
-            raise FailException("rhevm({0}) template disk is not 'ok' status".format(ssh_rhevm['host']))
-        return True
-
-    def rhevm_guests_all_clean(self, ssh_rhevm, rhevm_shell):
-        cmd = "%s -c -E 'list vms' | grep '^name' | awk -F ':' '{print $2}'" % rhevm_shell
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm all guests list")
-        if ret == 0 and output is not None and output != "":
-            guests = output.strip().split('\n')
-            if len(guests) > 0:
-                for guest_name in guests:
-                    self.rhevm_guest_delete(ssh_rhevm, rhevm_shell, guest_name.strip())
-        logger.info("Finished to clean all the rhevm({0}) guests".format(ssh_rhevm['host']))
-
-    def rhevm_hosts_list(self, ssh_rhevm, rhevm_shell):
-        cmd = "%s -c -E 'list hosts' | grep '^name' | awk -F ':' '{print $2}'" % rhevm_shell
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm all hosts list")
-        if ret == 0 and output is not None and output != "":
-            hosts = output.strip().split('\n')
-        else:
-            hosts = list()
-        return hosts
-
-    def rhevm_hosts_all_clean(self, ssh_rhevm, rhevm_shell):
-        hosts = self.rhevm_hosts_list(ssh_rhevm, rhevm_shell)
-        if len(hosts) > 0:
-            for host_name in hosts:
-                self.rhevm_host_delete(ssh_rhevm, rhevm_shell, host_name.strip())
-        logger.info("Finished to clean all the rhevm({0}) hosts".format(ssh_rhevm['host']))
-
-    def rhevm_host_uuid_by_guestname(self, ssh_rhevm, rhevm_shell, guest_name):
-        cmd = "{0} -c -E 'show vm {1}' |grep '^host-id'".format(rhevm_shell, guest_name)
-        ret, output = self.runcmd(cmd, ssh_rhevm)
-        if ret == 0 and "host-id" in output:
-            uuid = output.strip().split(':')[1].strip()
-            logger.info("Succeeded to get rhevm({0}) host: uuid {1}".format(ssh_rhevm['host'],uuid))
-            return uuid
-        else:
-            raise FailException("Failed to check rhevm({0}) host ".format(ssh_rhevm['host']))
-
-    def rhevm_host_name_by_guestname(self, ssh_rhevm, rhevm_shell, guest_name):
-        cmd = "{0} -c -E 'show vm {1}' |grep '^display-address'".format(rhevm_shell, guest_name)
-        ret, output = self.runcmd(cmd, ssh_rhevm)
-        if ret == 0 and "display-address" in output:
-            name = output.strip().split(':')[1].strip()
-            logger.info("Succeeded to get rhevm({0}) host name {1}".format(ssh_rhevm['host'],name))
-            return name
-        else:
-            raise FailException("Failed to check rhevm({0}) host ".format(ssh_rhevm['host']))
-
-    def rhevm_host_hwuuid_by_uuid(self, ssh_rhevm, rhevm_shell, host_uuid):
-        cmd = "{0} -c -E 'show host {1}' |grep '^hardware_information-uuid'".format(rhevm_shell, host_uuid)
-        ret, output = self.runcmd(cmd, ssh_rhevm)
-        if ret == 0 and "hardware_information-uuid" in output:
-            hwuuid = output.strip().split(':')[1].strip()
-            logger.info("Succeeded to get rhevm({0}) host: hwuuid {1}".format(ssh_rhevm['host'],hwuuid))
-            return hwuuid 
-        else:
-            raise FailException("Failed to check rhevm({0}) host ".format(ssh_rhevm['host']))
-
-    def rhevm_host_exist(self, ssh_rhevm, rhevm_shell, hostname):
-        cmd = "{0} -c -E 'show host {1}' |grep '^name'".format(rhevm_shell, hostname)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm host exist check")
-        if ret == 0 and hostname in output:
-            logger.info("rhevm({0}) host({1}) is exist".format(ssh_rhevm['host'], hostname))
-            return True
-        else:
-            logger.info("rhevm({0}) host({1}) is not exist".format(ssh_rhevm['host'], hostname))
-            return False
-
-    def rhevm_host_uuid(self, ssh_rhevm, rhevm_shell, hostname):
-        cmd = "{0} -c -E 'show host {1}' |grep '^id'".format(rhevm_shell, hostname)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm host uuid check")
-        if ret == 0 and "id" in output:
-            uuid = output.strip().split(':')[1].strip()
-            logger.info("Succeeded to get rhevm({0}) host({1}) uuid: {2}".format(ssh_rhevm['host'], hostname, uuid))
-            return uuid
-        else:
-            raise FailException("Failed to check rhevm({0}) host({1}) uuid".format(ssh_rhevm['host'], hostname))
-
-    def rhevm_host_hwuuid(self, ssh_rhevm, rhevm_shell, hostname):
-        cmd = "{0} -c -E 'show host {1}' |grep '^hardware_information-uuid'".format(rhevm_shell, hostname)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm host hwuuid check")
-        if ret == 0 and "hardware_information-uuid" in output:
-            hwuuid = output.strip().split(':')[1].strip()
-            logger.info("rhevm({0}) host({1}) hwuuid: {3}".format(ssh_rhevm['host'], hostname, hwuuid))
-            return hwuuid
-        else:
-            raise FailException("Failed to check rhevm({0}) host({1}) hwuuid".format(ssh_rhevm['host'], hostname))
-
-    def rhevm_host_display_name(self, ssh_rhevm, rhevm_shell, hostname):
-        cmd = "{0} -c -E 'show host {1}' |grep '^address'".format(rhevm_shell, hostname)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm host display name check")
-        if ret == 0 and "address" in output:
-            display_name = output.strip().split(':')[1].strip()
-            logger.info("rhevm({0}) host({1}) display name: {2}".format(ssh_rhevm['host'], hostname, display_name))
-            return display_name
-        else:
-            raise FailException("Failed to check rhevm({0}) host({1}) display name".format(ssh_rhevm['host'], hostname))
-
-    def rhevm_host_status(self, ssh_rhevm, rhevm_shell, hostname):
-        cmd = "{0} -c -E 'show host {1}' |grep '^status-state'".format(rhevm_shell, hostname)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm host status check")
-        if ret == 0 and "status-state" in output:
-            status = output.strip().split(':')[1].strip()
-            logger.info("rhevm({0}) host({1}) status: {2}".format(ssh_rhevm['host'], hostname, status))
-            return status
-        else:
-            raise FailException("Failed to check rhevm({0}) host({1}) status".format(ssh_rhevm['host'], hostname))
-
-    def rhevm_host_ready(self, ssh_rhevm, rhevm_shell, ssh_vdsm, datacenter, storage):
-        hostname = self.get_hostname(ssh_vdsm)
-        if self.rhevm_host_exist(ssh_rhevm, rhevm_shell, hostname):
-            if self.rhevm_host_status(ssh_rhevm, rhevm_shell, hostname) == "up":
-                logger.info("rhevm({0}) host({1}) is exist and up".format(ssh_rhevm['host'], hostname))
-                return "ready"
-            else:
-                logger.info("rhevm({0}) host({1}) is exist but not up, delete, add again".format(ssh_rhevm['host'], hostname))
-                self.rhevm_host_delete(ssh_rhevm, rhevm_shell, hostname)
-        self.rhevm_host_add(ssh_rhevm, rhevm_shell, ssh_vdsm, datacenter, storage)
-
-    def rhevm_host_addJob(self, ssh_rhevm, rhevm_shell, ssh_vdsm):
-        hostname = self.get_hostname(ssh_vdsm)
-        address = ssh_vdsm['host']
-        username = ssh_vdsm['username']
-        password = ssh_vdsm['password']
-        cmd = "{0} -c -E 'add host --address {1} --name {2} --root_password {3} --override_iptables false'"\
-                .format(rhevm_shell, address, hostname, password)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm host add")
-        cmd = "{0} -c -E 'action host {1} activate'".format(rhevm_shell, hostname)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm host active")
-
-    def rhevm_host_add(self, ssh_rhevm, rhevm_shell, ssh_vdsm, datacenter, storage):
-        hostname = self.get_hostname(ssh_vdsm)
-        self.rhevm_host_addJob(ssh_rhevm, rhevm_shell, ssh_vdsm)
-        status = ""
-        for i in range(60):
-            time.sleep(60)
-            status = self.rhevm_host_status(ssh_rhevm, rhevm_shell, hostname) 
-            if status == "up":
-                logger.info("Succeeded to add rhevm({0}) host({1})".format(ssh_rhevm['host'], hostname))
-                break
-            elif status == "non_operational" or status == "install_failed":
-                    self.rhevm_host_delete(ssh_rhevm, rhevm_shell, hostname)
-                    self.rhevm_host_addJob(ssh_rhevm, rhevm_shell, ssh_vdsm)
-        if status != "up":
-            raise FailException("Failed to add rhevm(%s) host(%s)" % (ssh_rhevm['host'], hostname))
-        self.rhevm_datacenter_ready(ssh_rhevm, rhevm_shell, ssh_vdsm, datacenter, storage)
-
-    def rhevm_hosts_fence(self, ssh_rhevm, rhevm_shell):
-        hosts = self.rhevm_hosts_list(ssh_rhevm, rhevm_shell)
-        if len(hosts) > 0:
-            for host_name in hosts:
-                cmd = "{0} -c -E 'action host {1} fence --fence_type manual'".format(rhevm_shell, host_name.strip())
-                ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm confirm host was rebooted")
-        logger.info("Finished to fence all the rhevm({0}) hosts".format(ssh_rhevm['host']))
-
-    def rhevm_host_maintenance(self, ssh_rhevm, rhevm_shell, hostname):
-        cmd = "service ovirt-engine restart"
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="restart rhevm service before maintenance")
-        time.sleep(60)
-        self.rhevm_hosts_fence(ssh_rhevm, rhevm_shell)
-        cmd = "%s -c -E 'list vms --show-all' | grep '^name' | awk -F ':' '{print $2}'" % rhevm_shell
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm list all guests")
-        host_uuid = self.rhevm_host_uuid(ssh_rhevm, rhevm_shell, hostname)
-        if ret == 0 and output is not None and output != "":
-            vms = output.strip().split('\n')
-            if len(vms) > 0:
-                for guest_name in vms:
-                    cmd = "{0} -c -E 'show vm {1}' | grep '^host-id'".format(rhevm_shell, guest_name)
-                    ret, output = self.runcmd(cmd, ssh_rhevm, desc="check guest is used by host")
-                    if ret == 0 and host_uuid in output:
-                        self.rhevm_guest_delete(ssh_rhevm, rhevm_shell, guest_name)
-        status = ""
-        for i in range(60):
-            cmd = "{0} -c -E 'action host {1} deactivate'".format(rhevm_shell, hostname)
-            ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm host deactivate and maintain")
-            time.sleep(30)
-            status = self.rhevm_host_status(ssh_rhevm, rhevm_shell, hostname)
-            if status == "maintenance":
-                logger.info("Succeeded to maintenance rhevm({0}) host({1})".format(ssh_rhevm['host'], hostname))
-                break
-        if status != "maintenance":
-            raise FailException("Failed to maintenance rhevm({0}) host({1})".format(ssh_rhevm['host'], hostname))
-
-    def rhevm_host_delete(self, ssh_rhevm, rhevm_shell, hostname):
-        if self.rhevm_host_exist(ssh_rhevm, rhevm_shell, hostname):
-            self.rhevm_host_maintenance(ssh_rhevm, rhevm_shell, hostname)
-            cmd = "{0} -c -E 'action host {1} delete'".format(rhevm_shell, hostname)
-            ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm host delete")
-            is_deleted = ""
-            for i in range(10):
-                time.sleep(30)
-                if self.rhevm_host_exist(ssh_rhevm, rhevm_shell, hostname) is False:
-                    is_deleted = "Yes"
-                    break
-            if is_deleted != "Yes":
-                raise FailException("Failed to delete rhevm({0}) host({1})".format(ssh_rhevm['host'], hostname))
-        else:
-            logger.info("rhevm({0}) host({1}) is not exist already".format(ssh_rhevm['host'], hostname))
-
-    def rhevm_datacenter_status(self, ssh_rhevm, rhevm_shell, datacenter):
-        cmd = "{0} -c -E 'show datacenter {1}' |grep '^status-state'".format(rhevm_shell, datacenter)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm datacenter status check")
-        if ret == 0 and "status-state" in output:
-            status = output.strip().split(':')[1].strip()
-            logger.info("rhevm(%s) datacenter status is: %s" % (ssh_rhevm['host'], status))
-            return status
-        else:
-            raise FailException("Failed to check rehvm(%s) datacenter status" % ssh_rhevm['host'])
-
-    def rhevm_datacenter_ready(self, ssh_rhevm, rhevm_shell, ssh_vdsm, datacenter, storage):
-        cmd = "{0} -c -E 'show storagedomain {1}' |grep '^name' ".format(rhevm_shell, storage)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm storage exist check")
-        if ret != 0 or storage not in output:
-            raise FailException("rhevm({0}) storage is not exist".format(ssh_rhevm['host']))
-        status = ""
-        for i in range(10):
-            time.sleep(60)
-            status = self.rhevm_datacenter_status(ssh_rhevm, rhevm_shell, datacenter)
-            if status == "up":
-                logger.info("rhevm(%s) datacenter is already up" % ssh_rhevm['host'])
-                break
-        if status != "up":
-            for i in range(10):
-                time.sleep(60)
-                status = self.rhevm_datacenter_status(ssh_rhevm, rhevm_shell, datacenter)
-                if status == "up":
-                    logger.info("rhevm(%s) datacenter is already up" % ssh_rhevm['host'])
-                    break
-                elif status == "problematic":
-                    hostname = self.get_hostname(ssh_vdsm)
-                    self.rhevm_host_delete(ssh_rhevm, rhevm_shell, hostname)
-                    self.rhevm_host_addJob(ssh_rhevm, rhevm_shell, ssh_vdsm)
-                else:
-                    if rhevm_shell == "ovirt-shell":
-                        attach_options = "add storagedomain --name {0} --parent-datacenter-name {1}".format(storage, datacenter)
-                        active_options = "action storagedomain {0} --parent-datacenter-name {1} activate".format(storage, datacenter)
-                    elif rhevm_shell == "rhevm-shell":
-                        attach_options = "add storagedomain --name {0} --datacenter-identifier {1}".format(storage, datacenter) 
-                        active_options = "action storagedomain {0} --datacenter-identifier {1} activate".format(storage, datacenter)
-                    cmd = "{0} -c -E '{1}'".format(rhevm_shell, attach_options)
-                    ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm storage attach ")
-                    cmd = "{0} -c -E '{1}'".format(rhevm_shell, active_options)
-                    ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm storage active ")
-        if status != "up":
-            raise FailException("Failed to start up rhevm(%s) datacenter" % ssh_rhevm['host'])
-
-    def rhevm_guest_disk_ready(self, ssh_rhevm, rhevm_shell, guest_name, disk):
-        if rhevm_shell == "ovirt-shell":
-            vm_options = "--parent-vm-name {0}".format(guest_name)
-        if rhevm_shell == "rhevm-shell":
-            vm_options = "--vm-identifier {0}".format(guest_name)
-        cmd = "{0} -c -E 'list disks {1}' | grep '^name'".format(rhevm_shell, vm_options)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest disk exist check")
-        if ret != 0 or disk not in output:
-            raise FailException("rhevm({0}) guest disk is not exist".format(ssh_rhevm['host']))
-        disk_uuid = self.rhevm_guest_disk_uuid(ssh_rhevm, rhevm_shell, guest_name, disk)
-        is_actived_disk = ""
-        status = ""
-        for i in range(60):
-            time.sleep(60)
-            if self.rhevm_guest_disk_is_actived(ssh_rhevm, rhevm_shell, guest_name, disk):
-                is_actived_disk = "Yes"
-            else:
-                cmd = "{0} -c -E 'action disk {1} activate {2}'".format(rhevm_shell, disk_uuid, vm_options)
-                ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest disk active")
-            if is_actived_disk == "Yes" and self.rhevm_guest_disk_status(ssh_rhevm, rhevm_shell, guest_name, disk) == "ok":
-                logger.info("rhevm({0}) guest disk is actived and status is ok".format(ssh_rhevm['host']))
-                status = "ok"
-                break
-        if is_actived_disk != "Yes" or status != "ok":
-            raise FailException("Failed to create rhevm({0}) guest, because disk can't be actived".format(ssh_rhevm['host']))
-
-    def rhevm_guest_disk_is_actived(self, ssh_rhevm, rhevm_shell, guest_name, disk):
-        if rhevm_shell == "ovirt-shell":
-            vm_options = "--parent-vm-name {0}".format(guest_name)
-        if rhevm_shell == "rhevm-shell":
-            vm_options = "--vm-identifier {0}".format(guest_name)
-        cmd = "{0} -c -E 'list disks {1} --show-all' | grep '^active'".format(rhevm_shell, vm_options)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm disk for guest is actived?")
-        if ret == 0 and "True" in output:
-            return True
-        else:
-            return False
-
-    def rhevm_guest_disk_status(self, ssh_rhevm, rhevm_shell, guest_name, disk):
-        if rhevm_shell == "ovirt-shell":
-            vm_options = "--parent-vm-name {0}".format(guest_name)
-        if rhevm_shell == "rhevm-shell":
-            vm_options = "--vm-identifier {0}".format(guest_name)
-        cmd = "{0} -c -E 'list disks {1} --show-all' | grep '^status-state'".format(rhevm_shell, vm_options)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm disk for guest status is ok?")
-        if ret == 0 and "status-state" in output:
-            status = output.strip().split(':')[1].strip()
-            logger.info("rhevm({0}) disk for guest status: {1}".format(ssh_rhevm['host'], status))
-            return status
-        else:
-            raise FailException("Failed to check rhevm({0}) guest disk status".format(ssh_rhevm['host']))
-
-    def rhevm_guest_disk_uuid(self, ssh_rhevm, rhevm_shell, guest_name, disk):
-        if rhevm_shell == "ovirt-shell":
-            vm_options = "--parent-vm-name {0}".format(guest_name)
-        if rhevm_shell == "rhevm-shell":
-            vm_options = "--vm-identifier {0}".format(guest_name)
-        cmd = "{0} -c -E 'list disks {1}' | grep '^id'".format(rhevm_shell, vm_options)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm disk uuid for guest")
-        if ret == 0 and "id" in output:
-            uuid = output.strip().split(':')[1].strip()
-            logger.info("rhevm({0}) disk uuid for guest: {1}".format(ssh_rhevm['host'], uuid))
-            return uuid
-        else:
-            raise FailException("Failed to check rhevm({0}) disk uuid for guest".format(ssh_rhevm['host']))
-
-    def rhevm_guest_exist(self, ssh_rhevm, rhevm_shell, guest_name):
-        cmd = "{0} -c -E 'show vm {1}' |grep '^name'".format(rhevm_shell, guest_name)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest exist check")
-        if ret == 0 and guest_name in output:
-            logger.info("rhevm({0}) guest {1} is exist".format(ssh_rhevm['host'],guest_name))
-            return True
-        else:
-            logger.info("rhevm({0}) guest {1} is not exist".format(ssh_rhevm['host'],guest_name))
-            return False
-
-    def rhevm_guest_status(self, ssh_rhevm, rhevm_shell, guest_name):
-        cmd = "{0} -c -E 'show vm {1}' |grep '^status-state'".format(rhevm_shell, guest_name)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest status check")
-        if ret == 0 and "status-state" in output:
-            status = output.strip().split(':')[1].strip()
-            logger.info("rhevm({0}) guest status: {1}".format(ssh_rhevm['host'],status))
-            return status
-        else:
-            raise FailException("Failed to check rhevm({0}) guest status".format(ssh_rhevm['host']))
-
-    def rhevm_guest_uuid(self, ssh_rhevm, rhevm_shell, guest_name):
-        cmd = "{0} -c -E 'show vm {1}' |grep '^id'".format(rhevm_shell, guest_name)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest uuid check")
-        if ret == 0 and "id" in output:
-            uuid = output.strip().split(':')[1].strip()
-            logger.info("Succeeded to get rhevm({0}) guest uuid: {1}".format(ssh_rhevm['host'],uuid))
-            return uuid
-        else:
-            raise FailException("Failed to check rhevm({0}) guest uuid".format(ssh_rhevm['host']))
-
-    def rhevm_guest_nic(self, ssh_rhevm, rhevm_shell, guest_name):
-        if rhevm_shell == "ovirt-shell":
-            options = "list nics --parent-vm-name {0} --show-all".format(guest_name)
-        if rhevm_shell == "rhevm-shell":
-            options = "list nics --vm-identifier {0} --show-all".format(guest_name)
-        cmd = "{0} -c -E '{1}' | grep  '^name'".format(rhevm_shell, options)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest nic check")
-        if ret == 0 and "name" in output:
-            nic = output.strip().split(': ')[1].strip()
-            logger.info("rhevm({0}) guest nic is: {1}".format(ssh_rhevm['host'], nic))
-            return nic
-        else:
-            raise FailException("Failed to check rhevm({0}) guest nic".format(ssh_rhevm['host']))
-
-    def rhevm_guest_mac(self, ssh_rhevm, rhevm_shell, guest_name):
-        if rhevm_shell == "ovirt-shell":
-            options = "list nics --parent-vm-name {0} --show-all".format(guest_name)
-        if rhevm_shell == "rhevm-shell":
-            options = "list nics --vm-identifier {0} --show-all".format(guest_name)
-        cmd = "{0} -c -E '{1}' | grep  '^mac-address'".format(rhevm_shell, options)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest mac check")
-        if ret == 0 and "mac-address" in output:
-            mac_addr = output.strip().split(': ')[1].strip()
-            logger.info("rhevm({0}) guest mac is: {1}".format(ssh_rhevm['host'], mac_addr))
-            return mac_addr
-        else:
-            raise FailException("Failed to check rhevm({0}) guest mac".format(ssh_rhevm['host']))
-
-    def rhevm_guest_ip(self, ssh_rhevm, rhevm_shell, ssh_vdsm, guest_name):
-        if self.rhevm_guest_exist(ssh_rhevm, rhevm_shell, guest_name) is False:
-            return False
-        mac_addr = self.rhevm_guest_mac(ssh_rhevm, rhevm_shell, guest_name)
-        guest_ip =  self.get_ipaddr_bymac(mac_addr, ssh_vdsm)
-        if guest_ip is not False and guest_ip is not None and guest_ip != "":
-            return guest_ip
-        cmd = "%s -c -E 'show vm %s' |grep '^guest_info-ips-ip-address' | grep -Eo '([0-9]{1,3}[\.]){3}[0-9]{1,3}' |grep ^10 |tail -1" \
-                % (rhevm_shell, guest_name)
-        for i in range(30):
-            ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest ip check")
-            guest_ip = output.strip()
-            if guest_ip is not None and guest_ip != "" and self.ping_is_connected(guest_ip):
-                return guest_ip
-            logger.info("No guest ip found for rhevm, try again after 30s...")
-            time.sleep(30)
-
-    def rhevm_guest_add(self, ssh_rhevm, rhevm_shell, ssh_vdsm, guest_name, template, cluster, disk):
-        host_name = self.get_hostname(ssh_vdsm) 
-        if self.rhevm_guest_exist(ssh_rhevm, rhevm_shell, guest_name):
-            self.rhevm_guest_delete(ssh_rhevm, rhevm_shell, guest_name)
-        cmd = "{0} -c -E 'add vm --name {1} --cluster-name {2} --template-name {3} --placement_policy-host-name {4}'"\
-                .format(rhevm_shell, guest_name, cluster, template, host_name)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest create")
-        guest_uuid = self.rhevm_guest_uuid(ssh_rhevm, rhevm_shell, guest_name)
-        guest_nic = self.rhevm_guest_nic(ssh_rhevm, rhevm_shell, guest_name)
-        guest_mac = self.randomMAC()
-        if rhevm_shell == "ovirt-shell":
-            vm_options = "--parent-vm-identifier {0}".format(guest_uuid)
-        if rhevm_shell == "rhevm-shell":
-            vm_options = "--vm-identifier {0}".format(guest_uuid)
-        cmd = "{0} -c -E 'update nic {1} {2} --mac-address {3}'".format(rhevm_shell, guest_nic, vm_options, guest_mac) 
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest mac update")
-        logger.info("rhevm({0}) guest new mac is: {1}".format(ssh_rhevm['host'], guest_mac))
-        self.rhevm_guest_disk_ready(ssh_rhevm, rhevm_shell, guest_name, disk)
-        self.rhevm_guest_start(ssh_rhevm, rhevm_shell, guest_name, ssh_vdsm)
-        guest_ip = self.rhevm_guest_ip(ssh_rhevm, rhevm_shell, ssh_vdsm, guest_name)
-        if guest_ip is not False and guest_ip is not None and guest_ip != "":
-            return guest_ip
-        raise FailException("Failed to add rhevm({0}) guest".format(ssh_rhevm['host']))
-
-    def rhevm_guest_delete(self, ssh_rhevm, rhevm_shell, guest_name):
-        if self.rhevm_guest_exist(ssh_rhevm, rhevm_shell, guest_name):
-            self.rhevm_guest_stop(ssh_rhevm, rhevm_shell, guest_name)
-            cmd = "{0} -c -E 'remove vm {1} --vm-disks-detach_only'".format(rhevm_shell, guest_name)
-            ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest remove")
-            is_deleted = ""
-            for i in range(10):
-                time.sleep(30)
-                if self.rhevm_guest_exist(ssh_rhevm, rhevm_shell, guest_name) is False:
-                    is_deleted = "deleted"
-                    break
-                cmd = "{0} -c -E 'show vm {1}' | grep '^host-id'".format(rhevm_shell, guest_name)
-                ret, output = self.runcmd(cmd, ssh_rhevm, desc="check guest is used by host")
-                if "host-id" not in output:
-                    is_deleted = "non_operational"
-                    break
-            if is_deleted == "deleted":
-                logger.info("Succeeded to delete rhevm({0}) guest".format(ssh_rhevm['host']))
-            elif is_deleted == "non_operational":
-                logger.error("Failed to delete rhevm({0}) guest, because datacenter is down".format(ssh_rhevm['host']))
-                logger.info("rhevm guest can be deleted when host is added and up")
-            else:
-                raise FailException("Failed to delete rhevm({0}) guest".format(ssh_rhevm['host']))
-
-    def rhevm_guest_start(self, ssh_rhevm, rhevm_shell, guest_name, ssh_vdsm=None):
-        if ssh_vdsm:
-            host_name = self.get_hostname(ssh_vdsm)
-        else:
-            host_name = self.rhevm_hosts_list(ssh_rhevm, rhevm_shell)[-1]
-        if not host_name:
-            raise FailException("no vdsm host found in rhevm")
-        cmd = "{0} -c -E 'action vm {1} start --vm-placement_policy-host-name {2}'".format(rhevm_shell, guest_name, host_name)
-        for i in range(5):
-            ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest start")
-            if ret ==0 and "ERROR" not in output:
-                break
+    def rhevm_host_info_by_guest(self, ssh_rhevm, guest):
+        api_url, curl_header = self.rhevm_api_data(ssh_rhevm)
+        guest_info = self.rhevm_guest_info(ssh_rhevm, guest)
+        host = re.findall(r"<address>(.+?)</address>", guest_info)[0]
+        if not host:
+            raise FailException(f'Failed to get the host address of {guest}.')
+        for i in range(3):
+            ret, output = self.runcmd(
+                f'curl -X GET {curl_header} {api_url}/hosts?search={host}',
+                ssh_rhevm
+            )
+            if output and '/ovirt-engine/api/hosts/' in output:
+                return output
+            logger.warning(f"no results found for {host}, try again after 15s...")
             time.sleep(15)
-        for i in range(10):
+        raise FailException(f"Failed to get host info of {host}.")
+
+    def rhevm_host_uuid_by_guest(self, ssh_rhevm, guest):
+        host_info = self.rhevm_host_info_by_guest(ssh_rhevm, guest)
+        host_uuid = re.findall(r"id=\"(.+?)\"", host_info)[0]
+        if host_uuid:
+            return host_uuid
+        raise FailException(f"Failed to get the host uuid of {guest}.")
+
+    def rhevm_host_name_by_guest(self, ssh_rhevm, guest):
+        host_info = self.rhevm_host_info_by_guest(ssh_rhevm, guest)
+        host_name = re.findall(r"<address>(.+?)</address>", host_info)[0]
+        if host_name:
+            return host_name
+        raise FailException(f"Failed to get the host name of {host_name}")
+
+    def rhevm_host_hwuuid_by_guest(self, ssh_rhevm, guest):
+        host_info = self.rhevm_host_info_by_guest(ssh_rhevm, guest)
+        host_hwuuid = re.findall(r"<uuid>(.+?)</uuid>", host_info)[0]
+        if host_hwuuid:
+            return host_hwuuid
+        raise FailException(f"Failed to get the host hwuuid of {guest}")
+
+    def rhevm_guest_info(self, ssh_rhevm, guest):
+        api_url, curl_header = self.rhevm_api_data(ssh_rhevm)
+        cmd = f'curl -X GET {curl_header} {api_url}/vms?search={guest}'
+        for i in range(3):
+            ret, output = self.runcmd(cmd, ssh_rhevm)
+            if output and '/ovirt-engine/api/vms/' in output:
+                return output
+            logger.warning(f"no results found for {guest}, try again after 15s...")
+            time.sleep(15)
+        raise FailException(f"Failed to get guest info of {guest}")
+
+    def rhevm_guest_uuid(self, ssh_rhevm, guest):
+        guest_info = self.rhevm_guest_info(ssh_rhevm, guest)
+        guest_uuid = re.findall(r"id=\"(.+?)\"", guest_info)[0]
+        if guest_uuid:
+            return guest_uuid
+        raise FailException(f"Failed to get the guest uuid for {guest}")
+
+    def rhevm_guest_nic_info(self, ssh_rhevm, guest):
+        guest_uuid = self.rhevm_guest_uuid(ssh_rhevm, guest)
+        api_url, curl_header = self.rhevm_api_data(ssh_rhevm)
+        cmd = f'curl -X GET {curl_header} {api_url}/vms/{guest_uuid}/nics'
+        for i in range(3):
+            ret, output = self.runcmd(cmd, ssh_rhevm)
+            if output and '/ovirt-engine/api/vms/' in output:
+                return output
+            logger.warning(f"no results found for nics of {guest}, try again after 15s...")
+            time.sleep(15)
+        raise FailException(f"Failed to get nics info of {guest}")
+
+    def rhevm_guest_mac(self, ssh_rhevm, guest):
+        nic_info = self.rhevm_guest_nic_info(ssh_rhevm, guest)
+        mac = re.findall(r"<address>(.+?)</address>", nic_info)[0]
+        if mac:
+            return mac
+        raise FailException(f"Failed to get the guest mac of {guest}.")
+
+    def rhevm_guest_ip(self, ssh_rhevm, guest):
+        mac_addr = self.rhevm_guest_mac(ssh_rhevm, guest)
+        guest_ip = self.get_ipaddr_bymac(mac_addr, ssh_rhevm)
+        if guest_ip:
+            return guest_ip
+        raise FailException(f'Failed to get the guest ip of {guest}.')
+
+    def rhevm_guest_status(self, ssh_rhevm, guest):
+        guest_info = self.rhevm_guest_info(ssh_rhevm, guest)
+        guest_status = re.findall(r"<status>(.+?)</status>", guest_info)[0]
+        if guest_status:
+            logger.info(f'Succeeded to get the guest status({guest_status}) of {guest}.')
+            return guest_status
+        raise FailException(f'Failed to get the guest status of {guest}.')
+
+    def rhevm_guest_start(self, ssh_rhevm, guest):
+        api_url, curl_header = self.rhevm_api_data(ssh_rhevm)
+        guest_uuid = self.rhevm_guest_uuid(ssh_rhevm, guest)
+        post_data = '"<action/>"'
+        cmd = f'curl -X POST -d {post_data} {curl_header} {api_url}/vms/{guest_uuid}/start'
+        for i in range(3):
+            self.runcmd(cmd, ssh_rhevm)
             time.sleep(30)
-            if self.rhevm_guest_status(ssh_rhevm, rhevm_shell, guest_name) == "up":
-                logger.info("Succeeded to start rhevm({0}) guest".format(ssh_rhevm['host']))
+            guest_status = self.rhevm_guest_status(ssh_rhevm, guest)
+            if guest_status == 'up' and self.rhevm_guest_ip(ssh_rhevm, guest):
+                logger.info(f'Succeeded to start {guest}.')
                 return True
-            logger.info("rhevm guest is not up, check again after 30s...")
-        raise FailException("Failed to start rhevm({0}) guest".format(ssh_rhevm['host']))
+            logger.warning(f"Failed to start {guest}, try again.")
+        raise FailException(f'Failed to start {guest}.')
 
-    def rhevm_guest_stop(self, ssh_rhevm, rhevm_shell, guest_name):
-        cmd = "{0} -c -E 'action vm {1} stop'".format(rhevm_shell, guest_name)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest stop")
-        for i in range(10):
+    def rhevm_guest_stop(self, ssh_rhevm, guest):
+        api_url, curl_header = self.rhevm_api_data(ssh_rhevm)
+        guest_uuid = self.rhevm_guest_uuid(ssh_rhevm, guest)
+        post_data = '"<action><force>true</force></action>"'
+        cmd = f'curl -X POST -d {post_data} {curl_header} {api_url}/vms/{guest_uuid}/stop'
+        for i in range(3):
+            self.runcmd(cmd, ssh_rhevm)
             time.sleep(30)
-            status = self.rhevm_guest_status(ssh_rhevm, rhevm_shell, guest_name) 
-            if status == "down":
-                logger.info("Succeeded to stop rhevm({0}) guest".format(ssh_rhevm['host']))
+            guest_status = self.rhevm_guest_status(ssh_rhevm, guest)
+            if guest_status == 'down':
+                logger.info(f'Succeeded to stop {guest}.')
                 return True
-            if status == "unknown":
-                self.rhevm_hosts_fence(ssh_rhevm, rhevm_shell)
-            logger.warning("rhevm guest is not down, check again after 30s...")
-        raise FailException("Failed to stop rhevm({0}) guest".format(ssh_rhevm['host']))
+            logger.warning(f"Failed to stop {guest}, try again.")
+        raise FailException(f'Failed to stop {guest}.')
 
-    def rhevm_guest_suspend(self, ssh_rhevm, rhevm_shell, guest_name):
-        cmd = "{0} -c -E 'action vm {1} suspend'".format(rhevm_shell, guest_name)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest suspend")
-        for i in range(10):
+    def rhevm_guest_suspend(self, ssh_rhevm, guest):
+        api_url, curl_header = self.rhevm_api_data(ssh_rhevm)
+        guest_uuid = self.rhevm_guest_uuid(ssh_rhevm, guest)
+        post_data = '"<action/>"'
+        cmd = f'curl -X POST -d {post_data} {curl_header} {api_url}/vms/{guest_uuid}/suspend'
+        for i in range(3):
+            self.runcmd(cmd, ssh_rhevm)
             time.sleep(30)
-            if self.rhevm_guest_status(ssh_rhevm, rhevm_shell, guest_name) == "suspended":
-                logger.info("Succeeded to suspend rhevm({0}) guest".format(ssh_rhevm['host']))
+            guest_status = self.rhevm_guest_status(ssh_rhevm, guest)
+            if guest_status == 'suspended':
+                logger.info(f'Succeeded to suspend {guest}.')
                 return True
-            logger.warning("rhevm guest status is not suspended, check again after 30s...")
-        raise FailException("Failed to suspend rhevm({0}) guest".format(ssh_rhevm['host']))
-
-    def rhevm_guest_resume(self, ssh_rhevm,  rhevm_shell, guest_name, ssh_vdsm=None):
-        if ssh_vdsm:
-            host_name = self.get_hostname(ssh_vdsm)
-        else:
-            host_name = self.rhevm_hosts_list(ssh_rhevm, rhevm_shell)[-1]
-        if not host_name:
-            raise FailException("no vdsm host found in rhevm")
-        cmd = "{0} -c -E 'action vm {1} start --vm-placement_policy-host-name {2}'".format(rhevm_shell, guest_name, host_name)
-        ret, output = self.runcmd(cmd, ssh_rhevm, desc="rhevm guest resume")
-        for i in range(10):
-            time.sleep(30)
-            if self.rhevm_guest_status(ssh_rhevm, rhevm_shell, guest_name) == "up":
-                logger.info("Succeeded to resume rhevm({0}) guest".format(ssh_rhevm['host']))
-                return True
-            logger.warning("rhevm guest status is not up, check again after 30s...")
-        raise FailException("Failed to suspend rhevm({0}) guest".format(ssh_rhevm['host']))
-
-    def vdsm_repo_enable(self, rhel_ver, rhevm_version, ssh_vdsm):
-        if rhel_ver == "6" and rhevm_version == "rhevm-3":
-            repos = "--enable=rhel-6-server-rpms --enable=rhel-6-server-optional-rpms --enable=rhel-6-server-rhev-mgmt-agent-rpms"
-        elif rhel_ver == "7" and rhevm_version == "rhevm-3":
-            repos = "--enable=rhel-7-server-rpms --enable=rhel-7-server-rhev-mgmt-agent-rpms"
-        elif rhel_ver == "7" and rhevm_version == "rhevm-4":
-            repos = "--enable=rhel-7-server-rpms --enable=rhel-7-server-rhv-4-mgmt-agent-rpms --enable=rhel-7-server-ansible-2-rpms"
-        else:
-            raise FailException("Unknown vdsm repos")
-        cmd = "subscription-manager repos %s " % repos
-        status, output = self.run_loop(cmd, ssh_vdsm, desc="enable vdsm repos from cdn")
-        if status != "Yes":
-            raise FailException("Failed to enable vdsm repos in %s" % ssh_vdsm['host'])
-        logger.info("Succeeded to enable vdsm repos in %s" % ssh_vdsm['host'])
-
-    def vdsm_pkg_install(self, ssh_vdsm):
-        cmd = "yum clean all; yum install -y vdsm nmap libguestfs-tools net-tools iproute rpcbind cockpit-ovirt-dashboard"
-        status, output = self.run_loop(cmd, ssh_vdsm, desc="install vdsm and related packages")
-        if status != "Yes":
-            raise FailException("Failed to install vdsm packages in %s" % ssh_vdsm['host'])
-        else:
-            logger.info("Succeeded to install vdsm packages in %s" % ssh_vdsm['host'])
-        cmd = "systemctl enable cockpit.socket; systemctl start cockpit.socket"
-        status, output = self.run_loop(cmd, ssh_vdsm, desc="enable cockpit service")
-
-    def vdsm_host_init(self, ssh_vdsm, rhevm_version):
-        trigger_type = deploy.trigger.type
-        rhel_ver = self.rhel_version(ssh_vdsm)
-        if trigger_type == "trigger-rhev":
-            self.nmap_pkg_ready(ssh_vdsm)
-        else:
-            self.employee_sku_attach(ssh_vdsm)
-            self.vdsm_repo_enable(rhel_ver, rhevm_version, ssh_vdsm)
-            self.vdsm_pkg_install(ssh_vdsm)
+            logger.warning(f"Failed to suspend {guest}, try again.")
+        raise FailException(f'Failed to suspend {guest}.')
