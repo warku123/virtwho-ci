@@ -146,7 +146,7 @@ class Provision(Register):
         #             args=(q,)
         #         )
         #     )
-        elif deploy.trigger.type == "trigger-multiarch":
+        if deploy.trigger.type == "trigger-multiarch":
             threads.append(
                 threading.Thread(
                     target=self.provision_arch_host,
