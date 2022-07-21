@@ -1370,9 +1370,7 @@ class Provision(Register):
         sat_host = ssh_sat['host']
         cmd = "subscription-manager repos \
                 --enable=rhel-{0}-server-satellite-maintenance-6-rpms \
-                --enable=rhel-{0}-server-satellite-capsule-{1}-rpms \
                 --enable=rhel-{0}-server-satellite-{1}-rpms \
-                --enable=rhel-{0}-server-satellite-tools-{1}-rpms \
                 --enable=rhel-{0}-server-ansible-2.9-rpms".format(rhel_ver, sat_ver)
         status, output = self.run_loop(cmd, ssh_sat, desc="enable satellite repos")
         if status != "Yes":
