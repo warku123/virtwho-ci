@@ -48,7 +48,7 @@ class Testcase(Testing):
         logger.info(">>>step3: server option is 红帽€467aa value")
         self.vw_option_update_value(option_tested, '红帽€467aa', config_file)
         data, tty_output, rhsm_output = self.vw_start()
-        if "esx" in hypervisor_type or "ahv" in hypervisor_type:
+        if hypervisor_type in ['esx', 'hyperv']:
             msg = "Option server needs to be ASCII characters only"
             if "ahv" in hypervisor_type:
                 msg = "Invalid server IP address provided"
