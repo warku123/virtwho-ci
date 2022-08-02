@@ -586,6 +586,7 @@ class SetAhv(FeatureSettings):
         self.master_user = None
         self.master_passwd = None
         self.cluster = None
+        self.api_version = None
         self.guest_name = None
         self.guest_user = None
         self.guest_passwd = None
@@ -599,6 +600,7 @@ class SetAhv(FeatureSettings):
         self.master_user = reader.get('ahv', 'master_user')
         self.master_passwd = reader.get('ahv', 'master_passwd')
         self.cluster = reader.get('ahv', 'cluster')
+        self.api_version = reader.get('ahv', 'api_version')
         self.guest_name = reader.get('ahv', 'guest_name')
         self.guest_user = reader.get('ahv', 'guest_user')
         self.guest_passwd = reader.get('ahv', 'guest_passwd')

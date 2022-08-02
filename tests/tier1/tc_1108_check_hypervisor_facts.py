@@ -38,8 +38,11 @@ class Testcase(Testing):
             'esx': 'VMware ESXi',
             'libvirt-remote': 'QEMU',
             'rhevm': 'qemu',
-            'ahv': 'ahv'
+            'ahv': 'AHV'
         }
+        if hypervisor_type == 'ahv' and deploy.ahv.api_version == 'v2':
+            type_values['ahv'] = 'kKvm'
+
         cluster_values = {
             'esx': deploy.vcenter.cluster,
             'rhevm': deploy.rhevm.cluster,
