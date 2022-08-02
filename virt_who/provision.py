@@ -1402,6 +1402,36 @@ class Provision(Register):
         logger.error("Failed to enable satellite qa repo")
         return False
 
+    def satellite_repo_enable(self, ssh_sat, sat_ver, rhel_ver):
+        '''enable satellite repo'''
+        if rhel_ver == "7":
+            cmd = "subscription-manager repos --disable=*; subscription-manager repos \
+            --enable=rhel-{0}-server-rpms \
+            --enable=rhel-server-rhscl-{0}-rpms \
+            --enable=rhel-{0}-server-ansible-2.9-rpms".format(rhel_ver)
+        elif rhel_ver == "8":
+            cmd = "subscription-manager repos --disable=*; subscription-manager repos \
+            --enable=rhel-{0}-for-x86_64-baseos-rpms \
+            --enable=rhel-{0}-for-x86_64-appstream-rpms".format(rhel_ver)
+        status, output = self.run_loop(cmd, ssh_sat, desc="enable satellite repos")
+        if status != "Yes":
+            raise FailException("Failed to enable satellite repos({0})".format(ssh_sat))
+        logger.info("Succeeded to enable satellite repos".format(ssh_sat))
+        cmd = "curl -o /etc/pki/ca-trust/source/anchors/satellite-sat-engineering-ca.crt http://satellite.sat.engineering.redhat.com/pub/katello-server-ca.crt; update-ca-trust"
+        status, output = self.run_loop(cmd, ssh_sat, desc="update ca cert")
+        if status != "Yes":
+            raise FailException("Failed to update ca cert)".format(ssh_sat))
+        logger.info("Succeeded to update ca cert".format(ssh_sat))
+        cmd = "curl -o /etc/yum.repos.d/satellite.repo http://ohsnap.sat.engineering.redhat.com/api/releases/{0}.0/el{1}/satellite/repo_file".format(
+            sat_ver, rhel_ver)
+        status, output = self.run_loop(cmd, ssh_sat, desc="get satellite repo_file")
+        if status != "Yes":
+            raise FailException("Failed to get satellite repo_file)".format(ssh_sat))
+        logger.info("Succeeded to get satellite repo_file".format(ssh_sat))
+        if rhel_ver == "8":
+            cmd = "dnf -y module enable satellite:el8"
+            _, output = self.runcmd(cmd, ssh_sat, desc="enable satellite rhel8 module")
+
     def satellite_pkg_install(self, ssh_sat):
         sat_host = ssh_sat['host']
         logger.info("Start to install satellite package({0})".format(sat_host))

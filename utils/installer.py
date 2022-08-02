@@ -67,8 +67,8 @@ def install_satellite(args):
     provision.system_init("satellite-host-virtwho", ssh_sat)
     sat_ver, rhel_ver = provision.satellite_version(sat_type)
     if "dogfood" in sat_type:
-        provision.satellite_qa_dogfood_enable(
-            ssh_sat, sat_ver, rhel_ver, repo_type="satellite")
+        provision.employee_sku_attach(ssh_sat)
+        provision.satellite_repo_enable(ssh_sat, sat_ver, rhel_ver)
     if "cdn" in sat_type:
         provision.employee_sku_attach(ssh_sat)
         provision.rhel_repo_enable(ssh_sat)
