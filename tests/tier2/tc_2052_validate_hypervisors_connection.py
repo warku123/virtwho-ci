@@ -17,8 +17,8 @@ class Testcase(Testing):
         config_name = "virtwho-config"
         config_file = "/etc/virt-who.d/{0}.conf".format(config_name)
         self.vw_option_enable('[global]', '/etc/virt-who.conf')
-        self.vw_option_enable('debug', '/etc/virt-who.conf')
-        self.vw_option_update_value('debug', 'True', '/etc/virt-who.conf')
+        # self.vw_option_enable('debug', '/etc/virt-who.conf')
+        # self.vw_option_update_value('debug', 'True', '/etc/virt-who.conf')
         self.vw_option_enable('interval', '/etc/virt-who.conf')
         self.vw_option_update_value('interval', '60', '/etc/virt-who.conf')
         self.vw_etc_d_mode_create(config_name, config_file)
