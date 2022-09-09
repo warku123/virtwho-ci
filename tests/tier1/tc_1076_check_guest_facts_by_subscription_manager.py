@@ -22,7 +22,7 @@ class Testcase(Testing):
         virt_type = {
                 'libvirt-local'     :'kvm',
                 'libvirt-remote'    :'kvm',
-                'rhevm'             :'rhev',
+                'rhevm'             :'kvm',
                 'esx'               :'vmware',
                 'hyperv'            :'hyperv',
                 'xen'               :'xen',
