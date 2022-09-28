@@ -963,11 +963,11 @@ class Provision(Register):
                     base_url, compose_id)
                 repo_extra = "{0}/rhel-7/rel-eng/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
                     base_url, compose_id)
-        if "RHEL-8" in compose_id:
-            if "updates" in compose_id:
-                repo_base = "{0}/rhel-8/rel-eng/updates/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
+        elif "RHEL-8" in compose_id:
+            if "updates" in compose_id or "RHEL-8.4" in compose_id:
+                repo_base = "{0}/rhel-8/nightly/updates/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
                     base_url, compose_id)
-                repo_extra = "{0}/rhel-8/rel-eng/updates/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
+                repo_extra = "{0}/rhel-8/nightly/updates/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
                     base_url, compose_id)
             elif ".d" in compose_id:
                 repo_base = "{0}/rhel-8/development/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
