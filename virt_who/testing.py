@@ -577,8 +577,12 @@ class Testing(Provision):
             cmd = ('cat <<EOF > {0}''{1}''{2}''{3}''{4}''{5}''EOF').format(
                     cf_file, cf_title, cf_type, cf_kube, cf_owner, cf_env)
         else:
-            cmd = ('cat <<EOF > {0}''{1}''{2}''{3}''{4}''{5}''{6}''{7}''EOF').format(
-                    cf_file, cf_title, cf_type, cf_server, cf_username, cf_password, cf_owner, cf_env)
+            option = ('{0}''{1}''{2}''{3}''{4}''{5}''{6}').format(
+                cf_title, cf_type, cf_server, cf_username, cf_password, cf_owner, cf_env)
+            if mode == 'ahv' and 'v3' in deploy.ahv.api_version:
+                cf_central = 'prism_central=true\n'
+                option += '{0}'.format(cf_central)
+            cmd = ('cat <<EOF > {0}''{1}''EOF').format(cf_file, option)
         ret, output = self.runcmd(cmd, self.ssh_host())
         if ret != 0:
             raise FailException("Failed to create config file {0}".format(config_file))
