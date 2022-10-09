@@ -947,49 +947,58 @@ class Provision(Register):
         base_url = deploy.repo.rhel_base
         repo_base = ""
         repo_extra = ""
-        if "RHEL-7" in compose_id:
-            if "updates" in compose_id:
-                repo_base = "{0}/rhel-7/rel-eng/updates/RHEL-7/{1}/compose/Server/x86_64/os".format(
-                    base_url, compose_id)
-                repo_extra = "{0}/rhel-7/rel-eng/updates/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
-                    base_url, compose_id)
-            elif ".n" in compose_id:
-                repo_base = "{0}/rhel-7/nightly/RHEL-7/{1}/compose/Server/x86_64/os".format(
-                    base_url, compose_id)
-                repo_extra = "{0}/rhel-7/nightly/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
-                    base_url, compose_id)
+        compose_path = self.get_exported_param("RHEL_COMPOSE_PATH")
+        if compose_path:
+            if "RHEL-7" in compose_id:
+                repo_base = f"{compose_path}/{compose_id}/compose/Server/x86_64/os"
+                repo_extra = f"{compose_path}/{compose_id}/compose/Server-optional/x86_64/os"
             else:
-                repo_base = "{0}/rhel-7/rel-eng/RHEL-7/{1}/compose/Server/x86_64/os".format(
-                    base_url, compose_id)
-                repo_extra = "{0}/rhel-7/rel-eng/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
-                    base_url, compose_id)
-        elif "RHEL-8" in compose_id:
-            if "updates" in compose_id or "RHEL-8.4" in compose_id:
-                repo_base = "{0}/rhel-8/nightly/updates/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
-                    base_url, compose_id)
-                repo_extra = "{0}/rhel-8/nightly/updates/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
-                    base_url, compose_id)
-            elif ".d" in compose_id:
-                repo_base = "{0}/rhel-8/development/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
-                    base_url, compose_id)
-                repo_extra = "{0}/rhel-8/development/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
-                    base_url, compose_id)
-            else:
-                repo_base = "{0}/rhel-8/nightly/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
-                    base_url, compose_id)
-                repo_extra = "{0}/rhel-8/nightly/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
-                    base_url, compose_id)
-        elif "RHEL-9" in compose_id:
-            if ".d" in compose_id:
-                repo_base = "{0}/rhel-9/development/RHEL-9/{1}/compose/BaseOS/x86_64/os".format(
-                    base_url, compose_id)
-                repo_extra = "{0}/rhel-9/development/RHEL-9/{1}/compose/AppStream/x86_64/os".format(
-                    base_url, compose_id)
-            else:
-                repo_base = "{0}/rhel-9/nightly/RHEL-9/{1}/compose/BaseOS/x86_64/os".format(
-                    base_url, compose_id)
-                repo_extra = "{0}/rhel-9/nightly/RHEL-9/{1}/compose/AppStream/x86_64/os".format(
-                    base_url, compose_id)
+                repo_base = f"{compose_path}/{compose_id}/compose/BaseOS/x86_64/os"
+                repo_extra = f"{compose_path}/{compose_id}/compose/AppStream/x86_64/os"
+        else:
+            if "RHEL-7" in compose_id:
+                if "updates" in compose_id:
+                    repo_base = "{0}/rhel-7/rel-eng/updates/RHEL-7/{1}/compose/Server/x86_64/os".format(
+                        base_url, compose_id)
+                    repo_extra = "{0}/rhel-7/rel-eng/updates/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
+                        base_url, compose_id)
+                elif ".n" in compose_id:
+                    repo_base = "{0}/rhel-7/nightly/RHEL-7/{1}/compose/Server/x86_64/os".format(
+                        base_url, compose_id)
+                    repo_extra = "{0}/rhel-7/nightly/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
+                        base_url, compose_id)
+                else:
+                    repo_base = "{0}/rhel-7/rel-eng/RHEL-7/{1}/compose/Server/x86_64/os".format(
+                        base_url, compose_id)
+                    repo_extra = "{0}/rhel-7/rel-eng/RHEL-7/{1}/compose/Server-optional/x86_64/os".format(
+                        base_url, compose_id)
+            elif "RHEL-8" in compose_id:
+                if "updates" in compose_id or "RHEL-8.4" in compose_id:
+                    repo_base = "{0}/rhel-8/nightly/updates/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
+                        base_url, compose_id)
+                    repo_extra = "{0}/rhel-8/nightly/updates/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
+                        base_url, compose_id)
+                elif ".d" in compose_id:
+                    repo_base = "{0}/rhel-8/development/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
+                        base_url, compose_id)
+                    repo_extra = "{0}/rhel-8/development/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
+                        base_url, compose_id)
+                else:
+                    repo_base = "{0}/rhel-8/nightly/RHEL-8/{1}/compose/BaseOS/x86_64/os".format(
+                        base_url, compose_id)
+                    repo_extra = "{0}/rhel-8/nightly/RHEL-8/{1}/compose/AppStream/x86_64/os".format(
+                        base_url, compose_id)
+            elif "RHEL-9" in compose_id:
+                if ".d" in compose_id:
+                    repo_base = "{0}/rhel-9/development/RHEL-9/{1}/compose/BaseOS/x86_64/os".format(
+                        base_url, compose_id)
+                    repo_extra = "{0}/rhel-9/development/RHEL-9/{1}/compose/AppStream/x86_64/os".format(
+                        base_url, compose_id)
+                else:
+                    repo_base = "{0}/rhel-9/nightly/RHEL-9/{1}/compose/BaseOS/x86_64/os".format(
+                        base_url, compose_id)
+                    repo_extra = "{0}/rhel-9/nightly/RHEL-9/{1}/compose/AppStream/x86_64/os".format(
+                        base_url, compose_id)
         return repo_base, repo_extra
 
     def rhel_compose_repo(self, ssh_host, compose_id, repo_file):
