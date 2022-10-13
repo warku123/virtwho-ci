@@ -10,6 +10,7 @@ try:
 except ImportError:
     import xml.etree.ElementTree as ET
 
+
 def parser_args(options):
     if len(options) == 0:
         logger.info('Usage: polarion_impoerter.py 1.xml 2.xml')
@@ -26,11 +27,13 @@ def parser_args(options):
         return files
     raise FailException("no valid xml files provided")
 
+
 def get_exported_param(param_name):
     param_value = os.getenv(param_name)
     if param_value is None or param_value == "":
         param_value = ""
     return param_value
+
 
 def write_file(filename, content):
     try:
@@ -43,6 +46,7 @@ def write_file(filename, content):
         logger.error('IOError to write file')
         pass
 
+
 def read_file(filename):
     try:
         content = open(filename,'r').read()
@@ -51,6 +55,7 @@ def read_file(filename):
         logger.error('IOError to read file')
         pass
 
+
 def update_file(filename, location, data):
     content = read_file(filename)
     pos = content.find(location)
@@ -58,11 +63,13 @@ def update_file(filename, location, data):
         content = content[:pos] + data + content[pos:]
         write_file(filename, content)
 
+
 def fomatTree(elem):
     root_str = ET.tostring(elem, 'UTF-8')
     reparse = minidom.parseString(root_str)
     return reparse.toprettyxml(
         ).replace("\t\t\n", "").replace("\t\n", "").replace("\n\n", "\n")
+
 
 def xml_init(xmlFile, root_node):
     if os.path.exists(xmlFile):
@@ -72,12 +79,14 @@ def xml_init(xmlFile, root_node):
     write_file(xmlFile, fomatTree(node))
     return fomatTree(node)
 
+
 def xml_read(xmlFile):
     try:
         tree=ET.parse(xmlFile)
         return tree
     except:
         logger.error("failed to read xml file")
+
 
 def xml_createNode(parent_node, child_node, attr, text):
     element = ET.Element(child_node)
@@ -89,15 +98,27 @@ def xml_createNode(parent_node, child_node, attr, text):
     parent_node.append(element)
     return element
 
+
+# def polarion_testrun_id():
+#     job_name = get_exported_param("JOB_NAME")
+#     trigger_name = get_exported_param("TRIGGER_TYPE")
+#     server_type = get_exported_param("HYPERVISOR_TYPE")
+#     create_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+#     if job_name != "" and trigger_name !="" and server_type !="":
+#         testrun_id = "virtwho_%s_%s_%s" % (job_name, trigger_name, create_time)
+#     else:
+#         testrun_id = "virtwho_testrun_by_ci_%s" % create_time
+#     testrun_url = '{0}/testrun?id={1}'.format(deploy.polarion.testrun_url, testrun_id)
+#     logger.info(testrun_url)
+#     fd = open(runtest_info, 'a')
+#     fd.write("TESTRUN_URL=%s\n" % testrun_url)
+#     fd.close()
+#     return testrun_id
+
+
 def polarion_testrun_id():
-    job_name = get_exported_param("JOB_NAME")
-    trigger_name = get_exported_param("TRIGGER_TYPE")
-    server_type = get_exported_param("HYPERVISOR_TYPE")
     create_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    if job_name != "" and trigger_name !="" and server_type !="":
-        testrun_id = "virtwho_%s_%s_%s" % (job_name, trigger_name, create_time)
-    else:
-        testrun_id = "virtwho_testrun_by_ci_%s" % create_time
+    testrun_id = "RHSS_%s" % create_time
     testrun_url = '{0}/testrun?id={1}'.format(deploy.polarion.testrun_url, testrun_id)
     logger.info(testrun_url)
     fd = open(runtest_info, 'a')
@@ -105,8 +126,72 @@ def polarion_testrun_id():
     fd.close()
     return testrun_id
 
+
+def polarion_testrun_title():
+    rhel_compose = get_exported_param("RHEL_COMPOSE")
+    trigger_level = get_exported_param("TRIGGER_LEVEL")
+    hypervisor_type = get_exported_param("HYPERVISOR_TYPE")
+    register_type = get_exported_param("REGISTER_TYPE")
+    if "satellite" in register_type:
+        register_type = "satellite"
+    if "full" in trigger_level:
+        trigger_level = "Tier1/Tier2"
+    hypervisor_type = hypervisor_type.upper()
+    register_type = register_type.title()
+    if 'sca' in trigger_level:
+        trigger_level = trigger_level.upper()
+    else:
+        trigger_level = trigger_level.title()
+    testrun_title = f"VIRT-WHO {hypervisor_type}+{register_type} {trigger_level} {rhel_compose}"
+    return testrun_title
+
+
+def polarion_planned_in():
+    keyword = get_exported_param("PLANNED_IN")
+    rhel_compose = get_exported_param("RHEL_COMPOSE")
+    plan = ''
+    plans_dict = {
+        'RHEL-9.1': {
+            'MAIN': 'RHEL_9_1',
+            'CTC1': '9_1_CTC_1',
+            'CTC2': '9_1_CTC_2',
+            'Beta': '9_1_Beta',
+            'RC': '9_1_RC'
+        },
+        'RHEL-9.2': {
+            'MAIN': '9_2_0',
+            'CTC1': '9_2_0_CTC_1',
+            'CTC2': '9_2_0_CTC_2',
+            'Beta': '9_2_0_Beta',
+            'RC': '9_2_0_RC'
+        },
+        'RHEL-8.7': {
+            'MAIN': 'RHEL_8_7',
+            'CTC1': '8_7_CTC_1',
+            'CTC2': '8_7_CTC_2',
+            'Beta': '8_7_Beta',
+            'RC': '8_7_RC'
+        },
+        'RHEL-8.8': {
+            'MAIN': '8_8_0',
+            'CTC1': '8_8_0_CTC_1',
+            'CTC2': '8_8_0_CTC_2',
+            'Beta': '8_8_0_Beta',
+            'RC': '8_8_0_RC'
+        }
+    }
+    if 'Legacy' in keyword:
+        plan = 'RHEL_Legacy_Release'
+    else:
+        for (rhel, plans) in plans_dict.items():
+            if rhel in rhel_compose:
+                plan = plans[keyword]
+    return plan
+
+
 def polarion_xml_init():
     testrun_id = polarion_testrun_id()
+    testrun_title = polarion_testrun_title()
     xml_file = os.path.join(
         os.path.realpath(os.path.join(os.path.dirname(__file__), os.pardir)),
         "polarion.xml"
@@ -118,17 +203,26 @@ def polarion_xml_init():
     attrs = {
             'polarion-project-id': 'RHELSS',
             'polarion-testrun-id': testrun_id,
-            'polarion-custom-assignee': 'hsun',
+            'polarion-testrun-title': testrun_title,
+            'polarion-set-testrun-finished': 'true',
+            'polarion-custom-assignee': 'yuefliu',
             'polarion-custom-isautomated': 'true',
             'polarion-custom-component': 'virt-who',
-            'polarion-custom-tags': 'virt-who',
+            'polarion-custom-arch': 'x86_64',
+            'polarion-custom-subsystemteam': 'sst_subscription_virtwho',
+            'polarion-custom-composeid': get_exported_param("RHEL_COMPOSE"),
+            'polarion-custom-build': get_exported_param('VIRTWHO_BUILD'),
+            'polarion-custom-jenkinsjobs': get_exported_param("BUILD_URL"),
+            'polarion-custom-plannedin': polarion_planned_in(),
+            'polarion-custom-notes': f"{get_exported_param('TRIGGER_TYPE')}"
     }
-
+    logger.info(f'---{attrs}---')
     for name, value in attrs.items():
-        attrs = {'name': name,'value': value}
+        attrs = {'name': name, 'value': value}
         propertie_node = xml_createNode(properties_node, "property", attrs, '')
     write_file(xml_file, fomatTree(rootNode))
     return xml_file, testrun_id
+
 
 def polarion_xml_update(xml_file, files):
     ts_tests = 0
@@ -167,14 +261,15 @@ def polarion_xml_update(xml_file, files):
         fd.close()
         logger.warning("failed cases is > 30, cancel to polarion import!")
         sys.exit()
-    data = '<testsuite name="nosetests" tests="%s" errors="%s" failures="%s" skip="%s">\n</testsuite>' \
-            %(ts_tests, ts_errors, ts_failures, ts_skip)
+    data = '<testsuite name="nosetests" tests="%s" errors="%s" failures="0" skip="%s">\n</testsuite>' \
+            %(ts_tests, total_fail, ts_skip)
     update_file(xml_file, "</testsuites>", data)
     for case in ts_cases:
         update_file(xml_file, "</testsuite>", case)
     tree = xml_read(xml_file)
     rootNode = tree.getroot()
     write_file(xml_file, fomatTree(rootNode))
+
 
 def polarion_caseid_mapping(xml_file):
     tree = xml_read(xml_file)
@@ -193,10 +288,11 @@ def polarion_caseid_mapping(xml_file):
                 propertie_node = xml_createNode(properties_node, "property", attrs, '')
     write_file(xml_file, fomatTree(rootNode))
 
+
 def polarion_xml_import(xml_file, testrun_id):
-    username =  deploy.polarion.username
-    password =  deploy.polarion.password
-    import_url =  deploy.polarion.import_url
+    username = deploy.polarion.username
+    password = deploy.polarion.password
+    import_url = deploy.polarion.import_url
     testrun_url = deploy.polarion.testrun_url
     cmd = "curl -k -u %s:%s -X POST -F file=@%s %s" % (username, password, xml_file, import_url) 
     output = os.popen(cmd).read()
@@ -212,6 +308,7 @@ def polarion_xml_import(xml_file, testrun_id):
     else:
         logger.error("Failed to import xml to polarion")
 
+
 if __name__ == "__main__":
     files = parser_args(sys.argv[1:])
     xml_file, testrun_id = polarion_xml_init()
@@ -219,3 +316,12 @@ if __name__ == "__main__":
     polarion_caseid_mapping(xml_file)
     polarion_xml_import(xml_file, testrun_id)
 
+# Please export below parms if you want to upload result manually.
+# export RHEL_COMPOSE=RHEL-9.1.0-20220718.0
+# export TRIGGER_LEVEL=tier1
+# export HYPERVISOR_TYPE=esx
+# export REGISTER_TYPE=satellite611
+# export PLANNED_IN=MAIN
+# export BUILD_URL=Jenkins_job_link_demo
+# export VIRTWHO_BUILD=virt-who-1.30.5-2.el8_4
+# export TRIGGER_TYPE=trigger-rhel

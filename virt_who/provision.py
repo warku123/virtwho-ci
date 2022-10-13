@@ -740,9 +740,10 @@ class Provision(Register):
         if "stage" in register_type:
             self.stage_consumer_clean(ssh_host, register_config)
 
-    def jenkins_parameter(self, hypervisor_config, register_config):
+    def jenkins_parameter(self, hypervisor_config, register_config, virtwho_build):
         parameter = list()
         parameter.append('-d TRIGGER_TYPE={0}'.format(deploy.trigger.type))
+        parameter.append('-d VIRTWHO_BUILD={0}'.format(virtwho_build))
         parameter.append('-d VIRTWHO_HOST_IP={0}'.format(hypervisor_config['host_ip']))
         parameter.append('-d VIRTWHO_HOST_USER={0}'.format(hypervisor_config['host_user']))
         parameter.append('-d VIRTWHO_HOST_PASSWD={0}'.format(hypervisor_config['host_passwd']))
@@ -787,6 +788,8 @@ class Provision(Register):
             parameter.append('-d PROVISION_INI={0}'.format(provision_ini))
             parameter.append('-d RHEL_COMPOSE={0}'.format(deploy.trigger.rhel_compose))
             parameter.append('-d TRIGGER_LEVEL={0}'.format(deploy.trigger.level))
+            parameter.append('-d POLARION_REPORT={0}'.format(self.get_exported_param("POLARION_REPORT")))
+            parameter.append('-d PLANNED_IN={0}'.format(self.get_exported_param("PLANNED_IN")))
         data = ' '.join(parameter)
         return data 
 
@@ -808,7 +811,9 @@ class Provision(Register):
                 kube_config_url = deploy.kubevirt.kube_config_url
                 cmd = "rm -f {1}; curl -L {0} -o {1}; sync".format(kube_config_url, kube_config_file)
                 ret, output = self.runcmd(cmd, ssh_host)
-            data = self.jenkins_parameter(hypervisor_config, register_config)
+            _, virtwho_build = self.runcmd("rpm -qa virt-who", ssh_host)
+            virtwho_build = virtwho_build.split('.noarch')[0]
+            data = self.jenkins_parameter(hypervisor_config, register_config, virtwho_build)
             if deploy.trigger.type == "trigger-gating":
                 job_name = "runtest-gating"
             cmd = "curl -k -s -i -X POST {0}/job/{1}/buildWithParameters --user {2}:{3} {4}".format(
