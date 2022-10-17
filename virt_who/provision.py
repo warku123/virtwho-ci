@@ -787,6 +787,7 @@ class Provision(Register):
             provision_ini = self.get_exported_param("PROVISION_INI")
             parameter.append('-d PROVISION_INI={0}'.format(provision_ini))
             parameter.append('-d RHEL_COMPOSE={0}'.format(deploy.trigger.rhel_compose))
+            parameter.append('-d RHEL_COMPOSE_PATH={0}'.format(self.get_exported_param("RHEL_COMPOSE_PATH")))
             parameter.append('-d TRIGGER_LEVEL={0}'.format(deploy.trigger.level))
             parameter.append('-d POLARION_REPORT={0}'.format(self.get_exported_param("POLARION_REPORT")))
             parameter.append('-d PLANNED_IN={0}'.format(self.get_exported_param("PLANNED_IN")))
