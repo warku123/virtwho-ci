@@ -23,9 +23,12 @@ class Testcase(Testing):
         logger.info(">>>step2: virt-who-config have correct man page")
         ret, output = self.runcmd("man virt-who-config", self.ssh_host())
         results.setdefault('step2', []).append("configuration for virt-who" in output)
-        msg = "backend names: ahv, libvirt, esx, rhevm, hyperv, fake, xen, or.*\n.*kubevirt"
-        if "RHEL-9" in compose_id:
+        if "RHEL-8.4" in compose_id:
+            msg = "backend names: libvirt, esx, rhevm, hyperv, fake, xen, or kube.*\n.*virt."
+        elif "RHEL-9" in compose_id:
             msg = "backend names: ahv, libvirt, esx, rhevm, hyperv, fake, or kube.*\n.*virt."
+        else:
+            msg = "backend names: ahv, libvirt, esx, rhevm, hyperv, fake, xen, or.*\n.*kubevirt"
         results.setdefault('step2', []).append(self.vw_msg_search(output, msg))
 
         logger.info(">>>step3: virt-who have correct help page")
