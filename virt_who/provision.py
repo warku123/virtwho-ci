@@ -221,6 +221,7 @@ class Provision(Register):
         logger.info("Start to provision register servers")
         func_name = sys._getframe().f_code.co_name
         register_list = deploy.trigger.register_list.lower()
+        satellite_server = self.get_exported_param('SATELLITE_SERVER')
         servers_ip = dict()
         sat_list = list()
         for register_type in register_list.strip().split(','):
@@ -228,26 +229,29 @@ class Provision(Register):
                 servers_ip['stage'] = deploy.stage.server
             if "satellite" in register_type:
                 sat_list.append(register_type)
-        job_passed = self.satellite_machines(sat_list)
-        if job_passed:
-            sat_queue = queue.Queue()
-            sat_results = []
-            sat_threads = []
-            for sat_type, sat_host in job_passed.items():
-                sat_threads.append(
-                    threading.Thread(
-                        target=self.satellite_setup,
-                        args=(sat_queue, sat_type, sat_host)
+                if satellite_server:
+                    servers_ip[register_type] = satellite_server
+        if not satellite_server:
+            job_passed = self.satellite_machines(sat_list)
+            if job_passed:
+                sat_queue = queue.Queue()
+                sat_results = []
+                sat_threads = []
+                for sat_type, sat_host in job_passed.items():
+                    sat_threads.append(
+                        threading.Thread(
+                            target=self.satellite_setup,
+                            args=(sat_queue, sat_type, sat_host)
+                        )
                     )
-                )
-            for t in sat_threads:
-                t.start()
-            for t in sat_threads:
-                t.join()
-            while not sat_queue.empty():
-                sat_results.append(sat_queue.get())
-            for item in sat_results:
-                servers_ip[item[0]] = item[1]
+                for t in sat_threads:
+                    t.start()
+                for t in sat_threads:
+                    t.join()
+                while not sat_queue.empty():
+                    sat_results.append(sat_queue.get())
+                for item in sat_results:
+                    servers_ip[item[0]] = item[1]
         q.put((func_name, servers_ip))
 
     def provision_remote_guests(self, q, remote_modes):
@@ -1674,10 +1678,10 @@ class Provision(Register):
             return False
 
     def docker_container_clean(self, ssh_docker):
-        ret, output = self.runcmd('sh /tmp/docker/rm_containers.sh -d 3', ssh_docker)
-        logger.info("Delete all the containers which created above 3 days")
+        ret, output = self.runcmd('sh /tmp/docker/rm_containers.sh -d 5', ssh_docker)
+        logger.info("Delete all the containers which created above 5 days")
         ret, output = self.runcmd('docker ps -a |wc -l', ssh_docker)
-        if int(output) > 8:
+        if int(output) > 10:
             cmd = "docker ps -a | awk '{print $1 }'|xargs -I {} docker stop {}"
             self.runcmd(cmd, ssh_docker, desc="Stop all containers")
             cmd = "docker ps -a | awk '{print $1 }'|xargs -I {} docker rm -f {}"
