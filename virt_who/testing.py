@@ -777,10 +777,10 @@ class Testing(Provision):
                     facts['type'] = item['facts']['hypervisor.type']
                     facts['version'] = item['facts']['hypervisor.version']
                     facts['socket'] = item['facts']['cpu.cpu_socket(s)']
-                    # ahv for rhel8.4 connot get the dmi.system.uuid now
-                    if 'RHEL-8.4' not in self.get_config('rhel_compose') and \
-                            'ahv' not in self.get_config('hypervisor_type'):
+                    if 'dmi.system.uuid' in item['facts'].keys():
                         facts['dmi'] = item['facts']['dmi.system.uuid']
+                    else:
+                        facts['dmi'] = ''
                     if 'hypervisor.cluster' in item['facts'].keys():
                         facts['cluster'] = item['facts']['hypervisor.cluster']
                     else:
