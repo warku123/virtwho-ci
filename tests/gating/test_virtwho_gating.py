@@ -41,75 +41,75 @@ class VirtWhoGatingTestCase(Testing):
         data, tty_output, rhsm_output = self.vw_start(exp_send=1)
         assert(self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1))
         assert(self.vw_msg_search(rhsm_output, msg="\[.*DEBUG\]", exp_exist=True))
-
-    def test_virtwho_oneshot(self):
-        data, tty_output, rhsm_output = self.vw_start(
-            'virt-who -o', exp_send=1, oneshot=True)
-        assert(self.op_normal_value(data, exp_error=0, exp_thread=0, exp_send=1))
-        data, tty_output, rhsm_output = self.vw_start(
-            'virt-who', exp_send=1, oneshot=False)
-        assert(self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1))
-
-    def test_virtwho_interval(self):
-        self.vw_option_enable("interval", self.global_file)
-        self.vw_option_update_value("interval", '60', self.global_file)
-        data, tty_output, rhsm_output = self.vw_start(exp_send=1, exp_loopnum=1)
-        assert(self.op_normal_value(
-            data, exp_error=0, exp_thread=1, exp_send=1, exp_interval=60,
-            exp_loopnum=1, exp_looptime=60))
-
-    def test_virtwho_hypervisor_id(self):
-        register_config = self.get_register_config()
-        register_type = register_config['type']
-        register_owner = register_config['owner']
-        hypervisor_type = self.get_config('hypervisor_type')
-        steps = {'step1':'uuid', 'step2':'hostname'}
-        if hypervisor_type in ('esx', 'rhevm'):
-            steps['step3'] = 'hwuuid'
-        for step, option in sorted(steps.items(),key=lambda item:item[0]):
-            self.vw_option_add("hypervisor_id", option, self.config_file)
-            data, tty_output, rhsm_output = self.vw_start()
-            assert(self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1))
-            if option == "hwuuid":
-                hypervisorId = self.host_hwuuid
-            elif option == "hostname":
-                hypervisorId = self.host_name
-            else:
-                hypervisorId = self.host_uuid
-            assert(hypervisorId in data[register_owner].keys())
-            self.vw_option_del("hypervisor_id", self.config_file)
-
-    def test_virtwho_rhsm_options(self):
-        self.system_unregister(self.ssh_host())
-        register_config = self.get_register_config()
-        register_type = register_config['type']
-        self.vw_option_add("rhsm_hostname", register_config['server'], self.config_file)
-        self.vw_option_add("rhsm_port", "443", self.config_file)
-        self.vw_option_add("rhsm_prefix", register_config['prefix'], self.config_file)
-        self.vw_option_add("rhsm_username", register_config['username'], self.config_file)
-        self.vw_option_add("rhsm_password", register_config['password'], self.config_file)
-        data, tty_output, rhsm_output = self.vw_start(exp_send=1)
-        assert(self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1))
-        self.system_register(self.ssh_host(), register_type, register_config)
-
-    def test_virtwho_vdc_subscription(self):
-        register_config = self.get_register_config()
-        register_type = register_config['type']
-        vdc_physical_sku = register_config['vdc']
-        vdc_virtual_sku = register_config['vdc_bonus']
-        data, tty_output, rhsm_output = self.vw_start()
-        assert(self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1))
-        sku_attrs = self.system_sku_attr(self.ssh_host(), vdc_physical_sku, "physical")
-        self.vw_web_attach(self.host_name, self.host_uuid, sku_attrs['pool_id'])
-        sku_attrs = self.system_sku_attr(self.ssh_guest(), vdc_virtual_sku, "virtual")
-        self.system_sku_attach(self.ssh_guest(), pool_id=sku_attrs['pool_id'])
-        output = self.system_sku_consumed(self.ssh_guest())
-        assert(self.vw_msg_search(output, vdc_virtual_sku, exp_exist=True))
-        ret, output = self.runcmd('subscription-manager repos --list', self.ssh_guest())
-        if "stage" in register_type:
-            assert(self.vw_msg_search(output, "Available Repositories" , exp_exist=True))
-        else:
-            assert(self.vw_msg_search(output, "no repositories available" , exp_exist=True))
-        ret, output = self.runcmd('subscription-manager status', self.ssh_guest())
-        assert(self.vw_msg_search(output, "Overall Status: Current" , exp_exist=True))
-        assert(self.vw_msg_search(output, "Invalid" , exp_exist=False))
+    #
+    # def test_virtwho_oneshot(self):
+    #     data, tty_output, rhsm_output = self.vw_start(
+    #         'virt-who -o', exp_send=1, oneshot=True)
+    #     assert(self.op_normal_value(data, exp_error=0, exp_thread=0, exp_send=1))
+    #     data, tty_output, rhsm_output = self.vw_start(
+    #         'virt-who', exp_send=1, oneshot=False)
+    #     assert(self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1))
+    #
+    # def test_virtwho_interval(self):
+    #     self.vw_option_enable("interval", self.global_file)
+    #     self.vw_option_update_value("interval", '60', self.global_file)
+    #     data, tty_output, rhsm_output = self.vw_start(exp_send=1, exp_loopnum=1)
+    #     assert(self.op_normal_value(
+    #         data, exp_error=0, exp_thread=1, exp_send=1, exp_interval=60,
+    #         exp_loopnum=1, exp_looptime=60))
+    #
+    # def test_virtwho_hypervisor_id(self):
+    #     register_config = self.get_register_config()
+    #     register_type = register_config['type']
+    #     register_owner = register_config['owner']
+    #     hypervisor_type = self.get_config('hypervisor_type')
+    #     steps = {'step1':'uuid', 'step2':'hostname'}
+    #     if hypervisor_type in ('esx', 'rhevm'):
+    #         steps['step3'] = 'hwuuid'
+    #     for step, option in sorted(steps.items(),key=lambda item:item[0]):
+    #         self.vw_option_add("hypervisor_id", option, self.config_file)
+    #         data, tty_output, rhsm_output = self.vw_start()
+    #         assert(self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1))
+    #         if option == "hwuuid":
+    #             hypervisorId = self.host_hwuuid
+    #         elif option == "hostname":
+    #             hypervisorId = self.host_name
+    #         else:
+    #             hypervisorId = self.host_uuid
+    #         assert(hypervisorId in data[register_owner].keys())
+    #         self.vw_option_del("hypervisor_id", self.config_file)
+    #
+    # def test_virtwho_rhsm_options(self):
+    #     self.system_unregister(self.ssh_host())
+    #     register_config = self.get_register_config()
+    #     register_type = register_config['type']
+    #     self.vw_option_add("rhsm_hostname", register_config['server'], self.config_file)
+    #     self.vw_option_add("rhsm_port", "443", self.config_file)
+    #     self.vw_option_add("rhsm_prefix", register_config['prefix'], self.config_file)
+    #     self.vw_option_add("rhsm_username", register_config['username'], self.config_file)
+    #     self.vw_option_add("rhsm_password", register_config['password'], self.config_file)
+    #     data, tty_output, rhsm_output = self.vw_start(exp_send=1)
+    #     assert(self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1))
+    #     self.system_register(self.ssh_host(), register_type, register_config)
+    #
+    # def test_virtwho_vdc_subscription(self):
+    #     register_config = self.get_register_config()
+    #     register_type = register_config['type']
+    #     vdc_physical_sku = register_config['vdc']
+    #     vdc_virtual_sku = register_config['vdc_bonus']
+    #     data, tty_output, rhsm_output = self.vw_start()
+    #     assert(self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1))
+    #     sku_attrs = self.system_sku_attr(self.ssh_host(), vdc_physical_sku, "physical")
+    #     self.vw_web_attach(self.host_name, self.host_uuid, sku_attrs['pool_id'])
+    #     sku_attrs = self.system_sku_attr(self.ssh_guest(), vdc_virtual_sku, "virtual")
+    #     self.system_sku_attach(self.ssh_guest(), pool_id=sku_attrs['pool_id'])
+    #     output = self.system_sku_consumed(self.ssh_guest())
+    #     assert(self.vw_msg_search(output, vdc_virtual_sku, exp_exist=True))
+    #     ret, output = self.runcmd('subscription-manager repos --list', self.ssh_guest())
+    #     if "stage" in register_type:
+    #         assert(self.vw_msg_search(output, "Available Repositories" , exp_exist=True))
+    #     else:
+    #         assert(self.vw_msg_search(output, "no repositories available" , exp_exist=True))
+    #     ret, output = self.runcmd('subscription-manager status', self.ssh_guest())
+    #     assert(self.vw_msg_search(output, "Overall Status: Current" , exp_exist=True))
+    #     assert(self.vw_msg_search(output, "Invalid" , exp_exist=False))
