@@ -1391,9 +1391,16 @@ class Provision(Register):
                 --enable=rhel-{0}-server-satellite-maintenance-6-rpms \
                 --enable=rhel-{0}-server-satellite-{1}-rpms \
                 --enable=rhel-{0}-server-ansible-2.9-rpms".format(rhel_ver, sat_ver)
+        if rhel_ver == '8':
+            cmd = "subscription-manager repos \
+                    --enable=satellite-{0}-for-rhel-8-x86_64-rpms \
+                    --enable=satellite-maintenance-{0}-for-rhel-8-x86_64-rpms".format(sat_ver)
         status, output = self.run_loop(cmd, ssh_sat, desc="enable satellite repos")
         if status != "Yes":
             raise FailException("Failed to enable satellite repos({0})".format(sat_host))
+        if rhel_ver == "8":
+            cmd = "dnf -y module enable satellite:el8"
+            _, _ = self.runcmd("dnf -y module enable satellite:el8", ssh_sat)
         logger.info("Succeeded to enable satellite repos({0})".format(sat_host))
 
     def satellite_qa_dogfood_enable(self, ssh_sat, sat_ver, rhel_ver, repo_type="satellite"):
