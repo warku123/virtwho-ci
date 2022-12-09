@@ -1403,6 +1403,21 @@ class Provision(Register):
             _, _ = self.runcmd("dnf -y module enable satellite:el8", ssh_sat)
         logger.info("Succeeded to enable satellite repos({0})".format(sat_host))
 
+    def satellite_cdn_repo_config(self, ssh_sat, sat_ver, rhel_ver):
+        sat_host = ssh_sat['host']
+        cmd = "subscription-manager repos \
+                --enable=rhel-{0}-for-x86_64-baseos-rpms \
+                --enable=rhel-{0}-for-x86_64-appstream-rpms \
+                --enable=satellite-{1}-for-rhel-{0}-x86_64-rpms \
+                --enable=satellite-maintenance-{1}-for-rhel-{0}-x86_64-rpms".format(rhel_ver, sat_ver)
+        status, output = self.run_loop(cmd, ssh_sat, desc="enable satellite repos")
+        if status != "Yes":
+            raise FailException("Failed to enable satellite repos({0})".format(sat_host))
+        logger.info("Succeeded to enable satellite repos({0})".format(sat_host))
+        if rhel_ver == "8":
+            cmd = "dnf -y module enable satellite:el8"
+            _, output = self.runcmd(cmd, ssh_sat, desc="enable satellite rhel8 module")
+
     def satellite_qa_dogfood_enable(self, ssh_sat, sat_ver, rhel_ver, repo_type="satellite"):
         '''repo_type should be one of them: satellite, capsule, satellite-tools'''
         repo = deploy.repo.rhel_sat

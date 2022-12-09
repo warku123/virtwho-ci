@@ -71,9 +71,12 @@ def install_satellite(args):
         provision.satellite_repo_enable(ssh_sat, sat_ver, rhel_ver)
     if "cdn" in sat_type:
         provision.employee_sku_attach(ssh_sat)
-        provision.rhel_repo_enable(ssh_sat)
-        provision.satellite_cdn_pool_attach(ssh_sat)
-        provision.satellite_cdn_repo_enable(ssh_sat, sat_ver, rhel_ver)
+        if rhel_ver == "8":
+            provision.satellite_cdn_repo_config(ssh_sat, sat_ver, rhel_ver)
+        else:
+            provision.rhel_repo_enable(ssh_sat)
+            provision.satellite_cdn_pool_attach(ssh_sat)
+            provision.satellite_cdn_repo_enable(ssh_sat, sat_ver, rhel_ver)
     if "nightly" in sat_type:
         provision.employee_sku_attach(ssh_sat)
         provision.rhel_repo_enable(ssh_sat)
