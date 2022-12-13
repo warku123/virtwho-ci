@@ -66,6 +66,7 @@ def install_satellite(args):
     ssh_sat = {'host':host, 'username':username, 'password':password}
     provision.system_init("satellite-host-virtwho", ssh_sat)
     sat_ver, rhel_ver = provision.satellite_version(sat_type)
+    logger.info('satellite version: {0}, RHEL version: {1}'.format(sat_ver, rhel_ver))
     if "dogfood" in sat_type:
         provision.employee_sku_attach(ssh_sat)
         provision.satellite_repo_enable(ssh_sat, sat_ver, rhel_ver)

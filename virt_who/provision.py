@@ -1368,6 +1368,7 @@ class Provision(Register):
             rhel_ver = "8"
         else:
             raise FailException("Unknown rhel version")
+        logger.info("Succeed to get the satellite version: {0}, rhel version {1}".format(sat_ver, rhel_ver))
         return sat_ver, rhel_ver
 
     def satellite_cdn_pool_attach(self, ssh_sat):
