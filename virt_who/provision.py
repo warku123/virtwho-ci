@@ -1368,7 +1368,7 @@ class Provision(Register):
             rhel_ver = "8"
         else:
             raise FailException("Unknown rhel version")
-        logger.info("Succeed to get the satellite version: {0}, rhel version {1}".format(sat_ver, rhel_ver))
+        logger.info("Succeed to get the satellite version: {0}, RHEL version: {1}".format(sat_ver, rhel_ver))
         return sat_ver, rhel_ver
 
     def satellite_cdn_pool_attach(self, ssh_sat):
@@ -1635,13 +1635,18 @@ class Provision(Register):
         }
         self.system_init("ci-host-satellite", ssh_sat)
         sat_ver, rhel_ver = self.satellite_version(sat_type)
+        logger.info('Satellite version: {0}, RHEL version: {1}'.format(sat_ver, rhel_ver))
         if "dogfood" in sat_type:
-            self.satellite_qa_dogfood_enable(ssh_sat, sat_ver, rhel_ver, repo_type="satellite")
+            self.employee_sku_attach(ssh_sat)
+            self.satellite_repo_enable(ssh_sat, sat_ver, rhel_ver)
         if "cdn" in sat_type:
             self.employee_sku_attach(ssh_sat)
-            self.rhel_repo_enable(ssh_sat)
-            self.satellite_cdn_pool_attach(ssh_sat)
-            self.satellite_cdn_repo_enable(ssh_sat, sat_ver, rhel_ver)
+            if rhel_ver == "8":
+                self.satellite_cdn_repo_config(ssh_sat, sat_ver, rhel_ver)
+            else:
+                self.rhel_repo_enable(ssh_sat)
+                self.satellite_cdn_pool_attach(ssh_sat)
+                self.satellite_cdn_repo_enable(ssh_sat, sat_ver, rhel_ver)
         self.satellite_pkg_install(ssh_sat)
         self.satellite_deploy(ssh_sat, admin_user, admin_passwd, manifest_url, sat_ver)
         self.satellite_host_setting(ssh_sat, register_config)
