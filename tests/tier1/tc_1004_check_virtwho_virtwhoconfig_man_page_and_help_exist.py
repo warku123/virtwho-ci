@@ -26,7 +26,7 @@ class Testcase(Testing):
         if "RHEL-8.4" in compose_id:
             msg = "backend names: libvirt, esx, rhevm, hyperv, fake, xen, or kube.*\n.*virt."
         elif "RHEL-9" in compose_id:
-            msg = "backend names: ahv, libvirt, esx, rhevm, hyperv, fake, or kube.*\n.*virt."
+            msg = "backend names: ahv, libvirt, esx, hyperv, fake, or kubevirt."
         else:
             msg = "backend names: ahv, libvirt, esx, rhevm, hyperv, fake, xen, or.*\n.*kubevirt"
         results.setdefault('step2', []).append(self.vw_msg_search(output, msg))
