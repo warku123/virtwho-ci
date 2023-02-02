@@ -79,7 +79,7 @@ class Provision(Register):
             source = ''
         cmd = 'curl -k -s -i {0}'.format(brew_build_url)
         output = os.popen(cmd).read()
-        pkg_url = re.findall(r'<a href="http://(.*?).noarch.rpm">download</a>', output)[-1]
+        pkg_url = re.findall(r'<a href="https://(.*?).noarch.rpm">download</a>', output)[-1]
         items = pkg_url.split('/')
         rhel_release = items[3]
         rhel_compose = self.get_exported_param("RHEL_COMPOSE")
