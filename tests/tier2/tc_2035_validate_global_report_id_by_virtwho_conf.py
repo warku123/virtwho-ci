@@ -13,6 +13,8 @@ class Testcase(Testing):
         # Case Config
         results = dict()
         virtwho_conf = "/etc/virt-who.conf"
+        register_config = self.get_register_config()
+        register_type = register_config['type']
         self.vw_option_enable('[global]', virtwho_conf)
         self.vw_option_enable('debug', virtwho_conf)
         self.vw_option_update_value('debug', 'True', virtwho_conf)
@@ -23,6 +25,8 @@ class Testcase(Testing):
         reporter_id_non_ascii = "红帽©¥®ðπ∉"
         steps = {'step2': reporter_id_null,
                  'step3': reporter_id_non_ascii}
+        if "satellite" in register_type:
+            del steps['step3']
 
         # Case Steps
         logger.info(">>>step1: get default reporter_id")
@@ -55,7 +59,7 @@ class Testcase(Testing):
         # Case Result
         notes = list()
         notes.append("Bug(step2): virt-who still uses null value for reporter_id")
-        notes.append("BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1750206")
+        notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1750206")
         notes.append("Bug(step3): error when configured the report_id with special")
-        notes.append("BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1910274")
+        notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1910274")
         self.vw_case_result(results, notes)
