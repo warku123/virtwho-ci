@@ -8,7 +8,7 @@ class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id="RHEL-136725")
         hypervisor_type = self.get_config('hypervisor_type')
-        if hypervisor_type in ("libvirt-local", "vdsm"):
+        if hypervisor_type in ("libvirt-local", "vdsm", "xen"):
             self.vw_case_skip(hypervisor_type)
         self.vw_case_init()
 
@@ -80,5 +80,8 @@ class Testcase(Testing):
                 results.setdefault('step3', []).append(False)
 
         # case result
-        self.vw_case_result(results)
+        notes = list()
+        notes.append("(step2) No any response after xen hypervisor lost its connection with virt-who host")
+        notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=2065097")
+        self.vw_case_result(results, notes)
 
