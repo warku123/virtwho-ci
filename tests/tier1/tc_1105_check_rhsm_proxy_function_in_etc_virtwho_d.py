@@ -33,7 +33,7 @@ class Testcase(Testing):
         proxy_port = deploy.proxy.port
         bad_proxy_server = "xxx.eng.pek2.redhat.com"
         bad_proxy_port = "0000"
-        error_msg = "Connection refused|Unable to connect to: .*{0}".format(bad_proxy_server)
+        error_msg = "Connection refused|Unable to connect to: .*{0}|Proxy error at .*{0}".format(bad_proxy_server)
 
         # Case Steps
         try:
