@@ -7,6 +7,7 @@ from virt_who.testing import Testing
 class Testcase(Testing):
     def test_run(self):
         self.vw_case_info(os.path.basename(__file__), case_id='RHEL-134069')
+        self.vw_case_skip("unlimited sku")
         self.vw_case_init()
 
         # case config
