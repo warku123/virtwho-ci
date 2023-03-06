@@ -38,3 +38,5 @@ sm.iml
 groups-to-methods.json
 polarizer-report.json
 logs/*
+
+megalinter-reports/
