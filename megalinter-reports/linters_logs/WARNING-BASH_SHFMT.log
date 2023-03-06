@@ -1,0 +1,514 @@
+Results of shfmt linter (version 3.6.0)
+See documentation on https://megalinter.io/0d699a348a2c104040efd78f2d2970e6ae8e5769/descriptors/bash_shfmt/
+-----------------------------------------------
+
+❌ [ERROR] for workspace /tmp/lint
+Linter raw log:
+[1m--- /tmp/lint/docker/mk_container.sh.orig
++++ /tmp/lint/docker/mk_container.sh
+[0m[36m@@ -1,7 +1,7 @@
+[0m #!/usr/bin/env bash
+ set -e
+ usage() {
+[31m-cat <<EOOPTS
+[32m+	cat <<EOOPTS
+[0m $(basename $0) [OPTIONS]
+ OPTIONS:
+   -i "<image_name>"         The image name will be used to launch container
+[0m[36m@@ -10,43 +10,42 @@
+[0m   -u "<container-user>"     The container user you want to create
+   -p "<container-password>" The container password you want to create
+ EOOPTS
+[31m-exit 1
+[32m+	exit 1
+[0m }
+ 
+[31m-if [ $# -eq 0 ]
+-then
+-    usage
+[32m+if [ $# -eq 0 ]; then
++	usage
+[0m fi
+ 
+ while getopts ":i:c:o:u:p:h" opt; do
+[31m-    case $opt in
+-        i)
+-            image_name=$OPTARG
+-            ;;
+-        c)
+-            container_name="$OPTARG"
+-            ;;
+-        o)
+-            container_port="$OPTARG"
+-            ;;
+-        u)
+-            container_user="$OPTARG"
+-            ;;
+-        p)
+-            container_password="$OPTARG"
+-            ;;
+-        h)
+-            usage
+-            ;;
+-        \?)
+-            echo "Invalid option: -$OPTARG"
+-            usage
+-            ;;
+-        :)
+-            echo "No value for opiton -$OPTARG"
+-            usage
+-            ;;
+-    esac
+[32m+	case $opt in
++	i)
++		image_name=$OPTARG
++		;;
++	c)
++		container_name="$OPTARG"
++		;;
++	o)
++		container_port="$OPTARG"
++		;;
++	u)
++		container_user="$OPTARG"
++		;;
++	p)
++		container_password="$OPTARG"
++		;;
++	h)
++		usage
++		;;
++	\?)
++		echo "Invalid option: -$OPTARG"
++		usage
++		;;
++	:)
++		echo "No value for opiton -$OPTARG"
++		usage
++		;;
++	esac
+[0m done
+ 
+ if [ $# -eq 0 ]; then usage; fi
+[0m[36m@@ -57,27 +56,25 @@
+[0m if [ "$container_password" == "" ]; then usage; fi
+ container_name=$(echo "$container_name" | tr '[:upper:]' '[:lower:]')
+ 
+[31m-if [[ $container_name =~ "rhel6" ]] || [[ $container_name =~ "rhel-6" ]] || [[ $container_name =~ "rhel.6" ]]
+-then
+-    docker run --privileged -itd --hostname $container_name --name $container_name -p $container_port:22 $image_name bash
+[32m+if [[ $container_name =~ "rhel6" ]] || [[ $container_name =~ "rhel-6" ]] || [[ $container_name =~ "rhel.6" ]]; then
++	docker run --privileged -itd --hostname $container_name --name $container_name -p $container_port:22 $image_name bash
+[0m else
+[31m-    docker run --privileged -itd -v /sys/fs/cgroup:/sys/fs/cgroup --hostname $container_name --name $container_name -p $container_port:22 $image_name /usr/sbin/init
+[32m+	docker run --privileged -itd -v /sys/fs/cgroup:/sys/fs/cgroup --hostname $container_name --name $container_name -p $container_port:22 $image_name /usr/sbin/init
+[0m fi
+ 
+ echo -e "${container_user}:${container_password}" | docker exec -i $container_name chpasswd
+ docker exec -i $container_name ifconfig
+ docker exec -i $container_name hostname $container_name
+[31m-if [[ $container_name =~ "rhel9" ]] || [[ $container_name =~ "rhel-9" ]] || [[ $container_name =~ "rhel.9" ]]
+-then
+-    docker exec -i $container_name sed -i 's/#*PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
+-    docker exec -i $container_name sed -i 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd
+[32m+if [[ $container_name =~ "rhel9" ]] || [[ $container_name =~ "rhel-9" ]] || [[ $container_name =~ "rhel.9" ]]; then
++	docker exec -i $container_name sed -i 's/#*PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
++	docker exec -i $container_name sed -i 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd
+[0m else
+[31m-    docker exec -i $container_name sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+[32m+	docker exec -i $container_name sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+[0m fi
+ docker exec -i $container_name sed -i 's/#UseDNS yes/UseDNS no/g' /etc/ssh/sshd_config
+ docker exec -i $container_name sed -i 's/GSSAPIAuthentication yes/GSSAPIAuthentication no/g' /etc/ssh/sshd_config
+ docker exec -i $container_name sed -i 's/#X11UseLocalhost yes/X11UseLocalhost no/g' /etc/ssh/sshd_config
+ docker exec -i $container_name rm -rf /.dockerenv
+[31m-echo -e "" | docker exec -i $container_name ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key > /dev/null 2>&1
+-echo -e "" | docker exec -i $container_name ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key > /dev/null 2>&1
+[32m+echo -e "" | docker exec -i $container_name ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key >/dev/null 2>&1
++echo -e "" | docker exec -i $container_name ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key >/dev/null 2>&1
+[0m docker exec -i $container_name /usr/sbin/sshd
+[0m[1m--- /tmp/lint/docker/mk_image.sh.orig
++++ /tmp/lint/docker/mk_image.sh
+[0m[36m@@ -8,7 +8,7 @@
+[0m set -e
+ 
+ usage() {
+[31m-    cat <<EOOPTS
+[32m+	cat <<EOOPTS
+[0m $(basename $0) [OPTIONS] <name>
+ OPTIONS:
+   -p "<packages>"  The list of packages to install in the container.
+[0m[36m@@ -18,41 +18,41 @@
+[0m   -y <yumconf>     The path to the yum config to install packages from. The
+                    default is /etc/yum.conf for Centos/RHEL and /etc/dnf/dnf.conf for Fedora
+ EOOPTS
+[31m-    exit 1
+[32m+	exit 1
+[0m }
+ 
+ # option defaults
+ yum_config=/etc/yum.conf
+[31m-if [ -f /etc/dnf/dnf.conf ] && command -v dnf &> /dev/null; then
+[32m+if [ -f /etc/dnf/dnf.conf ] && command -v dnf &>/dev/null; then
+[0m 	yum_config=/etc/dnf/dnf.conf
+ 	alias yum=dnf
+ fi
+ install_groups="Core"
+ while getopts ":y:p:g:h" opt; do
+[31m-    case $opt in
+-        y)
+-            yum_config=$OPTARG
+-            ;;
+-        h)
+-            usage
+-            ;;
+-        p)
+-            install_packages="$OPTARG"
+-            ;;
+-        g)
+-            install_groups="$OPTARG"
+-            ;;
+-        \?)
+-            echo "Invalid option: -$OPTARG"
+-            usage
+-            ;;
+-    esac
+[32m+	case $opt in
++	y)
++		yum_config=$OPTARG
++		;;
++	h)
++		usage
++		;;
++	p)
++		install_packages="$OPTARG"
++		;;
++	g)
++		install_groups="$OPTARG"
++		;;
++	\?)
++		echo "Invalid option: -$OPTARG"
++		usage
++		;;
++	esac
+[0m done
+ shift $((OPTIND - 1))
+ name=$1
+ 
+ if [[ -z $name ]]; then
+[31m-    usage
+[32m+	usage
+[0m fi
+ 
+ target=$(mktemp -d --tmpdir $(basename $0).XXXXXX)
+[0m[36m@@ -77,67 +77,57 @@
+[0m #	cp -a /etc/yum/vars "$target"/etc/yum/
+ #fi
+ 
+[31m-if [[ -n "$install_groups" ]];
+-then
+-    for i in {1..5}
+-    do
+-        yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs \
+-            --setopt=group_package_types=mandatory -y groupinstall "$install_groups"
+-        if [ $? -eq 0 ]
+-        then
+-            echo  "Finished to install groups"
+-            break
+-        else
+-            sleep 30s
+-            echo  "Waiting 60s try again to install groups"
+-        fi
+-    done
+[32m+if [[ -n "$install_groups" ]]; then
++	for i in {1..5}; do
++		yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs \
++			--setopt=group_package_types=mandatory -y groupinstall "$install_groups"
++		if [ $? -eq 0 ]; then
++			echo "Finished to install groups"
++			break
++		else
++			sleep 30s
++			echo "Waiting 60s try again to install groups"
++		fi
++	done
+[0m fi
+ 
+[31m-if [[ -n "$install_packages" ]];
+-then
+-    for i in {1..5}
+-    do
+-        yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs \
+-            --setopt=group_package_types=mandatory -y install "$install_packages"
+-        if [ $? -eq 0 ]
+-        then
+-            echo  "Finished to install packages"
+-            break
+-        else
+-            sleep 30s
+-            echo  "Waiting 60s try again to install packages"
+-        fi
+-    done
+[32m+if [[ -n "$install_packages" ]]; then
++	for i in {1..5}; do
++		yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs \
++			--setopt=group_package_types=mandatory -y install "$install_packages"
++		if [ $? -eq 0 ]; then
++			echo "Finished to install packages"
++			break
++		else
++			sleep 30s
++			echo "Waiting 60s try again to install packages"
++		fi
++	done
+[0m fi
+ 
+ # install dependence packages for virt-who
+[31m-for i in {1..5}
+-do
+-    yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs --setopt=group_package_types=mandatory \
+-        -y install @base openssh-server openssh-clients openssl-devel net-tools wget hostname sudo subscription-manager gcc expect
+-    # different packages for rhel8/9 and rhel7
+-    if [[ $name =~ "rhel7" ]] || [[ $name =~ "rhel-7" ]] || [[ $name =~ "rhel.7" ]];
+-    then
+-        yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs --setopt=group_package_types=mandatory \
+-            -y install @x11 subscription-manager-gui pexpect libvirt-python python-devel
+-    elif [[ $name =~ "rhel8" ]] || [[ $name =~ "rhel-8" ]] || [[ $name =~ "rhel.8" ]];
+-    then
+-        yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs --setopt=group_package_types=mandatory \
+-            -y install cockpit subscription-manager-cockpit python3-pexpect python3-libvirt glibc-all-langpacks
+-    else
+-        yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs --setopt=group_package_types=mandatory \
+-            -y install cockpit subscription-manager-cockpit python3-libvirt glibc-all-langpacks
+-    fi
+-    # try again if failed to install
+-    if [ $? -eq 0 ]
+-    then
+-        echo  "Finished to install packages"
+-        break
+-    else
+-        sleep 30s
+-        echo  "Waiting 60s try again to install packages"
+-    fi
+[32m+for i in {1..5}; do
++	yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs --setopt=group_package_types=mandatory \
++		-y install @base openssh-server openssh-clients openssl-devel net-tools wget hostname sudo subscription-manager gcc expect
++	# different packages for rhel8/9 and rhel7
++	if [[ $name =~ "rhel7" ]] || [[ $name =~ "rhel-7" ]] || [[ $name =~ "rhel.7" ]]; then
++		yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs --setopt=group_package_types=mandatory \
++			-y install @x11 subscription-manager-gui pexpect libvirt-python python-devel
++	elif [[ $name =~ "rhel8" ]] || [[ $name =~ "rhel-8" ]] || [[ $name =~ "rhel.8" ]]; then
++		yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs --setopt=group_package_types=mandatory \
++			-y install cockpit subscription-manager-cockpit python3-pexpect python3-libvirt glibc-all-langpacks
++	else
++		yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs --setopt=group_package_types=mandatory \
++			-y install cockpit subscription-manager-cockpit python3-libvirt glibc-all-langpacks
++	fi
++	# try again if failed to install
++	if [ $? -eq 0 ]; then
++		echo "Finished to install packages"
++		break
++	else
++		sleep 30s
++		echo "Waiting 60s try again to install packages"
++	fi
+[0m done
+ 
+ # setup compose yum repo for virt-who host
+[0m[36m@@ -146,7 +136,7 @@
+[0m 
+ yum -c "$yum_config" --installroot="$target" -y clean all
+ 
+[31m-cat > "$target"/etc/sysconfig/network <<EOF
+[32m+cat >"$target"/etc/sysconfig/network <<EOF
+[0m NETWORKING=yes
+ HOSTNAME=localhost.localdomain
+ EOF
+[0m[36m@@ -174,17 +164,16 @@
+[0m mkdir -p --mode=0755 "$target"/var/cache/ldconfig
+ 
+ version=
+[31m-for file in "$target"/etc/{redhat,system}-release
+-do
+-    if [ -r "$file" ]; then
+-        version="$(sed 's/^[^0-9\]*\([0-9.]\+\).*$/\1/' "$file")"
+-        break
+-    fi
+[32m+for file in "$target"/etc/{redhat,system}-release; do
++	if [ -r "$file" ]; then
++		version="$(sed 's/^[^0-9\]*\([0-9.]\+\).*$/\1/' "$file")"
++		break
++	fi
+[0m done
+ 
+ if [ -z "$version" ]; then
+[31m-    echo >&2 "warning: cannot autodetect OS version, using '$name' as tag"
+-    version=$name
+[32m+	echo >&2 "warning: cannot autodetect OS version, using '$name' as tag"
++	version=$name
+[0m fi
+ 
+ tar --numeric-owner -c -C "$target" . | docker import - $name
+[0m[36m@@ -193,4 +182,3 @@
+[0m #docker run -i -t --rm $name /bin/bash -c 'echo success'
+ 
+ rm -rf "$target"
+[31m-
+[0m[1m--- /tmp/lint/docker/rm_containers.sh.orig
++++ /tmp/lint/docker/rm_containers.sh
+[0m[36m@@ -1,41 +1,42 @@
+[0m #!/usr/bin/env bash
+ set -e
+ usage() {
+[31m-cat <<EOOPTS
+[32m+	cat <<EOOPTS
+[0m $(basename $0) [OPTIONS]
+ OPTIONS:
+   -d "<created-days>"       How many days the container created
+ EOOPTS
+[31m-exit 1
+[32m+	exit 1
+[0m }
+ 
+[31m-if [ $# -eq 0 ]
+-then
+-    usage
+[32m+if [ $# -eq 0 ]; then
++	usage
+[0m fi
+ 
+[31m-
+[0m while getopts ":d:h" opt; do
+[31m-    case $opt in
+-        d)
+-            created_days=$OPTARG
+-            ;;
+-        h)
+-            usage
+-            ;;
+-        \?)
+-            echo "Invalid option: -$OPTARG"
+-            usage
+-            ;;
+-        :)
+-            echo "No value for opiton -$OPTARG"
+-            usage
+-            ;;
+-    esac
+[32m+	case $opt in
++	d)
++		created_days=$OPTARG
++		;;
++	h)
++		usage
++		;;
++	\?)
++		echo "Invalid option: -$OPTARG"
++		usage
++		;;
++	:)
++		echo "No value for opiton -$OPTARG"
++		usage
++		;;
++	esac
+[0m done
+ 
+ if [ $# -eq 0 ]; then usage; fi
+ if [ "$created_days" == "" ]; then usage; fi
+ 
+[31m-# will  
+-docker ps -a --format "{{.ID}} {{.CreatedAt}}" | while read id cdate ctime _; do if [[ $(date +%s -d "$cdate $ctime") -lt $(date +%s -d "$created_days days ago") ]]; then docker kill $id; docker rm $id; fi; done
+[32m+# will
++docker ps -a --format "{{.ID}} {{.CreatedAt}}" | while read id cdate ctime _; do if [[ $(date +%s -d "$cdate $ctime") -lt $(date +%s -d "$created_days days ago") ]]; then
++	docker kill $id
++	docker rm $id
++fi; done
+[0m[1m--- /tmp/lint/utils/bridge_setup.sh.orig
++++ /tmp/lint/utils/bridge_setup.sh
+[0m[36m@@ -5,50 +5,46 @@
+[0m # nmcli c del $DEV_CON
+ # nmcli c add type ethernet autoconnect yes con-name $DEV_CON ifname $DEV
+ 
+[31m-usage()
+-{
+-   echo "Usage: $0 -b BRIDGE_NAME"
+-   exit 1
+[32m+usage() {
++	echo "Usage: $0 -b BRIDGE_NAME"
++	exit 1
+[0m }
+ 
+[31m-while getopts "b:" opt
+-do
+-   case "$opt" in
+-      b ) br_name="$OPTARG" ;;
+-      ? ) usage ;;
+-   esac
+[32m+while getopts "b:" opt; do
++	case "$opt" in
++	b) br_name="$OPTARG" ;;
++	?) usage ;;
++	esac
+[0m done
+ 
+[31m-if [ -z "$br_name" ]
+-then
+-   usage
+[32m+if [ -z "$br_name" ]; then
++	usage
+[0m fi
+ 
+[31m-DEV=`ip route get 8.8.8.8 | awk 'NR==2 {print $1}' RS='dev'`
+-DEV_CON=`nmcli device show $DEV |grep 'GENERAL.CONNECTION' |awk -F':' '{print $2}' | awk '$1=$1'`
+-IP=`nmcli device show $DEV |grep 'IP4.ADDRESS' |awk '{print $2}'`
+-GW=`nmcli device show $DEV |grep 'IP4.GATEWAY' |awk '{print $2}'`
+-DNS1=`nmcli device show $DEV |grep 'IP4.DNS\[1\]'|awk '{print $2}'`
+-DNS2=`nmcli device show $DEV |grep 'IP4.DNS\[2\]'|awk '{print $2}'`
+-DNS3=`nmcli device show $DEV |grep 'IP4.DNS\[3\]'|awk '{print $2}'`
+-NIC=`ethtool -i $DEV |grep 'driver' | awk -F':' '{print $2}'`
+-	
+-if [[ $DEV != $br_name ]]
+-then
+-    nmcli c del "$DEV_CON"
+-    nmcli c add type bridge autoconnect yes con-name $br_name ifname $br_name
+-    nmcli c add type bridge-slave autoconnect yes con-name "$DEV_CON" ifname $DEV master $br_name
+-    nmcli c modify $br_name bridge.stp no
+-    nmcli c modify $br_name ipv6.method disabled
+-    nmcli c modify $br_name ipv4.ignore-auto-dns yes
+-    nmcli c modify $br_name ipv4.ignore-auto-routes yes
+-    nmcli c modify $br_name ipv4.method manual ipv4.addresses $IP ipv4.gateway $GW
+-    nmcli c modify $br_name ipv4.dns $DNS1,$DNS2,$DNS3
+-    modprobe -r $NIC
+-    modprobe $NIC
+-    nmcli c down $br_name
+-    nmcli c up "$DEV_CON"
+-    nmcli c up $br_name
+[32m+DEV=$(ip route get 8.8.8.8 | awk 'NR==2 {print $1}' RS='dev')
++DEV_CON=$(nmcli device show $DEV | grep 'GENERAL.CONNECTION' | awk -F':' '{print $2}' | awk '$1=$1')
++IP=$(nmcli device show $DEV | grep 'IP4.ADDRESS' | awk '{print $2}')
++GW=$(nmcli device show $DEV | grep 'IP4.GATEWAY' | awk '{print $2}')
++DNS1=$(nmcli device show $DEV | grep 'IP4.DNS\[1\]' | awk '{print $2}')
++DNS2=$(nmcli device show $DEV | grep 'IP4.DNS\[2\]' | awk '{print $2}')
++DNS3=$(nmcli device show $DEV | grep 'IP4.DNS\[3\]' | awk '{print $2}')
++NIC=$(ethtool -i $DEV | grep 'driver' | awk -F':' '{print $2}')
++
++if [[ $DEV != $br_name ]]; then
++	nmcli c del "$DEV_CON"
++	nmcli c add type bridge autoconnect yes con-name $br_name ifname $br_name
++	nmcli c add type bridge-slave autoconnect yes con-name "$DEV_CON" ifname $DEV master $br_name
++	nmcli c modify $br_name bridge.stp no
++	nmcli c modify $br_name ipv6.method disabled
++	nmcli c modify $br_name ipv4.ignore-auto-dns yes
++	nmcli c modify $br_name ipv4.ignore-auto-routes yes
++	nmcli c modify $br_name ipv4.method manual ipv4.addresses $IP ipv4.gateway $GW
++	nmcli c modify $br_name ipv4.dns $DNS1,$DNS2,$DNS3
++	modprobe -r $NIC
++	modprobe $NIC
++	nmcli c down $br_name
++	nmcli c up "$DEV_CON"
++	nmcli c up $br_name
+[0m else
+[31m-    echo "The bridge $br_name is already exist!"
+[32m+	echo "The bridge $br_name is already exist!"
+[0m fi
+[0m

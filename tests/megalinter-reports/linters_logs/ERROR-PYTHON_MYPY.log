@@ -1,0 +1,10 @@
+Results of mypy linter (version 1.0.1)
+See documentation on https://megalinter.io/0d699a348a2c104040efd78f2d2970e6ae8e5769/descriptors/python_mypy/
+-----------------------------------------------
+
+❌ [ERROR] for workspace /tmp/lint
+Linter raw log:
+tmp/lint/tier2/tc_2039_validate_defaults_owner_option_by_virtwho_conf.py:92: error: Name "unittest" is not defined  [name-defined]
+tmp/lint/smoke/test_virtwho_smoke.py:108: error: Assertion is always true, perhaps remove parentheses?  [misc]
+Found 2 errors in 2 files (checked 189 source files)
+

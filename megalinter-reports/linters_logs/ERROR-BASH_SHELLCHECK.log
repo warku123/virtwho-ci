@@ -1,0 +1,424 @@
+Results of shellcheck linter (version 0.9.0)
+See documentation on https://megalinter.io/0d699a348a2c104040efd78f2d2970e6ae8e5769/descriptors/bash_shellcheck/
+-----------------------------------------------
+
+❌ [ERROR] for workspace /tmp/lint
+Linter raw log:
+
+In /tmp/lint/docker/mk_container.sh line 5:
+$(basename $0) [OPTIONS]
+           ^-- SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+$(basename "$0") [OPTIONS]
+
+
+In /tmp/lint/docker/mk_container.sh line 59:
+if [[ $container_name =~ "rhel6" ]] || [[ $container_name =~ "rhel-6" ]] || [[ $container_name =~ "rhel.6" ]]; then
+                                                                                                  ^------^ SC2076 (warning): Remove quotes from right-hand side of =~ to match as a regex rather than literally.
+
+
+In /tmp/lint/docker/mk_container.sh line 60:
+	docker run --privileged -itd --hostname $container_name --name $container_name -p $container_port:22 $image_name bash
+                                                ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+                                                                       ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+                                                                                          ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+                                                                                                             ^---------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	docker run --privileged -itd --hostname "$container_name" --name "$container_name" -p "$container_port":22 "$image_name" bash
+
+
+In /tmp/lint/docker/mk_container.sh line 62:
+	docker run --privileged -itd -v /sys/fs/cgroup:/sys/fs/cgroup --hostname $container_name --name $container_name -p $container_port:22 $image_name /usr/sbin/init
+                                                                                 ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+                                                                                                        ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+                                                                                                                           ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+                                                                                                                                              ^---------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	docker run --privileged -itd -v /sys/fs/cgroup:/sys/fs/cgroup --hostname "$container_name" --name "$container_name" -p "$container_port":22 "$image_name" /usr/sbin/init
+
+
+In /tmp/lint/docker/mk_container.sh line 65:
+echo -e "${container_user}:${container_password}" | docker exec -i $container_name chpasswd
+                                                                   ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+echo -e "${container_user}:${container_password}" | docker exec -i "$container_name" chpasswd
+
+
+In /tmp/lint/docker/mk_container.sh line 66:
+docker exec -i $container_name ifconfig
+               ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+docker exec -i "$container_name" ifconfig
+
+
+In /tmp/lint/docker/mk_container.sh line 67:
+docker exec -i $container_name hostname $container_name
+               ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+                                        ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+docker exec -i "$container_name" hostname "$container_name"
+
+
+In /tmp/lint/docker/mk_container.sh line 68:
+if [[ $container_name =~ "rhel9" ]] || [[ $container_name =~ "rhel-9" ]] || [[ $container_name =~ "rhel.9" ]]; then
+                                                                                                  ^------^ SC2076 (warning): Remove quotes from right-hand side of =~ to match as a regex rather than literally.
+
+
+In /tmp/lint/docker/mk_container.sh line 69:
+	docker exec -i $container_name sed -i 's/#*PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
+                       ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	docker exec -i "$container_name" sed -i 's/#*PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
+
+
+In /tmp/lint/docker/mk_container.sh line 70:
+	docker exec -i $container_name sed -i 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd
+                       ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	docker exec -i "$container_name" sed -i 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd
+
+
+In /tmp/lint/docker/mk_container.sh line 72:
+	docker exec -i $container_name sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+                       ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	docker exec -i "$container_name" sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+
+
+In /tmp/lint/docker/mk_container.sh line 74:
+docker exec -i $container_name sed -i 's/#UseDNS yes/UseDNS no/g' /etc/ssh/sshd_config
+               ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+docker exec -i "$container_name" sed -i 's/#UseDNS yes/UseDNS no/g' /etc/ssh/sshd_config
+
+
+In /tmp/lint/docker/mk_container.sh line 75:
+docker exec -i $container_name sed -i 's/GSSAPIAuthentication yes/GSSAPIAuthentication no/g' /etc/ssh/sshd_config
+               ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+docker exec -i "$container_name" sed -i 's/GSSAPIAuthentication yes/GSSAPIAuthentication no/g' /etc/ssh/sshd_config
+
+
+In /tmp/lint/docker/mk_container.sh line 76:
+docker exec -i $container_name sed -i 's/#X11UseLocalhost yes/X11UseLocalhost no/g' /etc/ssh/sshd_config
+               ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+docker exec -i "$container_name" sed -i 's/#X11UseLocalhost yes/X11UseLocalhost no/g' /etc/ssh/sshd_config
+
+
+In /tmp/lint/docker/mk_container.sh line 77:
+docker exec -i $container_name rm -rf /.dockerenv
+               ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+docker exec -i "$container_name" rm -rf /.dockerenv
+
+
+In /tmp/lint/docker/mk_container.sh line 78:
+echo -e "" | docker exec -i $container_name ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key >/dev/null 2>&1
+                            ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+echo -e "" | docker exec -i "$container_name" ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key >/dev/null 2>&1
+
+
+In /tmp/lint/docker/mk_container.sh line 79:
+echo -e "" | docker exec -i $container_name ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key >/dev/null 2>&1
+                            ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+echo -e "" | docker exec -i "$container_name" ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key >/dev/null 2>&1
+
+
+In /tmp/lint/docker/mk_container.sh line 80:
+docker exec -i $container_name /usr/sbin/sshd
+               ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+docker exec -i "$container_name" /usr/sbin/sshd
+
+
+In /tmp/lint/docker/mk_image.sh line 12:
+$(basename $0) [OPTIONS] <name>
+           ^-- SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+$(basename "$0") [OPTIONS] <name>
+
+
+In /tmp/lint/docker/mk_image.sh line 58:
+target=$(mktemp -d --tmpdir $(basename $0).XXXXXX)
+                            ^------------^ SC2046 (warning): Quote this to prevent word splitting.
+                                       ^-- SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+target=$(mktemp -d --tmpdir $(basename "$0").XXXXXX)
+
+
+In /tmp/lint/docker/mk_image.sh line 84:
+		if [ $? -eq 0 ]; then
+                     ^-- SC2181 (style): Check exit code directly with e.g. 'if mycmd;', not indirectly with $?.
+
+
+In /tmp/lint/docker/mk_image.sh line 98:
+		if [ $? -eq 0 ]; then
+                     ^-- SC2181 (style): Check exit code directly with e.g. 'if mycmd;', not indirectly with $?.
+
+
+In /tmp/lint/docker/mk_image.sh line 109:
+for i in {1..5}; do
+^-^ SC2034 (warning): i appears unused. Verify use (or export if used externally).
+
+
+In /tmp/lint/docker/mk_image.sh line 113:
+	if [[ $name =~ "rhel7" ]] || [[ $name =~ "rhel-7" ]] || [[ $name =~ "rhel.7" ]]; then
+                                                                            ^------^ SC2076 (warning): Remove quotes from right-hand side of =~ to match as a regex rather than literally.
+
+
+In /tmp/lint/docker/mk_image.sh line 116:
+	elif [[ $name =~ "rhel8" ]] || [[ $name =~ "rhel-8" ]] || [[ $name =~ "rhel.8" ]]; then
+                                                                              ^------^ SC2076 (warning): Remove quotes from right-hand side of =~ to match as a regex rather than literally.
+
+
+In /tmp/lint/docker/mk_image.sh line 124:
+	if [ $? -eq 0 ]; then
+             ^-- SC2181 (style): Check exit code directly with e.g. 'if mycmd;', not indirectly with $?.
+
+
+In /tmp/lint/docker/mk_image.sh line 134:
+mkdir -p -m 755 "$target"/etc/yum.repos.d/
+         ^-- SC2174 (warning): When used with -p, -m only applies to the deepest directory.
+
+
+In /tmp/lint/docker/mk_image.sh line 145:
+mkdir -p --mode=0755 "$target"/backup/
+         ^---------^ SC2174 (warning): When used with -p, -m only applies to the deepest directory.
+
+
+In /tmp/lint/docker/mk_image.sh line 159:
+mkdir -p --mode=0755 "$target"/var/cache/yum
+         ^---------^ SC2174 (warning): When used with -p, -m only applies to the deepest directory.
+
+
+In /tmp/lint/docker/mk_image.sh line 164:
+mkdir -p --mode=0755 "$target"/var/cache/ldconfig
+         ^---------^ SC2174 (warning): When used with -p, -m only applies to the deepest directory.
+
+
+In /tmp/lint/docker/mk_image.sh line 179:
+tar --numeric-owner -c -C "$target" . | docker import - $name
+                                                        ^---^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+tar --numeric-owner -c -C "$target" . | docker import - "$name"
+
+
+In /tmp/lint/docker/rm_containers.sh line 5:
+$(basename $0) [OPTIONS]
+           ^-- SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+$(basename "$0") [OPTIONS]
+
+
+In /tmp/lint/docker/rm_containers.sh line 39:
+docker ps -a --format "{{.ID}} {{.CreatedAt}}" | while read id cdate ctime _; do if [[ $(date +%s -d "$cdate $ctime") -lt $(date +%s -d "$created_days days ago") ]]; then
+                                                       ^--^ SC2162 (info): read without -r will mangle backslashes.
+
+
+In /tmp/lint/docker/rm_containers.sh line 40:
+	docker kill $id
+                    ^-^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	docker kill "$id"
+
+
+In /tmp/lint/docker/rm_containers.sh line 41:
+	docker rm $id
+                  ^-^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	docker rm "$id"
+
+
+In /tmp/lint/utils/bridge_setup.sh line 25:
+DEV_CON=$(nmcli device show $DEV | grep 'GENERAL.CONNECTION' | awk -F':' '{print $2}' | awk '$1=$1')
+                            ^--^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+DEV_CON=$(nmcli device show "$DEV" | grep 'GENERAL.CONNECTION' | awk -F':' '{print $2}' | awk '$1=$1')
+
+
+In /tmp/lint/utils/bridge_setup.sh line 26:
+IP=$(nmcli device show $DEV | grep 'IP4.ADDRESS' | awk '{print $2}')
+                       ^--^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+IP=$(nmcli device show "$DEV" | grep 'IP4.ADDRESS' | awk '{print $2}')
+
+
+In /tmp/lint/utils/bridge_setup.sh line 27:
+GW=$(nmcli device show $DEV | grep 'IP4.GATEWAY' | awk '{print $2}')
+                       ^--^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+GW=$(nmcli device show "$DEV" | grep 'IP4.GATEWAY' | awk '{print $2}')
+
+
+In /tmp/lint/utils/bridge_setup.sh line 28:
+DNS1=$(nmcli device show $DEV | grep 'IP4.DNS\[1\]' | awk '{print $2}')
+                         ^--^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+DNS1=$(nmcli device show "$DEV" | grep 'IP4.DNS\[1\]' | awk '{print $2}')
+
+
+In /tmp/lint/utils/bridge_setup.sh line 29:
+DNS2=$(nmcli device show $DEV | grep 'IP4.DNS\[2\]' | awk '{print $2}')
+                         ^--^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+DNS2=$(nmcli device show "$DEV" | grep 'IP4.DNS\[2\]' | awk '{print $2}')
+
+
+In /tmp/lint/utils/bridge_setup.sh line 30:
+DNS3=$(nmcli device show $DEV | grep 'IP4.DNS\[3\]' | awk '{print $2}')
+                         ^--^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+DNS3=$(nmcli device show "$DEV" | grep 'IP4.DNS\[3\]' | awk '{print $2}')
+
+
+In /tmp/lint/utils/bridge_setup.sh line 31:
+NIC=$(ethtool -i $DEV | grep 'driver' | awk -F':' '{print $2}')
+                 ^--^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+NIC=$(ethtool -i "$DEV" | grep 'driver' | awk -F':' '{print $2}')
+
+
+In /tmp/lint/utils/bridge_setup.sh line 33:
+if [[ $DEV != $br_name ]]; then
+              ^------^ SC2053 (warning): Quote the right-hand side of != in [[ ]] to prevent glob matching.
+
+
+In /tmp/lint/utils/bridge_setup.sh line 35:
+	nmcli c add type bridge autoconnect yes con-name $br_name ifname $br_name
+                                                         ^------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+                                                                         ^------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	nmcli c add type bridge autoconnect yes con-name "$br_name" ifname "$br_name"
+
+
+In /tmp/lint/utils/bridge_setup.sh line 36:
+	nmcli c add type bridge-slave autoconnect yes con-name "$DEV_CON" ifname $DEV master $br_name
+                                                                                 ^--^ SC2086 (info): Double quote to prevent globbing and word splitting.
+                                                                                             ^------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	nmcli c add type bridge-slave autoconnect yes con-name "$DEV_CON" ifname "$DEV" master "$br_name"
+
+
+In /tmp/lint/utils/bridge_setup.sh line 37:
+	nmcli c modify $br_name bridge.stp no
+                       ^------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	nmcli c modify "$br_name" bridge.stp no
+
+
+In /tmp/lint/utils/bridge_setup.sh line 38:
+	nmcli c modify $br_name ipv6.method disabled
+                       ^------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	nmcli c modify "$br_name" ipv6.method disabled
+
+
+In /tmp/lint/utils/bridge_setup.sh line 39:
+	nmcli c modify $br_name ipv4.ignore-auto-dns yes
+                       ^------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	nmcli c modify "$br_name" ipv4.ignore-auto-dns yes
+
+
+In /tmp/lint/utils/bridge_setup.sh line 40:
+	nmcli c modify $br_name ipv4.ignore-auto-routes yes
+                       ^------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	nmcli c modify "$br_name" ipv4.ignore-auto-routes yes
+
+
+In /tmp/lint/utils/bridge_setup.sh line 41:
+	nmcli c modify $br_name ipv4.method manual ipv4.addresses $IP ipv4.gateway $GW
+                       ^------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+                                                                  ^-^ SC2086 (info): Double quote to prevent globbing and word splitting.
+                                                                                   ^-^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	nmcli c modify "$br_name" ipv4.method manual ipv4.addresses "$IP" ipv4.gateway "$GW"
+
+
+In /tmp/lint/utils/bridge_setup.sh line 42:
+	nmcli c modify $br_name ipv4.dns $DNS1,$DNS2,$DNS3
+                       ^------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+                                         ^---^ SC2086 (info): Double quote to prevent globbing and word splitting.
+                                               ^---^ SC2086 (info): Double quote to prevent globbing and word splitting.
+                                                     ^---^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	nmcli c modify "$br_name" ipv4.dns "$DNS1","$DNS2","$DNS3"
+
+
+In /tmp/lint/utils/bridge_setup.sh line 43:
+	modprobe -r $NIC
+                    ^--^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	modprobe -r "$NIC"
+
+
+In /tmp/lint/utils/bridge_setup.sh line 44:
+	modprobe $NIC
+                 ^--^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	modprobe "$NIC"
+
+
+In /tmp/lint/utils/bridge_setup.sh line 45:
+	nmcli c down $br_name
+                     ^------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	nmcli c down "$br_name"
+
+
+In /tmp/lint/utils/bridge_setup.sh line 47:
+	nmcli c up $br_name
+                   ^------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+	nmcli c up "$br_name"
+
+For more information:
+  https://www.shellcheck.net/wiki/SC2034 -- i appears unused. Verify use (or ...
+  https://www.shellcheck.net/wiki/SC2046 -- Quote this to prevent word splitt...
+  https://www.shellcheck.net/wiki/SC2053 -- Quote the right-hand side of != i...
+

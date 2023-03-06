@@ -1,0 +1,2319 @@
+Results of jscpd linter (version 3.5.3)
+See documentation on https://megalinter.io/0d699a348a2c104040efd78f2d2970e6ae8e5769/descriptors/copypaste_jscpd/
+-----------------------------------------------
+
+❌ [ERROR] for workspace /tmp/lint
+Linter raw log:
+Clone found (python):
+ - tests/tier3/tc_1035_check_mapping_info_with_dconf_and_cli_for_two_modes.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier3/tc_1035_check_mapping_info_with_dconf_and_cli_for_two_modes.py [10:14 - 20:3] (10 lines, 93 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [10:14 - 20:5]
+
+Clone found (python):
+ - tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [10:14 - 26:5] (16 lines, 151 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [10:14 - 26:15]
+
+Clone found (python):
+ - tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [21:19 - 31:14] (10 lines, 86 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [19:24 - 29:15]
+
+Clone found (python):
+ - tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [40:2 - 51:2] (11 lines, 148 tokens)
+   tests/tier3/tc_1035_check_mapping_info_with_dconf_and_cli_for_two_modes.py [35:2 - 46:2]
+
+Clone found (python):
+ - tests/tier3/tc_1032_check_mapping_info_with_two_files_for_two_modes_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier3/tc_1032_check_mapping_info_with_two_files_for_two_modes_in_etc_virtwho_d.py [10:14 - 31:14] (21 lines, 200 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [10:14 - 31:13]
+
+Clone found (python):
+ - tests/tier3/tc_1032_check_mapping_info_with_two_files_for_two_modes_in_etc_virtwho_d.py [37:2 - 49:2] (12 lines, 168 tokens)
+   tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [39:2 - 46:2]
+
+Clone found (python):
+ - tests/tier3/tc_1031_check_mapping_info_with_one_file_include_two_modes_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier3/tc_1031_check_mapping_info_with_one_file_include_two_modes_in_etc_virtwho_d.py [10:14 - 35:65] (25 lines, 236 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [10:14 - 35:66]
+
+Clone found (python):
+ - tests/tier3/tc_1031_check_mapping_info_with_one_file_include_two_modes_in_etc_virtwho_d.py [39:2 - 51:2] (12 lines, 165 tokens)
+   tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [39:5 - 46:2]
+
+Clone found (python):
+ - tests/tier3/tc_1027_check_two_modes_enabled_in_etc_sysconfig.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier3/tc_1027_check_two_modes_enabled_in_etc_sysconfig.py [10:14 - 26:12] (16 lines, 151 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [10:14 - 26:15]
+
+Clone found (python):
+ - tests/tier3/tc_1027_check_two_modes_enabled_in_etc_sysconfig.py [33:49 - 38:45] (5 lines, 72 tokens)
+   tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [39:5 - 44:56]
+
+Clone found (python):
+ - tests/tier2/tc_2069_valide_insecure_option_for_kubevirt.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2068_validate_options_migration_during_virt_who_upgrade.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2067_validate_uniform_mapping_format.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2066_validate_cluster_name_with_special_char.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2065_deprecation_warning_for_etc_sysconfig.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2063_check_hypervisors_fqdn.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2061_check_fake_mode_is_hypervisor_option.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py [19:9 - 26:11] (7 lines, 75 tokens)
+   tests/tier2/tc_2069_valide_insecure_option_for_kubevirt.py [20:9 - 28:13]
+
+Clone found (python):
+ - tests/tier2/tc_2059_check_redundant_options_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2059_check_redundant_options_in_etc_virtwho_d.py [10:14 - 25:7] (15 lines, 136 tokens)
+   tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py [12:19 - 28:13]
+
+Clone found (python):
+ - tests/tier2/tc_2058_post_large_json_to_rhsm.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2057_validate_subscription_register_clean_together.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2057_validate_subscription_register_clean_together.py [48:16 - 55:8] (7 lines, 88 tokens)
+   tests/tier2/tc_2057_validate_subscription_register_clean_together.py [25:42 - 32:8]
+
+Clone found (python):
+ - tests/tier2/tc_2056_validate_non_root_to_run_virtwho.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2056_validate_non_root_to_run_virtwho.py [13:16 - 24:9] (11 lines, 89 tokens)
+   tests/tier2/tc_2057_validate_subscription_register_clean_together.py [10:14 - 21:16]
+
+Clone found (python):
+ - tests/tier2/tc_2055_validate_rhevm_url_without_ovirt_engine.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2055_validate_rhevm_url_without_ovirt_engine.py [12:16 - 24:7] (12 lines, 97 tokens)
+   tests/tier2/tc_2056_validate_non_root_to_run_virtwho.py [12:2 - 21:16]
+
+Clone found (python):
+ - tests/tier2/tc_2054_validate_trigger_event_with_different_interval.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2053_validate_guest_state_when_suspend_resume_stop_start.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2053_validate_guest_state_when_suspend_resume_stop_start.py [81:22 - 86:8] (5 lines, 90 tokens)
+   tests/tier2/tc_2053_validate_guest_state_when_suspend_resume_stop_start.py [50:25 - 54:2]
+
+Clone found (python):
+ - tests/tier2/tc_2053_validate_guest_state_when_suspend_resume_stop_start.py [99:23 - 105:8] (6 lines, 111 tokens)
+   tests/tier2/tc_2053_validate_guest_state_when_suspend_resume_stop_start.py [66:24 - 72:8]
+
+Clone found (python):
+ - tests/tier2/tc_2052_validate_hypervisors_connection.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2051_validate_virt_who_password_commandline.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2049_validate_hostname_without_domain.py [1:1 - 11:16] (10 lines, 80 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 11:5]
+
+Clone found (python):
+ - tests/tier2/tc_2048_register_system_with_activaiton_key.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2048_register_system_with_activaiton_key.py [13:14 - 24:16] (11 lines, 89 tokens)
+   tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py [15:16 - 28:13]
+
+Clone found (python):
+ - tests/tier2/tc_2047_check_rhsm_log_after_delete_host_hypervisor_from_server_webui.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2047_check_rhsm_log_after_delete_host_hypervisor_from_server_webui.py [14:9 - 25:13] (11 lines, 87 tokens)
+   tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py [16:9 - 28:13]
+
+Clone found (python):
+ - tests/tier2/tc_2047_check_rhsm_log_after_delete_host_hypervisor_from_server_webui.py [26:42 - 31:44] (5 lines, 72 tokens)
+   tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [39:5 - 44:56]
+
+Clone found (python):
+ - tests/tier2/tc_2046_check_registered_by_item_in_satellite_webui.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2046_check_registered_by_item_in_satellite_webui.py [11:18 - 26:10] (15 lines, 120 tokens)
+   tests/tier2/tc_2048_register_system_with_activaiton_key.py [10:14 - 28:13]
+
+Clone found (python):
+ - tests/tier2/tc_2046_check_registered_by_item_in_satellite_webui.py [19:9 - 28:11] (9 lines, 89 tokens)
+   tests/tier2/tc_2066_validate_cluster_name_with_special_char.py [27:9 - 37:5]
+
+Clone found (python):
+ - tests/tier2/tc_2046_check_registered_by_item_in_satellite_webui.py [30:2 - 38:42] (8 lines, 84 tokens)
+   tests/tier2/tc_2047_check_rhsm_log_after_delete_host_hypervisor_from_server_webui.py [23:12 - 44:56]
+
+Clone found (python):
+ - tests/tier2/tc_2045_check_content_subscriptions_in_satellite_webui.py [1:1 - 11:16] (10 lines, 80 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 11:14]
+
+Clone found (python):
+ - tests/tier2/tc_2045_check_content_subscriptions_in_satellite_webui.py [10:14 - 27:16] (17 lines, 153 tokens)
+   tests/tier2/tc_2046_check_registered_by_item_in_satellite_webui.py [10:14 - 37:5]
+
+Clone found (python):
+ - tests/tier2/tc_2045_check_content_subscriptions_in_satellite_webui.py [36:9 - 43:73] (7 lines, 82 tokens)
+   tests/tier2/tc_2047_check_rhsm_log_after_delete_host_hypervisor_from_server_webui.py [25:9 - 44:56]
+
+Clone found (python):
+ - tests/tier2/tc_2044_subscribe_guest_with_activation_key.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2044_subscribe_guest_with_activation_key.py [10:14 - 25:16] (15 lines, 120 tokens)
+   tests/tier2/tc_2048_register_system_with_activaiton_key.py [10:14 - 28:13]
+
+Clone found (python):
+ - tests/tier2/tc_2044_subscribe_guest_with_activation_key.py [65:8 - 71:53] (6 lines, 74 tokens)
+   tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [39:5 - 44:56]
+
+Clone found (python):
+ - tests/tier2/tc_2043_check_virtwho_send_mapping_to_multi_org_with_rhsm_parameters.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2043_check_virtwho_send_mapping_to_multi_org_with_rhsm_parameters.py [10:14 - 21:5] (11 lines, 88 tokens)
+   tests/tier2/tc_2063_check_hypervisors_fqdn.py [10:14 - 21:16]
+
+Clone found (python):
+ - tests/tier2/tc_2042_check_virtwho_send_mapping_to_multi_org.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2042_check_virtwho_send_mapping_to_multi_org.py [46:16 - 87:61] (41 lines, 276 tokens)
+   tests/tier2/tc_2043_check_virtwho_send_mapping_to_multi_org_with_rhsm_parameters.py [52:10 - 94:43]
+
+Clone found (python):
+ - tests/tier2/tc_2041_validate_default_hypervisor_id_by_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2041_validate_default_hypervisor_id_by_virtwho_conf.py [22:16 - 30:14] (8 lines, 83 tokens)
+   tests/tier2/tc_2042_check_virtwho_send_mapping_to_multi_org.py [21:8 - 29:8]
+
+Clone found (python):
+ - tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [89:12 - 96:8] (7 lines, 84 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [48:13 - 55:8]
+
+Clone found (python):
+ - tests/tier2/tc_2039_validate_defaults_owner_option_by_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2039_validate_defaults_owner_option_by_virtwho_conf.py [10:14 - 21:23] (11 lines, 89 tokens)
+   tests/tier2/tc_2041_validate_default_hypervisor_id_by_virtwho_conf.py [10:14 - 21:17]
+
+Clone found (python):
+ - tests/tier2/tc_2039_validate_defaults_owner_option_by_virtwho_conf.py [13:16 - 28:15] (15 lines, 129 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [15:19 - 30:13]
+
+Clone found (python):
+ - tests/tier2/tc_2039_validate_defaults_owner_option_by_virtwho_conf.py [37:15 - 45:55] (8 lines, 111 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [38:13 - 46:89]
+
+Clone found (python):
+ - tests/tier2/tc_2039_validate_defaults_owner_option_by_virtwho_conf.py [53:6 - 58:67] (5 lines, 72 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [53:2 - 59:91]
+
+Clone found (python):
+ - tests/tier2/tc_2039_validate_defaults_owner_option_by_virtwho_conf.py [77:9 - 84:50] (7 lines, 91 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [78:9 - 85:93]
+
+Clone found (python):
+ - tests/tier2/tc_2039_validate_defaults_owner_option_by_virtwho_conf.py [89:12 - 96:8] (7 lines, 86 tokens)
+   tests/tier2/tc_2039_validate_defaults_owner_option_by_virtwho_conf.py [48:13 - 55:8]
+
+Clone found (python):
+ - tests/tier2/tc_2039_validate_defaults_owner_option_by_virtwho_conf.py [94:6 - 100:5] (6 lines, 71 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [94:2 - 100:6]
+
+Clone found (python):
+ - tests/tier2/tc_2038_validate_global_configs_by_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2038_validate_global_configs_by_virtwho_conf.py [10:14 - 22:14] (12 lines, 101 tokens)
+   tests/tier2/tc_2041_validate_default_hypervisor_id_by_virtwho_conf.py [10:14 - 22:5]
+
+Clone found (python):
+ - tests/tier2/tc_2037_validate_global_oneshot_by_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2037_validate_global_oneshot_by_virtwho_conf.py [10:14 - 23:13] (13 lines, 97 tokens)
+   tests/tier2/tc_2042_check_virtwho_send_mapping_to_multi_org.py [14:14 - 26:10]
+
+Clone found (python):
+ - tests/tier2/tc_2036_validate_global_debug_by_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2035_validate_global_report_id_by_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2034_validate_global_interval_by_virtwho_conf.py [1:1 - 11:3] (10 lines, 80 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 11:16]
+
+Clone found (python):
+ - tests/tier2/tc_2034_validate_global_interval_by_virtwho_conf.py [12:19 - 26:57] (14 lines, 104 tokens)
+   tests/tier2/tc_2042_check_virtwho_send_mapping_to_multi_org.py [14:14 - 24:42]
+
+Clone found (python):
+ - tests/tier2/tc_2033_validate_options_quoted_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2033_validate_options_quoted_in_etc_virtwho_d.py [10:14 - 25:16] (15 lines, 135 tokens)
+   tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py [12:19 - 25:17]
+
+Clone found (python):
+ - tests/tier2/tc_2033_validate_options_quoted_in_etc_virtwho_d.py [41:14 - 47:73] (6 lines, 74 tokens)
+   tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [39:5 - 44:56]
+
+Clone found (python):
+ - tests/tier2/tc_2032_validate_file_extension_name_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2032_validate_file_extension_name_in_etc_virtwho_d.py [10:14 - 24:13] (14 lines, 124 tokens)
+   tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py [12:19 - 28:13]
+
+Clone found (python):
+ - tests/tier2/tc_2032_validate_file_extension_name_in_etc_virtwho_d.py [27:60 - 32:62] (5 lines, 69 tokens)
+   tests/tier2/tc_2055_validate_rhevm_url_without_ovirt_engine.py [28:53 - 33:54]
+
+Clone found (python):
+ - tests/tier2/tc_2031_validate_unsupported_options_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2031_validate_unsupported_options_in_etc_virtwho_d.py [10:14 - 26:42] (16 lines, 132 tokens)
+   tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py [12:19 - 26:42]
+
+Clone found (python):
+ - tests/tier2/tc_2030_validate_quotes_for_filter_and_exclude_hosts_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2030_validate_quotes_for_filter_and_exclude_hosts_option_in_etc_virtwho_d.py [10:14 - 26:13] (16 lines, 136 tokens)
+   tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py [12:19 - 35:10]
+
+Clone found (python):
+ - tests/tier2/tc_2029_validate_wildcard_for_filter_and_exclude_host_parents_options_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2029_validate_wildcard_for_filter_and_exclude_host_parents_options_in_etc_virtwho_d.py [17:11 - 29:14] (12 lines, 100 tokens)
+   tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py [15:16 - 25:17]
+
+Clone found (python):
+ - tests/tier2/tc_2028_validate_wildcard_for_filter_and_exclude_hosts_options_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2028_validate_wildcard_for_filter_and_exclude_hosts_options_in_etc_virtwho_d.py [10:14 - 29:3] (19 lines, 178 tokens)
+   tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py [12:19 - 34:13]
+
+Clone found (python):
+ - tests/tier2/tc_2028_validate_wildcard_for_filter_and_exclude_hosts_options_in_etc_virtwho_d.py [64:15 - 69:5] (5 lines, 86 tokens)
+   tests/tier2/tc_2029_validate_wildcard_for_filter_and_exclude_host_parents_options_in_etc_virtwho_d.py [81:22 - 86:5]
+
+Clone found (python):
+ - tests/tier2/tc_2028_validate_wildcard_for_filter_and_exclude_hosts_options_in_etc_virtwho_d.py [69:12 - 74:15] (5 lines, 68 tokens)
+   tests/tier2/tc_2029_validate_wildcard_for_filter_and_exclude_host_parents_options_in_etc_virtwho_d.py [85:6 - 90:23]
+
+Clone found (python):
+ - tests/tier2/tc_2027_validate_rhsm_encrypted_password_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2027_validate_rhsm_encrypted_password_option_in_etc_virtwho_d.py [10:14 - 28:16] (18 lines, 165 tokens)
+   tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py [12:19 - 28:14]
+
+Clone found (python):
+ - tests/tier2/tc_2027_validate_rhsm_encrypted_password_option_in_etc_virtwho_d.py [38:12 - 43:61] (5 lines, 72 tokens)
+   tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [39:5 - 44:56]
+
+Clone found (python):
+ - tests/tier2/tc_2026_validate_rhsm_password_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2026_validate_rhsm_password_option_in_etc_virtwho_d.py [12:15 - 34:46] (22 lines, 185 tokens)
+   tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py [13:18 - 32:65]
+
+Clone found (python):
+ - tests/tier2/tc_2026_validate_rhsm_password_option_in_etc_virtwho_d.py [36:9 - 42:5] (6 lines, 73 tokens)
+   tests/tier2/tc_2043_check_virtwho_send_mapping_to_multi_org_with_rhsm_parameters.py [35:12 - 41:10]
+
+Clone found (python):
+ - tests/tier2/tc_2026_validate_rhsm_password_option_in_etc_virtwho_d.py [41:18 - 46:51] (5 lines, 75 tokens)
+   tests/tier2/tc_2027_validate_rhsm_encrypted_password_option_in_etc_virtwho_d.py [38:16 - 44:56]
+
+Clone found (python):
+ - tests/tier2/tc_2026_validate_rhsm_password_option_in_etc_virtwho_d.py [48:16 - 55:53] (7 lines, 112 tokens)
+   tests/tier2/tc_2027_validate_rhsm_encrypted_password_option_in_etc_virtwho_d.py [45:26 - 52:27]
+
+Clone found (python):
+ - tests/tier2/tc_2026_validate_rhsm_password_option_in_etc_virtwho_d.py [67:6 - 72:55] (5 lines, 72 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [66:6 - 72:83]
+
+Clone found (python):
+ - tests/tier2/tc_2025_validate_rhsm_username_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2025_validate_rhsm_username_option_in_etc_virtwho_d.py [10:14 - 34:57] (24 lines, 209 tokens)
+   tests/tier2/tc_2026_validate_rhsm_password_option_in_etc_virtwho_d.py [10:14 - 32:65]
+
+Clone found (python):
+ - tests/tier2/tc_2025_validate_rhsm_username_option_in_etc_virtwho_d.py [36:9 - 46:51] (10 lines, 142 tokens)
+   tests/tier2/tc_2043_check_virtwho_send_mapping_to_multi_org_with_rhsm_parameters.py [35:12 - 44:56]
+
+Clone found (python):
+ - tests/tier2/tc_2025_validate_rhsm_username_option_in_etc_virtwho_d.py [48:16 - 55:53] (7 lines, 112 tokens)
+   tests/tier2/tc_2027_validate_rhsm_encrypted_password_option_in_etc_virtwho_d.py [45:26 - 52:27]
+
+Clone found (python):
+ - tests/tier2/tc_2025_validate_rhsm_username_option_in_etc_virtwho_d.py [76:13 - 81:55] (5 lines, 86 tokens)
+   tests/tier2/tc_2026_validate_rhsm_password_option_in_etc_virtwho_d.py [67:13 - 72:83]
+
+Clone found (python):
+ - tests/tier2/tc_2025_validate_rhsm_username_option_in_etc_virtwho_d.py [83:16 - 93:52] (10 lines, 131 tokens)
+   tests/tier2/tc_2026_validate_rhsm_password_option_in_etc_virtwho_d.py [74:16 - 84:52]
+
+Clone found (python):
+ - tests/tier2/tc_2025_validate_rhsm_username_option_in_etc_virtwho_d.py [94:16 - 102:2] (8 lines, 108 tokens)
+   tests/tier2/tc_2026_validate_rhsm_password_option_in_etc_virtwho_d.py [85:16 - 93:2]
+
+Clone found (python):
+ - tests/tier2/tc_2024_validate_rhsm_prefix_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2024_validate_rhsm_prefix_option_in_etc_virtwho_d.py [10:14 - 30:5] (20 lines, 187 tokens)
+   tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py [12:19 - 31:13]
+
+Clone found (python):
+ - tests/tier2/tc_2024_validate_rhsm_prefix_option_in_etc_virtwho_d.py [35:13 - 48:47] (13 lines, 154 tokens)
+   tests/tier2/tc_2026_validate_rhsm_password_option_in_etc_virtwho_d.py [33:9 - 44:56]
+
+Clone found (python):
+ - tests/tier2/tc_2024_validate_rhsm_prefix_option_in_etc_virtwho_d.py [69:14 - 82:8] (13 lines, 167 tokens)
+   tests/tier2/tc_2024_validate_rhsm_prefix_option_in_etc_virtwho_d.py [55:4 - 68:7]
+
+Clone found (python):
+ - tests/tier2/tc_2023_validate_rhsm_port_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2023_validate_rhsm_port_option_in_etc_virtwho_d.py [10:14 - 31:7] (21 lines, 203 tokens)
+   tests/tier2/tc_2026_validate_rhsm_password_option_in_etc_virtwho_d.py [10:14 - 30:9]
+
+Clone found (python):
+ - tests/tier2/tc_2023_validate_rhsm_port_option_in_etc_virtwho_d.py [37:13 - 47:44] (10 lines, 142 tokens)
+   tests/tier2/tc_2043_check_virtwho_send_mapping_to_multi_org_with_rhsm_parameters.py [35:12 - 44:56]
+
+Clone found (python):
+ - tests/tier2/tc_2022_validate_rhsm_hostname_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2022_validate_rhsm_hostname_option_in_etc_virtwho_d.py [10:14 - 31:11] (21 lines, 203 tokens)
+   tests/tier2/tc_2026_validate_rhsm_password_option_in_etc_virtwho_d.py [10:14 - 30:9]
+
+Clone found (python):
+ - tests/tier2/tc_2022_validate_rhsm_hostname_option_in_etc_virtwho_d.py [35:13 - 48:51] (13 lines, 154 tokens)
+   tests/tier2/tc_2025_validate_rhsm_username_option_in_etc_virtwho_d.py [33:9 - 44:56]
+
+Clone found (python):
+ - tests/tier2/tc_2022_validate_rhsm_hostname_option_in_etc_virtwho_d.py [49:9 - 57:28] (8 lines, 89 tokens)
+   tests/tier2/tc_2026_validate_rhsm_password_option_in_etc_virtwho_d.py [74:4 - 80:10]
+
+Clone found (python):
+ - tests/tier2/tc_2021_validate_encryped_password_option_by_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2021_validate_encryped_password_option_by_virtwho_d.py [14:11 - 26:9] (12 lines, 98 tokens)
+   tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py [14:7 - 28:13]
+
+Clone found (python):
+ - tests/tier2/tc_2021_validate_encryped_password_option_by_virtwho_d.py [35:2 - 40:4] (5 lines, 69 tokens)
+   tests/tier2/tc_2027_validate_rhsm_encrypted_password_option_in_etc_virtwho_d.py [38:2 - 43:7]
+
+Clone found (python):
+ - tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [38:42 - 43:43] (5 lines, 72 tokens)
+   tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [39:5 - 44:56]
+
+Clone found (python):
+ - tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [54:8 - 60:46] (6 lines, 74 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [53:2 - 59:91]
+
+Clone found (python):
+ - tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [80:8 - 86:42] (6 lines, 74 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [66:6 - 72:83]
+
+Clone found (python):
+ - tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [97:8 - 103:39] (6 lines, 74 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [79:8 - 85:93]
+
+Clone found (python):
+ - tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [144:3 - 151:8] (7 lines, 79 tokens)
+   tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [125:14 - 132:8]
+
+Clone found (python):
+ - tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py [38:42 - 43:43] (5 lines, 72 tokens)
+   tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [39:5 - 44:56]
+
+Clone found (python):
+ - tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py [64:17 - 72:10] (8 lines, 97 tokens)
+   tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [74:17 - 82:9]
+
+Clone found (python):
+ - tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py [76:42 - 89:10] (13 lines, 146 tokens)
+   tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [86:42 - 99:9]
+
+Clone found (python):
+ - tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py [93:39 - 103:9] (10 lines, 101 tokens)
+   tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [103:39 - 113:12]
+
+Clone found (python):
+ - tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py [111:64 - 124:9] (13 lines, 134 tokens)
+   tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [121:64 - 134:12]
+
+Clone found (python):
+ - tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py [130:61 - 141:6] (11 lines, 131 tokens)
+   tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [142:61 - 154:8]
+
+Clone found (python):
+ - tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [20:9 - 28:40] (8 lines, 74 tokens)
+   tests/tier2/tc_2047_check_rhsm_log_after_delete_host_hypervisor_from_server_webui.py [18:9 - 26:42]
+
+Clone found (python):
+ - tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [28:40 - 33:41] (5 lines, 72 tokens)
+   tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [39:5 - 44:56]
+
+Clone found (python):
+ - tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [46:13 - 55:44] (9 lines, 97 tokens)
+   tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [51:5 - 59:91]
+
+Clone found (python):
+ - tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [75:13 - 82:40] (7 lines, 90 tokens)
+   tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [79:17 - 72:83]
+
+Clone found (python):
+ - tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [100:2 - 106:37] (6 lines, 69 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [79:2 - 85:93]
+
+Clone found (python):
+ - tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [112:13 - 127:8] (15 lines, 140 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [88:13 - 103:8]
+
+Clone found (python):
+ - tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [122:62 - 130:62] (8 lines, 93 tokens)
+   tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py [103:47 - 111:64]
+
+Clone found (python):
+ - tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [137:8 - 142:59] (5 lines, 72 tokens)
+   tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py [125:6 - 130:61]
+
+Clone found (python):
+ - tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [152:9 - 158:6] (6 lines, 85 tokens)
+   tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [153:13 - 161:5]
+
+Clone found (python):
+ - tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py [25:9 - 33:37] (8 lines, 74 tokens)
+   tests/tier2/tc_2047_check_rhsm_log_after_delete_host_hypervisor_from_server_webui.py [18:9 - 26:42]
+
+Clone found (python):
+ - tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py [33:37 - 38:38] (5 lines, 72 tokens)
+   tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [39:5 - 44:56]
+
+Clone found (python):
+ - tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py [39:14 - 49:41] (10 lines, 125 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [89:6 - 59:91]
+
+Clone found (python):
+ - tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py [50:12 - 60:37] (10 lines, 119 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [61:13 - 72:83]
+
+Clone found (python):
+ - tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py [61:12 - 71:34] (10 lines, 119 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [74:13 - 85:93]
+
+Clone found (python):
+ - tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py [77:8 - 82:59] (5 lines, 72 tokens)
+   tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py [105:8 - 111:64]
+
+Clone found (python):
+ - tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py [90:9 - 96:56] (6 lines, 89 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [136:56 - 130:61]
+
+Clone found (python):
+ - tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py [98:3 - 105:8] (7 lines, 90 tokens)
+   tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py [86:14 - 93:8]
+
+Clone found (python):
+ - tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py [102:9 - 110:14] (8 lines, 97 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [151:9 - 159:3]
+
+Clone found (python):
+ - tests/tier2/tc_2016_validate_owner_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2016_validate_owner_option_in_etc_virtwho_d.py [19:9 - 27:39] (8 lines, 74 tokens)
+   tests/tier2/tc_2047_check_rhsm_log_after_delete_host_hypervisor_from_server_webui.py [18:9 - 26:42]
+
+Clone found (python):
+ - tests/tier2/tc_2016_validate_owner_option_in_etc_virtwho_d.py [27:39 - 32:40] (5 lines, 72 tokens)
+   tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [39:5 - 44:56]
+
+Clone found (python):
+ - tests/tier2/tc_2016_validate_owner_option_in_etc_virtwho_d.py [33:14 - 44:58] (11 lines, 131 tokens)
+   tests/tier2/tc_2039_validate_defaults_owner_option_by_virtwho_conf.py [89:8 - 59:69]
+
+Clone found (python):
+ - tests/tier2/tc_2016_validate_owner_option_in_etc_virtwho_d.py [51:12 - 64:36] (13 lines, 128 tokens)
+   tests/tier2/tc_2039_validate_defaults_owner_option_by_virtwho_conf.py [70:13 - 85:93]
+
+Clone found (python):
+ - tests/tier2/tc_2016_validate_owner_option_in_etc_virtwho_d.py [67:9 - 72:61] (5 lines, 86 tokens)
+   tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py [77:9 - 111:64]
+
+Clone found (python):
+ - tests/tier2/tc_2016_validate_owner_option_in_etc_virtwho_d.py [85:9 - 91:58] (6 lines, 89 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [136:56 - 130:61]
+
+Clone found (python):
+ - tests/tier2/tc_2016_validate_owner_option_in_etc_virtwho_d.py [95:9 - 101:2] (6 lines, 90 tokens)
+   tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [153:13 - 161:2]
+
+Clone found (python):
+ - tests/tier2/tc_2015_validate_type_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2015_validate_type_option_in_etc_virtwho_d.py [20:9 - 28:38] (8 lines, 74 tokens)
+   tests/tier2/tc_2047_check_rhsm_log_after_delete_host_hypervisor_from_server_webui.py [18:9 - 26:42]
+
+Clone found (python):
+ - tests/tier2/tc_2015_validate_type_option_in_etc_virtwho_d.py [55:8 - 60:7] (5 lines, 68 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [94:2 - 99:14]
+
+Clone found (python):
+ - tests/tier2/tc_2015_validate_type_option_in_etc_virtwho_d.py [55:2 - 60:60] (5 lines, 67 tokens)
+   tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py [105:2 - 111:64]
+
+Clone found (python):
+ - tests/tier2/tc_2015_validate_type_option_in_etc_virtwho_d.py [60:60 - 69:22] (9 lines, 81 tokens)
+   tests/tier2/tc_2016_validate_owner_option_in_etc_virtwho_d.py [72:61 - 82:16]
+
+Clone found (python):
+ - tests/tier2/tc_2015_validate_type_option_in_etc_virtwho_d.py [69:22 - 75:57] (6 lines, 89 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [136:56 - 130:61]
+
+Clone found (python):
+ - tests/tier2/tc_2014_validate_header_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2014_validate_header_option_in_etc_virtwho_d.py [33:40 - 38:41] (5 lines, 72 tokens)
+   tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [39:5 - 44:56]
+
+Clone found (python):
+ - tests/tier2/tc_2014_validate_header_option_in_etc_virtwho_d.py [53:13 - 58:40] (5 lines, 72 tokens)
+   tests/tier2/tc_2023_validate_rhsm_port_option_in_etc_virtwho_d.py [57:4 - 62:48]
+
+Clone found (python):
+ - tests/tier2/tc_2014_validate_header_option_in_etc_virtwho_d.py [75:14 - 81:65] (6 lines, 75 tokens)
+   tests/tier2/tc_2014_validate_header_option_in_etc_virtwho_d.py [59:5 - 65:72]
+
+Clone found (python):
+ - tests/tier2/tc_2014_validate_header_option_in_etc_virtwho_d.py [104:5 - 109:8] (5 lines, 81 tokens)
+   tests/tier2/tc_2014_validate_header_option_in_etc_virtwho_d.py [94:14 - 99:8]
+
+Clone found (python):
+ - tests/tier2/tc_2013_validate_unreachable_proxy_by_config.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [30:9 - 37:8] (7 lines, 91 tokens)
+   tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [37:9 - 44:9]
+
+Clone found (python):
+ - tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [49:13 - 57:15] (8 lines, 104 tokens)
+   tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [53:13 - 61:12]
+
+Clone found (python):
+ - tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [57:11 - 73:8] (16 lines, 161 tokens)
+   tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [37:8 - 53:8]
+
+Clone found (python):
+ - tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [68:13 - 77:15] (9 lines, 107 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [74:13 - 87:12]
+
+Clone found (python):
+ - tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [86:47 - 95:15] (9 lines, 104 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [98:62 - 104:12]
+
+Clone found (python):
+ - tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [102:8 - 109:8] (7 lines, 80 tokens)
+   tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [84:8 - 91:8]
+
+Clone found (python):
+ - tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [104:47 - 112:64] (8 lines, 93 tokens)
+   tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py [103:47 - 111:64]
+
+Clone found (python):
+ - tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [125:21 - 133:61] (8 lines, 93 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [136:56 - 130:61]
+
+Clone found (python):
+ - tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [135:3 - 142:8] (7 lines, 79 tokens)
+   tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [116:14 - 123:8]
+
+Clone found (python):
+ - tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [142:8 - 149:8] (7 lines, 80 tokens)
+   tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [123:8 - 130:8]
+
+Clone found (python):
+ - tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [144:21 - 154:8] (10 lines, 103 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [151:9 - 159:6]
+
+Clone found (python):
+ - tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [10:14 - 27:23] (17 lines, 171 tokens)
+   tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [10:14 - 27:23]
+
+Clone found (python):
+ - tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [30:9 - 37:8] (7 lines, 91 tokens)
+   tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py [37:9 - 44:9]
+
+Clone found (python):
+ - tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [39:9 - 47:46] (8 lines, 99 tokens)
+   tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [46:13 - 59:91]
+
+Clone found (python):
+ - tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [48:11 - 55:8] (7 lines, 87 tokens)
+   tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [37:8 - 44:8]
+
+Clone found (python):
+ - tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [50:9 - 58:42] (8 lines, 99 tokens)
+   tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [66:13 - 72:83]
+
+Clone found (python):
+ - tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [58:42 - 68:47] (10 lines, 109 tokens)
+   tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [76:42 - 86:47]
+
+Clone found (python):
+ - tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [66:8 - 73:8] (7 lines, 80 tokens)
+   tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py [101:8 - 108:8]
+
+Clone found (python):
+ - tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [68:47 - 76:39] (8 lines, 93 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [98:62 - 85:93]
+
+Clone found (python):
+ - tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [76:39 - 86:47] (10 lines, 106 tokens)
+   tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [94:39 - 104:47]
+
+Clone found (python):
+ - tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [79:2 - 95:12] (16 lines, 169 tokens)
+   tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py [96:2 - 112:15]
+
+Clone found (python):
+ - tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [94:64 - 107:21] (13 lines, 139 tokens)
+   tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [112:64 - 125:21]
+
+Clone found (python):
+ - tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [100:2 - 109:8] (9 lines, 90 tokens)
+   tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py [117:2 - 125:6]
+
+Clone found (python):
+ - tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [107:21 - 116:15] (9 lines, 104 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [136:56 - 131:12]
+
+Clone found (python):
+ - tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [115:61 - 126:21] (11 lines, 123 tokens)
+   tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [133:61 - 144:21]
+
+Clone found (python):
+ - tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [124:8 - 131:8] (7 lines, 80 tokens)
+   tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [105:8 - 112:8]
+
+Clone found (python):
+ - tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [126:21 - 136:10] (10 lines, 103 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [151:9 - 159:6]
+
+Clone found (python):
+ - tests/tier2/tc_2010_validate_server_option_in_etc_sysconfig.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2010_validate_server_option_in_etc_sysconfig.py [10:14 - 27:21] (17 lines, 171 tokens)
+   tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [10:14 - 27:23]
+
+Clone found (python):
+ - tests/tier2/tc_2010_validate_server_option_in_etc_sysconfig.py [28:2 - 37:8] (9 lines, 95 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [25:12 - 34:9]
+
+Clone found (python):
+ - tests/tier2/tc_2010_validate_server_option_in_etc_sysconfig.py [41:9 - 48:15] (7 lines, 103 tokens)
+   tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [48:13 - 56:12]
+
+Clone found (python):
+ - tests/tier2/tc_2010_validate_server_option_in_etc_sysconfig.py [52:9 - 59:15] (7 lines, 103 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [74:13 - 83:12]
+
+Clone found (python):
+ - tests/tier2/tc_2010_validate_server_option_in_etc_sysconfig.py [67:13 - 80:15] (13 lines, 164 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [94:13 - 107:12]
+
+Clone found (python):
+ - tests/tier2/tc_2010_validate_server_option_in_etc_sysconfig.py [85:13 - 101:12] (16 lines, 170 tokens)
+   tests/tier2/tc_2010_validate_server_option_in_etc_sysconfig.py [64:13 - 131:15]
+
+Clone found (python):
+ - tests/tier2/tc_2010_validate_server_option_in_etc_sysconfig.py [104:15 - 113:15] (9 lines, 129 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [134:12 - 143:12]
+
+Clone found (python):
+ - tests/tier2/tc_2010_validate_server_option_in_etc_sysconfig.py [114:3 - 119:8] (5 lines, 86 tokens)
+   tests/tier2/tc_2010_validate_server_option_in_etc_sysconfig.py [104:14 - 139:8]
+
+Clone found (python):
+ - tests/tier2/tc_2010_validate_server_option_in_etc_sysconfig.py [116:56 - 128:59] (12 lines, 125 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [151:9 - 140:59]
+
+Clone found (python):
+ - tests/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py [12:7 - 27:18] (15 lines, 142 tokens)
+   tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [12:11 - 27:23]
+
+Clone found (python):
+ - tests/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py [28:2 - 37:8] (9 lines, 95 tokens)
+   tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py [30:12 - 39:9]
+
+Clone found (python):
+ - tests/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py [37:15 - 48:15] (11 lines, 133 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [48:13 - 50:12]
+
+Clone found (python):
+ - tests/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py [48:15 - 59:15] (11 lines, 133 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [61:13 - 61:12]
+
+Clone found (python):
+ - tests/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py [59:15 - 66:8] (7 lines, 84 tokens)
+   tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py [72:12 - 79:8]
+
+Clone found (python):
+ - tests/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py [64:8 - 70:15] (6 lines, 83 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [100:8 - 72:12]
+
+Clone found (python):
+ - tests/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py [70:14 - 81:12] (11 lines, 126 tokens)
+   tests/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py [59:3 - 83:15]
+
+Clone found (python):
+ - tests/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py [84:15 - 95:15] (11 lines, 133 tokens)
+   tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py [86:12 - 97:12]
+
+Clone found (python):
+ - tests/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py [96:3 - 111:97] (15 lines, 161 tokens)
+   tests/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py [84:14 - 113:116]
+
+Clone found (python):
+ - tests/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py [10:14 - 27:20] (17 lines, 168 tokens)
+   tests/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py [10:14 - 27:23]
+
+Clone found (python):
+ - tests/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py [28:2 - 37:8] (9 lines, 95 tokens)
+   tests/tier2/tc_2016_validate_owner_option_in_etc_virtwho_d.py [24:12 - 33:9]
+
+Clone found (python):
+ - tests/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py [41:9 - 47:43] (6 lines, 89 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [52:9 - 59:91]
+
+Clone found (python):
+ - tests/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py [52:9 - 58:39] (6 lines, 89 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [65:9 - 72:83]
+
+Clone found (python):
+ - tests/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py [63:9 - 70:15] (7 lines, 100 tokens)
+   tests/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py [63:9 - 65:12]
+
+Clone found (python):
+ - tests/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py [70:14 - 77:8] (7 lines, 87 tokens)
+   tests/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py [59:3 - 66:8]
+
+Clone found (python):
+ - tests/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py [74:9 - 81:12] (7 lines, 93 tokens)
+   tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py [76:9 - 73:7]
+
+Clone found (python):
+ - tests/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py [88:9 - 95:15] (7 lines, 100 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [136:56 - 92:12]
+
+Clone found (python):
+ - tests/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py [96:3 - 103:8] (7 lines, 90 tokens)
+   tests/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py [84:14 - 91:8]
+
+Clone found (python):
+ - tests/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py [100:9 - 112:59] (12 lines, 125 tokens)
+   tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py [151:9 - 140:59]
+
+Clone found (python):
+ - tests/tier2/tc_2007_validate_parameters_consistency_by_cli.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2006_validate_config_function_by_cli.py [1:1 - 12:3] (11 lines, 92 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 12:11]
+
+Clone found (python):
+ - tests/tier2/tc_2006_validate_config_function_by_cli.py [50:9 - 55:59] (5 lines, 64 tokens)
+   tests/tier2/tc_2038_validate_global_configs_by_virtwho_conf.py [49:9 - 54:37]
+
+Clone found (python):
+ - tests/tier2/tc_2005_validate_password_option_by_cli.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2005_validate_password_option_by_cli.py [35:42 - 40:43] (5 lines, 75 tokens)
+   tests/tier2/tc_2007_validate_parameters_consistency_by_cli.py [29:58 - 34:61]
+
+Clone found (python):
+ - tests/tier2/tc_2005_validate_password_option_by_cli.py [51:13 - 63:4] (12 lines, 145 tokens)
+   tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [49:13 - 61:5]
+
+Clone found (python):
+ - tests/tier2/tc_2005_validate_password_option_by_cli.py [95:13 - 103:11] (8 lines, 99 tokens)
+   tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [82:13 - 90:12]
+
+Clone found (python):
+ - tests/tier2/tc_2005_validate_password_option_by_cli.py [115:13 - 123:11] (8 lines, 99 tokens)
+   tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py [100:13 - 108:12]
+
+Clone found (python):
+ - tests/tier2/tc_2005_validate_password_option_by_cli.py [117:8 - 124:8] (7 lines, 80 tokens)
+   tests/tier2/tc_2005_validate_password_option_by_cli.py [97:8 - 104:8]
+
+Clone found (python):
+ - tests/tier2/tc_2004_validate_username_option_by_cli.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2004_validate_username_option_by_cli.py [10:14 - 35:42] (25 lines, 164 tokens)
+   tests/tier2/tc_2005_validate_password_option_by_cli.py [10:14 - 35:42]
+
+Clone found (python):
+ - tests/tier2/tc_2004_validate_username_option_by_cli.py [35:42 - 40:43] (5 lines, 75 tokens)
+   tests/tier2/tc_2007_validate_parameters_consistency_by_cli.py [29:58 - 34:61]
+
+Clone found (python):
+ - tests/tier2/tc_2004_validate_username_option_by_cli.py [47:9 - 53:4] (6 lines, 90 tokens)
+   tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py [53:13 - 48:5]
+
+Clone found (python):
+ - tests/tier2/tc_2004_validate_username_option_by_cli.py [67:13 - 74:42] (7 lines, 90 tokens)
+   tests/tier2/tc_2005_validate_password_option_by_cli.py [78:13 - 85:42]
+
+Clone found (python):
+ - tests/tier2/tc_2004_validate_username_option_by_cli.py [78:19 - 88:47] (10 lines, 106 tokens)
+   tests/tier2/tc_2005_validate_password_option_by_cli.py [89:19 - 99:47]
+
+Clone found (python):
+ - tests/tier2/tc_2004_validate_username_option_by_cli.py [84:13 - 92:11] (8 lines, 99 tokens)
+   tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py [64:13 - 72:12]
+
+Clone found (python):
+ - tests/tier2/tc_2004_validate_username_option_by_cli.py [88:47 - 96:39] (8 lines, 93 tokens)
+   tests/tier2/tc_2005_validate_password_option_by_cli.py [99:47 - 107:39]
+
+Clone found (python):
+ - tests/tier2/tc_2004_validate_username_option_by_cli.py [98:20 - 108:47] (10 lines, 108 tokens)
+   tests/tier2/tc_2005_validate_password_option_by_cli.py [109:20 - 119:47]
+
+Clone found (python):
+ - tests/tier2/tc_2004_validate_username_option_by_cli.py [104:13 - 112:11] (8 lines, 99 tokens)
+   tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py [99:13 - 107:12]
+
+Clone found (python):
+ - tests/tier2/tc_2004_validate_username_option_by_cli.py [106:8 - 113:8] (7 lines, 80 tokens)
+   tests/tier2/tc_2004_validate_username_option_by_cli.py [86:8 - 93:8]
+
+Clone found (python):
+ - tests/tier2/tc_2004_validate_username_option_by_cli.py [108:47 - 117:2] (9 lines, 97 tokens)
+   tests/tier2/tc_2005_validate_password_option_by_cli.py [119:47 - 128:2]
+
+Clone found (python):
+ - tests/tier2/tc_2003_validate_server_option_by_cli.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2003_validate_server_option_by_cli.py [10:14 - 25:29] (15 lines, 132 tokens)
+   tests/tier2/tc_2005_validate_password_option_by_cli.py [10:14 - 25:19]
+
+Clone found (python):
+ - tests/tier2/tc_2003_validate_server_option_by_cli.py [32:40 - 37:41] (5 lines, 75 tokens)
+   tests/tier2/tc_2007_validate_parameters_consistency_by_cli.py [29:58 - 34:61]
+
+Clone found (python):
+ - tests/tier2/tc_2003_validate_server_option_by_cli.py [41:21 - 50:4] (9 lines, 119 tokens)
+   tests/tier2/tc_2004_validate_username_option_by_cli.py [44:23 - 56:5]
+
+Clone found (python):
+ - tests/tier2/tc_2003_validate_server_option_by_cli.py [84:62 - 92:37] (8 lines, 93 tokens)
+   tests/tier2/tc_2005_validate_password_option_by_cli.py [99:47 - 107:39]
+
+Clone found (python):
+ - tests/tier2/tc_2003_validate_server_option_by_cli.py [101:13 - 110:8] (9 lines, 118 tokens)
+   tests/tier2/tc_2003_validate_server_option_by_cli.py [80:13 - 89:8]
+
+Clone found (python):
+ - tests/tier2/tc_2003_validate_server_option_by_cli.py [105:62 - 114:2] (9 lines, 97 tokens)
+   tests/tier2/tc_2005_validate_password_option_by_cli.py [119:47 - 128:2]
+
+Clone found (python):
+ - tests/tier2/tc_2002_validate_env_option_by_cli.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2002_validate_env_option_by_cli.py [28:37 - 33:38] (5 lines, 75 tokens)
+   tests/tier2/tc_2007_validate_parameters_consistency_by_cli.py [29:58 - 34:61]
+
+Clone found (python):
+ - tests/tier2/tc_2002_validate_env_option_by_cli.py [44:9 - 51:4] (7 lines, 93 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [52:9 - 50:5]
+
+Clone found (python):
+ - tests/tier2/tc_2002_validate_env_option_by_cli.py [61:9 - 68:4] (7 lines, 93 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [65:9 - 61:5]
+
+Clone found (python):
+ - tests/tier2/tc_2002_validate_env_option_by_cli.py [74:28 - 80:34] (6 lines, 89 tokens)
+   tests/tier2/tc_2005_validate_password_option_by_cli.py [99:47 - 107:39]
+
+Clone found (python):
+ - tests/tier2/tc_2002_validate_env_option_by_cli.py [85:53 - 92:6] (7 lines, 88 tokens)
+   tests/tier2/tc_2005_validate_password_option_by_cli.py [119:47 - 128:5]
+
+Clone found (python):
+ - tests/tier2/tc_2002_validate_env_option_by_cli.py [87:11 - 96:55] (9 lines, 86 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [95:12 - 104:116]
+
+Clone found (python):
+ - tests/tier2/tc_2001_validate_owner_option_by_cli.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier2/tc_2001_validate_owner_option_by_cli.py [27:39 - 32:40] (5 lines, 75 tokens)
+   tests/tier2/tc_2007_validate_parameters_consistency_by_cli.py [29:58 - 34:61]
+
+Clone found (python):
+ - tests/tier2/tc_2001_validate_owner_option_by_cli.py [68:9 - 73:36] (5 lines, 86 tokens)
+   tests/tier2/tc_2005_validate_password_option_by_cli.py [100:13 - 107:39]
+
+Clone found (python):
+ - tests/tier2/tc_2001_validate_owner_option_by_cli.py [78:9 - 85:3] (7 lines, 94 tokens)
+   tests/tier2/tc_2005_validate_password_option_by_cli.py [120:13 - 93:14]
+
+Clone found (python):
+ - tests/tier1/tc_1113_check_virtwho_status.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1112_check_http_proxy_option_by_etc_conf.py [1:1 - 11:5] (10 lines, 80 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 11:11]
+
+Clone found (python):
+ - tests/tier1/tc_1112_check_http_proxy_option_by_etc_conf.py [31:23 - 36:4] (5 lines, 71 tokens)
+   tests/tier2/tc_2059_check_redundant_options_in_etc_virtwho_d.py [35:11 - 39:3]
+
+Clone found (python):
+ - tests/tier1/tc_1111_template_conf_validation.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1110_send_virt-who_version_in_the_User-Agent_header.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1109_connect_to_hypervisor_by_read_only_account.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1109_connect_to_hypervisor_by_read_only_account.py [14:16 - 25:5] (11 lines, 89 tokens)
+   tests/tier2/tc_2069_valide_insecure_option_for_kubevirt.py [16:11 - 28:13]
+
+Clone found (python):
+ - tests/tier1/tc_1109_connect_to_hypervisor_by_read_only_account.py [30:12 - 35:56] (5 lines, 73 tokens)
+   tests/tier3/tc_1031_check_mapping_info_with_one_file_include_two_modes_in_etc_virtwho_d.py [39:2 - 44:56]
+
+Clone found (python):
+ - tests/tier1/tc_1108_check_hypervisor_facts.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1108_check_hypervisor_facts.py [15:9 - 27:14] (12 lines, 111 tokens)
+   tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py [14:9 - 25:23]
+
+Clone found (python):
+ - tests/tier1/tc_1107_temporary_sku_can_be_changed_to_stable_by_auto.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1107_temporary_sku_can_be_changed_to_stable_by_auto.py [10:14 - 22:16] (12 lines, 100 tokens)
+   tests/tier2/tc_2069_valide_insecure_option_for_kubevirt.py [16:11 - 25:17]
+
+Clone found (python):
+ - tests/tier1/tc_1106_check_global_print_option_in_etc_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1106_check_global_print_option_in_etc_virtwho_conf.py [24:40 - 29:62] (5 lines, 72 tokens)
+   tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py [29:54 - 34:57]
+
+Clone found (python):
+ - tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [19:9 - 27:16] (8 lines, 82 tokens)
+   tests/tier2/tc_2042_check_virtwho_send_mapping_to_multi_org.py [18:9 - 26:10]
+
+Clone found (python):
+ - tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [45:11 - 50:12] (5 lines, 77 tokens)
+   tests/tier2/tc_2030_validate_quotes_for_filter_and_exclude_hosts_option_in_etc_virtwho_d.py [28:5 - 32:4]
+
+Clone found (python):
+ - tests/tier1/tc_1104_check_virtwho_config_exist_after_reboot_system.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1104_check_virtwho_config_exist_after_reboot_system.py [53:50 - 64:8] (11 lines, 103 tokens)
+   tests/tier1/tc_1104_check_virtwho_config_exist_after_reboot_system.py [36:44 - 47:8]
+
+Clone found (python):
+ - tests/tier1/tc_1103_check_virtwho_threads_number_after_reconfig_libvirt.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1103_check_virtwho_threads_number_after_reconfig_libvirt.py [69:18 - 74:8] (5 lines, 90 tokens)
+   tests/tier1/tc_1103_check_virtwho_threads_number_after_reconfig_libvirt.py [38:17 - 43:8]
+
+Clone found (python):
+ - tests/tier1/tc_1102_check_instance_consumed_status_in_guest_after_set_cpu_socket_8.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1102_check_instance_consumed_status_in_guest_after_set_cpu_socket_8.py [11:15 - 24:13] (13 lines, 107 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 28:16]
+
+Clone found (python):
+ - tests/tier1/tc_1102_check_instance_consumed_status_in_guest_after_set_cpu_socket_8.py [52:2 - 59:8] (7 lines, 87 tokens)
+   tests/tier1/tc_1102_check_instance_consumed_status_in_guest_after_set_cpu_socket_8.py [37:17 - 44:8]
+
+Clone found (python):
+ - tests/tier1/tc_1102_check_instance_consumed_status_in_guest_after_set_cpu_socket_8.py [57:43 - 63:58] (6 lines, 66 tokens)
+   tests/tier2/tc_2043_check_virtwho_send_mapping_to_multi_org_with_rhsm_parameters.py [110:10 - 116:53]
+
+Clone found (python):
+ - tests/tier1/tc_1101_check_instance_consumed_status_in_guest_after_set_cpu_socket_1.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1101_check_instance_consumed_status_in_guest_after_set_cpu_socket_1.py [10:14 - 27:48] (17 lines, 133 tokens)
+   tests/tier1/tc_1102_check_instance_consumed_status_in_guest_after_set_cpu_socket_8.py [10:14 - 27:48]
+
+Clone found (python):
+ - tests/tier1/tc_1101_check_instance_consumed_status_in_guest_after_set_cpu_socket_1.py [30:9 - 77:5] (47 lines, 633 tokens)
+   tests/tier1/tc_1102_check_instance_consumed_status_in_guest_after_set_cpu_socket_8.py [30:9 - 78:7]
+
+Clone found (python):
+ - tests/tier1/tc_1100_check_instance_consumed_status_by_auto_in_host_after_set_cpu_socket_8.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1100_check_instance_consumed_status_by_auto_in_host_after_set_cpu_socket_8.py [17:13 - 30:14] (13 lines, 107 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 28:16]
+
+Clone found (python):
+ - tests/tier1/tc_1100_check_instance_consumed_status_by_auto_in_host_after_set_cpu_socket_8.py [40:67 - 45:58] (5 lines, 69 tokens)
+   tests/tier2/tc_2055_validate_rhevm_url_without_ovirt_engine.py [34:12 - 39:57]
+
+Clone found (python):
+ - tests/tier1/tc_1099_check_instance_consumed_status_in_host_after_set_cpu_socket_8.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1099_check_instance_consumed_status_in_host_after_set_cpu_socket_8.py [14:16 - 28:10] (14 lines, 117 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 26:13]
+
+Clone found (python):
+ - tests/tier1/tc_1099_check_instance_consumed_status_in_host_after_set_cpu_socket_8.py [38:43 - 64:8] (26 lines, 323 tokens)
+   tests/tier2/tc_2055_validate_rhevm_url_without_ovirt_engine.py [34:12 - 64:8]
+
+Clone found (python):
+ - tests/tier1/tc_1099_check_instance_consumed_status_in_host_after_set_cpu_socket_8.py [68:13 - 76:8] (8 lines, 109 tokens)
+   tests/tier1/tc_1100_check_instance_consumed_status_by_auto_in_host_after_set_cpu_socket_8.py [73:13 - 81:3]
+
+Clone found (python):
+ - tests/tier1/tc_1099_check_instance_consumed_status_in_host_after_set_cpu_socket_8.py [89:5 - 95:8] (6 lines, 72 tokens)
+   tests/tier1/tc_1100_check_instance_consumed_status_by_auto_in_host_after_set_cpu_socket_8.py [101:13 - 106:7]
+
+Clone found (python):
+ - tests/tier1/tc_1098_check_instance_consumed_status_in_host_after_set_cpu_socket_1.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1098_check_instance_consumed_status_in_host_after_set_cpu_socket_1.py [10:14 - 30:47] (20 lines, 170 tokens)
+   tests/tier1/tc_1099_check_instance_consumed_status_in_host_after_set_cpu_socket_8.py [10:14 - 27:48]
+
+Clone found (python):
+ - tests/tier1/tc_1098_check_instance_consumed_status_in_host_after_set_cpu_socket_1.py [31:4 - 41:10] (10 lines, 111 tokens)
+   tests/tier1/tc_1100_check_instance_consumed_status_by_auto_in_host_after_set_cpu_socket_8.py [37:4 - 47:5]
+
+Clone found (python):
+ - tests/tier1/tc_1098_check_instance_consumed_status_in_host_after_set_cpu_socket_1.py [46:20 - 54:57] (8 lines, 88 tokens)
+   tests/tier1/tc_1102_check_instance_consumed_status_in_guest_after_set_cpu_socket_8.py [55:20 - 116:53]
+
+Clone found (python):
+ - tests/tier1/tc_1098_check_instance_consumed_status_in_host_after_set_cpu_socket_1.py [49:9 - 56:10] (7 lines, 75 tokens)
+   tests/tier1/tc_1100_check_instance_consumed_status_by_auto_in_host_after_set_cpu_socket_8.py [51:43 - 58:4]
+
+Clone found (python):
+ - tests/tier1/tc_1098_check_instance_consumed_status_in_host_after_set_cpu_socket_1.py [58:2 - 63:5] (5 lines, 76 tokens)
+   tests/tier1/tc_1100_check_instance_consumed_status_by_auto_in_host_after_set_cpu_socket_8.py [58:7 - 66:7]
+
+Clone found (python):
+ - tests/tier1/tc_1098_check_instance_consumed_status_in_host_after_set_cpu_socket_1.py [66:9 - 71:5] (5 lines, 82 tokens)
+   tests/tier1/tc_1100_check_instance_consumed_status_by_auto_in_host_after_set_cpu_socket_8.py [70:13 - 77:4]
+
+Clone found (python):
+ - tests/tier1/tc_1098_check_instance_consumed_status_in_host_after_set_cpu_socket_1.py [69:2 - 76:8] (7 lines, 87 tokens)
+   tests/tier1/tc_1098_check_instance_consumed_status_in_host_after_set_cpu_socket_1.py [43:17 - 50:8]
+
+Clone found (python):
+ - tests/tier1/tc_1098_check_instance_consumed_status_in_host_after_set_cpu_socket_1.py [73:2 - 79:5] (6 lines, 73 tokens)
+   tests/tier1/tc_1102_check_instance_consumed_status_in_guest_after_set_cpu_socket_8.py [86:2 - 92:8]
+
+Clone found (python):
+ - tests/tier1/tc_1097_check_instance_no_virtual_pool_created_in_guest.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1097_check_instance_no_virtual_pool_created_in_guest.py [10:14 - 23:10] (13 lines, 104 tokens)
+   tests/tier1/tc_1102_check_instance_consumed_status_in_guest_after_set_cpu_socket_8.py [10:14 - 26:10]
+
+Clone found (python):
+ - tests/tier1/tc_1097_check_instance_no_virtual_pool_created_in_guest.py [29:67 - 34:52] (5 lines, 69 tokens)
+   tests/tier2/tc_2055_validate_rhevm_url_without_ovirt_engine.py [28:53 - 33:54]
+
+Clone found (python):
+ - tests/tier1/tc_1096_check_limited_virtual_pool_revoked_in_guest_after_host_unregister.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1096_check_limited_virtual_pool_revoked_in_guest_after_host_unregister.py [11:14 - 26:19] (15 lines, 129 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 26:13]
+
+Clone found (python):
+ - tests/tier1/tc_1096_check_limited_virtual_pool_revoked_in_guest_after_host_unregister.py [27:8 - 36:5] (9 lines, 85 tokens)
+   tests/tier1/tc_1097_check_instance_no_virtual_pool_created_in_guest.py [26:11 - 35:10]
+
+Clone found (python):
+ - tests/tier1/tc_1095_check_limited_virtual_pool_revoked_in_guest_after_host_unattached.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1095_check_limited_virtual_pool_revoked_in_guest_after_host_unattached.py [10:14 - 29:13] (19 lines, 158 tokens)
+   tests/tier1/tc_1096_check_limited_virtual_pool_revoked_in_guest_after_host_unregister.py [10:14 - 29:13]
+
+Clone found (python):
+ - tests/tier1/tc_1095_check_limited_virtual_pool_revoked_in_guest_after_host_unattached.py [30:9 - 54:78] (24 lines, 294 tokens)
+   tests/tier1/tc_1097_check_instance_no_virtual_pool_created_in_guest.py [29:9 - 54:77]
+
+Clone found (python):
+ - tests/tier1/tc_1095_check_limited_virtual_pool_revoked_in_guest_after_host_unattached.py [56:16 - 62:2] (6 lines, 75 tokens)
+   tests/tier1/tc_1096_check_limited_virtual_pool_revoked_in_guest_after_host_unregister.py [56:19 - 62:2]
+
+Clone found (python):
+ - tests/tier1/tc_1094_check_limited_virtual_pool_attached_by_auto_in_guest.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1094_check_limited_virtual_pool_attached_by_auto_in_guest.py [10:14 - 26:14] (16 lines, 137 tokens)
+   tests/tier1/tc_1096_check_limited_virtual_pool_revoked_in_guest_after_host_unregister.py [10:14 - 26:13]
+
+Clone found (python):
+ - tests/tier1/tc_1094_check_limited_virtual_pool_attached_by_auto_in_guest.py [27:9 - 41:8] (14 lines, 139 tokens)
+   tests/tier1/tc_1096_check_limited_virtual_pool_revoked_in_guest_after_host_unregister.py [26:9 - 40:17]
+
+Clone found (python):
+ - tests/tier1/tc_1093_check_limited_virtual_pool_attached_by_poolId_in_guest.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1093_check_limited_virtual_pool_attached_by_poolId_in_guest.py [10:14 - 62:7] (52 lines, 448 tokens)
+   tests/tier1/tc_1096_check_limited_virtual_pool_revoked_in_guest_after_host_unregister.py [10:14 - 62:4]
+
+Clone found (python):
+ - tests/tier1/tc_1093_check_limited_virtual_pool_attached_by_poolId_in_guest.py [64:8 - 71:7] (7 lines, 94 tokens)
+   tests/tier1/tc_1094_check_limited_virtual_pool_attached_by_auto_in_guest.py [65:2 - 71:7]
+
+Clone found (python):
+ - tests/tier1/tc_1092_check_limited_virtual_pool_created_in_guest.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1092_check_limited_virtual_pool_created_in_guest.py [10:14 - 43:57] (33 lines, 305 tokens)
+   tests/tier1/tc_1096_check_limited_virtual_pool_revoked_in_guest_after_host_unregister.py [10:14 - 44:45]
+
+Clone found (python):
+ - tests/tier1/tc_1091_check_vdc_repos_in_guest_and_host_after_subscribed.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1091_check_vdc_repos_in_guest_and_host_after_subscribed.py [10:14 - 26:17] (16 lines, 139 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 27:19]
+
+Clone found (python):
+ - tests/tier1/tc_1091_check_vdc_repos_in_guest_and_host_after_subscribed.py [27:12 - 36:17] (9 lines, 100 tokens)
+   tests/tier1/tc_1097_check_instance_no_virtual_pool_created_in_guest.py [26:11 - 35:13]
+
+Clone found (python):
+ - tests/tier1/tc_1091_check_vdc_repos_in_guest_and_host_after_subscribed.py [62:13 - 83:14] (21 lines, 229 tokens)
+   tests/tier1/tc_1093_check_limited_virtual_pool_attached_by_poolId_in_guest.py [69:5 - 90:7]
+
+Clone found (python):
+ - tests/tier1/tc_1090_check_vdc_consumed_status_in_guest_after_set_cpu_socket.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1090_check_vdc_consumed_status_in_guest_after_set_cpu_socket.py [10:14 - 25:17] (15 lines, 129 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 26:13]
+
+Clone found (python):
+ - tests/tier1/tc_1090_check_vdc_consumed_status_in_guest_after_set_cpu_socket.py [32:9 - 40:52] (8 lines, 95 tokens)
+   tests/tier1/tc_1100_check_instance_consumed_status_by_auto_in_host_after_set_cpu_socket_8.py [37:4 - 39:57]
+
+Clone found (python):
+ - tests/tier1/tc_1090_check_vdc_consumed_status_in_guest_after_set_cpu_socket.py [52:20 - 60:57] (8 lines, 88 tokens)
+   tests/tier1/tc_1102_check_instance_consumed_status_in_guest_after_set_cpu_socket_8.py [70:20 - 78:58]
+
+Clone found (python):
+ - tests/tier1/tc_1089_check_vdc_consumed_status_in_host_after_set_cpu_socket.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1089_check_vdc_consumed_status_in_host_after_set_cpu_socket.py [10:14 - 26:17] (16 lines, 144 tokens)
+   tests/tier1/tc_1099_check_instance_consumed_status_in_host_after_set_cpu_socket_8.py [11:15 - 28:16]
+
+Clone found (python):
+ - tests/tier1/tc_1089_check_vdc_consumed_status_in_host_after_set_cpu_socket.py [31:9 - 40:69] (9 lines, 105 tokens)
+   tests/tier1/tc_1090_check_vdc_consumed_status_in_guest_after_set_cpu_socket.py [31:10 - 39:57]
+
+Clone found (python):
+ - tests/tier1/tc_1089_check_vdc_consumed_status_in_host_after_set_cpu_socket.py [47:17 - 56:68] (9 lines, 108 tokens)
+   tests/tier1/tc_1098_check_instance_consumed_status_in_host_after_set_cpu_socket_1.py [45:13 - 116:53]
+
+Clone found (python):
+ - tests/tier1/tc_1089_check_vdc_consumed_status_in_host_after_set_cpu_socket.py [65:48 - 70:9] (5 lines, 67 tokens)
+   tests/tier1/tc_1101_check_instance_consumed_status_in_guest_after_set_cpu_socket_1.py [72:43 - 77:10]
+
+Clone found (python):
+ - tests/tier1/tc_1088_check_vdc_virtual_pool_revoked_in_guest_after_host_unregister.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1088_check_vdc_virtual_pool_revoked_in_guest_after_host_unregister.py [10:14 - 29:67] (19 lines, 157 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 29:48]
+
+Clone found (python):
+ - tests/tier1/tc_1088_check_vdc_virtual_pool_revoked_in_guest_after_host_unregister.py [25:9 - 48:77] (23 lines, 266 tokens)
+   tests/tier1/tc_1091_check_vdc_repos_in_guest_and_host_after_subscribed.py [26:9 - 48:38]
+
+Clone found (python):
+ - tests/tier1/tc_1087_check_vdc_virtual_pool_revoked_in_guest_after_host_unattached.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1087_check_vdc_virtual_pool_revoked_in_guest_after_host_unattached.py [10:14 - 48:78] (38 lines, 395 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 48:38]
+
+Clone found (python):
+ - tests/tier1/tc_1087_check_vdc_virtual_pool_revoked_in_guest_after_host_unattached.py [50:16 - 56:2] (6 lines, 75 tokens)
+   tests/tier1/tc_1088_check_vdc_virtual_pool_revoked_in_guest_after_host_unregister.py [50:19 - 56:2]
+
+Clone found (python):
+ - tests/tier1/tc_1086_check_vdc_virtual_pool_attached_by_auto_in_guest.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1086_check_vdc_virtual_pool_attached_by_auto_in_guest.py [10:14 - 37:8] (27 lines, 263 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 37:17]
+
+Clone found (python):
+ - tests/tier1/tc_1085_check_vdc_virtual_pool_attached_by_poolId_in_guest.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1085_check_vdc_virtual_pool_attached_by_poolId_in_guest.py [10:14 - 39:7] (29 lines, 278 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 40:4]
+
+Clone found (python):
+ - tests/tier1/tc_1084_check_vdc_virtual_pool_created_in_guest.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1084_check_vdc_virtual_pool_created_in_guest.py [10:14 - 39:57] (29 lines, 282 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 39:51]
+
+Clone found (python):
+ - tests/tier1/tc_1083_check_unlimited_virtual_pool_revoked_in_guest_after_host_unregister.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1083_check_unlimited_virtual_pool_revoked_in_guest_after_host_unregister.py [11:16 - 26:14] (15 lines, 129 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 26:13]
+
+Clone found (python):
+ - tests/tier1/tc_1083_check_unlimited_virtual_pool_revoked_in_guest_after_host_unregister.py [26:10 - 35:14] (9 lines, 100 tokens)
+   tests/tier1/tc_1097_check_instance_no_virtual_pool_created_in_guest.py [26:11 - 35:13]
+
+Clone found (python):
+ - tests/tier1/tc_1083_check_unlimited_virtual_pool_revoked_in_guest_after_host_unregister.py [44:14 - 52:14] (8 lines, 81 tokens)
+   tests/tier1/tc_1088_check_vdc_virtual_pool_revoked_in_guest_after_host_unregister.py [44:16 - 52:16]
+
+Clone found (python):
+ - tests/tier1/tc_1082_check_unlimited_virtual_pool_revoked_in_guest_after_host_unattached.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1082_check_unlimited_virtual_pool_revoked_in_guest_after_host_unattached.py [10:14 - 48:78] (38 lines, 393 tokens)
+   tests/tier1/tc_1083_check_unlimited_virtual_pool_revoked_in_guest_after_host_unregister.py [10:14 - 48:77]
+
+Clone found (python):
+ - tests/tier1/tc_1082_check_unlimited_virtual_pool_revoked_in_guest_after_host_unattached.py [44:14 - 52:14] (8 lines, 81 tokens)
+   tests/tier1/tc_1087_check_vdc_virtual_pool_revoked_in_guest_after_host_unattached.py [44:16 - 52:16]
+
+Clone found (python):
+ - tests/tier1/tc_1082_check_unlimited_virtual_pool_revoked_in_guest_after_host_unattached.py [50:16 - 56:2] (6 lines, 75 tokens)
+   tests/tier1/tc_1083_check_unlimited_virtual_pool_revoked_in_guest_after_host_unregister.py [50:19 - 56:2]
+
+Clone found (python):
+ - tests/tier1/tc_1081_check_unlimited_virtual_pool_attached_by_auto_in_guest.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1081_check_unlimited_virtual_pool_attached_by_auto_in_guest.py [10:14 - 27:14] (17 lines, 147 tokens)
+   tests/tier1/tc_1083_check_unlimited_virtual_pool_revoked_in_guest_after_host_unregister.py [10:14 - 27:19]
+
+Clone found (python):
+ - tests/tier1/tc_1081_check_unlimited_virtual_pool_attached_by_auto_in_guest.py [27:9 - 37:8] (10 lines, 114 tokens)
+   tests/tier1/tc_1083_check_unlimited_virtual_pool_revoked_in_guest_after_host_unregister.py [26:9 - 36:17]
+
+Clone found (python):
+ - tests/tier1/tc_1081_check_unlimited_virtual_pool_attached_by_auto_in_guest.py [43:14 - 56:2] (13 lines, 126 tokens)
+   tests/tier1/tc_1086_check_vdc_virtual_pool_attached_by_auto_in_guest.py [47:13 - 60:2]
+
+Clone found (python):
+ - tests/tier1/tc_1080_check_unlimited_virtual_pool_attached_by_poolId_in_guest.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1080_check_unlimited_virtual_pool_attached_by_poolId_in_guest.py [10:14 - 40:7] (30 lines, 286 tokens)
+   tests/tier1/tc_1083_check_unlimited_virtual_pool_revoked_in_guest_after_host_unregister.py [10:14 - 40:4]
+
+Clone found (python):
+ - tests/tier1/tc_1080_check_unlimited_virtual_pool_attached_by_poolId_in_guest.py [48:39 - 57:8] (9 lines, 94 tokens)
+   tests/tier1/tc_1093_check_limited_virtual_pool_attached_by_poolId_in_guest.py [71:39 - 80:8]
+
+Clone found (python):
+ - tests/tier1/tc_1079_check_unlimited_virtual_pool_created_in_guest.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1079_check_unlimited_virtual_pool_created_in_guest.py [10:14 - 39:57] (29 lines, 280 tokens)
+   tests/tier1/tc_1083_check_unlimited_virtual_pool_revoked_in_guest_after_host_unregister.py [10:14 - 40:51]
+
+Clone found (python):
+ - tests/tier1/tc_1078_check_temporary_bonus_pool_can_be_attached_in_guest.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1078_check_temporary_bonus_pool_can_be_attached_in_guest.py [10:14 - 24:15] (14 lines, 117 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 31:13]
+
+Clone found (python):
+ - tests/tier1/tc_1077_check_associated_info_by_rhsmlog_and_webui.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1077_check_associated_info_by_rhsmlog_and_webui.py [10:14 - 24:11] (14 lines, 118 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 25:16]
+
+Clone found (python):
+ - tests/tier1/tc_1077_check_associated_info_by_rhsmlog_and_webui.py [28:33 - 37:7] (9 lines, 112 tokens)
+   tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [39:5 - 39:14]
+
+Clone found (python):
+ - tests/tier1/tc_1076_check_guest_facts_by_subscription_manager.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1076_check_guest_facts_by_subscription_manager.py [10:14 - 22:11] (12 lines, 96 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 26:10]
+
+Clone found (python):
+ - tests/tier1/tc_1075_check_rhsm_connection_info_in_rhsm_log.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1075_check_rhsm_connection_info_in_rhsm_log.py [10:14 - 23:13] (13 lines, 97 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 26:10]
+
+Clone found (python):
+ - tests/tier1/tc_1074_check_mapping_info_for_hypervisor_facts.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1074_check_mapping_info_for_hypervisor_facts.py [18:14 - 32:13] (14 lines, 108 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 27:10]
+
+Clone found (python):
+ - tests/tier1/tc_1073_check_mapping_info_point_to_specified_owner.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1073_check_mapping_info_point_to_specified_owner.py [12:2 - 26:16] (14 lines, 123 tokens)
+   tests/tier1/tc_1099_check_instance_consumed_status_in_host_after_set_cpu_socket_8.py [13:2 - 23:10]
+
+Clone found (python):
+ - tests/tier1/tc_1072_check_rhsm_log_and_thread_after_reregister_host.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1072_check_rhsm_log_and_thread_after_reregister_host.py [10:14 - 25:13] (15 lines, 118 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 31:13]
+
+Clone found (python):
+ - tests/tier1/tc_1072_check_rhsm_log_and_thread_after_reregister_host.py [68:13 - 73:14] (5 lines, 83 tokens)
+   tests/tier2/tc_2047_check_rhsm_log_after_delete_host_hypervisor_from_server_webui.py [49:13 - 54:3]
+
+Clone found (python):
+ - tests/tier1/tc_1070_check_fake_mode_pool_revoked_function_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1069_check_fake_mode_subscribe_function_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1069_check_fake_mode_subscribe_function_in_etc_virtwho_d.py [10:14 - 56:14] (46 lines, 494 tokens)
+   tests/tier1/tc_1070_check_fake_mode_pool_revoked_function_in_etc_virtwho_d.py [10:14 - 56:7]
+
+Clone found (python):
+ - tests/tier1/tc_1068_check_fake_mode_with_one_hypervisor_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1068_check_fake_mode_with_one_hypervisor_in_etc_virtwho_d.py [19:2 - 41:14] (22 lines, 228 tokens)
+   tests/tier1/tc_1070_check_fake_mode_pool_revoked_function_in_etc_virtwho_d.py [21:2 - 43:7]
+
+Clone found (python):
+ - tests/tier1/tc_1067_check_defaults_hypervisor_id_option_in_etc_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1067_check_defaults_hypervisor_id_option_in_etc_virtwho_conf.py [10:14 - 21:17] (11 lines, 89 tokens)
+   tests/tier1/tc_1073_check_mapping_info_point_to_specified_owner.py [10:14 - 21:23]
+
+Clone found (python):
+ - tests/tier1/tc_1067_check_defaults_hypervisor_id_option_in_etc_virtwho_conf.py [17:9 - 28:12] (11 lines, 115 tokens)
+   tests/tier2/tc_2041_validate_default_hypervisor_id_by_virtwho_conf.py [17:9 - 28:10]
+
+Clone found (python):
+ - tests/tier1/tc_1067_check_defaults_hypervisor_id_option_in_etc_virtwho_conf.py [33:9 - 41:68] (8 lines, 107 tokens)
+   tests/tier2/tc_2028_validate_wildcard_for_filter_and_exclude_hosts_options_in_etc_virtwho_d.py [29:9 - 37:70]
+
+Clone found (python):
+ - tests/tier1/tc_1066_check_defaults_env_option_in_etc_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1066_check_defaults_env_option_in_etc_virtwho_conf.py [11:9 - 27:13] (16 lines, 136 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [14:9 - 29:13]
+
+Clone found (python):
+ - tests/tier1/tc_1066_check_defaults_env_option_in_etc_virtwho_conf.py [34:2 - 41:74] (7 lines, 91 tokens)
+   tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py [39:2 - 46:89]
+
+Clone found (python):
+ - tests/tier1/tc_1066_check_defaults_env_option_in_etc_virtwho_conf.py [44:15 - 49:8] (5 lines, 91 tokens)
+   tests/tier1/tc_1066_check_defaults_env_option_in_etc_virtwho_conf.py [32:6 - 37:8]
+
+Clone found (python):
+ - tests/tier1/tc_1065_check_defaults_owner_option_in_etc_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1065_check_defaults_owner_option_in_etc_virtwho_conf.py [10:14 - 27:66] (17 lines, 136 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 30:55]
+
+Clone found (python):
+ - tests/tier1/tc_1065_check_defaults_owner_option_in_etc_virtwho_conf.py [30:15 - 37:14] (7 lines, 108 tokens)
+   tests/tier1/tc_1066_check_defaults_env_option_in_etc_virtwho_conf.py [33:13 - 45:7]
+
+Clone found (python):
+ - tests/tier1/tc_1064_check_defaults_section_header_in_etc_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1064_check_defaults_section_header_in_etc_virtwho_conf.py [10:14 - 24:13] (14 lines, 108 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 23:10]
+
+Clone found (python):
+ - tests/tier1/tc_1064_check_defaults_section_header_in_etc_virtwho_conf.py [26:13 - 34:2] (8 lines, 116 tokens)
+   tests/tier1/tc_1066_check_defaults_env_option_in_etc_virtwho_conf.py [33:13 - 38:2]
+
+Clone found (python):
+ - tests/tier1/tc_1063_check_global_configs_option_in_etc_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1063_check_global_configs_option_in_etc_virtwho_conf.py [12:16 - 23:16] (11 lines, 86 tokens)
+   tests/tier1/tc_1099_check_instance_consumed_status_in_host_after_set_cpu_socket_8.py [13:7 - 24:27]
+
+Clone found (python):
+ - tests/tier1/tc_1063_check_global_configs_option_in_etc_virtwho_conf.py [30:12 - 38:2] (8 lines, 116 tokens)
+   tests/tier1/tc_1066_check_defaults_env_option_in_etc_virtwho_conf.py [33:13 - 38:2]
+
+Clone found (python):
+ - tests/tier1/tc_1062_check_global_log_file_option_in_etc_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1062_check_global_log_file_option_in_etc_virtwho_conf.py [10:14 - 23:8] (13 lines, 107 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 23:10]
+
+Clone found (python):
+ - tests/tier1/tc_1061_check_global_log_dir_option_in_etc_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1061_check_global_log_dir_option_in_etc_virtwho_conf.py [10:14 - 27:68] (17 lines, 129 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 27:64]
+
+Clone found (python):
+ - tests/tier1/tc_1061_check_global_log_dir_option_in_etc_virtwho_conf.py [29:8 - 46:2] (17 lines, 265 tokens)
+   tests/tier1/tc_1062_check_global_log_file_option_in_etc_virtwho_conf.py [31:9 - 48:2]
+
+Clone found (python):
+ - tests/tier1/tc_1060_check_global_log_per_config_option_in_etc_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1060_check_global_log_per_config_option_in_etc_virtwho_conf.py [10:14 - 26:73] (16 lines, 117 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 25:59]
+
+Clone found (python):
+ - tests/tier1/tc_1059_check_global_oneshot_option_in_etc_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1059_check_global_oneshot_option_in_etc_virtwho_conf.py [10:14 - 24:45] (14 lines, 104 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 24:57]
+
+Clone found (python):
+ - tests/tier1/tc_1058_check_global_debug_option_in_etc_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1058_check_global_debug_option_in_etc_virtwho_conf.py [42:8 - 48:8] (6 lines, 85 tokens)
+   tests/tier1/tc_1058_check_global_debug_option_in_etc_virtwho_conf.py [24:7 - 38:8]
+
+Clone found (python):
+ - tests/tier1/tc_1057_check_global_reporter_id_option_in_etc_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1057_check_global_reporter_id_option_in_etc_virtwho_conf.py [10:14 - 22:20] (12 lines, 96 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 26:10]
+
+Clone found (python):
+ - tests/tier1/tc_1057_check_global_reporter_id_option_in_etc_virtwho_conf.py [32:17 - 37:3] (5 lines, 89 tokens)
+   tests/tier2/tc_2035_validate_global_report_id_by_virtwho_conf.py [42:13 - 47:5]
+
+Clone found (python):
+ - tests/tier1/tc_1056_check_global_interval_option_in_etc_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1056_check_global_interval_option_in_etc_virtwho_conf.py [10:14 - 24:64] (14 lines, 104 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [15:19 - 24:57]
+
+Clone found (python):
+ - tests/tier1/tc_1056_check_global_interval_option_in_etc_virtwho_conf.py [26:5 - 33:64] (7 lines, 84 tokens)
+   tests/tier2/tc_2034_validate_global_interval_by_virtwho_conf.py [28:3 - 36:75]
+
+Clone found (python):
+ - tests/tier1/tc_1056_check_global_interval_option_in_etc_virtwho_conf.py [34:13 - 47:7] (13 lines, 99 tokens)
+   tests/tier2/tc_2034_validate_global_interval_by_virtwho_conf.py [40:26 - 53:14]
+
+Clone found (python):
+ - tests/tier1/tc_1055_check_global_section_header_in_etc_virtwho_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1055_check_global_section_header_in_etc_virtwho_conf.py [24:2 - 31:14] (7 lines, 110 tokens)
+   tests/tier1/tc_1058_check_global_debug_option_in_etc_virtwho_conf.py [24:2 - 31:7]
+
+Clone found (python):
+ - tests/tier1/tc_1054_check_hypervisor_id_and_exclude_hosts_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1054_check_hypervisor_id_and_exclude_hosts_option_in_etc_virtwho_d.py [12:2 - 25:12] (13 lines, 108 tokens)
+   tests/tier1/tc_1109_connect_to_hypervisor_by_read_only_account.py [13:6 - 35:10]
+
+Clone found (python):
+ - tests/tier1/tc_1054_check_hypervisor_id_and_exclude_hosts_option_in_etc_virtwho_d.py [20:21 - 35:13] (15 lines, 162 tokens)
+   tests/tier1/tc_1067_check_defaults_hypervisor_id_option_in_etc_virtwho_conf.py [23:13 - 38:13]
+
+Clone found (python):
+ - tests/tier1/tc_1053_check_hypervisor_id_and_filter_hosts_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1053_check_hypervisor_id_and_filter_hosts_option_in_etc_virtwho_d.py [10:14 - 38:70] (28 lines, 295 tokens)
+   tests/tier1/tc_1054_check_hypervisor_id_and_exclude_hosts_option_in_etc_virtwho_d.py [10:14 - 38:71]
+
+Clone found (python):
+ - tests/tier1/tc_1052_check_hypervisor_id_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1052_check_hypervisor_id_option_in_etc_virtwho_d.py [10:14 - 38:46] (28 lines, 295 tokens)
+   tests/tier1/tc_1054_check_hypervisor_id_and_exclude_hosts_option_in_etc_virtwho_d.py [10:14 - 38:71]
+
+Clone found (python):
+ - tests/tier1/tc_1052_check_hypervisor_id_option_in_etc_virtwho_d.py [52:2 - 59:3] (7 lines, 86 tokens)
+   tests/tier1/tc_1067_check_defaults_hypervisor_id_option_in_etc_virtwho_conf.py [54:2 - 61:5]
+
+Clone found (python):
+ - tests/tier1/tc_1052_check_hypervisor_id_option_in_etc_virtwho_d.py [84:19 - 93:2] (9 lines, 81 tokens)
+   tests/tier1/tc_1067_check_defaults_hypervisor_id_option_in_etc_virtwho_conf.py [59:13 - 67:2]
+
+Clone found (python):
+ - tests/tier1/tc_1051_check_simplified_vim_option_in_etc_virtwho_d.py [1:1 - 12:6] (11 lines, 94 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 12:16]
+
+Clone found (python):
+ - tests/tier1/tc_1051_check_simplified_vim_option_in_etc_virtwho_d.py [12:16 - 27:13] (15 lines, 120 tokens)
+   tests/tier1/tc_1109_connect_to_hypervisor_by_read_only_account.py [13:6 - 26:10]
+
+Clone found (python):
+ - tests/tier1/tc_1050_check_filter_hosts_and_exclude_hosts_options_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1050_check_filter_hosts_and_exclude_hosts_options_in_etc_virtwho_d.py [10:14 - 26:13] (16 lines, 136 tokens)
+   tests/tier1/tc_1054_check_hypervisor_id_and_exclude_hosts_option_in_etc_virtwho_d.py [10:14 - 35:10]
+
+Clone found (python):
+ - tests/tier1/tc_1050_check_filter_hosts_and_exclude_hosts_options_in_etc_virtwho_d.py [27:64 - 33:85] (6 lines, 71 tokens)
+   tests/tier1/tc_1051_check_simplified_vim_option_in_etc_virtwho_d.py [28:60 - 33:50]
+
+Clone found (python):
+ - tests/tier1/tc_1050_check_filter_hosts_and_exclude_hosts_options_in_etc_virtwho_d.py [36:2 - 42:5] (6 lines, 105 tokens)
+   tests/tier2/tc_2030_validate_quotes_for_filter_and_exclude_hosts_option_in_etc_virtwho_d.py [36:2 - 43:7]
+
+Clone found (python):
+ - tests/tier1/tc_1050_check_filter_hosts_and_exclude_hosts_options_in_etc_virtwho_d.py [62:2 - 68:16] (6 lines, 109 tokens)
+   tests/tier2/tc_2030_validate_quotes_for_filter_and_exclude_hosts_option_in_etc_virtwho_d.py [52:2 - 58:15]
+
+Clone found (python):
+ - tests/tier1/tc_1049_check_exclude_host_parents_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1049_check_exclude_host_parents_option_in_etc_virtwho_d.py [10:14 - 29:69] (19 lines, 153 tokens)
+   tests/tier1/tc_1051_check_simplified_vim_option_in_etc_virtwho_d.py [10:14 - 28:60]
+
+Clone found (python):
+ - tests/tier1/tc_1049_check_exclude_host_parents_option_in_etc_virtwho_d.py [31:2 - 37:10] (6 lines, 105 tokens)
+   tests/tier2/tc_2030_validate_quotes_for_filter_and_exclude_hosts_option_in_etc_virtwho_d.py [28:2 - 35:7]
+
+Clone found (python):
+ - tests/tier1/tc_1049_check_exclude_host_parents_option_in_etc_virtwho_d.py [47:10 - 54:52] (7 lines, 114 tokens)
+   tests/tier1/tc_1051_check_simplified_vim_option_in_etc_virtwho_d.py [34:7 - 43:55]
+
+Clone found (python):
+ - tests/tier1/tc_1049_check_exclude_host_parents_option_in_etc_virtwho_d.py [55:3 - 62:14] (7 lines, 110 tokens)
+   tests/tier1/tc_1050_check_filter_hosts_and_exclude_hosts_options_in_etc_virtwho_d.py [62:10 - 58:5]
+
+Clone found (python):
+ - tests/tier1/tc_1048_check_filter_host_parents_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1048_check_filter_host_parents_option_in_etc_virtwho_d.py [10:14 - 29:70] (19 lines, 153 tokens)
+   tests/tier1/tc_1051_check_simplified_vim_option_in_etc_virtwho_d.py [10:14 - 28:60]
+
+Clone found (python):
+ - tests/tier1/tc_1048_check_filter_host_parents_option_in_etc_virtwho_d.py [31:3 - 45:7] (14 lines, 164 tokens)
+   tests/tier1/tc_1049_check_exclude_host_parents_option_in_etc_virtwho_d.py [31:4 - 44:5]
+
+Clone found (python):
+ - tests/tier1/tc_1048_check_filter_host_parents_option_in_etc_virtwho_d.py [47:22 - 52:5] (5 lines, 93 tokens)
+   tests/tier1/tc_1049_check_exclude_host_parents_option_in_etc_virtwho_d.py [47:23 - 40:6]
+
+Clone found (python):
+ - tests/tier1/tc_1047_check_exclude_hosts_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1047_check_exclude_hosts_option_in_etc_virtwho_d.py [10:14 - 25:9] (15 lines, 135 tokens)
+   tests/tier1/tc_1054_check_hypervisor_id_and_exclude_hosts_option_in_etc_virtwho_d.py [10:14 - 35:10]
+
+Clone found (python):
+ - tests/tier1/tc_1047_check_exclude_hosts_option_in_etc_virtwho_d.py [28:47 - 33:56] (5 lines, 69 tokens)
+   tests/tier1/tc_1051_check_simplified_vim_option_in_etc_virtwho_d.py [28:60 - 33:50]
+
+Clone found (python):
+ - tests/tier1/tc_1047_check_exclude_hosts_option_in_etc_virtwho_d.py [33:56 - 38:12] (5 lines, 88 tokens)
+   tests/tier1/tc_1050_check_filter_hosts_and_exclude_hosts_options_in_etc_virtwho_d.py [35:12 - 40:4]
+
+Clone found (python):
+ - tests/tier1/tc_1046_check_filter_hosts_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1046_check_filter_hosts_option_in_etc_virtwho_d.py [10:14 - 28:46] (18 lines, 155 tokens)
+   tests/tier1/tc_1054_check_hypervisor_id_and_exclude_hosts_option_in_etc_virtwho_d.py [10:14 - 28:47]
+
+Clone found (python):
+ - tests/tier1/tc_1046_check_filter_hosts_option_in_etc_virtwho_d.py [28:46 - 33:55] (5 lines, 69 tokens)
+   tests/tier1/tc_1051_check_simplified_vim_option_in_etc_virtwho_d.py [28:60 - 33:50]
+
+Clone found (python):
+ - tests/tier1/tc_1045_check_rhsm_proxy_function_in_rhsm_conf.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1045_check_rhsm_proxy_function_in_rhsm_conf.py [11:18 - 24:3] (13 lines, 110 tokens)
+   tests/tier2/tc_2069_valide_insecure_option_for_kubevirt.py [16:11 - 26:18]
+
+Clone found (python):
+ - tests/tier1/tc_1045_check_rhsm_proxy_function_in_rhsm_conf.py [46:22 - 52:2] (6 lines, 85 tokens)
+   tests/tier2/tc_2030_validate_quotes_for_filter_and_exclude_hosts_option_in_etc_virtwho_d.py [28:12 - 51:2]
+
+Clone found (python):
+ - tests/tier1/tc_1045_check_rhsm_proxy_function_in_rhsm_conf.py [74:13 - 90:70] (16 lines, 187 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [73:13 - 89:70]
+
+Clone found (python):
+ - tests/tier1/tc_1045_check_rhsm_proxy_function_in_rhsm_conf.py [91:13 - 109:65] (18 lines, 217 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [90:13 - 108:7]
+
+Clone found (python):
+ - tests/tier1/tc_1045_check_rhsm_proxy_function_in_rhsm_conf.py [113:17 - 119:5] (6 lines, 79 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [110:17 - 116:7]
+
+Clone found (python):
+ - tests/tier1/tc_1045_check_rhsm_proxy_function_in_rhsm_conf.py [119:3 - 133:17] (14 lines, 147 tokens)
+   tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py [114:3 - 129:11]
+
+Clone found (python):
+ - tests/tier1/tc_1044_check_rhsm_hostname_port_prefix_options_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1044_check_rhsm_hostname_port_prefix_options_in_etc_virtwho_d.py [10:14 - 26:16] (16 lines, 145 tokens)
+   tests/tier1/tc_1054_check_hypervisor_id_and_exclude_hosts_option_in_etc_virtwho_d.py [10:14 - 30:10]
+
+Clone found (python):
+ - tests/tier1/tc_1044_check_rhsm_hostname_port_prefix_options_in_etc_virtwho_d.py [32:9 - 44:52] (12 lines, 151 tokens)
+   tests/tier2/tc_2023_validate_rhsm_port_option_in_etc_virtwho_d.py [35:13 - 44:56]
+
+Clone found (python):
+ - tests/tier1/tc_1043_check_rhsm_username_and_rhsm_encrypted_password_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1043_check_rhsm_username_and_rhsm_encrypted_password_option_in_etc_virtwho_d.py [10:14 - 33:73] (23 lines, 195 tokens)
+   tests/tier1/tc_1054_check_hypervisor_id_and_exclude_hosts_option_in_etc_virtwho_d.py [10:14 - 33:79]
+
+Clone found (python):
+ - tests/tier1/tc_1043_check_rhsm_username_and_rhsm_encrypted_password_option_in_etc_virtwho_d.py [34:9 - 45:83] (11 lines, 144 tokens)
+   tests/tier2/tc_2043_check_virtwho_send_mapping_to_multi_org_with_rhsm_parameters.py [35:12 - 44:56]
+
+Clone found (python):
+ - tests/tier1/tc_1043_check_rhsm_username_and_rhsm_encrypted_password_option_in_etc_virtwho_d.py [49:16 - 54:14] (5 lines, 71 tokens)
+   tests/tier1/tc_1044_check_rhsm_hostname_port_prefix_options_in_etc_virtwho_d.py [45:16 - 49:5]
+
+Clone found (python):
+ - tests/tier1/tc_1042_check_rhsm_username_and_rhsm_password_option_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1042_check_rhsm_username_and_rhsm_password_option_in_etc_virtwho_d.py [10:14 - 32:65] (22 lines, 193 tokens)
+   tests/tier1/tc_1054_check_hypervisor_id_and_exclude_hosts_option_in_etc_virtwho_d.py [10:14 - 33:79]
+
+Clone found (python):
+ - tests/tier1/tc_1042_check_rhsm_username_and_rhsm_password_option_in_etc_virtwho_d.py [32:65 - 38:73] (6 lines, 74 tokens)
+   tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [39:5 - 44:56]
+
+Clone found (python):
+ - tests/tier1/tc_1042_check_rhsm_username_and_rhsm_password_option_in_etc_virtwho_d.py [39:9 - 47:8] (8 lines, 124 tokens)
+   tests/tier2/tc_2043_check_virtwho_send_mapping_to_multi_org_with_rhsm_parameters.py [35:12 - 44:8]
+
+Clone found (python):
+ - tests/tier1/tc_1042_check_rhsm_username_and_rhsm_password_option_in_etc_virtwho_d.py [44:18 - 49:7] (5 lines, 71 tokens)
+   tests/tier1/tc_1044_check_rhsm_hostname_port_prefix_options_in_etc_virtwho_d.py [45:16 - 49:5]
+
+Clone found (python):
+ - tests/tier1/tc_1042_check_rhsm_username_and_rhsm_password_option_in_etc_virtwho_d.py [53:3 - 59:70] (6 lines, 77 tokens)
+   tests/tier1/tc_1044_check_rhsm_hostname_port_prefix_options_in_etc_virtwho_d.py [52:12 - 56:62]
+
+Clone found (python):
+ - tests/tier1/tc_1042_check_rhsm_username_and_rhsm_password_option_in_etc_virtwho_d.py [62:16 - 67:14] (5 lines, 71 tokens)
+   tests/tier1/tc_1044_check_rhsm_hostname_port_prefix_options_in_etc_virtwho_d.py [59:14 - 63:5]
+
+Clone found (python):
+ - tests/tier1/tc_1041_check_encrypted_password_option_in_etc_virtwho_d.py [13:11 - 27:52] (14 lines, 106 tokens)
+   tests/tier1/tc_1054_check_hypervisor_id_and_exclude_hosts_option_in_etc_virtwho_d.py [12:7 - 29:63]
+
+Clone found (python):
+ - tests/tier1/tc_1041_check_encrypted_password_option_in_etc_virtwho_d.py [27:52 - 32:49] (5 lines, 72 tokens)
+   tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [39:5 - 44:56]
+
+Clone found (python):
+ - tests/tier1/tc_1040_check_virt_who_password_function.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1039_check_http_proxy_option_by_etc_sysconfig.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1039_check_http_proxy_option_by_etc_sysconfig.py [33:9 - 42:14] (9 lines, 132 tokens)
+   tests/tier1/tc_1112_check_http_proxy_option_by_etc_conf.py [36:9 - 45:17]
+
+Clone found (python):
+ - tests/tier1/tc_1039_check_http_proxy_option_by_etc_sysconfig.py [42:14 - 65:47] (23 lines, 304 tokens)
+   tests/tier1/tc_1112_check_http_proxy_option_by_etc_conf.py [46:23 - 69:50]
+
+Clone found (python):
+ - tests/tier1/tc_1038_check_sam_satellite_options_by_etc_sysconfig.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1037_check_sam_satellite_options_by_cli.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1036_check_ignore_swp_file_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1036_check_ignore_swp_file_in_etc_virtwho_d.py [12:16 - 23:10] (11 lines, 87 tokens)
+   tests/tier1/tc_1054_check_hypervisor_id_and_exclude_hosts_option_in_etc_virtwho_d.py [12:7 - 24:5]
+
+Clone found (python):
+ - tests/tier1/tc_1036_check_ignore_swp_file_in_etc_virtwho_d.py [33:3 - 49:2] (16 lines, 122 tokens)
+   tests/tier3/tc_1027_check_two_modes_enabled_in_etc_sysconfig.py [36:4 - 52:2]
+
+Clone found (python):
+ - tests/tier1/tc_1034_check_mapping_info_with_dconf_and_sysconf_for_the_same_mode.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1034_check_mapping_info_with_dconf_and_sysconf_for_the_same_mode.py [10:14 - 18:14] (8 lines, 81 tokens)
+   tests/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py [10:14 - 18:14]
+
+Clone found (python):
+ - tests/tier1/tc_1034_check_mapping_info_with_dconf_and_sysconf_for_the_same_mode.py [32:12 - 37:49] (5 lines, 75 tokens)
+   tests/tier2/tc_2027_validate_rhsm_encrypted_password_option_in_etc_virtwho_d.py [38:16 - 44:56]
+
+Clone found (python):
+ - tests/tier1/tc_1030_check_mapping_info_with_one_file_include_one_mode_in_etc_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1030_check_mapping_info_with_one_file_include_one_mode_in_etc_virtwho_d.py [12:2 - 27:74] (15 lines, 110 tokens)
+   tests/tier1/tc_1051_check_simplified_vim_option_in_etc_virtwho_d.py [12:2 - 29:63]
+
+Clone found (python):
+ - tests/tier1/tc_1029_check_virtwho_status_after_restart_rhsmcertd_service.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1029_check_virtwho_status_after_restart_rhsmcertd_service.py [10:14 - 23:62] (13 lines, 97 tokens)
+   tests/tier2/tc_2069_valide_insecure_option_for_kubevirt.py [16:11 - 29:63]
+
+Clone found (python):
+ - tests/tier1/tc_1029_check_virtwho_status_after_restart_rhsmcertd_service.py [42:9 - 48:2] (6 lines, 76 tokens)
+   tests/tier1/tc_1072_check_rhsm_log_and_thread_after_reregister_host.py [68:16 - 74:2]
+
+Clone found (python):
+ - tests/tier1/tc_1028_check_guest_attr_by_curl.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1028_check_guest_attr_by_curl.py [23:61 - 29:43] (6 lines, 83 tokens)
+   tests/tier1/tc_1034_check_mapping_info_with_dconf_and_sysconf_for_the_same_mode.py [31:2 - 44:56]
+
+Clone found (python):
+ - tests/tier1/tc_1026_check_virtwho_executabe_file_can_be_insteaded_or_not.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1025_start_virtwho_service_by_ssh.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1024_check_virtwho_sysconfig_and_pid_files_permission.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1024_check_virtwho_sysconfig_and_pid_files_permission.py [34:9 - 39:8] (5 lines, 80 tokens)
+   tests/tier1/tc_1024_check_virtwho_sysconfig_and_pid_files_permission.py [21:12 - 26:8]
+
+Clone found (python):
+ - tests/tier1/tc_1023_run_virtwho_in_cli_when_it_is_running.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1022_check_virtwho_can_be_killed_normally_in_terminal_side.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1021_check_reporter_id_function_by_cli.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1020_check_log_file_function_by_cli.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1020_check_log_file_function_by_cli.py [41:9 - 50:2] (9 lines, 80 tokens)
+   tests/tier1/tc_1021_check_reporter_id_function_by_cli.py [38:12 - 48:2]
+
+Clone found (python):
+ - tests/tier1/tc_1019_check_log_dir_function_by_cli.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1019_check_log_dir_function_by_cli.py [27:44 - 48:2] (21 lines, 307 tokens)
+   tests/tier1/tc_1021_check_reporter_id_function_by_cli.py [25:48 - 48:2]
+
+Clone found (python):
+ - tests/tier1/tc_1018_check_log_per_config_function_by_cli.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1018_check_log_per_config_function_by_cli.py [51:13 - 59:5] (8 lines, 128 tokens)
+   tests/tier1/tc_1060_check_global_log_per_config_option_in_etc_virtwho_conf.py [72:9 - 80:8]
+
+Clone found (python):
+ - tests/tier1/tc_1018_check_log_per_config_function_by_cli.py [59:5 - 65:5] (6 lines, 92 tokens)
+   tests/tier1/tc_1060_check_global_log_per_config_option_in_etc_virtwho_conf.py [80:8 - 86:8]
+
+Clone found (python):
+ - tests/tier1/tc_1018_check_log_per_config_function_by_cli.py [65:5 - 73:5] (8 lines, 96 tokens)
+   tests/tier1/tc_1060_check_global_log_per_config_option_in_etc_virtwho_conf.py [86:8 - 92:8]
+
+Clone found (python):
+ - tests/tier1/tc_1018_check_log_per_config_function_by_cli.py [72:43 - 80:2] (8 lines, 78 tokens)
+   tests/tier1/tc_1021_check_reporter_id_function_by_cli.py [39:17 - 48:2]
+
+Clone found (python):
+ - tests/tier1/tc_1017_check_config_function_by_cli.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1016_check_print_function_by_cli.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1015_check_interval_function_by_etc_sysconfig.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1015_check_interval_function_by_etc_sysconfig.py [27:13 - 34:50] (7 lines, 81 tokens)
+   tests/tier2/tc_2034_validate_global_interval_by_virtwho_conf.py [28:13 - 36:75]
+
+Clone found (python):
+ - tests/tier1/tc_1015_check_interval_function_by_etc_sysconfig.py [44:13 - 55:8] (11 lines, 85 tokens)
+   tests/tier2/tc_2034_validate_global_interval_by_virtwho_conf.py [40:26 - 51:8]
+
+Clone found (python):
+ - tests/tier1/tc_1015_check_interval_function_by_etc_sysconfig.py [58:13 - 69:8] (11 lines, 85 tokens)
+   tests/tier1/tc_1056_check_global_interval_option_in_etc_virtwho_conf.py [48:13 - 59:8]
+
+Clone found (python):
+ - tests/tier1/tc_1014_check_interval_function_by_cli.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1014_check_interval_function_by_cli.py [53:2 - 66:44] (13 lines, 88 tokens)
+   tests/tier1/tc_1015_check_interval_function_by_etc_sysconfig.py [45:2 - 57:51]
+
+Clone found (python):
+ - tests/tier1/tc_1014_check_interval_function_by_cli.py [68:2 - 82:6] (14 lines, 87 tokens)
+   tests/tier1/tc_1015_check_interval_function_by_etc_sysconfig.py [59:2 - 72:5]
+
+Clone found (python):
+ - tests/tier1/tc_1013_check_virtwho_oneshot_function_by_sysconfig.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1013_check_virtwho_oneshot_function_by_sysconfig.py [25:13 - 30:51] (5 lines, 77 tokens)
+   tests/tier1/tc_1059_check_global_oneshot_option_in_etc_virtwho_conf.py [26:13 - 31:46]
+
+Clone found (python):
+ - tests/tier1/tc_1013_check_virtwho_oneshot_function_by_sysconfig.py [31:13 - 36:58] (5 lines, 77 tokens)
+   tests/tier1/tc_1059_check_global_oneshot_option_in_etc_virtwho_conf.py [32:13 - 37:49]
+
+Clone found (python):
+ - tests/tier1/tc_1013_check_virtwho_oneshot_function_by_sysconfig.py [37:13 - 43:2] (6 lines, 81 tokens)
+   tests/tier1/tc_1059_check_global_oneshot_option_in_etc_virtwho_conf.py [38:13 - 44:2]
+
+Clone found (python):
+ - tests/tier1/tc_1012_check_virtwho_oneshot_function_by_cli.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1011_check_virtwho_debug_function_by_sysconfig.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1011_check_virtwho_debug_function_by_sysconfig.py [10:14 - 23:48] (13 lines, 103 tokens)
+   tests/tier1/tc_1013_check_virtwho_oneshot_function_by_sysconfig.py [10:14 - 23:51]
+
+Clone found (python):
+ - tests/tier1/tc_1011_check_virtwho_debug_function_by_sysconfig.py [25:13 - 32:48] (7 lines, 113 tokens)
+   tests/tier1/tc_1058_check_global_debug_option_in_etc_virtwho_conf.py [24:13 - 31:44]
+
+Clone found (python):
+ - tests/tier1/tc_1011_check_virtwho_debug_function_by_sysconfig.py [33:4 - 42:55] (9 lines, 122 tokens)
+   tests/tier1/tc_1011_check_virtwho_debug_function_by_sysconfig.py [25:4 - 41:52]
+
+Clone found (python):
+ - tests/tier1/tc_1011_check_virtwho_debug_function_by_sysconfig.py [43:16 - 53:2] (10 lines, 126 tokens)
+   tests/tier1/tc_1011_check_virtwho_debug_function_by_sysconfig.py [25:4 - 52:2]
+
+Clone found (python):
+ - tests/tier1/tc_1010_check_virtwho_debug_function_by_cli.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1010_check_virtwho_debug_function_by_cli.py [29:2 - 34:50] (5 lines, 66 tokens)
+   tests/tier2/tc_2006_validate_config_function_by_cli.py [44:9 - 49:52]
+
+Clone found (python):
+ - tests/tier1/tc_1009_check_virtwho_fetch_and_send_function_by_cli.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1009_check_virtwho_fetch_and_send_function_by_cli.py [27:32 - 32:56] (5 lines, 75 tokens)
+   tests/tier1/tc_1017_check_config_function_by_cli.py [24:12 - 39:56]
+
+Clone found (python):
+ - tests/tier1/tc_1009_check_virtwho_fetch_and_send_function_by_cli.py [28:2 - 37:2] (9 lines, 103 tokens)
+   tests/tier1/tc_1109_connect_to_hypervisor_by_read_only_account.py [31:2 - 40:2]
+
+Clone found (python):
+ - tests/tier1/tc_1008_check_virtwho_fetch_and_send_function_by_virtwho_d.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1008_check_virtwho_fetch_and_send_function_by_virtwho_d.py [10:14 - 22:11] (12 lines, 100 tokens)
+   tests/tier2/tc_2069_valide_insecure_option_for_kubevirt.py [16:11 - 35:10]
+
+Clone found (python):
+ - tests/tier1/tc_1008_check_virtwho_fetch_and_send_function_by_virtwho_d.py [20:12 - 35:2] (15 lines, 162 tokens)
+   tests/tier1/tc_1109_connect_to_hypervisor_by_read_only_account.py [25:23 - 40:2]
+
+Clone found (python):
+ - tests/tier1/tc_1007_check_virtwho_fetch_and_send_function_by_sysconfig.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1007_check_virtwho_fetch_and_send_function_by_sysconfig.py [25:52 - 35:2] (10 lines, 120 tokens)
+   tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py [39:5 - 40:2]
+
+Clone found (python):
+ - tests/tier1/tc_1006_run_virtwho_with_default_config.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1005_check_virtwho_service_function.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1004_check_virtwho_virtwhoconfig_man_page_and_help_exist.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1003_check_virtwho_package_info.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1002_check_virtwho_can_be_installed_and_uninstalled.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/tier1/tc_1001_check_virtwho_is_shipped_by_different_arch.py [1:1 - 10:14] (9 lines, 76 tokens)
+   tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py [1:1 - 10:14]
+
+Clone found (python):
+ - tests/smoke/test_virtwho_smoke.py [69:12 - 74:3] (5 lines, 74 tokens)
+   tests/tier1/tc_1112_check_http_proxy_option_by_etc_conf.py [34:5 - 40:10]
+
+Clone found (python):
+ - tests/sca/test_virtwho_sca.py [65:5 - 73:39] (8 lines, 108 tokens)
+   tests/smoke/test_virtwho_smoke.py [35:5 - 43:21]
+
+Clone found (python):
+ - tests/gating/test_virtwho_gating.py [15:13 - 34:19] (19 lines, 202 tokens)
+   tests/smoke/test_virtwho_smoke.py [16:20 - 35:34]
+
+Clone found (python):
+ - tests/gating/test_virtwho_gating.py [112:2 - 120:3] (8 lines, 144 tokens)
+   tests/smoke/test_virtwho_smoke.py [132:2 - 140:7]
+
+Clone found (python):
+ - tests/gating/test_virtwho_gating.py [123:13 - 128:2] (5 lines, 77 tokens)
+   tests/smoke/test_virtwho_smoke.py [140:9 - 143:2]
+
+Clone found (python):
+ - virt_who/settings.py [502:8 - 511:11] (9 lines, 90 tokens)
+   virt_who/settings.py [453:9 - 462:6]
+
+Clone found (python):
+ - virt_who/settings.py [510:2 - 523:7] (13 lines, 118 tokens)
+   virt_who/settings.py [464:2 - 477:8]
+
+Clone found (python):
+ - virt_who/base.py [91:5 - 99:8] (8 lines, 84 tokens)
+   virt_who/base.py [47:8 - 55:4]
+
+┌──────────┬────────────────┬─────────────┬──────────────┬──────────────┬──────────────────┬───────────────────┐
+│ Format   │ Files analyzed │ Total lines │ Total tokens │ Clones found │ Duplicated lines │ Duplicated tokens │
+├──────────┼────────────────┼─────────────┼──────────────┼──────────────┼──────────────────┼───────────────────┤
+│ python   │ 190            │ 15327       │ 155618       │ 573          │ 5925 (38.66%)    │ 60127 (38.64%)    │
+├──────────┼────────────────┼─────────────┼──────────────┼──────────────┼──────────────────┼───────────────────┤
+│ bash     │ 4              │ 352         │ 2820         │ 0            │ 0 (0%)           │ 0 (0%)            │
+├──────────┼────────────────┼─────────────┼──────────────┼──────────────┼──────────────────┼───────────────────┤
+│ markdown │ 1              │ 10          │ 20           │ 0            │ 0 (0%)           │ 0 (0%)            │
+├──────────┼────────────────┼─────────────┼──────────────┼──────────────┼──────────────────┼───────────────────┤
+│ Total:   │ 195            │ 15689       │ 158458       │ 573          │ 5925 (37.77%)    │ 60127 (37.95%)    │
+└──────────┴────────────────┴─────────────┴──────────────┴──────────────┴──────────────────┴───────────────────┘
+Found 573 clones.
+HTML report saved to /tmp/lint/megalinter-reports/copy-paste/html/
+ERROR: jscpd found too many duplicates (37.77%) over threshold (0%)
+Error: ERROR: jscpd found too many duplicates (37.77%) over threshold (0%)
+    at ThresholdReporter.report (/node-deps/node_modules/@jscpd/finder/dist/reporters/threshold.js:12:19)
+    at /node-deps/node_modules/@jscpd/finder/dist/in-files-detector.js:82:26
+    at Array.forEach (<anonymous>)
+    at /node-deps/node_modules/@jscpd/finder/dist/in-files-detector.js:81:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+

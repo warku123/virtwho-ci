@@ -1,0 +1,21 @@
+Results of devskim linter (version 0.7.104)
+See documentation on https://megalinter.io/0d699a348a2c104040efd78f2d2970e6ae8e5769/descriptors/repository_devskim/
+-----------------------------------------------
+
+❌ [ERROR] for workspace /tmp/lint
+Linter raw log:
+/tmp/lint/tests/smoke/test_virtwho_smoke.py:73:26:73:33 [Moderate] DS137138 Insecure URL
+/tmp/lint/tests/tier1/tc_1039_check_http_proxy_option_by_etc_sysconfig.py:36:26:36:33 [Moderate] DS137138 Insecure URL
+/tmp/lint/virt_who/register.py:166:27:166:34 [Moderate] DS137138 Insecure URL
+/tmp/lint/virt_who/base.py:483:19:483:26 [Moderate] DS137138 Insecure URL
+/tmp/lint/tests/tier1/tc_1003_check_virtwho_package_info.py:39:31:39:38 [Moderate] DS137138 Insecure URL
+/tmp/lint/tests/tier1/tc_1039_check_http_proxy_option_by_etc_sysconfig.py:37:30:37:37 [Moderate] DS137138 Insecure URL
+/tmp/lint/tests/tier1/tc_1112_check_http_proxy_option_by_etc_conf.py:39:26:39:33 [Moderate] DS137138 Insecure URL
+/tmp/lint/tests/tier1/tc_1112_check_http_proxy_option_by_etc_conf.py:40:30:40:37 [Moderate] DS137138 Insecure URL
+/tmp/lint/virt_who/provision.py:119:27:119:34 [Moderate] DS137138 Insecure URL
+/tmp/lint/virt_who/provision.py:1667:90:1667:97 [Moderate] DS137138 Insecure URL
+/tmp/lint/virt_who/provision.py:1672:56:1672:63 [Moderate] DS137138 Insecure URL
+/tmp/lint/tests/tier2/tc_2013_validate_unreachable_proxy_by_config.py:45:26:45:33 [Moderate] DS137138 Insecure URL
+/tmp/lint/tests/tier2/tc_2013_validate_unreachable_proxy_by_config.py:67:26:67:33 [Moderate] DS137138 Insecure URL
+For guidance on reported issues visit the relevant page here: https://github.com/microsoft/DevSkim/tree/main/guidance.
+

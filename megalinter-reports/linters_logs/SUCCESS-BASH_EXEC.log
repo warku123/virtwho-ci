@@ -1,0 +1,8 @@
+Results of bash-exec linter (version 5.2.15)
+See documentation on https://megalinter.io/0d699a348a2c104040efd78f2d2970e6ae8e5769/descriptors/bash_bash_exec/
+-----------------------------------------------
+
+✅ [SUCCESS] docker/mk_container.sh
+✅ [SUCCESS] docker/mk_image.sh
+✅ [SUCCESS] docker/rm_containers.sh
+✅ [SUCCESS] utils/bridge_setup.sh

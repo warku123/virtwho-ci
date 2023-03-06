@@ -1,0 +1,1437 @@
+Results of isort linter (version 5.12.0)
+See documentation on https://megalinter.io/0d699a348a2c104040efd78f2d2970e6ae8e5769/descriptors/python_isort/
+-----------------------------------------------
+
+❌ [ERROR] for workspace /tmp/lint
+Linter raw log:
+ERROR: /tmp/lint/tier1/tc_1001_check_virtwho_is_shipped_by_different_arch.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1002_check_virtwho_can_be_installed_and_uninstalled.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1004_check_virtwho_virtwhoconfig_man_page_and_help_exist.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1005_check_virtwho_service_function.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1006_run_virtwho_with_default_config.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1007_check_virtwho_fetch_and_send_function_by_sysconfig.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1008_check_virtwho_fetch_and_send_function_by_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1017_check_config_function_by_cli.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1020_check_log_file_function_by_cli.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1022_check_virtwho_can_be_killed_normally_in_terminal_side.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1023_run_virtwho_in_cli_when_it_is_running.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1024_check_virtwho_sysconfig_and_pid_files_permission.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1025_start_virtwho_service_by_ssh.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1026_check_virtwho_executabe_file_can_be_insteaded_or_not.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1028_check_guest_attr_by_curl.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1029_check_virtwho_status_after_restart_rhsmcertd_service.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1030_check_mapping_info_with_one_file_include_one_mode_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1034_check_mapping_info_with_dconf_and_sysconf_for_the_same_mode.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1036_check_ignore_swp_file_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1038_check_sam_satellite_options_by_etc_sysconfig.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1039_check_http_proxy_option_by_etc_sysconfig.py Imports are incorrectly sorted and/or formatted.
+--- /tmp/lint/tier1/tc_1001_check_virtwho_is_shipped_by_different_arch.py:before	2023-03-06 05:02:18.572378
++++ /tmp/lint/tier1/tc_1001_check_virtwho_is_shipped_by_different_arch.py:after	2023-03-06 06:16:23.644960
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1002_check_virtwho_can_be_installed_and_uninstalled.py:before	2023-03-06 05:02:18.573378
++++ /tmp/lint/tier1/tc_1002_check_virtwho_can_be_installed_and_uninstalled.py:after	2023-03-06 06:16:23.646771
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1004_check_virtwho_virtwhoconfig_man_page_and_help_exist.py:before	2023-03-06 05:02:18.573378
++++ /tmp/lint/tier1/tc_1004_check_virtwho_virtwhoconfig_man_page_and_help_exist.py:after	2023-03-06 06:16:23.650685
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1005_check_virtwho_service_function.py:before	2023-03-06 05:02:18.573378
++++ /tmp/lint/tier1/tc_1005_check_virtwho_service_function.py:after	2023-03-06 06:16:23.652474
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1006_run_virtwho_with_default_config.py:before	2023-03-06 05:02:18.573378
++++ /tmp/lint/tier1/tc_1006_run_virtwho_with_default_config.py:after	2023-03-06 06:16:23.654482
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1007_check_virtwho_fetch_and_send_function_by_sysconfig.py:before	2023-03-06 05:02:18.574378
++++ /tmp/lint/tier1/tc_1007_check_virtwho_fetch_and_send_function_by_sysconfig.py:after	2023-03-06 06:16:23.656166
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1008_check_virtwho_fetch_and_send_function_by_virtwho_d.py:before	2023-03-06 05:02:18.574378
++++ /tmp/lint/tier1/tc_1008_check_virtwho_fetch_and_send_function_by_virtwho_d.py:after	2023-03-06 06:16:23.657893
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1017_check_config_function_by_cli.py:before	2023-03-06 05:02:18.575378
++++ /tmp/lint/tier1/tc_1017_check_config_function_by_cli.py:after	2023-03-06 06:16:23.668763
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1020_check_log_file_function_by_cli.py:before	2023-03-06 05:02:18.575378
++++ /tmp/lint/tier1/tc_1020_check_log_file_function_by_cli.py:after	2023-03-06 06:16:23.673165
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1022_check_virtwho_can_be_killed_normally_in_terminal_side.py:before	2023-03-06 05:02:18.575378
++++ /tmp/lint/tier1/tc_1022_check_virtwho_can_be_killed_normally_in_terminal_side.py:after	2023-03-06 06:16:23.675898
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1023_run_virtwho_in_cli_when_it_is_running.py:before	2023-03-06 05:02:18.576378
++++ /tmp/lint/tier1/tc_1023_run_virtwho_in_cli_when_it_is_running.py:after	2023-03-06 06:16:23.677559
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1024_check_virtwho_sysconfig_and_pid_files_permission.py:before	2023-03-06 05:02:18.576378
++++ /tmp/lint/tier1/tc_1024_check_virtwho_sysconfig_and_pid_files_permission.py:after	2023-03-06 06:16:23.679317
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1025_start_virtwho_service_by_ssh.py:before	2023-03-06 05:02:18.576378
++++ /tmp/lint/tier1/tc_1025_start_virtwho_service_by_ssh.py:after	2023-03-06 06:16:23.681019
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1026_check_virtwho_executabe_file_can_be_insteaded_or_not.py:before	2023-03-06 05:02:18.576378
++++ /tmp/lint/tier1/tc_1026_check_virtwho_executabe_file_can_be_insteaded_or_not.py:after	2023-03-06 06:16:23.682793
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1028_check_guest_attr_by_curl.py:before	2023-03-06 05:02:18.576378
++++ /tmp/lint/tier1/tc_1028_check_guest_attr_by_curl.py:after	2023-03-06 06:16:23.685056
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1029_check_virtwho_status_after_restart_rhsmcertd_service.py:before	2023-03-06 05:02:18.576378
++++ /tmp/lint/tier1/tc_1029_check_virtwho_status_after_restart_rhsmcertd_service.py:after	2023-03-06 06:16:23.687289
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1030_check_mapping_info_with_one_file_include_one_mode_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.576378
++++ /tmp/lint/tier1/tc_1030_check_mapping_info_with_one_file_include_one_mode_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.688865
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1034_check_mapping_info_with_dconf_and_sysconf_for_the_same_mode.py:before	2023-03-06 05:02:18.576378
++++ /tmp/lint/tier1/tc_1034_check_mapping_info_with_dconf_and_sysconf_for_the_same_mode.py:after	2023-03-06 06:16:23.690612
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1036_check_ignore_swp_file_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.576378
++++ /tmp/lint/tier1/tc_1036_check_ignore_swp_file_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.692282
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1038_check_sam_satellite_options_by_etc_sysconfig.py:before	2023-03-06 05:02:18.576378
++++ /tmp/lint/tier1/tc_1038_check_sam_satellite_options_by_etc_sysconfig.py:after	2023-03-06 06:16:23.694913
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1039_check_http_proxy_option_by_etc_sysconfig.py:before	2023-03-06 05:02:18.576378
++++ /tmp/lint/tier1/tc_1039_check_http_proxy_option_by_etc_sysconfig.py:after	2023-03-06 06:16:23.697384
+@@ -3,6 +3,7 @@
+ERROR: /tmp/lint/tier1/tc_1040_check_virt_who_password_function.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1041_check_encrypted_password_option_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1042_check_rhsm_username_and_rhsm_password_option_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1043_check_rhsm_username_and_rhsm_encrypted_password_option_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1044_check_rhsm_hostname_port_prefix_options_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1046_check_filter_hosts_option_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1047_check_exclude_hosts_option_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1048_check_filter_host_parents_option_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1049_check_exclude_host_parents_option_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1050_check_filter_hosts_and_exclude_hosts_options_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1051_check_simplified_vim_option_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1052_check_hypervisor_id_option_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1053_check_hypervisor_id_and_filter_hosts_option_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1054_check_hypervisor_id_and_exclude_hosts_option_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1055_check_global_section_header_in_etc_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1056_check_global_interval_option_in_etc_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1057_check_global_reporter_id_option_in_etc_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1058_check_global_debug_option_in_etc_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1059_check_global_oneshot_option_in_etc_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1060_check_global_log_per_config_option_in_etc_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1040_check_virt_who_password_function.py:before	2023-03-06 05:02:18.576378
++++ /tmp/lint/tier1/tc_1040_check_virt_who_password_function.py:after	2023-03-06 06:16:23.698870
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1041_check_encrypted_password_option_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.577378
++++ /tmp/lint/tier1/tc_1041_check_encrypted_password_option_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.700732
+@@ -2,6 +2,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1042_check_rhsm_username_and_rhsm_password_option_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.577378
++++ /tmp/lint/tier1/tc_1042_check_rhsm_username_and_rhsm_password_option_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.703344
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1043_check_rhsm_username_and_rhsm_encrypted_password_option_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.577378
++++ /tmp/lint/tier1/tc_1043_check_rhsm_username_and_rhsm_encrypted_password_option_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.705477
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1044_check_rhsm_hostname_port_prefix_options_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.577378
++++ /tmp/lint/tier1/tc_1044_check_rhsm_hostname_port_prefix_options_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.707896
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1046_check_filter_hosts_option_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.577378
++++ /tmp/lint/tier1/tc_1046_check_filter_hosts_option_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.712357
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1047_check_exclude_hosts_option_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.577378
++++ /tmp/lint/tier1/tc_1047_check_exclude_hosts_option_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.714601
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1048_check_filter_host_parents_option_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.577378
++++ /tmp/lint/tier1/tc_1048_check_filter_host_parents_option_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.716766
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1049_check_exclude_host_parents_option_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.577378
++++ /tmp/lint/tier1/tc_1049_check_exclude_host_parents_option_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.718882
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1050_check_filter_hosts_and_exclude_hosts_options_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.577378
++++ /tmp/lint/tier1/tc_1050_check_filter_hosts_and_exclude_hosts_options_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.721501
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1051_check_simplified_vim_option_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.577378
++++ /tmp/lint/tier1/tc_1051_check_simplified_vim_option_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.723320
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1052_check_hypervisor_id_option_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.577378
++++ /tmp/lint/tier1/tc_1052_check_hypervisor_id_option_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.725584
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1053_check_hypervisor_id_and_filter_hosts_option_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.578378
++++ /tmp/lint/tier1/tc_1053_check_hypervisor_id_and_filter_hosts_option_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.728026
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1054_check_hypervisor_id_and_exclude_hosts_option_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.578378
++++ /tmp/lint/tier1/tc_1054_check_hypervisor_id_and_exclude_hosts_option_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.730081
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1055_check_global_section_header_in_etc_virtwho_conf.py:before	2023-03-06 05:02:18.578378
++++ /tmp/lint/tier1/tc_1055_check_global_section_header_in_etc_virtwho_conf.py:after	2023-03-06 06:16:23.732063
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1056_check_global_interval_option_in_etc_virtwho_conf.py:before	2023-03-06 05:02:18.578378
++++ /tmp/lint/tier1/tc_1056_check_global_interval_option_in_etc_virtwho_conf.py:after	2023-03-06 06:16:23.733875
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1057_check_global_reporter_id_option_in_etc_virtwho_conf.py:before	2023-03-06 05:02:18.578378
++++ /tmp/lint/tier1/tc_1057_check_global_reporter_id_option_in_etc_virtwho_conf.py:after	2023-03-06 06:16:23.735555
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1058_check_global_debug_option_in_etc_virtwho_conf.py:before	2023-03-06 05:02:18.578378
++++ /tmp/lint/tier1/tc_1058_check_global_debug_option_in_etc_virtwho_conf.py:after	2023-03-06 06:16:23.737502
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1059_check_global_oneshot_option_in_etc_virtwho_conf.py:before	2023-03-06 05:02:18.578378
++++ /tmp/lint/tier1/tc_1059_check_global_oneshot_option_in_etc_virtwho_conf.py:after	2023-03-06 06:16:23.739414
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1060_check_global_log_per_config_option_in_etc_virtwho_conf.py:before	2023-03-06 05:02:18.578378
+ERROR: /tmp/lint/tier1/tc_1061_check_global_log_dir_option_in_etc_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1062_check_global_log_file_option_in_etc_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1063_check_global_configs_option_in_etc_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1064_check_defaults_section_header_in_etc_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1065_check_defaults_owner_option_in_etc_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1066_check_defaults_env_option_in_etc_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1067_check_defaults_hypervisor_id_option_in_etc_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1068_check_fake_mode_with_one_hypervisor_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1069_check_fake_mode_subscribe_function_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1070_check_fake_mode_pool_revoked_function_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1072_check_rhsm_log_and_thread_after_reregister_host.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1075_check_rhsm_connection_info_in_rhsm_log.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1076_check_guest_facts_by_subscription_manager.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1077_check_associated_info_by_rhsmlog_and_webui.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1078_check_temporary_bonus_pool_can_be_attached_in_guest.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1079_check_unlimited_virtual_pool_created_in_guest.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1080_check_unlimited_virtual_pool_attached_by_poolId_in_guest.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1081_check_unlimited_virtual_pool_attached_by_auto_in_guest.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1082_check_unlimited_virtual_pool_revoked_in_guest_after_host_unattached.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1083_check_unlimited_virtual_pool_revoked_in_guest_after_host_unregister.py Imports are incorrectly sorted and/or formatted.
++++ /tmp/lint/tier1/tc_1060_check_global_log_per_config_option_in_etc_virtwho_conf.py:after	2023-03-06 06:16:23.742351
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1061_check_global_log_dir_option_in_etc_virtwho_conf.py:before	2023-03-06 05:02:18.578378
++++ /tmp/lint/tier1/tc_1061_check_global_log_dir_option_in_etc_virtwho_conf.py:after	2023-03-06 06:16:23.744385
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1062_check_global_log_file_option_in_etc_virtwho_conf.py:before	2023-03-06 05:02:18.578378
++++ /tmp/lint/tier1/tc_1062_check_global_log_file_option_in_etc_virtwho_conf.py:after	2023-03-06 06:16:23.746564
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1063_check_global_configs_option_in_etc_virtwho_conf.py:before	2023-03-06 05:02:18.578378
++++ /tmp/lint/tier1/tc_1063_check_global_configs_option_in_etc_virtwho_conf.py:after	2023-03-06 06:16:23.748259
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1064_check_defaults_section_header_in_etc_virtwho_conf.py:before	2023-03-06 05:02:18.578378
++++ /tmp/lint/tier1/tc_1064_check_defaults_section_header_in_etc_virtwho_conf.py:after	2023-03-06 06:16:23.749858
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1065_check_defaults_owner_option_in_etc_virtwho_conf.py:before	2023-03-06 05:02:18.578378
++++ /tmp/lint/tier1/tc_1065_check_defaults_owner_option_in_etc_virtwho_conf.py:after	2023-03-06 06:16:23.751448
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1066_check_defaults_env_option_in_etc_virtwho_conf.py:before	2023-03-06 05:02:18.578378
++++ /tmp/lint/tier1/tc_1066_check_defaults_env_option_in_etc_virtwho_conf.py:after	2023-03-06 06:16:23.753206
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1067_check_defaults_hypervisor_id_option_in_etc_virtwho_conf.py:before	2023-03-06 05:02:18.578378
++++ /tmp/lint/tier1/tc_1067_check_defaults_hypervisor_id_option_in_etc_virtwho_conf.py:after	2023-03-06 06:16:23.755301
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1068_check_fake_mode_with_one_hypervisor_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.579378
++++ /tmp/lint/tier1/tc_1068_check_fake_mode_with_one_hypervisor_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.757085
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1069_check_fake_mode_subscribe_function_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.579378
++++ /tmp/lint/tier1/tc_1069_check_fake_mode_subscribe_function_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.759312
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1070_check_fake_mode_pool_revoked_function_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.579378
++++ /tmp/lint/tier1/tc_1070_check_fake_mode_pool_revoked_function_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.761520
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1072_check_rhsm_log_and_thread_after_reregister_host.py:before	2023-03-06 05:02:18.579378
++++ /tmp/lint/tier1/tc_1072_check_rhsm_log_and_thread_after_reregister_host.py:after	2023-03-06 06:16:23.763754
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1075_check_rhsm_connection_info_in_rhsm_log.py:before	2023-03-06 05:02:18.579378
++++ /tmp/lint/tier1/tc_1075_check_rhsm_connection_info_in_rhsm_log.py:after	2023-03-06 06:16:23.768303
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1076_check_guest_facts_by_subscription_manager.py:before	2023-03-06 05:02:18.579378
++++ /tmp/lint/tier1/tc_1076_check_guest_facts_by_subscription_manager.py:after	2023-03-06 06:16:23.770646
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1077_check_associated_info_by_rhsmlog_and_webui.py:before	2023-03-06 05:02:18.579378
++++ /tmp/lint/tier1/tc_1077_check_associated_info_by_rhsmlog_and_webui.py:after	2023-03-06 06:16:23.772545
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1078_check_temporary_bonus_pool_can_be_attached_in_guest.py:before	2023-03-06 05:02:18.579378
++++ /tmp/lint/tier1/tc_1078_check_temporary_bonus_pool_can_be_attached_in_guest.py:after	2023-03-06 06:16:23.774577
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1079_check_unlimited_virtual_pool_created_in_guest.py:before	2023-03-06 05:02:18.589378
++++ /tmp/lint/tier1/tc_1079_check_unlimited_virtual_pool_created_in_guest.py:after	2023-03-06 06:16:23.776346
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1080_check_unlimited_virtual_pool_attached_by_poolId_in_guest.py:before	2023-03-06 05:02:18.589378
++++ /tmp/lint/tier1/tc_1080_check_unlimited_virtual_pool_attached_by_poolId_in_guest.py:after	2023-03-06 06:16:23.778728
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1081_check_unlimited_virtual_pool_attached_by_auto_in_guest.py:before	2023-03-06 05:02:18.589378
++++ /tmp/lint/tier1/tc_1081_check_unlimited_virtual_pool_attached_by_auto_in_guest.py:after	2023-03-06 06:16:23.781245
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1082_check_unlimited_virtual_pool_revoked_in_guest_after_host_unattached.py:before	2023-03-06 05:02:18.589378
++++ /tmp/lint/tier1/tc_1082_check_unlimited_virtual_pool_revoked_in_guest_after_host_unattached.py:after	2023-03-06 06:16:23.783464
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+ERROR: /tmp/lint/tier1/tc_1084_check_vdc_virtual_pool_created_in_guest.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1085_check_vdc_virtual_pool_attached_by_poolId_in_guest.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1086_check_vdc_virtual_pool_attached_by_auto_in_guest.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1087_check_vdc_virtual_pool_revoked_in_guest_after_host_unattached.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1088_check_vdc_virtual_pool_revoked_in_guest_after_host_unregister.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1089_check_vdc_consumed_status_in_host_after_set_cpu_socket.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1090_check_vdc_consumed_status_in_guest_after_set_cpu_socket.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1091_check_vdc_repos_in_guest_and_host_after_subscribed.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1092_check_limited_virtual_pool_created_in_guest.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1093_check_limited_virtual_pool_attached_by_poolId_in_guest.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1094_check_limited_virtual_pool_attached_by_auto_in_guest.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1095_check_limited_virtual_pool_revoked_in_guest_after_host_unattached.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1096_check_limited_virtual_pool_revoked_in_guest_after_host_unregister.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1097_check_instance_no_virtual_pool_created_in_guest.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1098_check_instance_consumed_status_in_host_after_set_cpu_socket_1.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1101_check_instance_consumed_status_in_guest_after_set_cpu_socket_1.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1102_check_instance_consumed_status_in_guest_after_set_cpu_socket_8.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1103_check_virtwho_threads_number_after_reconfig_libvirt.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1104_check_virtwho_config_exist_after_reboot_system.py Imports are incorrectly sorted and/or formatted.
+--- /tmp/lint/tier1/tc_1083_check_unlimited_virtual_pool_revoked_in_guest_after_host_unregister.py:before	2023-03-06 05:02:18.589378
++++ /tmp/lint/tier1/tc_1083_check_unlimited_virtual_pool_revoked_in_guest_after_host_unregister.py:after	2023-03-06 06:16:23.785479
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1084_check_vdc_virtual_pool_created_in_guest.py:before	2023-03-06 05:02:18.589378
++++ /tmp/lint/tier1/tc_1084_check_vdc_virtual_pool_created_in_guest.py:after	2023-03-06 06:16:23.787429
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1085_check_vdc_virtual_pool_attached_by_poolId_in_guest.py:before	2023-03-06 05:02:18.589378
++++ /tmp/lint/tier1/tc_1085_check_vdc_virtual_pool_attached_by_poolId_in_guest.py:after	2023-03-06 06:16:23.789528
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1086_check_vdc_virtual_pool_attached_by_auto_in_guest.py:before	2023-03-06 05:02:18.589378
++++ /tmp/lint/tier1/tc_1086_check_vdc_virtual_pool_attached_by_auto_in_guest.py:after	2023-03-06 06:16:23.792059
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1087_check_vdc_virtual_pool_revoked_in_guest_after_host_unattached.py:before	2023-03-06 05:02:18.589378
++++ /tmp/lint/tier1/tc_1087_check_vdc_virtual_pool_revoked_in_guest_after_host_unattached.py:after	2023-03-06 06:16:23.794321
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1088_check_vdc_virtual_pool_revoked_in_guest_after_host_unregister.py:before	2023-03-06 05:02:18.590378
++++ /tmp/lint/tier1/tc_1088_check_vdc_virtual_pool_revoked_in_guest_after_host_unregister.py:after	2023-03-06 06:16:23.796573
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1089_check_vdc_consumed_status_in_host_after_set_cpu_socket.py:before	2023-03-06 05:02:18.590378
++++ /tmp/lint/tier1/tc_1089_check_vdc_consumed_status_in_host_after_set_cpu_socket.py:after	2023-03-06 06:16:23.799484
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1090_check_vdc_consumed_status_in_guest_after_set_cpu_socket.py:before	2023-03-06 05:02:18.590378
++++ /tmp/lint/tier1/tc_1090_check_vdc_consumed_status_in_guest_after_set_cpu_socket.py:after	2023-03-06 06:16:23.802087
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1091_check_vdc_repos_in_guest_and_host_after_subscribed.py:before	2023-03-06 05:02:18.590378
++++ /tmp/lint/tier1/tc_1091_check_vdc_repos_in_guest_and_host_after_subscribed.py:after	2023-03-06 06:16:23.804876
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1092_check_limited_virtual_pool_created_in_guest.py:before	2023-03-06 05:02:18.590378
++++ /tmp/lint/tier1/tc_1092_check_limited_virtual_pool_created_in_guest.py:after	2023-03-06 06:16:23.806926
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1093_check_limited_virtual_pool_attached_by_poolId_in_guest.py:before	2023-03-06 05:02:18.590378
++++ /tmp/lint/tier1/tc_1093_check_limited_virtual_pool_attached_by_poolId_in_guest.py:after	2023-03-06 06:16:23.809635
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1094_check_limited_virtual_pool_attached_by_auto_in_guest.py:before	2023-03-06 05:02:18.590378
++++ /tmp/lint/tier1/tc_1094_check_limited_virtual_pool_attached_by_auto_in_guest.py:after	2023-03-06 06:16:23.812233
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1095_check_limited_virtual_pool_revoked_in_guest_after_host_unattached.py:before	2023-03-06 05:02:18.590378
++++ /tmp/lint/tier1/tc_1095_check_limited_virtual_pool_revoked_in_guest_after_host_unattached.py:after	2023-03-06 06:16:23.814452
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1096_check_limited_virtual_pool_revoked_in_guest_after_host_unregister.py:before	2023-03-06 05:02:18.590378
++++ /tmp/lint/tier1/tc_1096_check_limited_virtual_pool_revoked_in_guest_after_host_unregister.py:after	2023-03-06 06:16:23.816588
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1097_check_instance_no_virtual_pool_created_in_guest.py:before	2023-03-06 05:02:18.590378
++++ /tmp/lint/tier1/tc_1097_check_instance_no_virtual_pool_created_in_guest.py:after	2023-03-06 06:16:23.818563
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1098_check_instance_consumed_status_in_host_after_set_cpu_socket_1.py:before	2023-03-06 05:02:18.590378
++++ /tmp/lint/tier1/tc_1098_check_instance_consumed_status_in_host_after_set_cpu_socket_1.py:after	2023-03-06 06:16:23.821538
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1101_check_instance_consumed_status_in_guest_after_set_cpu_socket_1.py:before	2023-03-06 05:02:18.590378
++++ /tmp/lint/tier1/tc_1101_check_instance_consumed_status_in_guest_after_set_cpu_socket_1.py:after	2023-03-06 06:16:23.828270
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1102_check_instance_consumed_status_in_guest_after_set_cpu_socket_8.py:before	2023-03-06 05:02:18.591378
++++ /tmp/lint/tier1/tc_1102_check_instance_consumed_status_in_guest_after_set_cpu_socket_8.py:after	2023-03-06 06:16:23.831368
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1103_check_virtwho_threads_number_after_reconfig_libvirt.py:before	2023-03-06 05:02:18.591378
++++ /tmp/lint/tier1/tc_1103_check_virtwho_threads_number_after_reconfig_libvirt.py:after	2023-03-06 06:16:23.834744
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1104_check_virtwho_config_exist_after_reboot_system.py:before	2023-03-06 05:02:18.591378
+ERROR: /tmp/lint/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1106_check_global_print_option_in_etc_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1107_temporary_sku_can_be_changed_to_stable_by_auto.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1109_connect_to_hypervisor_by_read_only_account.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier1/tc_1112_check_http_proxy_option_by_etc_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2006_validate_config_function_by_cli.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2010_validate_server_option_in_etc_sysconfig.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2015_validate_type_option_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2021_validate_encryped_password_option_by_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2023_validate_rhsm_port_option_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2028_validate_wildcard_for_filter_and_exclude_hosts_options_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2029_validate_wildcard_for_filter_and_exclude_host_parents_options_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2030_validate_quotes_for_filter_and_exclude_hosts_option_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
++++ /tmp/lint/tier1/tc_1104_check_virtwho_config_exist_after_reboot_system.py:after	2023-03-06 06:16:23.837156
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.591378
++++ /tmp/lint/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.840641
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1106_check_global_print_option_in_etc_virtwho_conf.py:before	2023-03-06 05:02:18.591378
++++ /tmp/lint/tier1/tc_1106_check_global_print_option_in_etc_virtwho_conf.py:after	2023-03-06 06:16:23.843214
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1107_temporary_sku_can_be_changed_to_stable_by_auto.py:before	2023-03-06 05:02:18.591378
++++ /tmp/lint/tier1/tc_1107_temporary_sku_can_be_changed_to_stable_by_auto.py:after	2023-03-06 06:16:23.845821
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1109_connect_to_hypervisor_by_read_only_account.py:before	2023-03-06 05:02:18.591378
++++ /tmp/lint/tier1/tc_1109_connect_to_hypervisor_by_read_only_account.py:after	2023-03-06 06:16:23.849904
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier1/tc_1112_check_http_proxy_option_by_etc_conf.py:before	2023-03-06 05:02:18.591378
++++ /tmp/lint/tier1/tc_1112_check_http_proxy_option_by_etc_conf.py:after	2023-03-06 06:16:23.854938
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2006_validate_config_function_by_cli.py:before	2023-03-06 05:02:18.592378
++++ /tmp/lint/tier2/tc_2006_validate_config_function_by_cli.py:after	2023-03-06 06:16:23.870531
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py:before	2023-03-06 05:02:18.592378
++++ /tmp/lint/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py:after	2023-03-06 06:16:23.875138
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py:before	2023-03-06 05:02:18.592378
++++ /tmp/lint/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py:after	2023-03-06 06:16:23.879116
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2010_validate_server_option_in_etc_sysconfig.py:before	2023-03-06 05:02:18.592378
++++ /tmp/lint/tier2/tc_2010_validate_server_option_in_etc_sysconfig.py:after	2023-03-06 06:16:23.883274
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py:before	2023-03-06 05:02:18.592378
++++ /tmp/lint/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py:after	2023-03-06 06:16:23.887380
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py:before	2023-03-06 05:02:18.594378
++++ /tmp/lint/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py:after	2023-03-06 06:16:23.891525
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2015_validate_type_option_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.594378
++++ /tmp/lint/tier2/tc_2015_validate_type_option_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.898622
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.594378
++++ /tmp/lint/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.904478
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.594378
++++ /tmp/lint/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.909153
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.594378
++++ /tmp/lint/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.915717
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2021_validate_encryped_password_option_by_virtwho_d.py:before	2023-03-06 05:02:18.594378
++++ /tmp/lint/tier2/tc_2021_validate_encryped_password_option_by_virtwho_d.py:after	2023-03-06 06:16:23.918819
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2023_validate_rhsm_port_option_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.595378
++++ /tmp/lint/tier2/tc_2023_validate_rhsm_port_option_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.923376
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2028_validate_wildcard_for_filter_and_exclude_hosts_options_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.595378
++++ /tmp/lint/tier2/tc_2028_validate_wildcard_for_filter_and_exclude_hosts_options_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.932774
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2029_validate_wildcard_for_filter_and_exclude_host_parents_options_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.595378
++++ /tmp/lint/tier2/tc_2029_validate_wildcard_for_filter_and_exclude_host_parents_options_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.935513
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2030_validate_quotes_for_filter_and_exclude_hosts_option_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.595378
++++ /tmp/lint/tier2/tc_2030_validate_quotes_for_filter_and_exclude_hosts_option_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.938448
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ERROR: /tmp/lint/tier2/tc_2031_validate_unsupported_options_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2032_validate_file_extension_name_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2033_validate_options_quoted_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2034_validate_global_interval_by_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2036_validate_global_debug_by_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2037_validate_global_oneshot_by_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2038_validate_global_configs_by_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2041_validate_default_hypervisor_id_by_virtwho_conf.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2042_check_virtwho_send_mapping_to_multi_org.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2043_check_virtwho_send_mapping_to_multi_org_with_rhsm_parameters.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2045_check_content_subscriptions_in_satellite_webui.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2046_check_registered_by_item_in_satellite_webui.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2048_register_system_with_activaiton_key.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2049_validate_hostname_without_domain.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2051_validate_virt_who_password_commandline.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2052_validate_hypervisors_connection.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2053_validate_guest_state_when_suspend_resume_stop_start.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2054_validate_trigger_event_with_different_interval.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2055_validate_rhevm_url_without_ovirt_engine.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2056_validate_non_root_to_run_virtwho.py Imports are incorrectly sorted and/or formatted.
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2031_validate_unsupported_options_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.595378
++++ /tmp/lint/tier2/tc_2031_validate_unsupported_options_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.940375
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2032_validate_file_extension_name_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.595378
++++ /tmp/lint/tier2/tc_2032_validate_file_extension_name_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.942441
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2033_validate_options_quoted_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.595378
++++ /tmp/lint/tier2/tc_2033_validate_options_quoted_in_etc_virtwho_d.py:after	2023-03-06 06:16:23.944567
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2034_validate_global_interval_by_virtwho_conf.py:before	2023-03-06 05:02:18.595378
++++ /tmp/lint/tier2/tc_2034_validate_global_interval_by_virtwho_conf.py:after	2023-03-06 06:16:23.946618
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2036_validate_global_debug_by_virtwho_conf.py:before	2023-03-06 05:02:18.595378
++++ /tmp/lint/tier2/tc_2036_validate_global_debug_by_virtwho_conf.py:after	2023-03-06 06:16:23.950583
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2037_validate_global_oneshot_by_virtwho_conf.py:before	2023-03-06 05:02:18.595378
++++ /tmp/lint/tier2/tc_2037_validate_global_oneshot_by_virtwho_conf.py:after	2023-03-06 06:16:23.952877
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2038_validate_global_configs_by_virtwho_conf.py:before	2023-03-06 05:02:18.595378
++++ /tmp/lint/tier2/tc_2038_validate_global_configs_by_virtwho_conf.py:after	2023-03-06 06:16:23.955813
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py:before	2023-03-06 05:02:18.595378
++++ /tmp/lint/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py:after	2023-03-06 06:16:23.961210
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2041_validate_default_hypervisor_id_by_virtwho_conf.py:before	2023-03-06 05:02:18.595378
++++ /tmp/lint/tier2/tc_2041_validate_default_hypervisor_id_by_virtwho_conf.py:after	2023-03-06 06:16:23.963468
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2042_check_virtwho_send_mapping_to_multi_org.py:before	2023-03-06 05:02:18.596378
++++ /tmp/lint/tier2/tc_2042_check_virtwho_send_mapping_to_multi_org.py:after	2023-03-06 06:16:23.965754
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2043_check_virtwho_send_mapping_to_multi_org_with_rhsm_parameters.py:before	2023-03-06 05:02:18.596378
++++ /tmp/lint/tier2/tc_2043_check_virtwho_send_mapping_to_multi_org_with_rhsm_parameters.py:after	2023-03-06 06:16:23.968628
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2045_check_content_subscriptions_in_satellite_webui.py:before	2023-03-06 05:02:18.596378
++++ /tmp/lint/tier2/tc_2045_check_content_subscriptions_in_satellite_webui.py:after	2023-03-06 06:16:23.973733
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2046_check_registered_by_item_in_satellite_webui.py:before	2023-03-06 05:02:18.596378
++++ /tmp/lint/tier2/tc_2046_check_registered_by_item_in_satellite_webui.py:after	2023-03-06 06:16:23.976369
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2048_register_system_with_activaiton_key.py:before	2023-03-06 05:02:18.596378
++++ /tmp/lint/tier2/tc_2048_register_system_with_activaiton_key.py:after	2023-03-06 06:16:23.980143
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2049_validate_hostname_without_domain.py:before	2023-03-06 05:02:18.596378
++++ /tmp/lint/tier2/tc_2049_validate_hostname_without_domain.py:after	2023-03-06 06:16:23.982717
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2051_validate_virt_who_password_commandline.py:before	2023-03-06 05:02:18.596378
++++ /tmp/lint/tier2/tc_2051_validate_virt_who_password_commandline.py:after	2023-03-06 06:16:23.984686
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2052_validate_hypervisors_connection.py:before	2023-03-06 05:02:18.596378
++++ /tmp/lint/tier2/tc_2052_validate_hypervisors_connection.py:after	2023-03-06 06:16:23.987560
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2053_validate_guest_state_when_suspend_resume_stop_start.py:before	2023-03-06 05:02:18.596378
++++ /tmp/lint/tier2/tc_2053_validate_guest_state_when_suspend_resume_stop_start.py:after	2023-03-06 06:16:23.990945
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2054_validate_trigger_event_with_different_interval.py:before	2023-03-06 05:02:18.596378
++++ /tmp/lint/tier2/tc_2054_validate_trigger_event_with_different_interval.py:after	2023-03-06 06:16:23.993232
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2055_validate_rhevm_url_without_ovirt_engine.py:before	2023-03-06 05:02:18.596378
++++ /tmp/lint/tier2/tc_2055_validate_rhevm_url_without_ovirt_engine.py:after	2023-03-06 06:16:23.995224
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2056_validate_non_root_to_run_virtwho.py:before	2023-03-06 05:02:18.596378
+ERROR: /tmp/lint/tier2/tc_2057_validate_subscription_register_clean_together.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2058_post_large_json_to_rhsm.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier2/tc_2065_deprecation_warning_for_etc_sysconfig.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier3/tc_1027_check_two_modes_enabled_in_etc_sysconfig.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier3/tc_1031_check_mapping_info_with_one_file_include_two_modes_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier3/tc_1032_check_mapping_info_with_two_files_for_two_modes_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier3/tc_1035_check_mapping_info_with_dconf_and_cli_for_two_modes.py Imports are incorrectly sorted and/or formatted.
+ERROR: /tmp/lint/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py Imports are incorrectly sorted and/or formatted.
++++ /tmp/lint/tier2/tc_2056_validate_non_root_to_run_virtwho.py:after	2023-03-06 06:16:23.997388
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2057_validate_subscription_register_clean_together.py:before	2023-03-06 05:02:18.597378
++++ /tmp/lint/tier2/tc_2057_validate_subscription_register_clean_together.py:after	2023-03-06 06:16:24.000105
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2058_post_large_json_to_rhsm.py:before	2023-03-06 05:02:18.597378
++++ /tmp/lint/tier2/tc_2058_post_large_json_to_rhsm.py:after	2023-03-06 06:16:24.002903
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier2/tc_2065_deprecation_warning_for_etc_sysconfig.py:before	2023-03-06 05:02:18.597378
++++ /tmp/lint/tier2/tc_2065_deprecation_warning_for_etc_sysconfig.py:after	2023-03-06 06:16:24.010293
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier3/tc_1027_check_two_modes_enabled_in_etc_sysconfig.py:before	2023-03-06 05:02:18.598378
++++ /tmp/lint/tier3/tc_1027_check_two_modes_enabled_in_etc_sysconfig.py:after	2023-03-06 06:16:24.019305
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier3/tc_1031_check_mapping_info_with_one_file_include_two_modes_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.598378
++++ /tmp/lint/tier3/tc_1031_check_mapping_info_with_one_file_include_two_modes_in_etc_virtwho_d.py:after	2023-03-06 06:16:24.021532
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier3/tc_1032_check_mapping_info_with_two_files_for_two_modes_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.598378
++++ /tmp/lint/tier3/tc_1032_check_mapping_info_with_two_files_for_two_modes_in_etc_virtwho_d.py:after	2023-03-06 06:16:24.023645
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py:before	2023-03-06 05:02:18.598378
++++ /tmp/lint/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py:after	2023-03-06 06:16:24.025781
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier3/tc_1035_check_mapping_info_with_dconf_and_cli_for_two_modes.py:before	2023-03-06 05:02:18.598378
++++ /tmp/lint/tier3/tc_1035_check_mapping_info_with_dconf_and_cli_for_two_modes.py:after	2023-03-06 06:16:24.027735
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+--- /tmp/lint/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py:before	2023-03-06 05:02:18.598378
++++ /tmp/lint/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py:after	2023-03-06 06:16:24.030098
+@@ -3,6 +3,7 @@
+ from virt_who.base import Base
+ from virt_who.register import Register
+ from virt_who.testing import Testing
++
+ 
+ class Testcase(Testing):
+     def test_run(self):
+

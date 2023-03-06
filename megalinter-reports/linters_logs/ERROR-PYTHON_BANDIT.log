@@ -1,0 +1,1269 @@
+Results of bandit linter (version 1.7.4)
+See documentation on https://megalinter.io/0d699a348a2c104040efd78f2d2970e6ae8e5769/descriptors/python_bandit/
+-----------------------------------------------
+
+❌ [ERROR] for workspace /tmp/lint
+Linter raw log:
+[main]	INFO	profile include tests: None
+[main]	INFO	profile exclude tests: None
+[main]	INFO	cli include tests: None
+[main]	INFO	cli exclude tests: None
+[main]	INFO	using config: /action/lib/.automation/.bandit.yml
+[main]	INFO	running on Python 3.11.2
+202 [0.. 50.. 100.. 150.. 200.. ]
+Run started:2023-03-06 08:22:12.729436
+
+Test results:
+>> Issue: [B408:blacklist] Using minidom to parse untrusted XML data is known to be vulnerable to XML attacks. Replace minidom with the equivalent defusedxml package, or make sure defusedxml.defuse_stdlib() is called.
+   Severity: Low   Confidence: High
+   CWE: CWE-20 (https://cwe.mitre.org/data/definitions/20.html)
+   Location: /tmp/lint/scripts/polarion_importer.py:11:0
+   More Info: https://bandit.readthedocs.io/en/1.7.4/blacklists/blacklist_imports.html#b408-import-xml-minidom
+10	from datetime import datetime
+11	from xml.dom import minidom
+12	
+13	from virt_who import *
+
+--------------------------------------------------
+>> Issue: [B405:blacklist] Using xml.etree.cElementTree to parse untrusted XML data is known to be vulnerable to XML attacks. Replace xml.etree.cElementTree with the equivalent defusedxml package, or make sure defusedxml.defuse_stdlib() is called.
+   Severity: Low   Confidence: High
+   CWE: CWE-20 (https://cwe.mitre.org/data/definitions/20.html)
+   Location: /tmp/lint/scripts/polarion_importer.py:16:4
+   More Info: https://bandit.readthedocs.io/en/1.7.4/blacklists/blacklist_imports.html#b405-import-xml-etree
+15	try:
+16	    import xml.etree.cElementTree as ET
+17	except ImportError:
+
+--------------------------------------------------
+>> Issue: [B405:blacklist] Using xml.etree.ElementTree to parse untrusted XML data is known to be vulnerable to XML attacks. Replace xml.etree.ElementTree with the equivalent defusedxml package, or make sure defusedxml.defuse_stdlib() is called.
+   Severity: Low   Confidence: High
+   CWE: CWE-20 (https://cwe.mitre.org/data/definitions/20.html)
+   Location: /tmp/lint/scripts/polarion_importer.py:18:4
+   More Info: https://bandit.readthedocs.io/en/1.7.4/blacklists/blacklist_imports.html#b405-import-xml-etree
+17	except ImportError:
+18	    import xml.etree.ElementTree as ET
+19	
+
+--------------------------------------------------
+>> Issue: [B314:blacklist] Using xml.etree.ElementTree.parse to parse untrusted XML data is known to be vulnerable to XML attacks. Replace xml.etree.ElementTree.parse with its defusedxml equivalent function or make sure defusedxml.defuse_stdlib() is called
+   Severity: Medium   Confidence: High
+   CWE: CWE-20 (https://cwe.mitre.org/data/definitions/20.html)
+   Location: /tmp/lint/scripts/polarion_importer.py:29:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/blacklists/blacklist_calls.html#b313-b320-xml-bad-elementtree
+28	            """check arg is a xml file or not"""
+29	            ET.parse(arg)
+30	            files.append(arg)
+
+--------------------------------------------------
+>> Issue: [B318:blacklist] Using xml.dom.minidom.parseString to parse untrusted XML data is known to be vulnerable to XML attacks. Replace xml.dom.minidom.parseString with its defusedxml equivalent function or make sure defusedxml.defuse_stdlib() is called
+   Severity: Medium   Confidence: High
+   CWE: CWE-20 (https://cwe.mitre.org/data/definitions/20.html)
+   Location: /tmp/lint/scripts/polarion_importer.py:76:14
+   More Info: https://bandit.readthedocs.io/en/1.7.4/blacklists/blacklist_calls.html#b313-b320-xml-bad-minidom
+75	    root_str = ET.tostring(elem, "UTF-8")
+76	    reparse = minidom.parseString(root_str)
+77	    return (
+
+--------------------------------------------------
+>> Issue: [B314:blacklist] Using xml.etree.ElementTree.parse to parse untrusted XML data is known to be vulnerable to XML attacks. Replace xml.etree.ElementTree.parse with its defusedxml equivalent function or make sure defusedxml.defuse_stdlib() is called
+   Severity: Medium   Confidence: High
+   CWE: CWE-20 (https://cwe.mitre.org/data/definitions/20.html)
+   Location: /tmp/lint/scripts/polarion_importer.py:96:15
+   More Info: https://bandit.readthedocs.io/en/1.7.4/blacklists/blacklist_calls.html#b313-b320-xml-bad-elementtree
+95	    try:
+96	        tree = ET.parse(xmlFile)
+97	        return tree
+
+--------------------------------------------------
+>> Issue: [B605:start_process_with_a_shell] Starting a process with a shell, possible injection detected, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   Location: /tmp/lint/scripts/polarion_importer.py:318:13
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b605_start_process_with_a_shell.html
+317	    )
+318	    output = os.popen(cmd).read()
+319	    logger.info(cmd)
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/gating/test_virtwho_gating.py:37:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+36	        data, tty_output, rhsm_output = self.vw_start(exp_send=1)
+37	        assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+38	        assert self.vw_msg_search(rhsm_output, msg="\[.*DEBUG\]", exp_exist=False)
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/gating/test_virtwho_gating.py:38:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+37	        assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+38	        assert self.vw_msg_search(rhsm_output, msg="\[.*DEBUG\]", exp_exist=False)
+39	        self.vw_option_update_value("debug", "True", self.global_file)
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/gating/test_virtwho_gating.py:41:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+40	        data, tty_output, rhsm_output = self.vw_start(exp_send=1)
+41	        assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+42	        assert self.vw_msg_search(rhsm_output, msg="\[.*DEBUG\]", exp_exist=True)
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/gating/test_virtwho_gating.py:42:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+41	        assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+42	        assert self.vw_msg_search(rhsm_output, msg="\[.*DEBUG\]", exp_exist=True)
+43	
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/gating/test_virtwho_gating.py:48:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+47	        )
+48	        assert self.op_normal_value(data, exp_error=0, exp_thread=0, exp_send=1)
+49	        data, tty_output, rhsm_output = self.vw_start(
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/gating/test_virtwho_gating.py:52:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+51	        )
+52	        assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+53	
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/gating/test_virtwho_gating.py:58:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+57	        data, tty_output, rhsm_output = self.vw_start(exp_send=1, exp_loopnum=1)
+58	        assert self.op_normal_value(
+59	            data,
+60	            exp_error=0,
+61	            exp_thread=1,
+62	            exp_send=1,
+63	            exp_interval=60,
+64	            exp_loopnum=1,
+65	            exp_looptime=60,
+66	        )
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/gating/test_virtwho_gating.py:79:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+78	            data, tty_output, rhsm_output = self.vw_start()
+79	            assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+80	            if option == "hwuuid":
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/gating/test_virtwho_gating.py:86:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+85	                hypervisorId = self.host_uuid
+86	            assert hypervisorId in data[register_owner].keys()
+87	            self.vw_option_del("hypervisor_id", self.config_file)
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/gating/test_virtwho_gating.py:103:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+102	        data, tty_output, rhsm_output = self.vw_start(exp_send=1)
+103	        assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+104	        self.system_register(self.ssh_host(), register_type, register_config)
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/gating/test_virtwho_gating.py:112:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+111	        data, tty_output, rhsm_output = self.vw_start()
+112	        assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+113	        sku_attrs = self.system_sku_attr(self.ssh_host(), vdc_physical_sku, "physical")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/gating/test_virtwho_gating.py:118:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+117	        output = self.system_sku_consumed(self.ssh_guest())
+118	        assert self.vw_msg_search(output, vdc_virtual_sku, exp_exist=True)
+119	        ret, output = self.runcmd("subscription-manager repos --list", self.ssh_guest())
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/gating/test_virtwho_gating.py:121:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+120	        if "stage" in register_type:
+121	            assert self.vw_msg_search(output, "Available Repositories", exp_exist=True)
+122	        else:
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/gating/test_virtwho_gating.py:123:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+122	        else:
+123	            assert self.vw_msg_search(
+124	                output, "no repositories available", exp_exist=True
+125	            )
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/gating/test_virtwho_gating.py:127:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+126	        ret, output = self.runcmd("subscription-manager status", self.ssh_guest())
+127	        assert self.vw_msg_search(output, "Overall Status: Current", exp_exist=True)
+128	        assert self.vw_msg_search(output, "Invalid", exp_exist=False)
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/gating/test_virtwho_gating.py:128:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+127	        assert self.vw_msg_search(output, "Overall Status: Current", exp_exist=True)
+128	        assert self.vw_msg_search(output, "Invalid", exp_exist=False)
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/sca/test_virtwho_sca.py:51:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+50	        logger.info(f"---data is: {data}---")
+51	        assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+52	        assert self.register_owner in data.keys()
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/sca/test_virtwho_sca.py:52:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+51	        assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+52	        assert self.register_owner in data.keys()
+53	        assert self.host_uuid in data[self.register_owner].keys()
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/sca/test_virtwho_sca.py:53:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+52	        assert self.register_owner in data.keys()
+53	        assert self.host_uuid in data[self.register_owner].keys()
+54	        assert self.guest_uuid in data[self.register_owner].keys()
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/sca/test_virtwho_sca.py:54:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+53	        assert self.host_uuid in data[self.register_owner].keys()
+54	        assert self.guest_uuid in data[self.register_owner].keys()
+55	
+56	        # test hypervisor facts
+57	        facts_items = ["socket", "type", "dmi", "version"]
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/sca/test_virtwho_sca.py:62:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+61	        for item in facts_items:
+62	            assert item in facts_dic.keys()
+63	            assert facts_dic[item] is not None
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/sca/test_virtwho_sca.py:63:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+62	            assert item in facts_dic.keys()
+63	            assert facts_dic[item] is not None
+64	
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/sca/test_virtwho_sca.py:67:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+66	        data, tty_output, rhsm_output = self.vw_start(exp_send=1)
+67	        assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+68	        assert self.vw_rhsm_associate(data, self.host_uuid, self.guest_uuid)
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/sca/test_virtwho_sca.py:68:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+67	        assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+68	        assert self.vw_rhsm_associate(data, self.host_uuid, self.guest_uuid)
+69	        assert self.vw_web_associate(
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/sca/test_virtwho_sca.py:69:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+68	        assert self.vw_rhsm_associate(data, self.host_uuid, self.guest_uuid)
+69	        assert self.vw_web_associate(
+70	            self.host_name, self.host_uuid, self.guest_name, self.guest_uuid
+71	        )
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/sca/test_virtwho_sca.py:77:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+76	        )
+77	        assert "Content Access Mode is set to Simple Content Access" in output
+78	
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:37:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+36	        data, tty_output, rhsm_output = self.vw_start(exp_send=1)
+37	        assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+38	        assert self.vw_rhsm_associate(data, self.host_uuid, self.guest_uuid)
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:38:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+37	        assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+38	        assert self.vw_rhsm_associate(data, self.host_uuid, self.guest_uuid)
+39	        assert self.vw_web_associate(
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:39:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+38	        assert self.vw_rhsm_associate(data, self.host_uuid, self.guest_uuid)
+39	        assert self.vw_web_associate(
+40	            self.host_name, self.host_uuid, self.guest_name, self.guest_uuid
+41	        )
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:63:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+62	        data, tty_output, rhsm_output = self.vw_start(exp_send=1)
+63	        assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+64	        self.system_register(self.ssh_host(), register_type, self.register_config)
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:79:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+78	            data, tty_output, rhsm_output = self.vw_start(exp_send=1)
+79	            assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+80	            assert self.vw_msg_search(
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:80:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+79	            assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+80	            assert self.vw_msg_search(
+81	                rhsm_output, "Using proxy.*{0}".format(proxy_server)
+82	            )
+83	            self.vw_option_disable(option, self.global_file)
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:110:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+109	            data, tty_output, rhsm_output = self.vw_start()
+110	            assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+111	            assert ids[0] in data[register_owner].keys()
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:111:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+110	            assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+111	            assert ids[0] in data[register_owner].keys()
+112	            logger.info(">>> check only single hypervisor name on Satellite WebUI")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:120:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+119	            ret, result = self.runcmd(cmd, ssh_sat)
+120	            assert (self.vw_msg_search(result, "virt-who-" + ids[0]), True)
+121	            assert self.vw_msg_search(result, "virt-who-" + ids[1], False)
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:121:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+120	            assert (self.vw_msg_search(result, "virt-who-" + ids[0]), True)
+121	            assert self.vw_msg_search(result, "virt-who-" + ids[1], False)
+122	            if "hwuuid" in hypervisor_ids:
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:123:16
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+122	            if "hwuuid" in hypervisor_ids:
+123	                assert self.vw_msg_search(result, "virt-who-" + ids[2], False)
+124	            self.vw_option_del("hypervisor_id", self.config_file)
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:130:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+129	        data, tty_output, rhsm_output = self.vw_start()
+130	        assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+131	        logger.info(">>> attach virtual vdc pool for guest")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:138:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+137	        output = self.system_sku_consumed(self.ssh_guest())
+138	        assert self.vw_msg_search(output, vdc_virtual_sku, exp_exist=True)
+139	        ret, output = self.runcmd("subscription-manager repos --list", self.ssh_guest())
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:140:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+139	        ret, output = self.runcmd("subscription-manager repos --list", self.ssh_guest())
+140	        assert self.vw_msg_search(output, "no repositories available", exp_exist=True)
+141	        ret, output = self.runcmd("subscription-manager status", self.ssh_guest())
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:142:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+141	        ret, output = self.runcmd("subscription-manager status", self.ssh_guest())
+142	        assert self.vw_msg_search(output, "Overall Status: Current", exp_exist=True)
+143	        assert self.vw_msg_search(output, "Invalid", exp_exist=False)
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:143:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+142	        assert self.vw_msg_search(output, "Overall Status: Current", exp_exist=True)
+143	        assert self.vw_msg_search(output, "Invalid", exp_exist=False)
+144	        logger.info(">>> virtual vdc pool is revoked after unattach physical sku")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:147:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+146	        output = self.system_sku_consumed(self.ssh_guest(), exp_exist=False)
+147	        assert self.vw_msg_search(output, vdc_virtual_sku, exp_exist=False)
+148	
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:152:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+151	        data, tty_output, rhsm_output = self.vw_start()
+152	        assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+153	        logger.info(">>> attach virtual limited pool for guest")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:160:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+159	        output = self.system_sku_consumed(self.ssh_guest())
+160	        assert self.vw_msg_search(output, limited_sku)
+161	        ret, output = self.runcmd("subscription-manager repos --list", self.ssh_guest())
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:162:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+161	        ret, output = self.runcmd("subscription-manager repos --list", self.ssh_guest())
+162	        assert self.vw_msg_search(output, "no repositories available")
+163	        ret, output = self.runcmd("subscription-manager status", self.ssh_guest())
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:164:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+163	        ret, output = self.runcmd("subscription-manager status", self.ssh_guest())
+164	        assert self.vw_msg_search(output, "Overall Status: Current")
+165	        assert self.vw_msg_search(output, "Invalid", exp_exist=False)
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:165:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+164	        assert self.vw_msg_search(output, "Overall Status: Current")
+165	        assert self.vw_msg_search(output, "Invalid", exp_exist=False)
+166	        logger.info(">>> no virtual limit pool for guest any more")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:170:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+169	        )
+170	        assert self.vw_msg_search(str(output), limited_sku, exp_exist=False)
+171	        logger.info(">>> limit bonus pool is revoked after unattach physical sku")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:174:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+173	        output = self.system_sku_consumed(self.ssh_guest(), exp_exist=False)
+174	        assert self.vw_msg_search(output, limited_sku, exp_exist=False)
+175	
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:179:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+178	        data, tty_output, rhsm_output = self.vw_start()
+179	        assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+180	        logger.info(">>> attach virtual unlimit pool for guest")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:187:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+186	        output = self.system_sku_consumed(self.ssh_guest())
+187	        assert self.vw_msg_search(output, unlimited_sku)
+188	        logger.info(">>>  virtual unlimit sku can be listed in guest ")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:190:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+189	        output = self.system_sku_attr(self.ssh_guest(), unlimited_sku, "virtual")
+190	        assert self.vw_msg_search(str(output), unlimited_sku)
+191	        logger.info(">>> virtual unlimit pool is revoked after unattach physical sku")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:194:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+193	        output = self.system_sku_consumed(self.ssh_guest(), exp_exist=False)
+194	        assert self.vw_msg_search(output, unlimited_sku, exp_exist=False)
+195	
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:199:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+198	        logger.info(">>> set cpu.cpu_socket(s) to 8 in guest")
+199	        assert self.system_custom_facts_create(
+200	            self.ssh_guest(), "cpu.cpu_socket(s)", "8"
+201	        )
+202	        logger.info(">>> attach physical instance sku for guest without quantity")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:207:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+206	        output = self.system_sku_consumed(self.ssh_guest())
+207	        assert self.vw_msg_search(output, instance_sku)
+208	        assert self.vw_msg_search(output, "Quantity Used:.*1")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:208:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+207	        assert self.vw_msg_search(output, instance_sku)
+208	        assert self.vw_msg_search(output, "Quantity Used:.*1")
+209	        assert self.vw_msg_search(output, "Status Details:.*Subscription is current")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:209:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+208	        assert self.vw_msg_search(output, "Quantity Used:.*1")
+209	        assert self.vw_msg_search(output, "Status Details:.*Subscription is current")
+210	        logger.info(">>> attach physical instance sku for guest with quantity=1")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:215:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+214	        output = self.system_sku_consumed(self.ssh_guest())
+215	        assert self.vw_msg_search(output, instance_sku)
+216	        assert self.vw_msg_search(output, "Quantity Used:.*1")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:216:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+215	        assert self.vw_msg_search(output, instance_sku)
+216	        assert self.vw_msg_search(output, "Quantity Used:.*1")
+217	        assert self.vw_msg_search(output, "Status Details:.*Subscription is current")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:217:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+216	        assert self.vw_msg_search(output, "Quantity Used:.*1")
+217	        assert self.vw_msg_search(output, "Status Details:.*Subscription is current")
+218	        logger.info(">>> attach physical instance sku for guest with quantity=2")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:223:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+222	        output = self.system_sku_consumed(self.ssh_guest())
+223	        assert self.vw_msg_search(output, instance_sku)
+224	        assert self.vw_msg_search(output, "Quantity Used:.*2")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:224:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+223	        assert self.vw_msg_search(output, instance_sku)
+224	        assert self.vw_msg_search(output, "Quantity Used:.*2")
+225	        assert self.vw_msg_search(output, "Status Details:.*Subscription is current")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:225:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+224	        assert self.vw_msg_search(output, "Quantity Used:.*2")
+225	        assert self.vw_msg_search(output, "Status Details:.*Subscription is current")
+226	        logger.info(">>> attach physical instance sku for guest with quantity=6")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:230:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+229	        output = self.system_sku_consumed(self.ssh_guest())
+230	        assert self.vw_msg_search(output, instance_sku, exp_exist=True)
+231	        assert self.vw_msg_search(output, "Quantity Used:.*2")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:231:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+230	        assert self.vw_msg_search(output, instance_sku, exp_exist=True)
+231	        assert self.vw_msg_search(output, "Quantity Used:.*2")
+232	        assert self.vw_msg_search(output, "Quantity Used:.*6")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:232:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+231	        assert self.vw_msg_search(output, "Quantity Used:.*2")
+232	        assert self.vw_msg_search(output, "Quantity Used:.*6")
+233	        assert self.vw_msg_search(output, "Status Details:.*Subscription is current")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:233:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+232	        assert self.vw_msg_search(output, "Quantity Used:.*6")
+233	        assert self.vw_msg_search(output, "Status Details:.*Subscription is current")
+234	        self.system_custom_facts_remove(self.ssh_guest())
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:240:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+239	        ret, output = self.runcmd("subscription-manager list --av", self.ssh_guest())
+240	        assert self.vw_msg_search(
+241	            output, "Subscription Type: .*Temporary", exp_exist=True
+242	        )
+243	        logger.info(">>> run virt-who service and check temporary sku disappear")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:245:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+244	        data, tty_output, rhsm_output = self.vw_start(exp_send=1)
+245	        assert self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
+246	        self.system_sku_refresh(self.ssh_guest())
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/tests/smoke/test_virtwho_smoke.py:248:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b101_assert_used.html
+247	        ret, output = self.runcmd("subscription-manager list --av", self.ssh_guest())
+248	        assert self.vw_msg_search(
+249	            output, "Subscription Type: .*Temporary", exp_exist=False
+250	        )
+
+--------------------------------------------------
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   Location: /tmp/lint/tests/tier1/tc_1016_check_print_function_by_cli.py:15:20
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b108_hardcoded_tmp_directory.html
+14	        results = dict()
+15	        json_file = "/tmp/file.json"
+16	        host_uuid = self.get_hypervisor_hostuuid()
+
+--------------------------------------------------
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   Location: /tmp/lint/tests/tier1/tc_1017_check_config_function_by_cli.py:19:22
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b108_hardcoded_tmp_directory.html
+18	        config_name = "virtwho-config"
+19	        config_file = "/tmp/{0}.conf".format(config_name)
+20	        self.vw_etc_d_mode_create(config_name, config_file)
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'redhat'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   Location: /tmp/lint/tests/tier1/tc_1040_check_virt_who_password_function.py:15:19
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b105_hardcoded_password_string.html
+14	        results = dict()
+15	        password = "redhat"
+16	
+17	        # case steps
+18	        encrypt_1 = self.vw_encrypted(password)
+
+--------------------------------------------------
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   Location: /tmp/lint/tests/tier1/tc_1063_check_global_configs_option_in_etc_virtwho_conf.py:23:22
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b108_hardcoded_tmp_directory.html
+22	        config_name = "virtwho-config"
+23	        config_file = "/tmp/{0}.conf".format(config_name)
+24	        self.vw_etc_d_mode_create(config_name, config_file)
+
+--------------------------------------------------
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   Location: /tmp/lint/tests/tier1/tc_1068_check_fake_mode_with_one_hypervisor_in_etc_virtwho_d.py:21:20
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b108_hardcoded_tmp_directory.html
+20	        guest_uuid = self.get_hypervisor_guestuuid()
+21	        json_file = "/tmp/fake.json"
+22	        conf_file = "/etc/virt-who.d/fake.conf"
+
+--------------------------------------------------
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   Location: /tmp/lint/tests/tier1/tc_1069_check_fake_mode_subscribe_function_in_etc_virtwho_d.py:23:20
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b108_hardcoded_tmp_directory.html
+22	        guest_uuid = self.get_hypervisor_guestuuid()
+23	        json_file = "/tmp/fake.json"
+24	        conf_file = "/etc/virt-who.d/fake.conf"
+
+--------------------------------------------------
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   Location: /tmp/lint/tests/tier1/tc_1070_check_fake_mode_pool_revoked_function_in_etc_virtwho_d.py:23:20
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b108_hardcoded_tmp_directory.html
+22	        guest_uuid = self.get_hypervisor_guestuuid()
+23	        json_file = "/tmp/fake.json"
+24	        conf_file = "/etc/virt-who.d/fake.conf"
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: ''
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   Location: /tmp/lint/tests/tier2/tc_2021_validate_encryped_password_option_by_virtwho_d.py:27:29
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b105_hardcoded_password_string.html
+26	        msg_list = '"encrypted_password" cannot be decrypted|'
+27	        encrypted_pwd_null = ""
+28	        encrypted_pwd_wrong = "xxxxxx"
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'xxxxxx'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   Location: /tmp/lint/tests/tier2/tc_2021_validate_encryped_password_option_by_virtwho_d.py:28:30
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b105_hardcoded_password_string.html
+27	        encrypted_pwd_null = ""
+28	        encrypted_pwd_wrong = "xxxxxx"
+29	        steps = {"step2": encrypted_pwd_null, "step3": encrypted_pwd_wrong}
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'redhat'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   Location: /tmp/lint/tests/tier2/tc_2056_validate_non_root_to_run_virtwho.py:25:21
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b105_hardcoded_password_string.html
+24	        new_user = "tester"
+25	        new_passwd = "redhat"
+26	
+27	        # case steps
+28	        logger.info(">>>step1: create tester account")
+
+--------------------------------------------------
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   Location: /tmp/lint/tests/tier2/tc_2061_check_fake_mode_is_hypervisor_option.py:19:20
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b108_hardcoded_tmp_directory.html
+18	        hypervisor_type = self.get_config("hypervisor_type")
+19	        json_file = "/tmp/fake.json"
+20	        conf_file = "/etc/virt-who.d/fake.conf"
+
+--------------------------------------------------
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   Location: /tmp/lint/tests/tier2/tc_2063_check_hypervisors_fqdn.py:32:20
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b108_hardcoded_tmp_directory.html
+31	        self.vw_option_add("hypervisor_id", "hostname", config_file)
+32	        json_file = "/tmp/fake.json"
+33	        conf_file = "/etc/virt-who.d/fake.conf"
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   Location: /tmp/lint/tests/tier2/tc_2063_check_hypervisors_fqdn.py:58:31
+   More Info: https://bandit.readthedocs.io/en/1.7.4/blacklists/blacklist_calls.html#b311-random
+57	        logger.info(">>>step4: run virt-who with the new hypervisor's fqdn")
+58	        new_name = "new" + str(random.randint(1, 10000)) + ".rhts.eng.pek2.redhat.com"
+59	        self.vw_fake_json_update(host_name, new_name, json_file)
+
+--------------------------------------------------
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   Location: /tmp/lint/tests/tier2/tc_2067_validate_uniform_mapping_format.py:22:20
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b108_hardcoded_tmp_directory.html
+21	        hypervisor_type = self.get_config("hypervisor_type")
+22	        json_file = "/tmp/fake.json"
+23	        fake_config_file = "/etc/virt-who.d/fake.conf"
+
+--------------------------------------------------
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   Location: /tmp/lint/tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py:35:20
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b108_hardcoded_tmp_directory.html
+34	        guest_02_uuid = self.get_hypervisor_guestuuid(uid="02")
+35	        json_file = "/tmp/fake.json"
+36	        fake_conf_file = "/etc/virt-who.d/fake.conf"
+
+--------------------------------------------------
+>> Issue: [B405:blacklist] Using xml.etree.ElementTree to parse untrusted XML data is known to be vulnerable to XML attacks. Replace xml.etree.ElementTree with the equivalent defusedxml package, or make sure defusedxml.defuse_stdlib() is called.
+   Severity: Low   Confidence: High
+   CWE: CWE-20 (https://cwe.mitre.org/data/definitions/20.html)
+   Location: /tmp/lint/utils/merge-xunit.py:4:0
+   More Info: https://bandit.readthedocs.io/en/1.7.4/blacklists/blacklist_imports.html#b405-import-xml-etree
+3	import sys
+4	import xml.etree.ElementTree as ET
+5	
+6	"""
+
+--------------------------------------------------
+>> Issue: [B314:blacklist] Using xml.etree.ElementTree.parse to parse untrusted XML data is known to be vulnerable to XML attacks. Replace xml.etree.ElementTree.parse with its defusedxml equivalent function or make sure defusedxml.defuse_stdlib() is called
+   Severity: Medium   Confidence: High
+   CWE: CWE-20 (https://cwe.mitre.org/data/definitions/20.html)
+   Location: /tmp/lint/utils/merge-xunit.py:31:15
+   More Info: https://bandit.readthedocs.io/en/1.7.4/blacklists/blacklist_calls.html#b313-b320-xml-bad-elementtree
+30	    for file_name in xml_files:
+31	        tree = ET.parse(file_name)
+32	        test_suite = tree.getroot()
+
+--------------------------------------------------
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   Location: /tmp/lint/virt_who/base.py:135:19
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b108_hardcoded_tmp_directory.html
+134	        options = list()
+135	        filename = "/tmp/exp.sh"
+136	        for attr in attrs:
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   Location: /tmp/lint/virt_who/base.py:172:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/blacklists/blacklist_calls.html#b311-random
+171	            0x06,
+172	            random.randint(0x00, 0x2F),
+173	            random.randint(0x00, 0x3F),
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   Location: /tmp/lint/virt_who/base.py:173:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/blacklists/blacklist_calls.html#b311-random
+172	            random.randint(0x00, 0x2F),
+173	            random.randint(0x00, 0x3F),
+174	            random.randint(0x00, 0x4F),
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   Location: /tmp/lint/virt_who/base.py:174:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/blacklists/blacklist_calls.html#b311-random
+173	            random.randint(0x00, 0x3F),
+174	            random.randint(0x00, 0x4F),
+175	            random.randint(0x00, 0x8F),
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   Location: /tmp/lint/virt_who/base.py:175:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/blacklists/blacklist_calls.html#b311-random
+174	            random.randint(0x00, 0x4F),
+175	            random.randint(0x00, 0x8F),
+176	            random.randint(0x00, 0xFF),
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   Location: /tmp/lint/virt_who/base.py:176:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/blacklists/blacklist_calls.html#b311-random
+175	            random.randint(0x00, 0x8F),
+176	            random.randint(0x00, 0xFF),
+177	        ]
+
+--------------------------------------------------
+>> Issue: [B605:start_process_with_a_shell] Starting a process with a shell, possible injection detected, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   Location: /tmp/lint/virt_who/base.py:205:17
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b605_start_process_with_a_shell.html
+204	        )
+205	        output = os.popen(cmd).read()
+206	        if output.strip() == "true":
+
+--------------------------------------------------
+>> Issue: [B605:start_process_with_a_shell] Starting a process with a shell, possible injection detected, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   Location: /tmp/lint/virt_who/base.py:314:17
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b605_start_process_with_a_shell.html
+313	        cmd = "ping -c 5 %s |grep -q 'ttl=' && echo 'ok' || echo 'failed'" % ipaddr
+314	        output = os.popen(cmd).read().strip()
+315	        if output == "ok":
+
+--------------------------------------------------
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   Location: /tmp/lint/virt_who/base.py:348:22
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b108_hardcoded_tmp_directory.html
+347	        local_file = os.path.join(root_path, "utils/bridge_setup.sh")
+348	        remote_file = "/tmp/bridge_setup.sh"
+349	        self.paramiko_putfile(ssh, local_file, remote_file)
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/virt_who/base.py:471:12
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b110_try_except_pass.html
+470	                info.update({k: v})
+471	            except:
+472	                pass
+
+--------------------------------------------------
+>> Issue: [B605:start_process_with_a_shell] Starting a process with a shell, possible injection detected, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   Location: /tmp/lint/virt_who/provision.py:86:17
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b605_start_process_with_a_shell.html
+85	        cmd = "curl -k -s -i {0}".format(brew_build_url)
+86	        output = os.popen(cmd).read()
+87	        pkg_url = re.findall(
+
+--------------------------------------------------
+>> Issue: [B605:start_process_with_a_shell] Starting a process with a shell, possible injection detected, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   Location: /tmp/lint/virt_who/provision.py:110:27
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b605_start_process_with_a_shell.html
+109	            cmd = "curl -s -k -L {0}".format(url)
+110	            rhel_compose = os.popen(cmd).read().strip()
+111	        if not pkg_url:
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: ''
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   Location: /tmp/lint/virt_who/provision.py:606:32
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b105_hardcoded_password_string.html
+605	        hypervisor_ssh_user = ""
+606	        hypervisor_ssh_passwd = ""
+607	        hypervisor_config_file = ""
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: ''
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   Location: /tmp/lint/virt_who/provision.py:694:32
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b105_hardcoded_password_string.html
+693	            hypervisor_user = ""
+694	            hypervisor_passwd = ""
+695	            host_user = deploy.libvirt.local_user
+
+--------------------------------------------------
+>> Issue: [B605:start_process_with_a_shell] Starting a process with a shell, possible injection detected, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   Location: /tmp/lint/virt_who/provision.py:913:25
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b605_start_process_with_a_shell.html
+912	            for i in range(3):
+913	                output = os.popen(cmd).readlines()
+914	                if "Location:" in str(output) or "location:" in str(output):
+
+--------------------------------------------------
+>> Issue: [B605:start_process_with_a_shell] Starting a process with a shell, possible injection detected, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   Location: /tmp/lint/virt_who/provision.py:938:17
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b605_start_process_with_a_shell.html
+937	        )
+938	        output = os.popen(cmd).read()
+939	        while "executable" not in output:
+
+--------------------------------------------------
+>> Issue: [B605:start_process_with_a_shell] Starting a process with a shell, possible injection detected, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   Location: /tmp/lint/virt_who/provision.py:941:21
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b605_start_process_with_a_shell.html
+940	            time.sleep(10)
+941	            output = os.popen(cmd).read()
+942	        data = json.loads(output)
+
+--------------------------------------------------
+>> Issue: [B605:start_process_with_a_shell] Starting a process with a shell, possible injection detected, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   Location: /tmp/lint/virt_who/provision.py:951:21
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b605_start_process_with_a_shell.html
+950	        try:
+951	            output = os.popen(cmd).read()
+952	            data = json.loads(output)
+
+--------------------------------------------------
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   Location: /tmp/lint/virt_who/provision.py:980:19
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b108_hardcoded_tmp_directory.html
+979	            raise FailException("VIRTWHO_UPSTREAM is not available")
+980	        git_path = "/tmp/virt-who.git"
+981	        cmd = "rm -rf /tmp/virt-who*; git clone {0} {1}".format(git_url, git_path)
+
+--------------------------------------------------
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   Location: /tmp/lint/virt_who/provision.py:1704:24
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b108_hardcoded_tmp_directory.html
+1703	        sat_host = ssh_sat["host"]
+1704	        manifest_path = "/tmp/manifest"
+1705	        ret, output = self.runcmd(
+
+--------------------------------------------------
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   Location: /tmp/lint/virt_who/provision.py:1773:24
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b108_hardcoded_tmp_directory.html
+1772	        sat_host = ssh_sat["host"]
+1773	        manifest_path = "/tmp/manifest"
+1774	        self.runcmd("rm -rf {0}; mkdir -p {0}".format(manifest_path), ssh_sat)
+
+--------------------------------------------------
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   Location: /tmp/lint/virt_who/provision.py:1944:27
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b108_hardcoded_tmp_directory.html
+1943	            logger.info("Start to create docker image {0}".format(image_name))
+1944	            compose_repo = "/tmp/docker/compose.repo"
+1945	            self.rhel_compose_repo(ssh_docker, compose_id, compose_repo)
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   Location: /tmp/lint/virt_who/provision.py:1978:15
+   More Info: https://bandit.readthedocs.io/en/1.7.4/blacklists/blacklist_calls.html#b311-random
+1977	    def docker_container_port(self, ssh_docker):
+1978	        port = random.randint(53220, 60000)
+1979	        while self.docker_container_exist(ssh_docker, port):
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   Location: /tmp/lint/virt_who/provision.py:1980:19
+   More Info: https://bandit.readthedocs.io/en/1.7.4/blacklists/blacklist_calls.html#b311-random
+1979	        while self.docker_container_exist(ssh_docker, port):
+1980	            port = random.randint(53220, 60000)
+1981	        return str(port)
+
+--------------------------------------------------
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   Location: /tmp/lint/virt_who/provision.py:2025:21
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b108_hardcoded_tmp_directory.html
+2024	        local_dir = os.path.join(root_path, "docker/")
+2025	        remote_dir = "/tmp/docker/"
+2026	        self.runcmd(
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: /tmp/lint/virt_who/settings.py:23:8
+   More Info: https://bandit.readthedocs.io/en/1.7.4/plugins/b110_try_except_pass.html
+22	                    self.config_parser.read_file(handler)
+23	        except:
+24	            pass
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 19376
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 91
+		Medium: 21
+		High: 9
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 23
+		High: 98
+Files skipped (0):
+

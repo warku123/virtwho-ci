@@ -1,0 +1,375 @@
+Results of pyright linter (version 1.1.296)
+See documentation on https://megalinter.io/0d699a348a2c104040efd78f2d2970e6ae8e5769/descriptors/python_pyright/
+-----------------------------------------------
+
+❌ [ERROR] for workspace /tmp/lint
+Linter raw log:
+
+added 1 package, and audited 2 packages in 11s
+
+found 0 vulnerabilities
+No configuration file found.
+No pyproject.toml file found.
+stubPath /typings is not a valid directory.
+Assuming Python platform Linux
+Searching for source files
+Found 202 source files
+pyright 1.1.296
+/tmp/lint/scripts/polarion_importer.py
+  /tmp/lint/scripts/polarion_importer.py:68:19 - error: "find" is not a known member of "None" (reportOptionalMemberAccess)
+  /tmp/lint/scripts/polarion_importer.py:70:19 - error: Object of type "None" is not subscriptable (reportOptionalSubscript)
+  /tmp/lint/scripts/polarion_importer.py:70:42 - error: Object of type "None" is not subscriptable (reportOptionalSubscript)
+  /tmp/lint/scripts/polarion_importer.py:214:21 - error: "getroot" is not a known member of "None" (reportOptionalMemberAccess)
+  /tmp/lint/scripts/polarion_importer.py:248:31 - error: Argument of type "Literal['<testsuite (.*?)>']" cannot be assigned to parameter "pattern" of type "bytes | Pattern[bytes]" in function "findall"
+    Type "Literal['<testsuite (.*?)>']" cannot be assigned to type "bytes | Pattern[bytes]"
+      "Literal['<testsuite (.*?)>']" is incompatible with "bytes"
+      "Literal['<testsuite (.*?)>']" is incompatible with "Pattern[bytes]" (reportGeneralTypeIssues)
+  /tmp/lint/scripts/polarion_importer.py:248:53 - error: Argument of type "str | None" cannot be assigned to parameter "string" of type "ReadableBuffer" in function "findall"
+    Type "str | None" cannot be assigned to type "ReadableBuffer"
+      Type "str" cannot be assigned to type "ReadableBuffer"
+        "str" is incompatible with "ReadOnlyBuffer"
+        "str" is incompatible with "bytearray"
+        "str" is incompatible with "memoryview"
+        "str" is incompatible with "array[Any]"
+        "str" is incompatible with "mmap"
+        "str" is incompatible with "_CData"
+    ... (reportGeneralTypeIssues)
+  /tmp/lint/scripts/polarion_importer.py:256:31 - error: Argument of type "Literal['<testsuite .*?>(.*?)</testsuite>']" cannot be assigned to parameter "pattern" of type "bytes | Pattern[bytes]" in function "findall"
+    Type "Literal['<testsuite .*?>(.*?)</testsuite>']" cannot be assigned to type "bytes | Pattern[bytes]"
+      "Literal['<testsuite .*?>(.*?)</testsuite>']" is incompatible with "bytes"
+      "Literal['<testsuite .*?>(.*?)</testsuite>']" is incompatible with "Pattern[bytes]" (reportGeneralTypeIssues)
+  /tmp/lint/scripts/polarion_importer.py:256:36 - error: Argument of type "str | None" cannot be assigned to parameter "string" of type "ReadableBuffer" in function "findall"
+    Type "str | None" cannot be assigned to type "ReadableBuffer"
+      Type "str" cannot be assigned to type "ReadableBuffer"
+        "str" is incompatible with "ReadOnlyBuffer"
+        "str" is incompatible with "bytearray"
+        "str" is incompatible with "memoryview"
+        "str" is incompatible with "array[Any]"
+        "str" is incompatible with "mmap"
+        "str" is incompatible with "_CData"
+    ... (reportGeneralTypeIssues)
+  /tmp/lint/scripts/polarion_importer.py:285:21 - error: "getroot" is not a known member of "None" (reportOptionalMemberAccess)
+  /tmp/lint/scripts/polarion_importer.py:291:21 - error: "getroot" is not a known member of "None" (reportOptionalMemberAccess)
+  /tmp/lint/scripts/polarion_importer.py:293:25 - error: "findall" is not a known member of "None" (reportOptionalMemberAccess)
+/tmp/lint/tests/gating/test_virtwho_gating.py
+  /tmp/lint/tests/gating/test_virtwho_gating.py:38:53 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/gating/test_virtwho_gating.py:38:62 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/gating/test_virtwho_gating.py:42:53 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/gating/test_virtwho_gating.py:42:62 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+/tmp/lint/tests/smoke/test_virtwho_smoke.py
+  /tmp/lint/tests/smoke/test_virtwho_smoke.py:77:49 - error: "value" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/tests/smoke/test_virtwho_smoke.py:120:48 - error: Operator "+" not supported for types "Literal['virt-who-']" and "Unknown | Any | None"
+    Operator "+" not supported for types "Literal['virt-who-']" and "None" (reportGeneralTypeIssues)
+  /tmp/lint/tests/smoke/test_virtwho_smoke.py:120:20 - warning: Assert expression always evaluates to true (reportAssertAlwaysTrue)
+  /tmp/lint/tests/smoke/test_virtwho_smoke.py:121:47 - error: Operator "+" not supported for types "Literal['virt-who-']" and "Unknown | Any | None"
+    Operator "+" not supported for types "Literal['virt-who-']" and "None" (reportGeneralTypeIssues)
+  /tmp/lint/tests/smoke/test_virtwho_smoke.py:123:51 - error: Operator "+" not supported for types "Literal['virt-who-']" and "Unknown | Any | None"
+    Operator "+" not supported for types "Literal['virt-who-']" and "None" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier1/tc_1003_check_virtwho_package_info.py
+  /tmp/lint/tests/tier1/tc_1003_check_virtwho_package_info.py:35:17 - error: Operator "in" not supported for types "str" and "Unknown | None"
+    Operator "in" not supported for types "str" and "None" (reportGeneralTypeIssues)
+  /tmp/lint/tests/tier1/tc_1003_check_virtwho_package_info.py:49:52 - error: Operator "in" not supported for types "Literal['none']" and "Unknown | None"
+    Operator "in" not supported for types "Literal['none']" and "None" (reportGeneralTypeIssues)
+  /tmp/lint/tests/tier1/tc_1003_check_virtwho_package_info.py:52:17 - error: Operator "in" not supported for types "Literal['Key ID']" and "Unknown | None"
+    Operator "in" not supported for types "Literal['Key ID']" and "None" (reportGeneralTypeIssues)
+  /tmp/lint/tests/tier1/tc_1003_check_virtwho_package_info.py:55:18 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier1/tc_1007_check_virtwho_fetch_and_send_function_by_sysconfig.py
+  /tmp/lint/tests/tier1/tc_1007_check_virtwho_fetch_and_send_function_by_sysconfig.py:11:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier1/tc_1010_check_virtwho_debug_function_by_cli.py
+  /tmp/lint/tests/tier1/tc_1010_check_virtwho_debug_function_by_cli.py:30:59 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier1/tc_1010_check_virtwho_debug_function_by_cli.py:30:68 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier1/tc_1010_check_virtwho_debug_function_by_cli.py:37:59 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier1/tc_1010_check_virtwho_debug_function_by_cli.py:37:68 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+/tmp/lint/tests/tier1/tc_1011_check_virtwho_debug_function_by_sysconfig.py
+  /tmp/lint/tests/tier1/tc_1011_check_virtwho_debug_function_by_sysconfig.py:11:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+  /tmp/lint/tests/tier1/tc_1011_check_virtwho_debug_function_by_sysconfig.py:28:60 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier1/tc_1011_check_virtwho_debug_function_by_sysconfig.py:28:69 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier1/tc_1011_check_virtwho_debug_function_by_sysconfig.py:37:38 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier1/tc_1011_check_virtwho_debug_function_by_sysconfig.py:37:47 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier1/tc_1011_check_virtwho_debug_function_by_sysconfig.py:47:38 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier1/tc_1011_check_virtwho_debug_function_by_sysconfig.py:47:47 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+/tmp/lint/tests/tier1/tc_1013_check_virtwho_oneshot_function_by_sysconfig.py
+  /tmp/lint/tests/tier1/tc_1013_check_virtwho_oneshot_function_by_sysconfig.py:11:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier1/tc_1015_check_interval_function_by_etc_sysconfig.py
+  /tmp/lint/tests/tier1/tc_1015_check_interval_function_by_etc_sysconfig.py:11:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier1/tc_1022_check_virtwho_can_be_killed_normally_in_terminal_side.py
+  /tmp/lint/tests/tier1/tc_1022_check_virtwho_can_be_killed_normally_in_terminal_side.py:44:12 - error: "is_killed" is possibly unbound (reportUnboundVariable)
+/tmp/lint/tests/tier1/tc_1024_check_virtwho_sysconfig_and_pid_files_permission.py
+  /tmp/lint/tests/tier1/tc_1024_check_virtwho_sysconfig_and_pid_files_permission.py:17:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier1/tc_1034_check_mapping_info_with_dconf_and_sysconf_for_the_same_mode.py
+  /tmp/lint/tests/tier1/tc_1034_check_mapping_info_with_dconf_and_sysconf_for_the_same_mode.py:14:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier1/tc_1038_check_sam_satellite_options_by_etc_sysconfig.py
+  /tmp/lint/tests/tier1/tc_1038_check_sam_satellite_options_by_etc_sysconfig.py:11:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier1/tc_1039_check_http_proxy_option_by_etc_sysconfig.py
+  /tmp/lint/tests/tier1/tc_1039_check_http_proxy_option_by_etc_sysconfig.py:11:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+  /tmp/lint/tests/tier1/tc_1039_check_http_proxy_option_by_etc_sysconfig.py:42:40 - error: "value" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/tests/tier1/tc_1039_check_http_proxy_option_by_etc_sysconfig.py:58:49 - error: "bad_value" is possibly unbound (reportUnboundVariable)
+/tmp/lint/tests/tier1/tc_1052_check_hypervisor_id_option_in_etc_virtwho_d.py
+  /tmp/lint/tests/tier1/tc_1052_check_hypervisor_id_option_in_etc_virtwho_d.py:75:57 - error: "lower" is not a known member of "None" (reportOptionalMemberAccess)
+  /tmp/lint/tests/tier1/tc_1052_check_hypervisor_id_option_in_etc_virtwho_d.py:68:37 - error: Object of type "None" is not subscriptable (reportOptionalSubscript)
+  /tmp/lint/tests/tier1/tc_1052_check_hypervisor_id_option_in_etc_virtwho_d.py:68:37 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+  /tmp/lint/tests/tier1/tc_1052_check_hypervisor_id_option_in_etc_virtwho_d.py:74:37 - error: Object of type "None" is not subscriptable (reportOptionalSubscript)
+  /tmp/lint/tests/tier1/tc_1052_check_hypervisor_id_option_in_etc_virtwho_d.py:74:37 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier1/tc_1055_check_global_section_header_in_etc_virtwho_conf.py
+  /tmp/lint/tests/tier1/tc_1055_check_global_section_header_in_etc_virtwho_conf.py:27:60 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier1/tc_1055_check_global_section_header_in_etc_virtwho_conf.py:27:69 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+/tmp/lint/tests/tier1/tc_1058_check_global_debug_option_in_etc_virtwho_conf.py
+  /tmp/lint/tests/tier1/tc_1058_check_global_debug_option_in_etc_virtwho_conf.py:27:60 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier1/tc_1058_check_global_debug_option_in_etc_virtwho_conf.py:27:69 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier1/tc_1058_check_global_debug_option_in_etc_virtwho_conf.py:36:38 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier1/tc_1058_check_global_debug_option_in_etc_virtwho_conf.py:36:47 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier1/tc_1058_check_global_debug_option_in_etc_virtwho_conf.py:46:38 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier1/tc_1058_check_global_debug_option_in_etc_virtwho_conf.py:46:47 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+/tmp/lint/tests/tier1/tc_1066_check_defaults_env_option_in_etc_virtwho_conf.py
+  /tmp/lint/tests/tier1/tc_1066_check_defaults_env_option_in_etc_virtwho_conf.py:11:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier1/tc_1076_check_guest_facts_by_subscription_manager.py
+  /tmp/lint/tests/tier1/tc_1076_check_guest_facts_by_subscription_manager.py:40:80 - error: "lower" is not a known member of "None" (reportOptionalMemberAccess)
+/tmp/lint/tests/tier1/tc_1104_check_virtwho_config_exist_after_reboot_system.py
+  /tmp/lint/tests/tier1/tc_1104_check_virtwho_config_exist_after_reboot_system.py:46:60 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier1/tc_1104_check_virtwho_config_exist_after_reboot_system.py:46:69 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier1/tc_1104_check_virtwho_config_exist_after_reboot_system.py:63:60 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier1/tc_1104_check_virtwho_config_exist_after_reboot_system.py:63:69 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+/tmp/lint/tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py
+  /tmp/lint/tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py:14:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier1/tc_1106_check_global_print_option_in_etc_virtwho_conf.py
+  /tmp/lint/tests/tier1/tc_1106_check_global_print_option_in_etc_virtwho_conf.py:11:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier1/tc_1108_check_hypervisor_facts.py
+  /tmp/lint/tests/tier1/tc_1108_check_hypervisor_facts.py:12:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier1/tc_1110_send_virt-who_version_in_the_User-Agent_header.py
+  /tmp/lint/tests/tier1/tc_1110_send_virt-who_version_in_the_User-Agent_header.py:11:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+  /tmp/lint/tests/tier1/tc_1110_send_virt-who_version_in_the_User-Agent_header.py:35:15 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier1/tc_1112_check_http_proxy_option_by_etc_conf.py
+  /tmp/lint/tests/tier1/tc_1112_check_http_proxy_option_by_etc_conf.py:46:49 - error: "value" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/tests/tier1/tc_1112_check_http_proxy_option_by_etc_conf.py:62:49 - error: "bad_value" is possibly unbound (reportUnboundVariable)
+/tmp/lint/tests/tier2/tc_2002_validate_env_option_by_cli.py
+  /tmp/lint/tests/tier2/tc_2002_validate_env_option_by_cli.py:17:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2004_validate_username_option_by_cli.py
+  /tmp/lint/tests/tier2/tc_2004_validate_username_option_by_cli.py:53:66 - error: Cannot access member "split" for type "Literal[False]"
+    Member "split" is unknown (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2006_validate_config_function_by_cli.py
+  /tmp/lint/tests/tier2/tc_2006_validate_config_function_by_cli.py:45:59 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier2/tc_2006_validate_config_function_by_cli.py:45:68 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+/tmp/lint/tests/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py
+  /tmp/lint/tests/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py:14:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py
+  /tmp/lint/tests/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py:14:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2010_validate_server_option_in_etc_sysconfig.py
+  /tmp/lint/tests/tier2/tc_2010_validate_server_option_in_etc_sysconfig.py:14:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py
+  /tmp/lint/tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py:14:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py
+  /tmp/lint/tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py:14:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2013_validate_unreachable_proxy_by_config.py
+  /tmp/lint/tests/tier2/tc_2013_validate_unreachable_proxy_by_config.py:13:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+  /tmp/lint/tests/tier2/tc_2013_validate_unreachable_proxy_by_config.py:70:40 - error: "value" is possibly unbound (reportUnboundVariable)
+/tmp/lint/tests/tier2/tc_2014_validate_header_option_in_etc_virtwho_d.py
+  /tmp/lint/tests/tier2/tc_2014_validate_header_option_in_etc_virtwho_d.py:41:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+  /tmp/lint/tests/tier2/tc_2014_validate_header_option_in_etc_virtwho_d.py:61:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+  /tmp/lint/tests/tier2/tc_2014_validate_header_option_in_etc_virtwho_d.py:77:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py
+  /tmp/lint/tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py:15:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py
+  /tmp/lint/tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py:56:70 - error: Cannot access member "split" for type "Literal[False]"
+    Member "split" is unknown (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2025_validate_rhsm_username_option_in_etc_virtwho_d.py
+  /tmp/lint/tests/tier2/tc_2025_validate_rhsm_username_option_in_etc_virtwho_d.py:63:70 - error: Cannot access member "split" for type "Literal[False]"
+    Member "split" is unknown (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2028_validate_wildcard_for_filter_and_exclude_hosts_options_in_etc_virtwho_d.py
+  /tmp/lint/tests/tier2/tc_2028_validate_wildcard_for_filter_and_exclude_hosts_options_in_etc_virtwho_d.py:48:24 - error: Object of type "None" is not subscriptable (reportOptionalSubscript)
+  /tmp/lint/tests/tier2/tc_2028_validate_wildcard_for_filter_and_exclude_hosts_options_in_etc_virtwho_d.py:48:49 - error: Object of type "None" is not subscriptable (reportOptionalSubscript)
+/tmp/lint/tests/tier2/tc_2034_validate_global_interval_by_virtwho_conf.py
+  /tmp/lint/tests/tier2/tc_2034_validate_global_interval_by_virtwho_conf.py:11:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2036_validate_global_debug_by_virtwho_conf.py
+  /tmp/lint/tests/tier2/tc_2036_validate_global_debug_by_virtwho_conf.py:27:53 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier2/tc_2036_validate_global_debug_by_virtwho_conf.py:27:62 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+/tmp/lint/tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py
+  /tmp/lint/tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py:14:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2046_check_registered_by_item_in_satellite_webui.py
+  /tmp/lint/tests/tier2/tc_2046_check_registered_by_item_in_satellite_webui.py:69:24 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2049_validate_hostname_without_domain.py
+  /tmp/lint/tests/tier2/tc_2049_validate_hostname_without_domain.py:25:41 - error: "split" is not a known member of "None" (reportOptionalMemberAccess)
+/tmp/lint/tests/tier2/tc_2054_validate_trigger_event_with_different_interval.py
+  /tmp/lint/tests/tier2/tc_2054_validate_trigger_event_with_different_interval.py:11:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2058_post_large_json_to_rhsm.py
+  /tmp/lint/tests/tier2/tc_2058_post_large_json_to_rhsm.py:64:57 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+  /tmp/lint/tests/tier2/tc_2058_post_large_json_to_rhsm.py:65:58 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+  /tmp/lint/tests/tier2/tc_2058_post_large_json_to_rhsm.py:70:24 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+  /tmp/lint/tests/tier2/tc_2058_post_large_json_to_rhsm.py:71:66 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+  /tmp/lint/tests/tier2/tc_2058_post_large_json_to_rhsm.py:72:64 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py
+  /tmp/lint/tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py:11:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2063_check_hypervisors_fqdn.py
+  /tmp/lint/tests/tier2/tc_2063_check_hypervisors_fqdn.py:54:43 - error: Operator "+" not supported for types "Literal['virt-who-']" and "Unknown | Any | None"
+    Operator "+" not supported for types "Literal['virt-who-']" and "None" (reportGeneralTypeIssues)
+  /tmp/lint/tests/tier2/tc_2063_check_hypervisors_fqdn.py:71:43 - error: Operator "+" not supported for types "Literal['virt-who-']" and "Unknown | Any | None"
+    Operator "+" not supported for types "Literal['virt-who-']" and "None" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2066_validate_cluster_name_with_special_char.py
+  /tmp/lint/tests/tier2/tc_2066_validate_cluster_name_with_special_char.py:51:69 - error: Argument of type "Literal[0]" cannot be assigned to parameter "exp_error" of type "bool" in function "vw_start"
+    "Literal[0]" is incompatible with "bool" (reportGeneralTypeIssues)
+  /tmp/lint/tests/tier2/tc_2066_validate_cluster_name_with_special_char.py:68:60 - error: Object of type "None" is not subscriptable (reportOptionalSubscript)
+  /tmp/lint/tests/tier2/tc_2066_validate_cluster_name_with_special_char.py:68:60 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+  /tmp/lint/tests/tier2/tc_2066_validate_cluster_name_with_special_char.py:78:26 - error: Object of type "None" is not subscriptable (reportOptionalSubscript)
+  /tmp/lint/tests/tier2/tc_2066_validate_cluster_name_with_special_char.py:78:26 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier2/tc_2068_validate_options_migration_during_virt_who_upgrade.py
+  /tmp/lint/tests/tier2/tc_2068_validate_options_migration_during_virt_who_upgrade.py:81:57 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/tests/tier2/tc_2068_validate_options_migration_during_virt_who_upgrade.py:81:66 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+/tmp/lint/tests/tier3/tc_1027_check_two_modes_enabled_in_etc_sysconfig.py
+  /tmp/lint/tests/tier3/tc_1027_check_two_modes_enabled_in_etc_sysconfig.py:20:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py
+  /tmp/lint/tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py:20:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/tests/tier3/tc_1035_check_mapping_info_with_dconf_and_cli_for_two_modes.py
+  /tmp/lint/tests/tier3/tc_1035_check_mapping_info_with_dconf_and_cli_for_two_modes.py:20:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/utils/installer.py
+  /tmp/lint/utils/installer.py:307:13 - error: Argument of type "str | Unbound" cannot be assigned to parameter "guest_port" of type "int" in function "update_hypervisor_section"
+    Type "str | Unbound" cannot be assigned to type "int"
+      "str" is incompatible with "int" (reportGeneralTypeIssues)
+  /tmp/lint/utils/installer.py:304:13 - error: "guest_ip" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/utils/installer.py:307:13 - error: "guest_port" is possibly unbound (reportUnboundVariable)
+/tmp/lint/utils/merge-xunit.py
+  /tmp/lint/utils/merge-xunit.py:51:13 - error: Argument of type "ElementTree" cannot be assigned to parameter "elem" of type "Element" in function "dump"
+    "ElementTree" is incompatible with "Element" (reportGeneralTypeIssues)
+/tmp/lint/virt_who/__init__.py
+  /tmp/lint/virt_who/__init__.py:25:12 - error: Import "Queue" could not be resolved (reportMissingImports)
+  /tmp/lint/virt_who/__init__.py:15:8 - warning: Import "paramiko" could not be resolved from source (reportMissingModuleSource)
+/tmp/lint/virt_who/base.py
+  /tmp/lint/virt_who/base.py:100:44 - error: Argument of type "Unknown | None" cannot be assigned to parameter "timeout" of type "int" in function "paramiko_run"
+    Type "Unknown | None" cannot be assigned to type "int"
+      Type "None" cannot be assigned to type "int" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/base.py:11:40 - error: "open_session" is not a known member of "None" (reportOptionalMemberAccess)
+  /tmp/lint/virt_who/base.py:241:24 - error: "split" is not a known member of "None" (reportOptionalMemberAccess)
+  /tmp/lint/virt_who/base.py:325:26 - error: "group" is not a known member of "None" (reportOptionalMemberAccess)
+  /tmp/lint/virt_who/base.py:58:14 - error: "put" is not a known member of "None" (reportOptionalMemberAccess)
+  /tmp/lint/virt_who/base.py:410:18 - error: Cannot access member "rhsm_backup" for type "Base"
+    Member "rhsm_backup" is unknown (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/base.py:10:17 - error: Cannot access member "_transport" for type "SSHClient"
+    Member "_transport" is unknown (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/base.py:44:14 - error: "get" is not a known member of "None" (reportOptionalMemberAccess)
+  /tmp/lint/virt_who/base.py:75:30 - error: "put" is not a known member of "None" (reportOptionalMemberAccess)
+  /tmp/lint/virt_who/base.py:77:30 - error: "mkdir" is not a known member of "None" (reportOptionalMemberAccess)
+  /tmp/lint/virt_who/base.py:78:30 - error: "put" is not a known member of "None" (reportOptionalMemberAccess)
+  /tmp/lint/virt_who/base.py:84:30 - error: "mkdir" is not a known member of "None" (reportOptionalMemberAccess)
+  /tmp/lint/virt_who/base.py:125:24 - error: "output" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/base.py:166:35 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/virt_who/base.py:166:54 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/virt_who/base.py:166:73 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/virt_who/base.py:240:12 - error: Operator "in" not supported for types "Literal[':']" and "Unknown | None"
+    Operator "in" not supported for types "Literal[':']" and "None" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/base.py:498:16 - error: "nmap" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/base.py:498:51 - error: "nmap" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/base.py:499:77 - error: "nmap" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/base.py:500:16 - error: "ncat" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/base.py:500:51 - error: "ncat" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/base.py:501:77 - error: "ncat" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/base.py:513:100 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+/tmp/lint/virt_who/provision.py
+  /tmp/lint/virt_who/provision.py:36:58 - error: "lower" is not a known member of "None" (reportOptionalMemberAccess)
+  /tmp/lint/virt_who/provision.py:81:35 - error: Argument of type "Literal['buildID=(.*?)" cannot be assigned to parameter "pattern" of type "bytes | Pattern[bytes]" in function "findall"]" cannot be assigned to parameter "pattern" of type "bytes | Pattern[bytes]" in function "findall"
+    Type "Literal['buildID=(.*?)" cannot be assigned to type "bytes | Pattern[bytes]"]" cannot be assigned to type "bytes | Pattern[bytes]"
+      "Literal['buildID=(.*?)" is incompatible with "bytes"]" is incompatible with "bytes"
+      "Literal['buildID=(.*?)" is incompatible with "Pattern[bytes]"]" is incompatible with "Pattern[bytes]" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/provision.py:81:54 - error: Argument of type "str | None" cannot be assigned to parameter "string" of type "ReadableBuffer" in function "findall"
+    Type "str | None" cannot be assigned to type "ReadableBuffer"
+      Type "str" cannot be assigned to type "ReadableBuffer"
+        "str" is incompatible with "ReadOnlyBuffer"
+        "str" is incompatible with "bytearray"
+        "str" is incompatible with "memoryview"
+        "str" is incompatible with "array[Any]"
+        "str" is incompatible with "mmap"
+        "str" is incompatible with "_CData"
+    ... (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/provision.py:109:46 - error: "url" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:230:54 - error: "lower" is not a known member of "None" (reportOptionalMemberAccess)
+  /tmp/lint/virt_who/provision.py:354:67 - error: "strip" is not a known member of "None" (reportOptionalMemberAccess)
+  /tmp/lint/virt_who/provision.py:560:29 - error: "username" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:561:29 - error: "password" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:562:26 - error: "owner" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:563:24 - error: "env" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:701:52 - error: "guest_user" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:701:76 - error: "guest_passwd" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:703:32 - error: "hypervisor_type" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:704:34 - error: "hypervisor_server" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:705:32 - error: "hypervisor_user" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:706:34 - error: "hypervisor_passwd" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:715:27 - error: "guest_name" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:716:27 - error: "guest_user" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:717:29 - error: "guest_passwd" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:880:21 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/provision.py:888:21 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/provision.py:925:44 - error: "output" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:936:63 - error: "url" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:1004:12 - error: Operator "in" not supported for types "Literal['RHEL-7']" and "str | Unknown | None"
+    Operator "in" not supported for types "Literal['RHEL-7']" and "None" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/provision.py:1041:18 - error: "epel_url" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:1193:34 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/virt_who/provision.py:1256:31 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/virt_who/provision.py:1256:42 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/virt_who/provision.py:1497:22 - error: "compose_id" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:1663:40 - error: "cmd" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/provision.py:1846:54 - error: Cannot access member "format" for type "FailException"
+    Member "format" is unknown (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/provision.py:2519:13 - error: Module is not callable (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/provision.py:2656:44 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/virt_who/provision.py:2658:43 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/virt_who/provision.py:2664:85 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/virt_who/provision.py:2664:96 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/virt_who/provision.py:2682:48 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/virt_who/provision.py:2682:63 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/virt_who/provision.py:2739:55 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/virt_who/provision.py:2739:66 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+/tmp/lint/virt_who/register.py
+  /tmp/lint/virt_who/register.py:110:16 - error: "registered_id" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/register.py:110:41 - error: "registered_id" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/register.py:110:64 - error: "registered_id" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/register.py:158:58 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/virt_who/register.py:158:60 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/virt_who/register.py:191:39 - error: "cmd" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/register.py:682:70 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+/tmp/lint/virt_who/testing.py
+  /tmp/lint/virt_who/testing.py:112:12 - error: Operator "in" not supported for types "Literal['libvirt-local']" and "str | Unknown | None"
+    Operator "in" not supported for types "Literal['libvirt-local']" and "None" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/testing.py:114:12 - error: Operator "in" not supported for types "Literal['rhevm']" and "str | Unknown | None"
+    Operator "in" not supported for types "Literal['rhevm']" and "None" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/testing.py:114:42 - error: Operator "in" not supported for types "Literal['vdsm']" and "str | Unknown | None"
+    Operator "in" not supported for types "Literal['vdsm']" and "None" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/testing.py:120:16 - error: Operator "not in" not supported for types "Literal['//']" and "str | Unknown | None"
+    Operator "not in" not supported for types "Literal['//']" and "None" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/testing.py:122:12 - error: Operator "in" not supported for types "Literal['esx']" and "str | Unknown | None"
+    Operator "in" not supported for types "Literal['esx']" and "None" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/testing.py:171:12 - error: Operator "in" not supported for types "Literal['stage']" and "Unknown | str | None"
+    Operator "in" not supported for types "Literal['stage']" and "None" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/testing.py:175:12 - error: Operator "in" not supported for types "Literal['satellite']" and "Unknown | str | None"
+    Operator "in" not supported for types "Literal['satellite']" and "None" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/testing.py:196:23 - error: "prefix" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/testing.py:199:20 - error: "api" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/testing.py:200:24 - error: "ssh_sat" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/testing.py:252:16 - error: "hostname" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/testing.py:281:16 - error: "uuid" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/testing.py:325:16 - error: "uuid" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/testing.py:576:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/testing.py:629:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/testing.py:644:34 - error: Operator "in" not supported for types "Literal['v3']" and "Unknown | None"
+    Operator "in" not supported for types "Literal['v3']" and "None" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/testing.py:675:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/testing.py:793:12 - error: "__getitem__" method not defined on type "Literal[False]" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/testing.py:1015:64 - error: Operator "in" not supported for types "Literal['vdsm']" and "str | None"
+    Operator "in" not supported for types "Literal['vdsm']" and "None" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/testing.py:1021:17 - error: Operator "in" not supported for types "Literal['vdsm']" and "str | None"
+    Operator "in" not supported for types "Literal['vdsm']" and "None" (reportGeneralTypeIssues)
+  /tmp/lint/virt_who/testing.py:1074:26 - error: "msg" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/testing.py:1080:22 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/virt_who/testing.py:1080:33 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/virt_who/testing.py:1255:16 - error: "data" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/testing.py:1255:22 - error: "tty_output" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/testing.py:1255:34 - error: "rhsm_output" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/testing.py:1281:22 - warning: Unsupported escape sequence in string literal (reportInvalidStringEscapeSequence)
+  /tmp/lint/virt_who/testing.py:1325:12 - error: "data" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/testing.py:1327:18 - error: "data" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/testing.py:1331:20 - error: "data" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/testing.py:1331:26 - error: "tty_output" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/testing.py:1331:38 - error: "rhsm_output" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/testing.py:1493:12 - error: "registered_id" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/testing.py:1493:37 - error: "registered_id" is possibly unbound (reportUnboundVariable)
+  /tmp/lint/virt_who/testing.py:1493:60 - error: "registered_id" is possibly unbound (reportUnboundVariable)
+173 errors, 54 warnings, 0 informations 
+Completed in 20.846sec
+

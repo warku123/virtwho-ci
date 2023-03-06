@@ -1,0 +1,29 @@
+Results of pylint linter (version 2.16.3)
+See documentation on https://megalinter.io/0d699a348a2c104040efd78f2d2970e6ae8e5769/descriptors/python_pylint/
+-----------------------------------------------
+
+❌ [ERROR] for workspace /tmp/lint
+Linter raw log:
+pylint: Command line or configuration file:1: UserWarning: Specifying exception names in the overgeneral-exceptions option without module name is deprecated and support for it will be removed in pylint 3.0. Use fully qualified name (maybe 'builtins.Exception' ?) instead.
+************* Module scripts.polarion_importer
+/tmp/lint/scripts/polarion_importer.py:7:0: E0401: Unable to import 'polarion_caseid_mapping' (import-error)
+/tmp/lint/scripts/polarion_importer.py:299:24: E0602: Undefined variable 'mapping' (undefined-variable)
+/tmp/lint/scripts/polarion_importer.py:300:35: E0602: Undefined variable 'mapping' (undefined-variable)
+************* Module tests.tier2.tc_2047_check_rhsm_log_after_delete_host_hypervisor_from_server_webui
+/tmp/lint/tests/tier2/tc_2047_check_rhsm_log_after_delete_host_hypervisor_from_server_webui.py:35:12: E1111: Assigning result of a function call, where the function has no return (assignment-from-no-return)
+************* Module virt_who
+/tmp/lint/virt_who/__init__.py:15:0: E0401: Unable to import 'paramiko' (import-error)
+/tmp/lint/virt_who/__init__.py:16:0: E0401: Unable to import 'urllib3' (import-error)
+/tmp/lint/virt_who/__init__.py:17:0: E0401: Unable to import 'six' (import-error)
+/tmp/lint/virt_who/__init__.py:18:0: E0401: Unable to import 'urllib3.util.timeout' (import-error)
+/tmp/lint/virt_who/__init__.py:27:0: E0401: Unable to import 'six' (import-error)
+************* Module virt_who.base
+/tmp/lint/virt_who/base.py:498:15: E0601: Using variable 'nmap' before assignment (used-before-assignment)
+/tmp/lint/virt_who/base.py:500:15: E0601: Using variable 'ncat' before assignment (used-before-assignment)
+************* Module virt_who.provision
+/tmp/lint/virt_who/provision.py:1041:17: E0601: Using variable 'epel_url' before assignment (used-before-assignment)
+/tmp/lint/virt_who/provision.py:1846:18: E1101: Instance of 'FailException' has no 'format' member (no-member)
+/tmp/lint/virt_who/provision.py:2519:12: E1102: time is not callable (not-callable)
+************* Module virt_who.register
+/tmp/lint/virt_who/register.py:988:24: E1305: Too many arguments for format string (too-many-format-args)
+

@@ -1,0 +1,11 @@
+Results of markdownlint linter (version 0.33.0)
+See documentation on https://megalinter.io/0d699a348a2c104040efd78f2d2970e6ae8e5769/descriptors/markdown_markdownlint/
+-----------------------------------------------
+
+❌ [ERROR] for workspace /tmp/lint
+Linter raw log:
+/tmp/lint/README.md:1 MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "VIRTWHO-QE - Testing virt-who ..."]
+/tmp/lint/README.md:6 MD040/fenced-code-language Fenced code blocks should have a language specified [Context: "```"]
+/tmp/lint/README.md:34 MD040/fenced-code-language Fenced code blocks should have a language specified [Context: "```"]
+/tmp/lint/README.md:68 MD040/fenced-code-language Fenced code blocks should have a language specified [Context: "```"]
+

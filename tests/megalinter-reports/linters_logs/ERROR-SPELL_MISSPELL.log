@@ -1,0 +1,10 @@
+Results of misspell linter (version 0.3.4)
+See documentation on https://megalinter.io/0d699a348a2c104040efd78f2d2970e6ae8e5769/descriptors/spell_misspell/
+-----------------------------------------------
+
+❌ [ERROR] for workspace /tmp/lint
+Linter raw log:
+/tmp/lint/tier2/tc_2007_validate_parameters_consistency_by_cli.py:34:56: "unconsistent" is a misspelling of "inconsistent"
+/tmp/lint/tier2/tc_2046_check_registered_by_item_in_satellite_webui.py:62:37: "succeded" is a misspelling of "succeeded"
+/tmp/lint/tier2/tc_2046_check_registered_by_item_in_satellite_webui.py:70:37: "succeded" is a misspelling of "succeeded"
+

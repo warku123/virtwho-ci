@@ -1,0 +1,12 @@
+Results of dustilock linter (version 1.2.0)
+See documentation on https://megalinter.io/0d699a348a2c104040efd78f2d2970e6ae8e5769/descriptors/repository_dustilock/
+-----------------------------------------------
+
+❌ [ERROR] for workspace /tmp/lint
+Linter raw log:
+DustiLock started
+scanning directory "/tmp/lint" (recursive=true) ...
+Head "https://pypi.org/simple/urllib3": context deadline exceeded
+Head "https://pypi.org/simple/urllib3": context deadline exceeded
+2023/03/06 07:18:54 Head "https://pypi.org/simple/urllib3": context deadline exceeded
+

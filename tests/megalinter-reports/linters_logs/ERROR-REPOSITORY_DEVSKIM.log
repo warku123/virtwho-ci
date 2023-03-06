@@ -1,0 +1,16 @@
+Results of devskim linter (version 0.7.104)
+See documentation on https://megalinter.io/0d699a348a2c104040efd78f2d2970e6ae8e5769/descriptors/repository_devskim/
+-----------------------------------------------
+
+❌ [ERROR] for workspace /tmp/lint
+Linter raw log:
+/tmp/lint/tier1/tc_1003_check_virtwho_package_info.py:35:31:35:38 [Moderate] DS137138 Insecure URL
+/tmp/lint/tier1/tc_1039_check_http_proxy_option_by_etc_sysconfig.py:31:26:31:33 [Moderate] DS137138 Insecure URL
+/tmp/lint/smoke/test_virtwho_smoke.py:64:26:64:33 [Moderate] DS137138 Insecure URL
+/tmp/lint/tier1/tc_1039_check_http_proxy_option_by_etc_sysconfig.py:32:30:32:37 [Moderate] DS137138 Insecure URL
+/tmp/lint/tier1/tc_1112_check_http_proxy_option_by_etc_conf.py:34:26:34:33 [Moderate] DS137138 Insecure URL
+/tmp/lint/tier1/tc_1112_check_http_proxy_option_by_etc_conf.py:35:30:35:37 [Moderate] DS137138 Insecure URL
+/tmp/lint/tier2/tc_2013_validate_unreachable_proxy_by_config.py:46:26:46:33 [Moderate] DS137138 Insecure URL
+/tmp/lint/tier2/tc_2013_validate_unreachable_proxy_by_config.py:66:26:66:33 [Moderate] DS137138 Insecure URL
+For guidance on reported issues visit the relevant page here: https://github.com/microsoft/DevSkim/tree/main/guidance.
+
