@@ -147,45 +147,48 @@ def polarion_testrun_title():
 
 
 def polarion_planned_in():
-    keyword = get_exported_param("PLANNED_IN")
-    rhel_compose = get_exported_param("RHEL_COMPOSE")
-    plan = ''
-    plans_dict = {
-        'RHEL-9.1': {
-            'MAIN': 'RHEL_9_1',
-            'CTC1': '9_1_CTC_1',
-            'CTC2': '9_1_CTC_2',
-            'Beta': '9_1_Beta',
-            'RC': '9_1_RC'
-        },
-        'RHEL-9.2': {
-            'MAIN': '9_2_0',
-            'CTC1': '9_2_0_CTC_1',
-            'CTC2': '9_2_0_CTC_2',
-            'Beta': '9_2_0_Beta',
-            'RC': '9_2_0_RC'
-        },
-        'RHEL-8.7': {
-            'MAIN': 'RHEL_8_7',
-            'CTC1': '8_7_CTC_1',
-            'CTC2': '8_7_CTC_2',
-            'Beta': '8_7_Beta',
-            'RC': '8_7_RC'
-        },
-        'RHEL-8.8': {
-            'MAIN': '8_8_0',
-            'CTC1': '8_8_0_CTC_1',
-            'CTC2': '8_8_0_CTC_2',
-            'Beta': '8_8_0_Beta',
-            'RC': '8_8_0_RC'
-        }
-    }
-    if 'Legacy' in keyword:
-        plan = 'RHEL_Legacy_Release'
-    else:
-        for (rhel, plans) in plans_dict.items():
-            if rhel in rhel_compose:
-                plan = plans[keyword]
+    # keyword = get_exported_param("PLANNED_IN")
+    # rhel_compose = get_exported_param("RHEL_COMPOSE")
+    # plan = ''
+    # plans_dict = {
+    #     'RHEL-9.1': {
+    #         'MAIN': 'RHEL_9_1',
+    #         'CTC1': '9_1_CTC_1',
+    #         'CTC2': '9_1_CTC_2',
+    #         'Beta': '9_1_Beta',
+    #         'RC': '9_1_RC'
+    #     },
+    #     'RHEL-9.2': {
+    #         'MAIN': '9_2_0',
+    #         'CTC1': '9_2_0_CTC_1',
+    #         'CTC2': '9_2_0_CTC_2',
+    #         'Beta': '9_2_0_Beta',
+    #         'RC': '9_2_0_RC'
+    #     },
+    #     'RHEL-8.7': {
+    #         'MAIN': 'RHEL_8_7',
+    #         'CTC1': '8_7_CTC_1',
+    #         'CTC2': '8_7_CTC_2',
+    #         'Beta': '8_7_Beta',
+    #         'RC': '8_7_RC'
+    #     },
+    #     'RHEL-8.8': {
+    #         'MAIN': '8_8_0',
+    #         'CTC1': '8_8_0_CTC_1',
+    #         'CTC2': '8_8_0_CTC_2',
+    #         'Beta': '8_8_0_Beta',
+    #         'RC': '8_8_0_RC'
+    #     }
+    # }
+    # if 'Legacy' in keyword:
+    #     plan = 'RHEL_Legacy_Release'
+    # else:
+    #     for (rhel, plans) in plans_dict.items():
+    #         if rhel in rhel_compose:
+    #             plan = plans[keyword]
+
+    # Get planned in id from http://10.73.131.83/ci/polarion/plannedIn
+    plan = get_exported_param("PLANNED_IN")
     return plan
 
 
@@ -321,7 +324,7 @@ if __name__ == "__main__":
 # export TRIGGER_LEVEL=tier1
 # export HYPERVISOR_TYPE=esx
 # export REGISTER_TYPE=satellite611
-# export PLANNED_IN=MAIN
+# export PLANNED_IN=
 # export BUILD_URL=Jenkins_job_link_demo
 # export VIRTWHO_BUILD=virt-who-1.30.5-2.el8_4
 # export TRIGGER_TYPE=trigger-rhel
