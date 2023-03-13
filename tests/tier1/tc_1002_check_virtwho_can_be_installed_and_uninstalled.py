@@ -10,6 +10,8 @@ class Testcase(Testing):
         trigger_type = self.get_config('trigger_type')
         if trigger_type in ('trigger-rhev', 'trigger-brew', 'trigger-multiarch'):
             self.vw_case_skip(trigger_type)
+        # unregister in advance to avoid impacting the pkg install from repository.
+        self.system_unregister(self.ssh_host())
 
         # case config
         results = dict()

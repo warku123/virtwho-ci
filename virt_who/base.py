@@ -346,7 +346,7 @@ class Base(unittest.TestCase):
 
     def get_gateway(self, ssh):
         ipaddr = self.get_ipaddr(ssh)
-        cmd = "ip route | grep %s" % ipaddr
+        cmd = "ip route | grep %s | grep /" % ipaddr
         ret, output = self.runcmd(cmd, ssh)
         if ret == 0 and output is not None and output != "":
             output = output.strip().split(" ")
