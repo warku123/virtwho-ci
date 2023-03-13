@@ -19,3 +19,5 @@ BASH_SHFMT_ARGUMENTS: "-i 2 -sr -kp"
 CLOJURE_FILTER_REGEX_EXCLUDE: "test/*|ldtp_api2.clj|metadata.clj"
 PYTHON_FILTER_REGEX_EXCLUDE: "scripts/old/*|scripts/log-server/*"
 
+PAT: ${{secrets.PAT}}
+
