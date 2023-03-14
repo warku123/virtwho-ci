@@ -3,10 +3,6 @@
 # More info at https://megalinter.io
 name: MegaLinter
 
-pre_commands:
-  - command: pip install -r requirements.txt
-    cwd: "workspace"   # Will be run at the root of the workspace (usually your repository root)
-
 on:
   # Trigger mega-linter at every push. Action will also be visible from Pull Requests to main
   push: # Comment this line to trigger action only on pull-requests (not recommended if you don't pay for GH Actions)
