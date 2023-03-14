@@ -20,6 +20,7 @@ CLOJURE_FILTER_REGEX_EXCLUDE: "test/*|ldtp_api2.clj|metadata.clj"
 PYTHON_FILTER_REGEX_EXCLUDE: "scripts/old/*|scripts/log-server/*"
 
 PRE_COMMANDS:
+  - command: export PATH=$PATH:$pythonLocation
   - command: pip --version && python -V
   - command: pip install -r requirements.txt
     cwd: "workspace"   # Will be run at the root of the workspace (usually your repository root)
