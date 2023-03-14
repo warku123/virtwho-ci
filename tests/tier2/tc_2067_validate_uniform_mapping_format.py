@@ -35,8 +35,11 @@ class Testcase(Testing):
         data, tty_output, rhsm_output = self.vw_start(cli='virt-who -do', exp_send=1)
         ret, fake_json = self.runcmd("cat {0}".format(json_file), self.ssh_host())
         fake_json_lines = fake_json.split('\n')
+        # BZ1933578 WONTFIX
+        if hypervisor_type == 'libvirt-local':
+            fake_json_lines = fake_json_lines[5:-6]
         for line in fake_json_lines:
-            results.setdefault('step2', []).append(line in tty_output)
+            results.setdefault('step2', []).append(line.strip() in tty_output)
 
         # case result
         self.vw_case_result(results)
