@@ -1,6 +1,6 @@
 # coding:utf-8
 import os, sys, getopt, fcntl
-from polarion_caseid_mapping import *
+from polarion_caseid_mapping import mapping
 sys.path.append('../')
 from virt_who import *
 from datetime import datetime
