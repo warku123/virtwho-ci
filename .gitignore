@@ -40,3 +40,4 @@ polarizer-report.json
 logs/*
 
 megalinter-reports/
+report/
