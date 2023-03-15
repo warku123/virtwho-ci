@@ -481,3 +481,11 @@ class Base(unittest.TestCase):
             logger.info("Try to scan ip by nmap in %s after 30s ..." % ssh['host'])
         logger.error("Failed to get ip addr by mac(%s)" % ssh['host'])
         return False
+
+    def rhsm_backup(self, ssh):
+        ret, output = self.runcmd("ls /backup/rhsm.conf", ssh)
+        if ret != 0 or "No such file or directory" in output:
+            cmd = "rm -rf /backup/; mkdir -p /backup/; cp /etc/rhsm/rhsm.conf /backup/"
+            self.runcmd(cmd, ssh)
+        else:
+            logger.info("rhsm.conf is backup already({0})".format(ssh['host']))
