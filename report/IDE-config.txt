@@ -1,0 +1,37 @@
+Mega-Linter can help you to define the same linter configuration locally
+
+INSTRUCTIONS
+
+- Copy the content of IDE-config folder at the root of your repository
+- if you are using Visual Studio Code, just reopen your project after the copy, and you will be prompted to install recommended extensions
+- If not, you can install extensions manually using the following links.
+
+IDE EXTENSIONS APPLICABLE TO YOUR PROJECT
+
+shfmt (BASH)
+  - atom:
+    - format-shell: https://atom.io/packages/format-shell
+  - emacs:
+    - emacs-shfmt: https://github.com/purcell/emacs-shfmt/
+  - idea:
+    - shell-scripts: https://www.jetbrains.com/help/idea/shell-scripts.html
+  - micro:
+    - micro: https://micro-editor.github.io/
+  - sublime:
+    - Sublime-Pretty-Shell: https://github.com/aerobounce/Sublime-Pretty-Shell
+  - vim:
+    - vim-shfmt: https://github.com/z0mbix/vim-shfmt
+  - vscode:
+    - shell-format: https://marketplace.visualstudio.com/items?itemName=foxundermoon.shell-format
+
+pylint (PYTHON)
+  - eclipse:
+    - PyLint: https://pydev.org/manual_adv_pylint.html
+  - idea:
+    - PyCharm (Native Support): https://www.jetbrains.com/pycharm/
+  - vim:
+    - pylint.vim: https://www.vim.org/scripts/script.php?script_id=891
+  - visual_studio:
+    - Native Support: https://docs.microsoft.com/fr-fr/visualstudio/python/linting-python-code?view=vs-2019
+  - vscode:
+    - Native Support: https://code.visualstudio.com/docs/python/linting#_pylint

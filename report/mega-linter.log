@@ -1,0 +1,485 @@
+[33m#######################################################################[0m
+[33mMEGA-LINTER HAS A NEW V5 VERSION at https://github.com/megalinter/megalinter. Please upgrade to it by:[0m
+[33m- Running the command at the root of your repo (requires node.js): npx mega-linter-runner --upgrade[0m
+[33m- Replace versions used by latest (v5 latest stable version) or beta (previously 'insiders', content of master branch of megalinter/megalinter)[0m
+[33m#######################################################################[0m
+----------------------------------------------------------------------------------------------------
+------------------------------------------- Mega-Linter --------------------------------------------
+----------------------------------------------------------------------------------------------------
+ - Image Creation Date: 2021-10-30T09:03:14Z
+ - Image Revision: 2195c5e7
+ - Image Version: v4
+----------------------------------------------------------------------------------------------------
+The Mega-Linter documentation can be found at:
+ - https://nvuillam.github.io/mega-linter
+----------------------------------------------------------------------------------------------------
+GITHUB_REPOSITORY: warku123/virtwho-ci
+GITHUB_REF: refs/heads/linter-test
+GITHUB_RUN_ID: 4424035200
+PAT: set
+
+[Pre] run: [alias python=$pythonLocation/bin/python && alias pip=$pythonLocation/bin/pip] in cwd [/github/workspace]
+[Pre] [] 
+[Pre] run: [pip --version && python -V] in cwd [/github/workspace]
+[Pre] [pip 21.2.4 from /usr/local/lib/python3.9/site-packages/pip (python 3.9)
+Python 3.9.7
+] pip 21.2.4 from /usr/local/lib/python3.9/site-packages/pip (python 3.9)
+Python 3.9.7
+
+[Pre] run: [pip install -r requirements.txt] in cwd [/github/workspace]
+[Pre] [WARNING: The directory '/github/home/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Collecting attrdict==2.0.1
+  Downloading attrdict-2.0.1-py2.py3-none-any.whl (9.9 kB)
+Collecting paramiko==2.10.1
+  Downloading paramiko-2.10.1-py2.py3-none-any.whl (211 kB)
+Requirement already satisfied: pytest==6.2.5 in /usr/local/lib/python3.9/site-packages (from -r requirements.txt (line 3)) (6.2.5)
+Collecting pytest-services==1.3.1
+  Downloading pytest-services-1.3.1.tar.gz (14 kB)
+Collecting pytest-mock==1.10.4
+  Downloading pytest_mock-1.10.4-py2.py3-none-any.whl (9.7 kB)
+Collecting pytest-xdist==1.34.0
+  Downloading pytest_xdist-1.34.0-py2.py3-none-any.whl (36 kB)
+Collecting requests==2.22.0
+  Downloading requests-2.22.0-py2.py3-none-any.whl (57 kB)
+Collecting unittest2==1.1.0
+  Downloading unittest2-1.1.0-py2.py3-none-any.whl (96 kB)
+Collecting urllib3==1.25.3
+  Downloading urllib3-1.25.3-py2.py3-none-any.whl (150 kB)
+Collecting PyYAML==5.1.2
+  Downloading PyYAML-5.1.2.tar.gz (265 kB)
+Collecting pexpect==4.7.0
+  Downloading pexpect-4.7.0-py2.py3-none-any.whl (58 kB)
+Requirement already satisfied: six in /usr/local/lib/python3.9/site-packages (from attrdict==2.0.1->-r requirements.txt (line 1)) (1.16.0)
+Collecting cryptography>=2.5
+  Downloading cryptography-39.0.2-cp36-abi3-musllinux_1_1_x86_64.whl (4.3 MB)
+Collecting bcrypt>=3.1.3
+  Downloading bcrypt-4.0.1-cp36-abi3-musllinux_1_1_x86_64.whl (624 kB)
+Requirement already satisfied: pynacl>=1.0.1 in /usr/local/lib/python3.9/site-packages/PyNaCl-1.4.0-py3.9-linux-x86_64.egg (from paramiko==2.10.1->-r requirements.txt (line 2)) (1.4.0)
+Requirement already satisfied: py>=1.8.2 in /usr/local/lib/python3.9/site-packages (from pytest==6.2.5->-r requirements.txt (line 3)) (1.10.0)
+Requirement already satisfied: packaging in /usr/local/lib/python3.9/site-packages (from pytest==6.2.5->-r requirements.txt (line 3)) (21.2)
+Requirement already satisfied: iniconfig in /usr/local/lib/python3.9/site-packages (from pytest==6.2.5->-r requirements.txt (line 3)) (1.1.1)
+Requirement already satisfied: toml in /usr/local/lib/python3.9/site-packages (from pytest==6.2.5->-r requirements.txt (line 3)) (0.10.2)
+Requirement already satisfied: attrs>=19.2.0 in /usr/local/lib/python3.9/site-packages (from pytest==6.2.5->-r requirements.txt (line 3)) (21.2.0)
+Requirement already satisfied: pluggy<2.0,>=0.12 in /usr/local/lib/python3.9/site-packages (from pytest==6.2.5->-r requirements.txt (line 3)) (1.0.0)
+Requirement already satisfied: setuptools in /usr/local/lib/python3.9/site-packages (from pytest-services==1.3.1->-r requirements.txt (line 4)) (50.3.2)
+Requirement already satisfied: psutil in /usr/local/lib/python3.9/site-packages (from pytest-services==1.3.1->-r requirements.txt (line 4)) (5.8.0)
+Collecting execnet>=1.1
+  Downloading execnet-1.9.0-py2.py3-none-any.whl (39 kB)
+Collecting pytest-forked
+  Downloading pytest_forked-1.6.0-py3-none-any.whl (4.9 kB)
+Collecting chardet<3.1.0,>=3.0.2
+  Downloading chardet-3.0.4-py2.py3-none-any.whl (133 kB)
+Collecting idna<2.9,>=2.5
+  Downloading idna-2.8-py2.py3-none-any.whl (58 kB)
+Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.9/site-packages (from requests==2.22.0->-r requirements.txt (line 7)) (2021.10.8)
+Collecting traceback2
+  Downloading traceback2-1.4.0-py2.py3-none-any.whl (16 kB)
+Collecting argparse
+  Downloading argparse-1.4.0-py2.py3-none-any.whl (23 kB)
+Collecting ptyprocess>=0.5
+  Downloading ptyprocess-0.7.0-py2.py3-none-any.whl (13 kB)
+Requirement already satisfied: cffi>=1.12 in /usr/local/lib/python3.9/site-packages/cffi-1.15.0-py3.9-linux-x86_64.egg (from cryptography>=2.5->paramiko==2.10.1->-r requirements.txt (line 2)) (1.15.0)
+Requirement already satisfied: pycparser in /usr/local/lib/python3.9/site-packages/pycparser-2.20-py3.9.egg (from cffi>=1.12->cryptography>=2.5->paramiko==2.10.1->-r requirements.txt (line 2)) (2.20)
+Requirement already satisfied: pyparsing<3,>=2.0.2 in /usr/local/lib/python3.9/site-packages (from packaging->pytest==6.2.5->-r requirements.txt (line 3)) (2.4.7)
+Collecting linecache2
+  Downloading linecache2-1.0.0-py2.py3-none-any.whl (12 kB)
+Building wheels for collected packages: pytest-services, PyYAML
+  Building wheel for pytest-services (setup.py): started
+  Building wheel for pytest-services (setup.py): finished with status 'done'
+  Created wheel for pytest-services: filename=pytest_services-1.3.1-py3-none-any.whl size=17040 sha256=73599317cf26cdcce7ee8143d82a6523ec12665b8593b281d2a96d15c5d8fcaa
+  Stored in directory: /tmp/pip-ephem-wheel-cache-d5ljlx9n/wheels/43/5e/ea/1a3b11a27b7b062fafd5ef1c9a1edda632cf6e398251c15256
+  Building wheel for PyYAML (setup.py): started
+  Building wheel for PyYAML (setup.py): finished with status 'done'
+  Created wheel for PyYAML: filename=PyYAML-5.1.2-cp39-cp39-linux_x86_64.whl size=44102 sha256=0872fd2416f149482595e8060c0188d89a5f5d560396a9d2bc01ccaea6c292db
+  Stored in directory: /tmp/pip-ephem-wheel-cache-d5ljlx9n/wheels/93/72/1b/db6b10e2b46c76704d0eb0716d72091146e539648f6b164bae
+Successfully built pytest-services PyYAML
+Installing collected packages: urllib3, linecache2, idna, chardet, traceback2, requests, pytest-forked, ptyprocess, execnet, cryptography, bcrypt, argparse, unittest2, PyYAML, pytest-xdist, pytest-services, pytest-mock, pexpect, paramiko, attrdict
+  Attempting uninstall: urllib3
+    Found existing installation: urllib3 1.26.7
+    Uninstalling urllib3-1.26.7:
+      Successfully uninstalled urllib3-1.26.7
+  Attempting uninstall: idna
+    Found existing installation: idna 3.3
+    Uninstalling idna-3.3:
+      Successfully uninstalled idna-3.3
+  Attempting uninstall: chardet
+    Found existing installation: chardet 4.0.0
+    Uninstalling chardet-4.0.0:
+      Successfully uninstalled chardet-4.0.0
+  Attempting uninstall: requests
+    Found existing installation: requests 2.26.0
+    Uninstalling requests-2.26.0:
+      Successfully uninstalled requests-2.26.0
+  Attempting uninstall: PyYAML
+    Found existing installation: PyYAML 6.0
+    Uninstalling PyYAML-6.0:
+      Successfully uninstalled PyYAML-6.0
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+checkov 2.0.524 requires pyyaml>=5.4.1, but you have pyyaml 5.1.2 which is incompatible.
+cfn-lint 0.54.4 requires pyyaml>5.4; python_version != "3.5", but you have pyyaml 5.1.2 which is incompatible.
+botocore 1.20.112 requires urllib3<1.27,>=1.25.4, but you have urllib3 1.25.3 which is incompatible.
+bandit 1.7.0 requires PyYAML>=5.3.1, but you have pyyaml 5.1.2 which is incompatible.
+megalinter 0.1 requires importlib-metadata>=3.10, but you have importlib-metadata 1.7.0 which is incompatible.
+megalinter 0.1 requires requests==2.24.0, but you have requests 2.22.0 which is incompatible.
+mkdocs 1.2.3 requires importlib-metadata>=3.10, but you have importlib-metadata 1.7.0 which is incompatible.
+Successfully installed PyYAML-5.1.2 argparse-1.4.0 attrdict-2.0.1 bcrypt-4.0.1 chardet-3.0.4 cryptography-39.0.2 execnet-1.9.0 idna-2.8 linecache2-1.0.0 paramiko-2.10.1 pexpect-4.7.0 ptyprocess-0.7.0 pytest-forked-1.6.0 pytest-mock-1.10.4 pytest-services-1.3.1 pytest-xdist-1.34.0 requests-2.22.0 traceback2-1.4.0 unittest2-1.1.0 urllib3-1.25.3
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+WARNING: You are using pip version 21.2.4; however, version 23.0.1 is available.
+You should consider upgrading via the '/usr/local/bin/python -m pip install --upgrade pip' command.
+] WARNING: The directory '/github/home/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Collecting attrdict==2.0.1
+  Downloading attrdict-2.0.1-py2.py3-none-any.whl (9.9 kB)
+Collecting paramiko==2.10.1
+  Downloading paramiko-2.10.1-py2.py3-none-any.whl (211 kB)
+Requirement already satisfied: pytest==6.2.5 in /usr/local/lib/python3.9/site-packages (from -r requirements.txt (line 3)) (6.2.5)
+Collecting pytest-services==1.3.1
+  Downloading pytest-services-1.3.1.tar.gz (14 kB)
+Collecting pytest-mock==1.10.4
+  Downloading pytest_mock-1.10.4-py2.py3-none-any.whl (9.7 kB)
+Collecting pytest-xdist==1.34.0
+  Downloading pytest_xdist-1.34.0-py2.py3-none-any.whl (36 kB)
+Collecting requests==2.22.0
+  Downloading requests-2.22.0-py2.py3-none-any.whl (57 kB)
+Collecting unittest2==1.1.0
+  Downloading unittest2-1.1.0-py2.py3-none-any.whl (96 kB)
+Collecting urllib3==1.25.3
+  Downloading urllib3-1.25.3-py2.py3-none-any.whl (150 kB)
+Collecting PyYAML==5.1.2
+  Downloading PyYAML-5.1.2.tar.gz (265 kB)
+Collecting pexpect==4.7.0
+  Downloading pexpect-4.7.0-py2.py3-none-any.whl (58 kB)
+Requirement already satisfied: six in /usr/local/lib/python3.9/site-packages (from attrdict==2.0.1->-r requirements.txt (line 1)) (1.16.0)
+Collecting cryptography>=2.5
+  Downloading cryptography-39.0.2-cp36-abi3-musllinux_1_1_x86_64.whl (4.3 MB)
+Collecting bcrypt>=3.1.3
+  Downloading bcrypt-4.0.1-cp36-abi3-musllinux_1_1_x86_64.whl (624 kB)
+Requirement already satisfied: pynacl>=1.0.1 in /usr/local/lib/python3.9/site-packages/PyNaCl-1.4.0-py3.9-linux-x86_64.egg (from paramiko==2.10.1->-r requirements.txt (line 2)) (1.4.0)
+Requirement already satisfied: py>=1.8.2 in /usr/local/lib/python3.9/site-packages (from pytest==6.2.5->-r requirements.txt (line 3)) (1.10.0)
+Requirement already satisfied: packaging in /usr/local/lib/python3.9/site-packages (from pytest==6.2.5->-r requirements.txt (line 3)) (21.2)
+Requirement already satisfied: iniconfig in /usr/local/lib/python3.9/site-packages (from pytest==6.2.5->-r requirements.txt (line 3)) (1.1.1)
+Requirement already satisfied: toml in /usr/local/lib/python3.9/site-packages (from pytest==6.2.5->-r requirements.txt (line 3)) (0.10.2)
+Requirement already satisfied: attrs>=19.2.0 in /usr/local/lib/python3.9/site-packages (from pytest==6.2.5->-r requirements.txt (line 3)) (21.2.0)
+Requirement already satisfied: pluggy<2.0,>=0.12 in /usr/local/lib/python3.9/site-packages (from pytest==6.2.5->-r requirements.txt (line 3)) (1.0.0)
+Requirement already satisfied: setuptools in /usr/local/lib/python3.9/site-packages (from pytest-services==1.3.1->-r requirements.txt (line 4)) (50.3.2)
+Requirement already satisfied: psutil in /usr/local/lib/python3.9/site-packages (from pytest-services==1.3.1->-r requirements.txt (line 4)) (5.8.0)
+Collecting execnet>=1.1
+  Downloading execnet-1.9.0-py2.py3-none-any.whl (39 kB)
+Collecting pytest-forked
+  Downloading pytest_forked-1.6.0-py3-none-any.whl (4.9 kB)
+Collecting chardet<3.1.0,>=3.0.2
+  Downloading chardet-3.0.4-py2.py3-none-any.whl (133 kB)
+Collecting idna<2.9,>=2.5
+  Downloading idna-2.8-py2.py3-none-any.whl (58 kB)
+Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.9/site-packages (from requests==2.22.0->-r requirements.txt (line 7)) (2021.10.8)
+Collecting traceback2
+  Downloading traceback2-1.4.0-py2.py3-none-any.whl (16 kB)
+Collecting argparse
+  Downloading argparse-1.4.0-py2.py3-none-any.whl (23 kB)
+Collecting ptyprocess>=0.5
+  Downloading ptyprocess-0.7.0-py2.py3-none-any.whl (13 kB)
+Requirement already satisfied: cffi>=1.12 in /usr/local/lib/python3.9/site-packages/cffi-1.15.0-py3.9-linux-x86_64.egg (from cryptography>=2.5->paramiko==2.10.1->-r requirements.txt (line 2)) (1.15.0)
+Requirement already satisfied: pycparser in /usr/local/lib/python3.9/site-packages/pycparser-2.20-py3.9.egg (from cffi>=1.12->cryptography>=2.5->paramiko==2.10.1->-r requirements.txt (line 2)) (2.20)
+Requirement already satisfied: pyparsing<3,>=2.0.2 in /usr/local/lib/python3.9/site-packages (from packaging->pytest==6.2.5->-r requirements.txt (line 3)) (2.4.7)
+Collecting linecache2
+  Downloading linecache2-1.0.0-py2.py3-none-any.whl (12 kB)
+Building wheels for collected packages: pytest-services, PyYAML
+  Building wheel for pytest-services (setup.py): started
+  Building wheel for pytest-services (setup.py): finished with status 'done'
+  Created wheel for pytest-services: filename=pytest_services-1.3.1-py3-none-any.whl size=17040 sha256=73599317cf26cdcce7ee8143d82a6523ec12665b8593b281d2a96d15c5d8fcaa
+  Stored in directory: /tmp/pip-ephem-wheel-cache-d5ljlx9n/wheels/43/5e/ea/1a3b11a27b7b062fafd5ef1c9a1edda632cf6e398251c15256
+  Building wheel for PyYAML (setup.py): started
+  Building wheel for PyYAML (setup.py): finished with status 'done'
+  Created wheel for PyYAML: filename=PyYAML-5.1.2-cp39-cp39-linux_x86_64.whl size=44102 sha256=0872fd2416f149482595e8060c0188d89a5f5d560396a9d2bc01ccaea6c292db
+  Stored in directory: /tmp/pip-ephem-wheel-cache-d5ljlx9n/wheels/93/72/1b/db6b10e2b46c76704d0eb0716d72091146e539648f6b164bae
+Successfully built pytest-services PyYAML
+Installing collected packages: urllib3, linecache2, idna, chardet, traceback2, requests, pytest-forked, ptyprocess, execnet, cryptography, bcrypt, argparse, unittest2, PyYAML, pytest-xdist, pytest-services, pytest-mock, pexpect, paramiko, attrdict
+  Attempting uninstall: urllib3
+    Found existing installation: urllib3 1.26.7
+    Uninstalling urllib3-1.26.7:
+      Successfully uninstalled urllib3-1.26.7
+  Attempting uninstall: idna
+    Found existing installation: idna 3.3
+    Uninstalling idna-3.3:
+      Successfully uninstalled idna-3.3
+  Attempting uninstall: chardet
+    Found existing installation: chardet 4.0.0
+    Uninstalling chardet-4.0.0:
+      Successfully uninstalled chardet-4.0.0
+  Attempting uninstall: requests
+    Found existing installation: requests 2.26.0
+    Uninstalling requests-2.26.0:
+      Successfully uninstalled requests-2.26.0
+  Attempting uninstall: PyYAML
+    Found existing installation: PyYAML 6.0
+    Uninstalling PyYAML-6.0:
+      Successfully uninstalled PyYAML-6.0
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+checkov 2.0.524 requires pyyaml>=5.4.1, but you have pyyaml 5.1.2 which is incompatible.
+cfn-lint 0.54.4 requires pyyaml>5.4; python_version != "3.5", but you have pyyaml 5.1.2 which is incompatible.
+botocore 1.20.112 requires urllib3<1.27,>=1.25.4, but you have urllib3 1.25.3 which is incompatible.
+bandit 1.7.0 requires PyYAML>=5.3.1, but you have pyyaml 5.1.2 which is incompatible.
+megalinter 0.1 requires importlib-metadata>=3.10, but you have importlib-metadata 1.7.0 which is incompatible.
+megalinter 0.1 requires requests==2.24.0, but you have requests 2.22.0 which is incompatible.
+mkdocs 1.2.3 requires importlib-metadata>=3.10, but you have importlib-metadata 1.7.0 which is incompatible.
+Successfully installed PyYAML-5.1.2 argparse-1.4.0 attrdict-2.0.1 bcrypt-4.0.1 chardet-3.0.4 cryptography-39.0.2 execnet-1.9.0 idna-2.8 linecache2-1.0.0 paramiko-2.10.1 pexpect-4.7.0 ptyprocess-0.7.0 pytest-forked-1.6.0 pytest-mock-1.10.4 pytest-services-1.3.1 pytest-xdist-1.34.0 requests-2.22.0 traceback2-1.4.0 unittest2-1.1.0 urllib3-1.25.3
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+WARNING: You are using pip version 21.2.4; however, version 23.0.1 is available.
+You should consider upgrading via the '/usr/local/bin/python -m pip install --upgrade pip' command.
+
+Skipped linters: ACTION_ACTIONLINT, ANSIBLE_ANSIBLE_LINT, ARM_ARM_TTK, BASH_EXEC, BASH_SHELLCHECK, CLOUDFORMATION_CFN_LINT, COFFEE_COFFEELINT, COPYPASTE_JSCPD, CPP_CPPLINT, CREDENTIALS_SECRETLINT, CSHARP_DOTNET_FORMAT, CSS_SCSS_LINT, CSS_STYLELINT, C_CPPLINT, DART_DARTANALYZER, DOCKERFILE_DOCKERFILELINT, DOCKERFILE_HADOLINT, EDITORCONFIG_EDITORCONFIG_CHECKER, ENV_DOTENV_LINTER, GHERKIN_GHERKIN_LINT, GIT_GIT_DIFF, GO_GOLANGCI_LINT, GO_REVIVE, GRAPHQL_GRAPHQL_SCHEMA_LINTER, GROOVY_NPM_GROOVY_LINT, HTML_HTMLHINT, JAVASCRIPT_ES, JAVASCRIPT_PRETTIER, JAVASCRIPT_STANDARD, JAVA_CHECKSTYLE, JSON_ESLINT_PLUGIN_JSONC, JSON_JSONLINT, JSON_PRETTIER, JSON_V8R, JSX_ESLINT, KOTLIN_KTLINT, KUBERNETES_KUBEVAL, LATEX_CHKTEX, LUA_LUACHECK, MARKDOWN_MARKDOWNLINT, MARKDOWN_MARKDOWN_LINK_CHECK, MARKDOWN_MARKDOWN_TABLE_FORMATTER, MARKDOWN_REMARK_LINT, OPENAPI_SPECTRAL, PERL_PERLCRITIC, PHP_BUILTIN, PHP_PHPCS, PHP_PHPSTAN, PHP_PSALM, POWERSHELL_POWERSHELL, PROTOBUF_PROTOLINT, PUPPET_PUPPET_LINT, PYTHON_BANDIT, PYTHON_BLACK, PYTHON_FLAKE8, PYTHON_ISORT, PYTHON_MYPY, RAKU_RAKU, RST_RSTCHECK, RST_RSTFMT, RST_RST_LINT, RUBY_RUBOCOP, RUST_CLIPPY, R_LINTR, SALESFORCE_SFDX_SCANNER_APEX, SALESFORCE_SFDX_SCANNER_AURA, SALESFORCE_SFDX_SCANNER_LWC, SCALA_SCALAFIX, SNAKEMAKE_LINT, SNAKEMAKE_SNAKEFMT, SPELL_CSPELL, SPELL_MISSPELL, SQL_SQLFLUFF, SQL_SQL_LINT, SQL_TSQLLINT, SWIFT_SWIFTLINT, TEKTON_TEKTON_LINT, TERRAFORM_CHECKOV, TERRAFORM_TERRAFORM_FMT, TERRAFORM_TERRAGRUNT, TERRAFORM_TERRASCAN, TERRAFORM_TFLINT, TSX_ESLINT, TYPESCRIPT_ES, TYPESCRIPT_PRETTIER, TYPESCRIPT_STANDARD, VBDOTNET_DOTNET_FORMAT, XML_XMLLINT, YAML_PRETTIER, YAML_V8R, YAML_YAMLLINT
+To receive reports as email, please set variable EMAIL_REPORTER_EMAIL
+Listing all files in directory [/github/workspace], then filter with:
+- File extensions: .bash, .clj, .cljc, .cljs, .dash, .edn, .ksh, .py, .sh
+Kept [206] files on [214] found files
+
++----MATCHING LINTERS-+----------------------+----------------+------------+
+| Descriptor | Linter | Criteria             | Matching files | Format/Fix |
++------------+--------+----------------------+----------------+------------+
+| PYTHON     | pylint | .py                  | 202            | no         |
+| BASH       | shfmt  | .sh|.bash|.dash|.ksh | 4              | yes        |
++------------+--------+----------------------+----------------+------------+
+
+
+[1m### Processed [BASH] files[0m
+- Using [shfmt v3.3.1] https://github.com/mvdan/sh
+- Mega-Linter key: [BASH_SHFMT]
+- Rules config: identified by [shfmt]
+[36m[shfmt] docker/mk_container.sh - SUCCESS - 0 error(s) - FIXED[0m
+[36m[shfmt] docker/mk_image.sh - SUCCESS - 0 error(s) - FIXED[0m
+[36m[shfmt] docker/rm_containers.sh - SUCCESS - 0 error(s) - FIXED[0m
+[36m[shfmt] utils/bridge_setup.sh - SUCCESS - 0 error(s) - FIXED[0m
+[32m✅ Linted [BASH] files with [shfmt] successfully - (0.11s)[0m
+[GitHub Status Reporter] Error posting Status for BASHwith shfmt: 403
+GitHub API response: {"message":"Resource not accessible by integration","documentation_url":"https://docs.github.com/rest/commits/statuses#create-a-commit-status"}
+[Text Reporter] Generated TEXT report: /github/workspace/report/linters_logs/SUCCESS-BASH_SHFMT.log
+
+[1m### Processed [PYTHON] files[0m
+- Using [pylint v2.11.1] https://www.pylint.org
+- Mega-Linter key: [PYTHON_PYLINT]
+- Rules config: [.python-lint]
+[pylint] scripts/__init__.py
+[pylint] scripts/polarion_caseid_mapping.py
+[pylint] scripts/polarion_importer.py
+[pylint] tests/__init__.py
+[pylint] tests/gating/__init__.py
+[pylint] tests/gating/test_virtwho_gating.py
+[pylint] tests/sca/__init__.py
+[pylint] tests/sca/test_virtwho_sca.py
+[pylint] tests/smoke/__init__.py
+[pylint] tests/smoke/test_virtwho_smoke.py
+[pylint] tests/tier1/__init__.py
+[pylint] tests/tier1/tc_1001_check_virtwho_is_shipped_by_different_arch.py
+[pylint] tests/tier1/tc_1002_check_virtwho_can_be_installed_and_uninstalled.py
+[pylint] tests/tier1/tc_1003_check_virtwho_package_info.py
+[pylint] tests/tier1/tc_1004_check_virtwho_virtwhoconfig_man_page_and_help_exist.py
+[pylint] tests/tier1/tc_1005_check_virtwho_service_function.py
+[pylint] tests/tier1/tc_1006_run_virtwho_with_default_config.py
+[pylint] tests/tier1/tc_1007_check_virtwho_fetch_and_send_function_by_sysconfig.py
+[pylint] tests/tier1/tc_1008_check_virtwho_fetch_and_send_function_by_virtwho_d.py
+[pylint] tests/tier1/tc_1009_check_virtwho_fetch_and_send_function_by_cli.py
+[pylint] tests/tier1/tc_1010_check_virtwho_debug_function_by_cli.py
+[pylint] tests/tier1/tc_1011_check_virtwho_debug_function_by_sysconfig.py
+[pylint] tests/tier1/tc_1012_check_virtwho_oneshot_function_by_cli.py
+[pylint] tests/tier1/tc_1013_check_virtwho_oneshot_function_by_sysconfig.py
+[pylint] tests/tier1/tc_1014_check_interval_function_by_cli.py
+[pylint] tests/tier1/tc_1015_check_interval_function_by_etc_sysconfig.py
+[pylint] tests/tier1/tc_1016_check_print_function_by_cli.py
+[pylint] tests/tier1/tc_1017_check_config_function_by_cli.py
+[pylint] tests/tier1/tc_1018_check_log_per_config_function_by_cli.py
+[pylint] tests/tier1/tc_1019_check_log_dir_function_by_cli.py
+[pylint] tests/tier1/tc_1020_check_log_file_function_by_cli.py
+[pylint] tests/tier1/tc_1021_check_reporter_id_function_by_cli.py
+[pylint] tests/tier1/tc_1022_check_virtwho_can_be_killed_normally_in_terminal_side.py
+[pylint] tests/tier1/tc_1023_run_virtwho_in_cli_when_it_is_running.py
+[pylint] tests/tier1/tc_1024_check_virtwho_sysconfig_and_pid_files_permission.py
+[pylint] tests/tier1/tc_1025_start_virtwho_service_by_ssh.py
+[pylint] tests/tier1/tc_1026_check_virtwho_executabe_file_can_be_insteaded_or_not.py
+[pylint] tests/tier1/tc_1028_check_guest_attr_by_curl.py
+[pylint] tests/tier1/tc_1029_check_virtwho_status_after_restart_rhsmcertd_service.py
+[pylint] tests/tier1/tc_1030_check_mapping_info_with_one_file_include_one_mode_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1034_check_mapping_info_with_dconf_and_sysconf_for_the_same_mode.py
+[pylint] tests/tier1/tc_1036_check_ignore_swp_file_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1037_check_sam_satellite_options_by_cli.py
+[pylint] tests/tier1/tc_1038_check_sam_satellite_options_by_etc_sysconfig.py
+[pylint] tests/tier1/tc_1039_check_http_proxy_option_by_etc_sysconfig.py
+[pylint] tests/tier1/tc_1040_check_virt_who_password_function.py
+[pylint] tests/tier1/tc_1041_check_encrypted_password_option_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1042_check_rhsm_username_and_rhsm_password_option_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1043_check_rhsm_username_and_rhsm_encrypted_password_option_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1044_check_rhsm_hostname_port_prefix_options_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1045_check_rhsm_proxy_function_in_rhsm_conf.py
+[pylint] tests/tier1/tc_1046_check_filter_hosts_option_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1047_check_exclude_hosts_option_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1048_check_filter_host_parents_option_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1049_check_exclude_host_parents_option_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1050_check_filter_hosts_and_exclude_hosts_options_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1051_check_simplified_vim_option_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1052_check_hypervisor_id_option_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1053_check_hypervisor_id_and_filter_hosts_option_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1054_check_hypervisor_id_and_exclude_hosts_option_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1055_check_global_section_header_in_etc_virtwho_conf.py
+[pylint] tests/tier1/tc_1056_check_global_interval_option_in_etc_virtwho_conf.py
+[pylint] tests/tier1/tc_1057_check_global_reporter_id_option_in_etc_virtwho_conf.py
+[pylint] tests/tier1/tc_1058_check_global_debug_option_in_etc_virtwho_conf.py
+[pylint] tests/tier1/tc_1059_check_global_oneshot_option_in_etc_virtwho_conf.py
+[pylint] tests/tier1/tc_1060_check_global_log_per_config_option_in_etc_virtwho_conf.py
+[pylint] tests/tier1/tc_1061_check_global_log_dir_option_in_etc_virtwho_conf.py
+[pylint] tests/tier1/tc_1062_check_global_log_file_option_in_etc_virtwho_conf.py
+[pylint] tests/tier1/tc_1063_check_global_configs_option_in_etc_virtwho_conf.py
+[pylint] tests/tier1/tc_1064_check_defaults_section_header_in_etc_virtwho_conf.py
+[pylint] tests/tier1/tc_1065_check_defaults_owner_option_in_etc_virtwho_conf.py
+[pylint] tests/tier1/tc_1066_check_defaults_env_option_in_etc_virtwho_conf.py
+[pylint] tests/tier1/tc_1067_check_defaults_hypervisor_id_option_in_etc_virtwho_conf.py
+[pylint] tests/tier1/tc_1068_check_fake_mode_with_one_hypervisor_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1069_check_fake_mode_subscribe_function_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1070_check_fake_mode_pool_revoked_function_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1072_check_rhsm_log_and_thread_after_reregister_host.py
+[pylint] tests/tier1/tc_1073_check_mapping_info_point_to_specified_owner.py
+[pylint] tests/tier1/tc_1074_check_mapping_info_for_hypervisor_facts.py
+[pylint] tests/tier1/tc_1075_check_rhsm_connection_info_in_rhsm_log.py
+[pylint] tests/tier1/tc_1076_check_guest_facts_by_subscription_manager.py
+[pylint] tests/tier1/tc_1077_check_associated_info_by_rhsmlog_and_webui.py
+[pylint] tests/tier1/tc_1078_check_temporary_bonus_pool_can_be_attached_in_guest.py
+[pylint] tests/tier1/tc_1079_check_unlimited_virtual_pool_created_in_guest.py
+[pylint] tests/tier1/tc_1080_check_unlimited_virtual_pool_attached_by_poolId_in_guest.py
+[pylint] tests/tier1/tc_1081_check_unlimited_virtual_pool_attached_by_auto_in_guest.py
+[pylint] tests/tier1/tc_1082_check_unlimited_virtual_pool_revoked_in_guest_after_host_unattached.py
+[pylint] tests/tier1/tc_1083_check_unlimited_virtual_pool_revoked_in_guest_after_host_unregister.py
+[pylint] tests/tier1/tc_1084_check_vdc_virtual_pool_created_in_guest.py
+[pylint] tests/tier1/tc_1085_check_vdc_virtual_pool_attached_by_poolId_in_guest.py
+[pylint] tests/tier1/tc_1086_check_vdc_virtual_pool_attached_by_auto_in_guest.py
+[pylint] tests/tier1/tc_1087_check_vdc_virtual_pool_revoked_in_guest_after_host_unattached.py
+[pylint] tests/tier1/tc_1088_check_vdc_virtual_pool_revoked_in_guest_after_host_unregister.py
+[pylint] tests/tier1/tc_1089_check_vdc_consumed_status_in_host_after_set_cpu_socket.py
+[pylint] tests/tier1/tc_1090_check_vdc_consumed_status_in_guest_after_set_cpu_socket.py
+[pylint] tests/tier1/tc_1091_check_vdc_repos_in_guest_and_host_after_subscribed.py
+[pylint] tests/tier1/tc_1092_check_limited_virtual_pool_created_in_guest.py
+[pylint] tests/tier1/tc_1093_check_limited_virtual_pool_attached_by_poolId_in_guest.py
+[pylint] tests/tier1/tc_1094_check_limited_virtual_pool_attached_by_auto_in_guest.py
+[pylint] tests/tier1/tc_1095_check_limited_virtual_pool_revoked_in_guest_after_host_unattached.py
+[pylint] tests/tier1/tc_1096_check_limited_virtual_pool_revoked_in_guest_after_host_unregister.py
+[pylint] tests/tier1/tc_1097_check_instance_no_virtual_pool_created_in_guest.py
+[pylint] tests/tier1/tc_1098_check_instance_consumed_status_in_host_after_set_cpu_socket_1.py
+[pylint] tests/tier1/tc_1099_check_instance_consumed_status_in_host_after_set_cpu_socket_8.py
+[pylint] tests/tier1/tc_1100_check_instance_consumed_status_by_auto_in_host_after_set_cpu_socket_8.py
+[pylint] tests/tier1/tc_1101_check_instance_consumed_status_in_guest_after_set_cpu_socket_1.py
+[pylint] tests/tier1/tc_1102_check_instance_consumed_status_in_guest_after_set_cpu_socket_8.py
+[pylint] tests/tier1/tc_1103_check_virtwho_threads_number_after_reconfig_libvirt.py
+[pylint] tests/tier1/tc_1104_check_virtwho_config_exist_after_reboot_system.py
+[pylint] tests/tier1/tc_1105_check_rhsm_proxy_function_in_etc_virtwho_d.py
+[pylint] tests/tier1/tc_1106_check_global_print_option_in_etc_virtwho_conf.py
+[pylint] tests/tier1/tc_1107_temporary_sku_can_be_changed_to_stable_by_auto.py
+[pylint] tests/tier1/tc_1108_check_hypervisor_facts.py
+[pylint] tests/tier1/tc_1109_connect_to_hypervisor_by_read_only_account.py
+[pylint] tests/tier1/tc_1110_send_virt-who_version_in_the_User-Agent_header.py
+[pylint] tests/tier1/tc_1111_template_conf_validation.py
+[pylint] tests/tier1/tc_1112_check_http_proxy_option_by_etc_conf.py
+[pylint] tests/tier1/tc_1113_check_virtwho_status.py
+[pylint] tests/tier2/__init__.py
+[pylint] tests/tier2/tc_2001_validate_owner_option_by_cli.py
+[pylint] tests/tier2/tc_2002_validate_env_option_by_cli.py
+[pylint] tests/tier2/tc_2003_validate_server_option_by_cli.py
+[pylint] tests/tier2/tc_2004_validate_username_option_by_cli.py
+[pylint] tests/tier2/tc_2005_validate_password_option_by_cli.py
+[pylint] tests/tier2/tc_2006_validate_config_function_by_cli.py
+[pylint] tests/tier2/tc_2007_validate_parameters_consistency_by_cli.py
+[pylint] tests/tier2/tc_2008_validate_owner_option_in_etc_sysconfig.py
+[pylint] tests/tier2/tc_2009_validate_env_option_in_etc_sysconfig.py
+[pylint] tests/tier2/tc_2010_validate_server_option_in_etc_sysconfig.py
+[pylint] tests/tier2/tc_2011_validate_username_option_in_etc_sysconfig.py
+[pylint] tests/tier2/tc_2012_validate_password_option_in_etc_sysconfig.py
+[pylint] tests/tier2/tc_2013_validate_unreachable_proxy_by_config.py
+[pylint] tests/tier2/tc_2014_validate_header_option_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2015_validate_type_option_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2016_validate_owner_option_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2017_validate_env_option_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2018_validate_server_option_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2019_validate_username_option_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2020_validate_password_option_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2021_validate_encryped_password_option_by_virtwho_d.py
+[pylint] tests/tier2/tc_2022_validate_rhsm_hostname_option_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2023_validate_rhsm_port_option_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2024_validate_rhsm_prefix_option_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2025_validate_rhsm_username_option_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2026_validate_rhsm_password_option_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2027_validate_rhsm_encrypted_password_option_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2028_validate_wildcard_for_filter_and_exclude_hosts_options_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2029_validate_wildcard_for_filter_and_exclude_host_parents_options_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2030_validate_quotes_for_filter_and_exclude_hosts_option_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2031_validate_unsupported_options_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2032_validate_file_extension_name_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2033_validate_options_quoted_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2034_validate_global_interval_by_virtwho_conf.py
+[pylint] tests/tier2/tc_2035_validate_global_report_id_by_virtwho_conf.py
+[pylint] tests/tier2/tc_2036_validate_global_debug_by_virtwho_conf.py
+[pylint] tests/tier2/tc_2037_validate_global_oneshot_by_virtwho_conf.py
+[pylint] tests/tier2/tc_2038_validate_global_configs_by_virtwho_conf.py
+[pylint] tests/tier2/tc_2039_validate_defaults_owner_option_by_virtwho_conf.py
+[pylint] tests/tier2/tc_2040_validate_defaults_env_option_by_virtwho_conf.py
+[pylint] tests/tier2/tc_2041_validate_default_hypervisor_id_by_virtwho_conf.py
+[pylint] tests/tier2/tc_2042_check_virtwho_send_mapping_to_multi_org.py
+[pylint] tests/tier2/tc_2043_check_virtwho_send_mapping_to_multi_org_with_rhsm_parameters.py
+[pylint] tests/tier2/tc_2044_subscribe_guest_with_activation_key.py
+[pylint] tests/tier2/tc_2045_check_content_subscriptions_in_satellite_webui.py
+[pylint] tests/tier2/tc_2046_check_registered_by_item_in_satellite_webui.py
+[pylint] tests/tier2/tc_2047_check_rhsm_log_after_delete_host_hypervisor_from_server_webui.py
+[pylint] tests/tier2/tc_2048_register_system_with_activaiton_key.py
+[pylint] tests/tier2/tc_2049_validate_hostname_without_domain.py
+[pylint] tests/tier2/tc_2051_validate_virt_who_password_commandline.py
+[pylint] tests/tier2/tc_2052_validate_hypervisors_connection.py
+[pylint] tests/tier2/tc_2053_validate_guest_state_when_suspend_resume_stop_start.py
+[pylint] tests/tier2/tc_2054_validate_trigger_event_with_different_interval.py
+[pylint] tests/tier2/tc_2055_validate_rhevm_url_without_ovirt_engine.py
+[pylint] tests/tier2/tc_2056_validate_non_root_to_run_virtwho.py
+[pylint] tests/tier2/tc_2057_validate_subscription_register_clean_together.py
+[pylint] tests/tier2/tc_2058_post_large_json_to_rhsm.py
+[pylint] tests/tier2/tc_2059_check_redundant_options_in_etc_virtwho_d.py
+[pylint] tests/tier2/tc_2060_check_commented_out_line_with_tab_space.py
+[pylint] tests/tier2/tc_2061_check_fake_mode_is_hypervisor_option.py
+[pylint] tests/tier2/tc_2063_check_hypervisors_fqdn.py
+[pylint] tests/tier2/tc_2065_deprecation_warning_for_etc_sysconfig.py
+[pylint] tests/tier2/tc_2066_validate_cluster_name_with_special_char.py
+[pylint] tests/tier2/tc_2067_validate_uniform_mapping_format.py
+[pylint] tests/tier2/tc_2068_validate_options_migration_during_virt_who_upgrade.py
+[pylint] tests/tier2/tc_2069_valide_insecure_option_for_kubevirt.py
+[pylint] tests/tier3/__init__.py
+[pylint] tests/tier3/tc_1027_check_two_modes_enabled_in_etc_sysconfig.py
+[pylint] tests/tier3/tc_1031_check_mapping_info_with_one_file_include_two_modes_in_etc_virtwho_d.py
+[pylint] tests/tier3/tc_1032_check_mapping_info_with_two_files_for_two_modes_in_etc_virtwho_d.py
+[pylint] tests/tier3/tc_1033_check_mapping_info_with_dconf_and_sysconf_for_two_modes.py
+[pylint] tests/tier3/tc_1035_check_mapping_info_with_dconf_and_cli_for_two_modes.py
+[pylint] tests/tier3/tc_1071_check_fake_mode_with_two_hypervisors_in_etc_virtwho_d.py
+[pylint] utils/__init__.py
+[pylint] utils/installer.py
+[pylint] utils/merge-xunit.py
+[pylint] virt_who/__init__.py
+[pylint] virt_who/base.py
+[pylint] virt_who/provision.py
+[pylint] virt_who/register.py
+[pylint] virt_who/scheduler.py
+[pylint] virt_who/settings.py
+[pylint] virt_who/testing.py
+[32m✅ Linted [PYTHON] files with [pylint] successfully - (32.71s)[0m
+[GitHub Status Reporter] Error posting Status for PYTHONwith pylint: 403
+GitHub API response: {"message":"Resource not accessible by integration","documentation_url":"https://docs.github.com/rest/commits/statuses#create-a-commit-status"}
+[Text Reporter] Generated TEXT report: /github/workspace/report/linters_logs/SUCCESS-PYTHON_PYLINT.log
+
++----SUMMARY-+--------+---------------+-------+-------+--------+--------------+
+| Descriptor | Linter | Mode          | Files | Fixed | Errors | Elapsed time |
++------------+--------+---------------+-------+-------+--------+--------------+
+| ✅ BASH    | shfmt  | file          |     4 |     4 |      0 |        0.11s |
+| ✅ PYTHON  | pylint | list_of_files |   202 |       |      0 |       32.71s |
++------------+--------+---------------+-------+-------+--------+--------------+
+
+[34mYou could have same capabilities but better runtime performances if you use a Mega-Linter flavor:[0m
+- [python] nvuillam/mega-linter/flavors/python@v4 (49 linters) https://nvuillam.github.io/mega-linter/flavors/python/
+
+[GitHub Comment Reporter] Posted summary as comment on warku123/virtwho-ci #PR261
+[Updated Sources Reporter] copied 4 fixed source files in folder /github/workspace/report/updated_sources.
+Download it from artifacts then copy-paste it in your local repo to apply linters updates
+✅ Successfully linted all files without errors
+[33m#######################################################################[0m
+[33mMEGA-LINTER HAS A NEW V5 VERSION at https://github.com/megalinter/megalinter. Please upgrade to it by:[0m
+[33m- Running the command at the root of your repo (requires node.js): npx mega-linter-runner --upgrade[0m
+[33m- Replace versions used by latest (v5 latest stable version) or beta (previously 'insiders', content of master branch of megalinter/megalinter)[0m
+[33m#######################################################################[0m
