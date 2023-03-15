@@ -702,7 +702,7 @@ class Register(Base):
             for i in range(3):
                 ret, output = self.runcmd(cmd, ssh, desc="satellite attach pool")
                 if pool_id in output and "subscription_id" in output and "product_id" in output:
-                    logger.info("Succeeded to attach pool({0}) for host_id({0})".format(pool_id, host_id))
+                    logger.info("Succeeded to attach pool({0}) for host_id({1})".format(pool_id, host_id))
                     return True
                 logger.warning("can't attach pool({0}) for host_id({1}), try again after 15s".format(pool_id, host_id))
                 time.sleep(15)

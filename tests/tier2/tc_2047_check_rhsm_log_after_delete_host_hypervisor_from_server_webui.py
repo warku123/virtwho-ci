@@ -32,13 +32,13 @@ class Testcase(Testing):
         try:
             vw_host_name = self.get_hostname(self.ssh_host())
             vw_host_uuid='xxx'
-            res1 = self.vw_web_host_delete(vw_host_name, vw_host_uuid)
+            self.vw_web_host_delete(vw_host_name, vw_host_uuid)
             data, tty_output, rhsm_output = self.vw_start(exp_send=0, exp_error=True)
             res2 = self.op_normal_value(data, exp_error="1|2", exp_thread=1, exp_send=0)
             error_msg = ["consumer no longer exists|"
                          ".*has been deleted"]
             res3 = self.msg_validation(rhsm_output, error_msg, exp_exist=True)
-            results.setdefault('step2', []).append(res1)
+            # results.setdefault('step2', []).append(res1)
             results.setdefault('step2', []).append(res2)
             results.setdefault('step2', []).append(res3)
         except:

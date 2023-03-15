@@ -1603,7 +1603,7 @@ class Provision(Register):
         self.runcmd(plugin_install, ssh_sat)
         ret, output = self.runcmd(foreman_install, ssh_sat)
         if ret != 0:
-            raise FailException("Failed to run: {}").format(foreman_install)
+            raise FailException("Failed to run: {}".format(foreman_install))
         self.run_loop(upload_manifest, ssh_sat)
         self.run_loop(refresh_manifest, ssh_sat)
 
@@ -2154,7 +2154,7 @@ class Provision(Register):
             else:
                 logger.info("Succeeded to delete vcenter guest")
                 return True
-            time(10)
+            time.sleep(10)
         raise FailException("Failed to delete vcenter guest")
 
     def vcenter_guest_start(self, cert, ssh_cli, guest_name):
