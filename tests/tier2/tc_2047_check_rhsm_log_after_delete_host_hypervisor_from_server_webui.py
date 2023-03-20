@@ -38,7 +38,6 @@ class Testcase(Testing):
             error_msg = ["consumer no longer exists|"
                          ".*has been deleted"]
             res3 = self.msg_validation(rhsm_output, error_msg, exp_exist=True)
-            # results.setdefault('step2', []).append(res1)
             results.setdefault('step2', []).append(res2)
             results.setdefault('step2', []).append(res3)
         except:
