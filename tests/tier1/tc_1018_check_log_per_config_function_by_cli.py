@@ -7,8 +7,8 @@ from virt_who.testing import Testing
 
 class Testcase(Testing):
     def test_run(self):
-        self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133696')
-        compose_id = self.get_config('rhel_compose')
+        self.vw_case_info(os.path.basename(__file__), case_id="RHEL-133696")
+        compose_id = self.get_config("rhel_compose")
         if "RHEL-7" not in compose_id:
             self.vw_case_skip(compose_id)
         self.vw_case_init()
@@ -18,7 +18,7 @@ class Testcase(Testing):
         guest_uuid = self.get_hypervisor_guestuuid()
         cmd1 = self.vw_cli_base() + "-d -m"
         cmd2 = self.vw_cli_base() + "-d --log-per-config"
-        steps = {'step1': cmd1, 'step2': cmd2}
+        steps = {"step1": cmd1, "step2": cmd2}
 
         # Case Steps
         for step, cmd in sorted(steps.items(), key=lambda item: item[0]):
@@ -26,20 +26,20 @@ class Testcase(Testing):
             data, tty_output, rhsm_output = self.vw_start(cmd, exp_send=1)
             res = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
             results.setdefault(step, []).append(res)
-            ret, output = self.runcmd('ls /var/log/rhsm/virtwho*', self.ssh_host())
+            ret, output = self.runcmd("ls /var/log/rhsm/virtwho*", self.ssh_host())
             if ret != 0 or output is None:
                 logger.error("Failed to find /var/log/rhsm/virtwho* files")
                 results.setdefault(step, []).append(False)
-            files = output.split('\n') 
-            ''' check files exist or not'''
+            files = output.split("\n")
+            """ check files exist or not"""
             if any("destination" in fd for fd in files):
                 logger.info("Succeeded to find virtwho.destination file")
-            else: 
+            else:
                 logger.error("Failed to find virtwho.destination file")
                 results.setdefault(step, []).append(False)
             if any("main" in fd for fd in files):
                 logger.info("Succeeded to find virtwho.main file")
-            else: 
+            else:
                 logger.error("Failed to find virtwho.main file")
                 results.setdefault(step, []).append(False)
             if any("rhsm_log" in fd for fd in files):
@@ -47,7 +47,7 @@ class Testcase(Testing):
             else:
                 logger.error("Failed to find virtwho.rhsm_log file")
                 results.setdefault(step, []).append(False)
-            ''' check message is expected or not'''
+            """ check message is expected or not"""
             for fd in files:
                 fd = fd.strip()
                 ret, output = self.runcmd("cat {0}".format(fd), self.ssh_host())
@@ -64,15 +64,17 @@ class Testcase(Testing):
                         logger.error("Failed to validate virtwho.main file")
                         results.setdefault(step, []).append(False)
                 if "rhsm_log" in fd:
-                    r1 = self.vw_msg_search(output, "Using reporter_id=", exp_exist=True)
+                    r1 = self.vw_msg_search(
+                        output, "Using reporter_id=", exp_exist=True
+                    )
                     r2 = self.vw_msg_search(output, "ERROR", exp_exist=False)
                     if r1 is False or r2 is False:
                         logger.error("Failed to validate virtwho.rhsm_log file")
                         results.setdefault(step, []).append(False)
         # case result
         notes = list()
-        hypervisor_type = self.get_config('hypervisor_type')
-        if hypervisor_type == 'kubevirt':
+        hypervisor_type = self.get_config("hypervisor_type")
+        if hypervisor_type == "kubevirt":
             notes.append("(step1,2) No kubeconfig option for cli")
             notes.append("Bug: https://bugzilla.redhat.com/show_bug.cgi?id=1751441")
         self.vw_case_result(results, notes)

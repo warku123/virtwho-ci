@@ -4,10 +4,11 @@ from virt_who.base import Base
 from virt_who.register import Register
 from virt_who.testing import Testing
 
+
 class Testcase(Testing):
     def test_run(self):
-        self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133658')
-        hypervisor_type = self.get_config('hypervisor_type')
+        self.vw_case_info(os.path.basename(__file__), case_id="RHEL-133658")
+        hypervisor_type = self.get_config("hypervisor_type")
         if "libvirt-local" in hypervisor_type:
             self.vw_case_skip(hypervisor_type)
         self.vw_case_init()
@@ -23,13 +24,13 @@ class Testcase(Testing):
         cmd = "virt-who -c {0} -d".format(config_file)
         data, tty_output, rhsm_output = self.vw_start(cmd, exp_send=1)
         res = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
-        results.setdefault('step1', []).append(res)
+        results.setdefault("step1", []).append(res)
 
         logger.info(">>>step2: run virt-who with --config option")
         cmd = "virt-who --config {0} -d".format(config_file)
         data, tty_output, rhsm_output = self.vw_start(cmd, exp_send=1)
         res = self.op_normal_value(data, exp_error=0, exp_thread=1, exp_send=1)
-        results.setdefault('step2', []).append(res)
+        results.setdefault("step2", []).append(res)
 
         # case result
         self.vw_case_result(results)
