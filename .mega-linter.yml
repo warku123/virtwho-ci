@@ -7,9 +7,10 @@ ENABLE_LINTERS:
   - BASH_SHFMT
   - CLOJURE_CLJ_KONDO
   - PYTHON_PYLINT
-DISABLE:
-  - COPYPASTE # Comment to enable checks of excessive copy-pastes
-  - SPELL # Comment to enable checks of spelling mistakes
+  - PYTHON_BLACK
+# DISABLE:
+#   - COPYPASTE # Comment to enable checks of excessive copy-pastes
+#   - SPELL # Comment to enable checks of spelling mistakes
 SHOW_ELAPSED_TIME: true
 FILEIO_REPORTER: false
 # DISABLE_ERRORS: true # Uncomment if you want MegaLinter to detect errors but not block CI to pass
