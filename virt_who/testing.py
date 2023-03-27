@@ -166,7 +166,7 @@ class Testing(Provision):
         if not instance:
             instance = "RH00003"
         if not limit:
-            limit = "RH00204"
+            limit = "RH00205"
         if not unlimit:
             unlimit = "RH00060"
         configs = {
