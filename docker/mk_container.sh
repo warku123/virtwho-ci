@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 usage() {
-cat <<EOOPTS
+  cat << EOOPTS
 $(basename $0) [OPTIONS]
 OPTIONS:
   -i "<image_name>"         The image name will be used to launch container
@@ -10,11 +10,10 @@ OPTIONS:
   -u "<container-user>"     The container user you want to create
   -p "<container-password>" The container password you want to create
 EOOPTS
-exit 1
+  exit 1
 }
 
-if [ $# -eq 0 ]
-then
+if [ $# -eq 0 ]; then
     usage
 fi
 
@@ -46,7 +45,7 @@ while getopts ":i:c:o:u:p:h" opt; do
             echo "No value for opiton -$OPTARG"
             usage
             ;;
-    esac
+  esac
 done
 
 if [ $# -eq 0 ]; then usage; fi
@@ -57,8 +56,7 @@ if [ "$container_user" == "" ]; then usage; fi
 if [ "$container_password" == "" ]; then usage; fi
 container_name=$(echo "$container_name" | tr '[:upper:]' '[:lower:]')
 
-if [[ $container_name =~ "rhel6" ]] || [[ $container_name =~ "rhel-6" ]] || [[ $container_name =~ "rhel.6" ]]
-then
+if [[ $container_name =~ "rhel6" ]] || [[ $container_name =~ "rhel-6" ]] || [[ $container_name =~ "rhel.6" ]]; then
     docker run --privileged -itd --hostname $container_name --name $container_name -p $container_port:22 $image_name bash
 else
     docker run --privileged -itd -v /sys/fs/cgroup:/sys/fs/cgroup --hostname $container_name --name $container_name -p $container_port:22 $image_name /usr/sbin/init
@@ -67,8 +65,7 @@ fi
 echo -e "${container_user}:${container_password}" | docker exec -i $container_name chpasswd
 docker exec -i $container_name ifconfig
 docker exec -i $container_name hostname $container_name
-if [[ $container_name =~ "rhel9" ]] || [[ $container_name =~ "rhel-9" ]] || [[ $container_name =~ "rhel.9" ]]
-then
+if [[ $container_name =~ "rhel9" ]] || [[ $container_name =~ "rhel-9" ]] || [[ $container_name =~ "rhel.9" ]]; then
     docker exec -i $container_name sed -i 's/#*PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
     docker exec -i $container_name sed -i 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd
 else

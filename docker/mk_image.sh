@@ -8,7 +8,7 @@
 set -e
 
 usage() {
-    cat <<EOOPTS
+    cat << EOOPTS
 $(basename $0) [OPTIONS] <name>
 OPTIONS:
   -p "<packages>"  The list of packages to install in the container.
@@ -24,8 +24,8 @@ EOOPTS
 # option defaults
 yum_config=/etc/yum.conf
 if [ -f /etc/dnf/dnf.conf ] && command -v dnf &> /dev/null; then
-	yum_config=/etc/dnf/dnf.conf
-	alias yum=dnf
+  yum_config=/etc/dnf/dnf.conf
+  alias yum=dnf
 fi
 install_groups="Core"
 while getopts ":y:p:g:h" opt; do
@@ -46,7 +46,7 @@ while getopts ":y:p:g:h" opt; do
             echo "Invalid option: -$OPTARG"
             usage
             ;;
-    esac
+  esac
 done
 shift $((OPTIND - 1))
 name=$1
@@ -77,67 +77,57 @@ mknod -m 666 "$target"/dev/zero c 1 5
 #	cp -a /etc/yum/vars "$target"/etc/yum/
 #fi
 
-if [[ -n "$install_groups" ]];
-then
-    for i in {1..5}
-    do
+if [[ -n "$install_groups" ]]; then
+    for i in {1..5}; do
         yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs \
             --setopt=group_package_types=mandatory -y groupinstall "$install_groups"
-        if [ $? -eq 0 ]
-        then
+        if [ $? -eq 0 ]; then
             echo  "Finished to install groups"
             break
-        else
+    else
             sleep 30s
             echo  "Waiting 60s try again to install groups"
-        fi
-    done
+    fi
+  done
 fi
 
-if [[ -n "$install_packages" ]];
-then
-    for i in {1..5}
-    do
+if [[ -n "$install_packages" ]]; then
+    for i in {1..5}; do
         yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs \
             --setopt=group_package_types=mandatory -y install "$install_packages"
-        if [ $? -eq 0 ]
-        then
+        if [ $? -eq 0 ]; then
             echo  "Finished to install packages"
             break
-        else
+    else
             sleep 30s
             echo  "Waiting 60s try again to install packages"
-        fi
-    done
+    fi
+  done
 fi
 
 # install dependence packages for virt-who
-for i in {1..5}
-do
+for i in {1..5}; do
     yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs --setopt=group_package_types=mandatory \
         -y install @base openssh-server openssh-clients openssl-devel net-tools wget hostname sudo subscription-manager gcc expect
     # different packages for rhel8/9 and rhel7
-    if [[ $name =~ "rhel7" ]] || [[ $name =~ "rhel-7" ]] || [[ $name =~ "rhel.7" ]];
-    then
+    if [[ $name =~ "rhel7" ]] || [[ $name =~ "rhel-7" ]] || [[ $name =~ "rhel.7" ]]; then
         yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs --setopt=group_package_types=mandatory \
             -y install @x11 subscription-manager-gui pexpect libvirt-python python-devel
-    elif [[ $name =~ "rhel8" ]] || [[ $name =~ "rhel-8" ]] || [[ $name =~ "rhel.8" ]];
-    then
+  elif   [[ $name =~ "rhel8" ]] || [[ $name =~ "rhel-8" ]] || [[ $name =~ "rhel.8" ]]; then
         yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs --setopt=group_package_types=mandatory \
             -y install cockpit subscription-manager-cockpit python3-pexpect python3-libvirt glibc-all-langpacks
-    else
+  else
         yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs --setopt=group_package_types=mandatory \
             -y install cockpit subscription-manager-cockpit python3-libvirt glibc-all-langpacks
-    fi
+  fi
     # try again if failed to install
-    if [ $? -eq 0 ]
-    then
+    if [ $? -eq 0 ]; then
         echo  "Finished to install packages"
         break
-    else
+  else
         sleep 30s
         echo  "Waiting 60s try again to install packages"
-    fi
+  fi
 done
 
 # setup compose yum repo for virt-who host
@@ -146,7 +136,7 @@ cp "$yum_config" "$target"/etc/yum.repos.d/
 
 yum -c "$yum_config" --installroot="$target" -y clean all
 
-cat > "$target"/etc/sysconfig/network <<EOF
+cat > "$target"/etc/sysconfig/network << EOF
 NETWORKING=yes
 HOSTNAME=localhost.localdomain
 EOF
@@ -174,12 +164,11 @@ rm -rf "$target"/etc/ld.so.cache "$target"/var/cache/ldconfig
 mkdir -p --mode=0755 "$target"/var/cache/ldconfig
 
 version=
-for file in "$target"/etc/{redhat,system}-release
-do
+for file in "$target"/etc/{redhat,system}-release; do
     if [ -r "$file" ]; then
         version="$(sed 's/^[^0-9\]*\([0-9.]\+\).*$/\1/' "$file")"
         break
-    fi
+  fi
 done
 
 if [ -z "$version" ]; then
@@ -193,4 +182,3 @@ docker images | grep "$name"
 #docker run -i -t --rm $name /bin/bash -c 'echo success'
 
 rm -rf "$target"
-

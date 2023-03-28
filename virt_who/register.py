@@ -52,14 +52,6 @@ class Register(Base):
         ret, output = self.runcmd(cmd, ssh)
         ret, output = self.runcmd('cat /etc/rhsm/facts/override_uuid.facts', ssh)
 
-    def rhsm_backup(self, ssh):
-        ret, output = self.runcmd("ls /backup/rhsm.conf", ssh)
-        if ret != 0 or "No such file or directory" in output:
-            cmd = "rm -rf /backup/; mkdir -p /backup/; cp /etc/rhsm/rhsm.conf /backup/"
-            self.runcmd(cmd, ssh)
-        else:
-            logger.info("rhsm.conf is backup already({0})".format(ssh['host']))
-
     def rhsm_recovery(self, ssh):
         self.system_unregister(ssh)
         ret, output = self.runcmd("rpm -qa | grep katello-ca-consumer | xargs rpm -e |sort", ssh)
@@ -710,7 +702,7 @@ class Register(Base):
             for i in range(3):
                 ret, output = self.runcmd(cmd, ssh, desc="satellite attach pool")
                 if pool_id in output and "subscription_id" in output and "product_id" in output:
-                    logger.info("Succeeded to attach pool({0}) for host_id({0})".format(pool_id, host_id))
+                    logger.info("Succeeded to attach pool({0}) for host_id({1})".format(pool_id, host_id))
                     return True
                 logger.warning("can't attach pool({0}) for host_id({1}), try again after 15s".format(pool_id, host_id))
                 time.sleep(15)
