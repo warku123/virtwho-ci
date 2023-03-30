@@ -7,6 +7,7 @@ ENABLE_LINTERS:
   - BASH_SHFMT
   - CLOJURE_CLJ_KONDO
   - PYTHON_PYLINT
+  - PYTHON_BLACK
 DISABLE:
   - COPYPASTE # Comment to enable checks of excessive copy-pastes
   - SPELL # Comment to enable checks of spelling mistakes
