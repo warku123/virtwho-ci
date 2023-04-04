@@ -4,9 +4,10 @@ from virt_who.base import Base
 from virt_who.register import Register
 from virt_who.testing import Testing
 
+
 class Testcase(Testing):
     def test_run(self):
-        self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133732')
+        self.vw_case_info(os.path.basename(__file__), case_id="RHEL-133732")
         self.vw_case_init()
 
         # case config
@@ -24,10 +25,10 @@ class Testcase(Testing):
         time.sleep(15)
         if self.vw_callback_thread_num() == 1:
             logger.info("Succeeded to start virt-who by cli")
-            results.setdefault('step1', []).append(True)
+            results.setdefault("step1", []).append(True)
         else:
             logger.error("Failed to start virt-who by cli")
-            results.setdefault('step1', []).append(False)
+            results.setdefault("step1", []).append(False)
 
         logger.info(">>>step2: kill virt-who by 'kill -2'")
         for i in range(5):
@@ -42,10 +43,10 @@ class Testcase(Testing):
                 logger.warning("Failed to kill virt-who, try again ...")
         if is_killed == "Yes":
             logger.info("Succeeded to kill virt-who")
-            results.setdefault('step2', []).append(True)
+            results.setdefault("step2", []).append(True)
         else:
             logger.info("Failed to kill virt-who")
-            results.setdefault('step2', []).append(False)
+            results.setdefault("step2", []).append(False)
 
         # case result
         self.vw_case_result(results)

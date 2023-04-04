@@ -4,9 +4,10 @@ from virt_who.base import Base
 from virt_who.register import Register
 from virt_who.testing import Testing
 
+
 class Testcase(Testing):
     def test_run(self):
-        self.vw_case_info(os.path.basename(__file__), case_id='RHEL-133706')
+        self.vw_case_info(os.path.basename(__file__), case_id="RHEL-133706")
         self.vw_case_init()
 
         # case config
